@@ -1,0 +1,1082 @@
+{
+  "title": "Russell's Research on the Alchemical Hands",
+  "source_method": "CORPUS_EXTRACTION",
+  "sections": [
+    {
+      "id": "annotator-hands-overview",
+      "title": "All Annotator Hands in the Corpus",
+      "evidence_type": "DB_QUERY",
+      "data": [
+        {
+          "hand_label": "A",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous (possibly Jesuit, St. Omer)",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "French",
+          "ink_color": "black",
+          "date_range": "pre-1739",
+          "description": "First French hand in black ink. Wrote summary of HP narrative on page following dedicatory letter. If the book was at St. Omer before 1739 (as Jesuit ex libris suggests), this may be a Jesuit annotator.",
+          "interests": "narrative summary"
+        },
+        {
+          "hand_label": "B",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous (possibly Jesuit, St. Omer)",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "French",
+          "ink_color": "light brown",
+          "date_range": "pre-1739",
+          "description": "Second French hand in light brown ink. Primary interest in etymologies of Greek terms. Only annotator in the study to identify Hebrew roots. Also traces Plinian sources (Naturalis historia) for wines, laws, architecture. Similar ductus to Hand A suggests common origin, possibly another Jesuit of St. Omer.",
+          "interests": "Greek etymologies, Hebrew roots, Plinian sources"
+        },
+        {
+          "hand_label": "C",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Latin",
+          "ink_color": "brown",
+          "date_range": null,
+          "description": "Latin hand in brown ink. Primarily interested in signposting the narrative, summarising major passages.",
+          "interests": "narrative signposting"
+        },
+        {
+          "hand_label": "D",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Italian, Latin",
+          "ink_color": null,
+          "date_range": null,
+          "description": "Italian hand responding to Hand A. In one instance crosses off A's comments and offers abbreviated summary. Primary interest in architecture. Switches to Latin when labelling architectural features.",
+          "interests": "architecture"
+        },
+        {
+          "hand_label": "E",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous",
+          "is_alchemist": 1,
+          "school": "pseudo-Geber (Jabir ibn Hayyan)",
+          "language": "Latin",
+          "ink_color": null,
+          "date_range": "late 17th-early 18th century",
+          "description": "Final distinguishable hand. Applies alchemical reading. Overwrites Hand D (latest hand). Follower of pseudo-Geber school emphasizing sulphur and Sol/Luna pairings. Unlike BL alchemist, uses minimal ideograms — writes out element names in full (e.g. 'sulphur naturae'). Labels passages with alchemical stages. Praises Geber's 'ingenium subtile'. Reads male-female pairings as alchemical weddings. Identifies chess match results as silver/gold transmutation.",
+          "interests": "alchemical allegory, Sol/Luna, sulphur, chemical wedding"
+        },
+        {
+          "hand_label": "A",
+          "manuscript_shelfmark": "C.60.o.12",
+          "attribution": "Ben Jonson",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "English, Latin",
+          "ink_color": null,
+          "date_range": "c.1600-1637",
+          "description": "First hand in the BL copy, convincingly attributed to Ben Jonson. Composed a selective summary foregrounding large-scale visual monuments and vehicles suitable for stage design. Extensive grammatical parsing through underlining (simple, double, bracket). Interested in architectural vocabulary and natural forms (snails, acanthus, seashells) as column models. Mining the HP for ideas for masque stagecraft (inventio).",
+          "interests": "stagecraft, linguistic technicalities, inventio, visual stage design"
+        },
+        {
+          "hand_label": "B",
+          "manuscript_shelfmark": "C.60.o.12",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "is_alchemist": 1,
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)",
+          "language": "Latin, English",
+          "ink_color": null,
+          "date_range": "post-1641, late 17th century",
+          "description": "Anonymous second hand in the BL copy. Inferred alchemical formulae beneath the narrative surface. Labelled passages and woodcuts with alchemical signs (gold, silver, mercury, Venus, Jupiter). Follower of Jean d'Espagnet's emphasis on mercury as catalytic bearer of solar energy. Used extensive alchemical ideograms with Latin inflections (e.g. sun-symbol + '-ra' for 'aurata'). Consistency with Newton's Keynes MSS vocabulary suggests possible connection to Royal Society or Cambridge. Wrote programmatic summary on flyleaf verso: 'verus sensus intentionis huius libri est 3um' — threefold meaning centering on 'Master Mercury'. Notes decline in Book II but alchemical symbols persist. Also an Englishman ('frogg green').",
+          "interests": "alchemical allegory, Master Mercury, ideographic vocabulary, prisca sapientia"
+        },
+        {
+          "hand_label": "Primary",
+          "manuscript_shelfmark": "INCUN A.5.13",
+          "attribution": "Benedetto Giovio",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Italian, Latin",
+          "ink_color": null,
+          "date_range": "early 16th century",
+          "description": "Also attributed to Benedetto Giovio. Same hand as Modena copy. Focuses specifically on botanical vocabulary extraction, treating the HP as a Plinian encyclopedia. Identifies plants with Plinian cross-references.",
+          "interests": "Plinian botany, botanical vocabulary extraction"
+        },
+        {
+          "hand_label": "Primary",
+          "manuscript_shelfmark": "Inc.Stam.Chig.II.610",
+          "attribution": "Pope Alexander VII (Fabio Chigi)",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Latin, Italian",
+          "ink_color": null,
+          "date_range": "c.1630s-1667",
+          "description": "Attributed to Fabio Chigi, later Pope Alexander VII (1599-1667). Combed text for examples of verbal wit (acutezze). Compared Poliphilo's architectural journeys with his own passages through Rome. Interest in orthographic diagrams and textual emendation.",
+          "interests": "acutezze (verbal wit), architecture, Rome topography"
+        },
+        {
+          "hand_label": "Primary",
+          "manuscript_shelfmark": "Modena (Panini)",
+          "attribution": "Benedetto Giovio",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Italian, Latin",
+          "ink_color": null,
+          "date_range": "early 16th century",
+          "description": "Primary hand attributed to Benedetto Giovio (1471-1545). Plinian encyclopedic reading: extracts etymologies, botanical identifications, medical terms, musical modes, mineralogy, and literary cross-references (Boccaccio, Erasmus, Homer). Over 150 sources identified by Stichel. Also modified woodcuts with coloring and shading.",
+          "interests": "Plinian natural history, etymology, botany, music, medicine"
+        },
+        {
+          "hand_label": "Primary",
+          "manuscript_shelfmark": "O.III.38",
+          "attribution": "Anonymous",
+          "is_alchemist": 0,
+          "school": null,
+          "language": "Latin, Italian",
+          "ink_color": null,
+          "date_range": "early modern",
+          "description": "Painstaking calligraphic marginalia. Multiple hands (A-D) including ownership marks by Francisci Fini and Friedrich Schaller. Hand C wrote 'Ad lectorem' note. Hand D engaged with dating and literary analysis.",
+          "interests": "calligraphic annotation, textual emendation, educative marginalia"
+        }
+      ]
+    },
+    {
+      "id": "alchemist-hands",
+      "title": "Alchemist Annotators",
+      "evidence_type": "DB_QUERY",
+      "data": [
+        {
+          "hand_label": "E",
+          "manuscript_shelfmark": "Buffalo RBR",
+          "attribution": "Anonymous",
+          "is_alchemist": 1,
+          "school": "pseudo-Geber (Jabir ibn Hayyan)",
+          "language": "Latin",
+          "ink_color": null,
+          "date_range": "late 17th-early 18th century",
+          "description": "Final distinguishable hand. Applies alchemical reading. Overwrites Hand D (latest hand). Follower of pseudo-Geber school emphasizing sulphur and Sol/Luna pairings. Unlike BL alchemist, uses minimal ideograms — writes out element names in full (e.g. 'sulphur naturae'). Labels passages with alchemical stages. Praises Geber's 'ingenium subtile'. Reads male-female pairings as alchemical weddings. Identifies chess match results as silver/gold transmutation.",
+          "interests": "alchemical allegory, Sol/Luna, sulphur, chemical wedding"
+        },
+        {
+          "hand_label": "B",
+          "manuscript_shelfmark": "C.60.o.12",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "is_alchemist": 1,
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)",
+          "language": "Latin, English",
+          "ink_color": null,
+          "date_range": "post-1641, late 17th century",
+          "description": "Anonymous second hand in the BL copy. Inferred alchemical formulae beneath the narrative surface. Labelled passages and woodcuts with alchemical signs (gold, silver, mercury, Venus, Jupiter). Follower of Jean d'Espagnet's emphasis on mercury as catalytic bearer of solar energy. Used extensive alchemical ideograms with Latin inflections (e.g. sun-symbol + '-ra' for 'aurata'). Consistency with Newton's Keynes MSS vocabulary suggests possible connection to Royal Society or Cambridge. Wrote programmatic summary on flyleaf verso: 'verus sensus intentionis huius libri est 3um' — threefold meaning centering on 'Master Mercury'. Notes decline in Book II but alchemical symbols persist. Also an Englishman ('frogg green').",
+          "interests": "alchemical allegory, Master Mercury, ideographic vocabulary, prisca sapientia"
+        }
+      ]
+    },
+    {
+      "id": "alchemist-refs",
+      "title": "Dissertation References to Alchemical Annotations",
+      "evidence_type": "DB_QUERY",
+      "count": 19,
+      "data": [
+        {
+          "signature_ref": "a3r",
+          "thesis_page": 155,
+          "context_text": "from all superior men.  (G 2-3, emphasis mine) \n \nBy opening in a comparable manner to that of an alchemical treatise, the HP would therefore \nhave raised a horizon of expectation that the text would include alchemical content for \nreaders who were thus inclined, whether or not this was the intent of the author.  With such \n                                                             \n35 Giovan Battista Nazari, Della tramutatione metallica sogni tre (Brescia: Pietro Maria Marchetti, 1599), f. a3r. \n36 Trans. by Doug Skinner, Three Dreams (Glasgow: Magnum Opus Hermeticum Sourceworks No. 27, 2002), \np. 5.",
+          "marginal_text": null,
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b6v",
+          "thesis_page": 156,
+          "context_text": "are \nremnants from what was at one time an extensive ideographic vocabulary.37  A number of \nthese ideograms are of significant antiquity.38  Others may be of more recent coinage, or even \nsigns distinct to a particular practitioner.  Thus, by following the procession of operations \nsignified in each of these symbols, one can correlate passages of the HP with the alchemical \nprocesses presumed to be encoded therein. For example, the following annotation on the \nimage of the Elephant and Obelisk (b6v) contains a number of such ideograms within the \nsyntax of the sentence.  \n                                                             \n37 Taylor, The Alchemists, pp. 51-67. \n38 As an example of the antiquity of these signs, Taylor (ibid.) cites a Leyden papyrus (c. 250 AD) entitled the \nGold-making of Cleopatra which bears the symbols of mercury, gold and silver.  For an introduction to \nalchemical symbolism, see Ibid., pp. 145-61.",
+          "marginal_text": null,
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b6v",
+          "thesis_page": 157,
+          "context_text": "146 \n \n Detail, (b6v) \n \n \nThe annotator consistently uses in-text ideograms throughout his annotation.  The hand is \nheavy throughout the book, although notes decline in frequency and alchemical significance \nin Book II.  Nevertheless, even on (E8v) the symbol of Venus is still used as a replacement \nfor the goddess’ name. \n \n Detail, (E8v) \n \nThe Latin inflexions suffixed to the symbols serve to disambiguate each sign by \nidentifying its gender and case, as well as allowing the ideogram to function as a word withi",
+          "marginal_text": null,
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "E8v",
+          "thesis_page": 157,
+          "context_text": "146 \n \n Detail, (b6v) \n \n \nThe annotator consistently uses in-text ideograms throughout his annotation.  The hand is \nheavy throughout the book, although notes decline in frequency and alchemical significance \nin Book II.  Nevertheless, even on (E8v) the symbol of Venus is still used as a replacement \nfor the goddess’ name. \n \n Detail, (E8v) \n \nThe Latin inflexions suffixed to the symbols serve to disambiguate each sign by \nidentifying its gender and case, as well as allowing the ideogram to function as a word within \na sentence.  For example, the ‘-ra’ added to the alchemical sign for ‘gold’, ☉-ra, modified by \n‘scintillata’, may read ‘scintillata aurata’.  \n \nAlthough the working theories of alchemists varied significantly, there was a \ns",
+          "marginal_text": "-ra",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "E8v",
+          "thesis_page": 157,
+          "context_text": "146 \n \n Detail, (b6v) \n \n \nThe annotator consistently uses in-text ideograms throughout his annotation.  The hand is \nheavy throughout the book, although notes decline in frequency and alchemical significance \nin Book II.  Nevertheless, even on (E8v) the symbol of Venus is still used as a replacement \nfor the goddess’ name. \n \n Detail, (E8v) \n \nThe Latin inflexions suffixed to the symbols serve to disambiguate each sign by \nidentifying its gender and case, as well as allowing the ideogram to function as a word within \na sentence.  For example, the ‘-ra’ added to the alchemical sign for ‘gold’, ☉-ra, modified by \n‘scintillata’, may read ‘scintillata aurata’.  \n \nAlthough the working theories of alchemists varied significantly, there was a \nstandardized formulation or progression of elements in these ideographic vocabularies.",
+          "marginal_text": "-ra",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "e1r",
+          "thesis_page": 163,
+          "context_text": "g thin, and so swimming in the Air, or else bound \nup into a Cloud, do most eagerly suck in that spiritual Nectar [from the heavenly bodies], and attract \nit to them by a Magnetick virtue, and having received it, they grow big, and being impregnated and \nquickened with that ingendering seeds, as being delivered of their burden, do freely fall down back \ninto the lap of the Earth in some Dew, hoar Frost, Rain or some other nature.52 \n \nA label added to the woodcut bearing the Panton Tokadi image (e1r) is an indication that this \npresent annotator conceptualized the alchemical process in a manner consonant with \nD’Espagnet’s scheme.  The annotator interpreted this particular emblem as representing the \nemanation of the world spirit, borne upon Mercury.  The image depicts a satyr, pulling back a \ncurtain to reveal a mother figure.53  Two fauns stand behind the woman, bearing vessels.  \nPencil lines indicating streams of milk emerge from the woman’s nipples.",
+          "marginal_text": null,
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "d8v",
+          "thesis_page": 164,
+          "context_text": "bol for \nthe generation of life, draws associations with D’Espagnet’s concept of the ‘magnetick’ \nprinciple drawing the spirit of life into the ‘vessels’ of matter, through the medium of \nmercury.   \nThere are also signs of the second level of d’Espagnet’s schema discussed above, that of \nthe expression of the ‘universal spirit’ in matter. Godwin translates Panta Tokadi as ‘the \nmother of all (G 73)’.  The present annotator gives the phrase a slightly different inflection.  \nOn the facing folio (d8v) the phrase is translated as rerum omnium vas, followed by the \nabbreviation for ‘licet’, and then an alternate symbol for mercury.   \n \n \nDetail, d8v \n \nIf rerum omnium vas is thus equated to mercury, then this would resonate with D’Espagnet’s \nconcept of mercury, not only as a quickening force, but also as a vessel for generative forces.   \nTherefore, the Panta Tokadi is mercury itself. The use of vas broadens the meaning \nbeyond ‘mother’. A ‘Mother’ would be originator of all things. The anno",
+          "marginal_text": "Mother",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "d8v",
+          "thesis_page": 164,
+          "context_text": "’ of matter, through the medium of \nmercury.   \nThere are also signs of the second level of d’Espagnet’s schema discussed above, that of \nthe expression of the ‘universal spirit’ in matter. Godwin translates Panta Tokadi as ‘the \nmother of all (G 73)’.  The present annotator gives the phrase a slightly different inflection.  \nOn the facing folio (d8v) the phrase is translated as rerum omnium vas, followed by the \nabbreviation for ‘licet’, and then an alternate symbol for mercury.   \n \n \nDetail, d8v \n \nIf rerum omnium vas is thus equated to mercury, then this would resonate with D’Espagnet’s \nconcept of mercury, not only as a quickening force, but also as a vessel for generative forces.   \nTherefore, the Panta Tokadi is mercury itself. The use of vas broadens the meaning \nbeyond ‘mother’. A ‘Mother’ would be originator of all things. The annotator of State Library \nof New South Wales copy (Chapter 8) does in fact render the term as omnia genetrix.  ‘Vas’, \nmeaning either ‘vessel’ or ‘tool/",
+          "marginal_text": "vessel",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a1r",
+          "thesis_page": 165,
+          "context_text": "ve material for future research.  This study has, \nfor the present, confined itself to highlighting some of the annotator’s ideographic \nvocabulary, and identifying the alchemical framework behind his or her analysis.  Alchemy is \nB’s primary, but not sole interest.  The second hand in the BL copy also took a literary and \nphilological interest in the text, noting the Greek origins of names.  On the opening leaf, B \nidentifies the lexical components that make up the name Leucothea.  \n \n Detail, a1r \n \nAlthough the word was highlighted by A, it is B which takes the time to define the term.  In \nthe margins, ‘Leucos albus, candidus, etc.’ is offered as an etymology for the name of the \ngoddess.  Pozzi and Ciapponi concur, identifying the term as deriving from Nonius \nMarcellinus.54 \n \nB also takes note of the sequence of events, or at least the time of day at which they took \nplace.  This chapter is labelled ‘AURORAE DESCRIPTIO’ (Description of the dawn).  \n \nEt corruscante già sopra le cer",
+          "marginal_text": "AURORAE DESCRIPTIO",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a1r",
+          "thesis_page": 166,
+          "context_text": "155 \n \nvehiculo suo cum il Mulo, lo uno candido et l’altro fusco, trahenti ad l’ultimo Horizonta discriminante \ngli Hemisperii pervenuta ... (a1r) \n \nHis [Phoebus’] curling hair was already sending its rays scintillating over the restless blue waves. As \nhe arrived at this point, hornless Cynthia was setting opposite, urging on the steeds of her vehicle \nwhich was drawn by a white and a dark mule.  She reached the far horizon separating the hemispheres \nand gave way... (G 11). \n \nAdjacent to this image of the sun cresting the horizon, the annotator writes, somewhat \nobviously, ‘Tempus ergo matutinum erat, sine diluculo, uel crepusculum’,",
+          "marginal_text": "Tempus ergo matutinum erat, sine diluculo, uel crepusculum",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a1r",
+          "thesis_page": 166,
+          "context_text": "As \nhe arrived at this point, hornless Cynthia was setting opposite, urging on the steeds of her vehicle \nwhich was drawn by a white and a dark mule.  She reached the far horizon separating the hemispheres \nand gave way... (G 11). \n \nAdjacent to this image of the sun cresting the horizon, the annotator writes, somewhat \nobviously, ‘Tempus ergo matutinum erat, sine diluculo, uel crepusculum’, or ‘Therefore \nit was the early morning, before dawn, or later in the evening, after sunset’. \n \nDetail, (a1r) \n \n \nIf this comment was solely intended as a remark that that it is indeed dawn, this statement \nwould be redundant.  Yet a closer consideration of this marginalium suggests a reason for the \nredundancy. The annotator observes the constellation of literary references to the dawn \nclustered on the same page, and in doing so, observes that between them all they not only \nindicate the morning in general, but a specific time of morning, before the exact moment \nwhen the sun crests the horizon.  Th",
+          "marginal_text": "Therefore \nit was the early morning, before dawn, or later in the evening, after sunset",
+          "chapter_num": 6,
+          "manuscript_shelfmark": "C.60.o.12",
+          "hand_label": "B",
+          "attribution": "Anonymous (possibly Royal Society circle)",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b7r",
+          "thesis_page": 187,
+          "context_text": "176 \n \nSilver, were understood to be interconnected inverses of one another.  Gold (Sol) is \nmasculine ‘in its height’ and feminine ‘in its depth’, while silver (Luna) is feminine in its \nheight and masculine in its depth.  It is the variance in these proportions which differentiates \nelements. \nIn the episode featuring the elephant and obelisk, together with the statues of the king and \nqueen, this annotator witnessed a set of signs which persuaded him that a Geberian subtext \nwas operating (b7r-b8v). Under the motto of ‘Γόνος et Ευφυία’ (Labor and Industry), the \nannotator identifies such a framework to be in place. .  \n \n  Detail, (b7r) \n \nThe annotator praises Geber’s ‘ingenium subtile’ (subtle ingegno), establishing that the \ndiscussion of what follows will take place within a Geberian framework.  These would be \nessential virtues in the task of an alchemist, whose work might involve distilling the same \nsubstance many hundreds of times.  The statues of the crowned man and woman on",
+          "marginal_text": "Γόνος et Ευφυία",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "thesis_page": 187,
+          "context_text": "pth’, while silver (Luna) is feminine in its \nheight and masculine in its depth.  It is the variance in these proportions which differentiates \nelements. \nIn the episode featuring the elephant and obelisk, together with the statues of the king and \nqueen, this annotator witnessed a set of signs which persuaded him that a Geberian subtext \nwas operating (b7r-b8v). Under the motto of ‘Γόνος et Ευφυία’ (Labor and Industry), the \nannotator identifies such a framework to be in place. .  \n \n  Detail, (b7r) \n \nThe annotator praises Geber’s ‘ingenium subtile’ (subtle ingegno), establishing that the \ndiscussion of what follows will take place within a Geberian framework.  These would be \nessential virtues in the task of an alchemist, whose work might involve distilling the same \nsubstance many hundreds of times.  The statues of the crowned man and woman on the \nleaves that follow then easily commend themselves to reading along the lines of Geber.  For \ninstance, on c6v Poliphilo views a Greek epigra",
+          "marginal_text": "ingenium subtile",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "thesis_page": 187,
+          "context_text": "be in place. .  \n \n  Detail, (b7r) \n \nThe annotator praises Geber’s ‘ingenium subtile’ (subtle ingegno), establishing that the \ndiscussion of what follows will take place within a Geberian framework.  These would be \nessential virtues in the task of an alchemist, whose work might involve distilling the same \nsubstance many hundreds of times.  The statues of the crowned man and woman on the \nleaves that follow then easily commend themselves to reading along the lines of Geber.  For \ninstance, on c6v Poliphilo views a Greek epigram which translates as ‘to the blessed Mother, \nthe Goddess Venus, and to her Son, Amor, Bacchus and Demeter have given of their own \nsubstances’. (G 51).",
+          "marginal_text": "to the blessed Mother, \nthe Goddess Venus, and to her Son, Amor, Bacchus and Demeter have given of their own \nsubstances",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "thesis_page": 188,
+          "context_text": "177 \n \n \nDetail, (c6v) \n \nE writes ‘Bacchus et Ceres [Demeter] id est sol et luna’.  Hand D elaborates, equating \nBacchus with the principle of growth, ‘Baccho era creduto dagli antichi esser quella virtù \nocculta che aiuta le piante a forza de produrre in maturi frutti.’ \nE found ample expression of the Sol and Luna duality in the human chess match held at \nQueen Eleutherylida’s palace (g8r-g8v).  E also described the game as a ‘chorea \nelegantissima’ that was ‘festivamente iocando.’ (g8r).   \n \n Detail, (g8r) \n \nTh",
+          "marginal_text": "Bacchus et Ceres [Demeter] id est sol et luna",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "thesis_page": 189,
+          "context_text": "rgento).  This is the inverse of the Geberian ideal, indicating that \nthe process of transmutation has yet to take place \nThe annotator then observes that the process results in the transformation of the king out \nof silver and into gold.  Although the ‘King’, Sol, is traditionally associated with gold, within \nthe Geberian schema, silver and gold are creative inverses of one another, and so as a \nconsequence a King can indeed be wrought out of the traditionally feminine silver.   \n \n  \nDetail, (h1r) \n \nThis annotator interpreted the chess match as one of the conflict between, and eventual \nintermingling of, silver and gold.  The maidens play three matches, and the reader recorded \nthe results of each round.  The human chess pieces intermingle on the board, and when one \npiece takes another, they kiss before being sent off the board.  This may have been perceived \nto allegorise the mingling of elements in the alchemical marriage and the eventual triumph of \nthe more refined element.  Surpri",
+          "marginal_text": "King",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "thesis_page": 189,
+          "context_text": "age and the eventual triumph of \nthe more refined element.  Surprisingly, the silver side wins the first match. The annotator \nrecords this fact, writing ‘Argentum,’ and draws in a small sketch of a moon’s crescent, \nrepresenting Luna.  Below he writes ‘Rex ex argento factus victor remanet.’  One would \nexpect Gold to be the initial victor, but the highest of elements wins out only after multiple \nrounds of play, presumably symbolizing distillations.   \nSilver wins the second round as well (g8v-h1r), and B writes ‘argentum rex ex argento \nfactus victor secunda vice remanet.’  The King of Gold finally wins in the third and final \nround, and E initially writes ‘Rex ex auro factus victoriam ultimam et ultimo victor \ntriumphat.’; then appears to correct ‘Re>x<’ with ‘[Re]gina’, ‘auro’ with ‘aura’, ‘factus’ with \n‘☉ uestita’ and ‘victor’ with ‘victrix’. E then cancels >[Re]gina< and places ‘Auru(m)’ as the \nculmination of the process.",
+          "marginal_text": "Auru(m)",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "thesis_page": 190,
+          "context_text": "179 \n \n Detail, (h1r) \n \nThe issue of the alchemical marriage is a hermaphrodite, representing the combination of \nopposite qualities or coincidentia oppositorum.  One reader found what he perceived to be a \nreference to this figure in an epigram on one side of the base of the statue of the horse, \nreading D.AMBIG.DD, or ‘dedicated to the ambiguous gods.’ (b5r) E interprets the \n‘ambiguous gods’ as referring to such alchemical hermaphrodites. \n \ndiis ambiguis id est metallis hermafroditis guarda enim metalla sunt ma",
+          "marginal_text": "dedicated to the ambiguous gods.",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b5r",
+          "thesis_page": 190,
+          "context_text": "179 \n \n Detail, (h1r) \n \nThe issue of the alchemical marriage is a hermaphrodite, representing the combination of \nopposite qualities or coincidentia oppositorum.  One reader found what he perceived to be a \nreference to this figure in an epigram on one side of the base of the statue of the horse, \nreading D.AMBIG.DD, or ‘dedicated to the ambiguous gods.’ (b5r) E interprets the \n‘ambiguous gods’ as referring to such alchemical hermaphrodites. \n \ndiis ambiguis id est metallis hermafroditis guarda enim metalla sunt mas et foemina guarda enim \nmetalla sunt foemine et mas aura-argentu enim in sua altitudine mas est in sua profunda foeminina \nargentum vero in sua altitudine est foemininum in suo profundo mas. \n \n‘To the ambiguous gods’, that is, to the metallic hermaphrodies, when once they are massa [the \nalchemical matter] they remain feminine [and thus]",
+          "marginal_text": "ambiguous gods",
+          "chapter_num": 7,
+          "manuscript_shelfmark": "Buffalo RBR",
+          "hand_label": "E",
+          "attribution": "Anonymous",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        }
+      ]
+    },
+    {
+      "id": "alchemist-images",
+      "title": "Images Matched to Alchemical Annotations",
+      "evidence_type": "DB_QUERY",
+      "count": 37,
+      "data": [
+        {
+          "signature_ref": "E8v",
+          "filename": "O.III.38_0212r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0212r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "E8v",
+          "filename": "O.III.38_0212v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0212v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "E8v",
+          "filename": "O.III.38_0212r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0212r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "E8v",
+          "filename": "O.III.38_0212v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0212v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b5r",
+          "filename": "O.III.38_0013r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0013r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b5r",
+          "filename": "O.III.38_0013v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0013v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "O.III.38_0015r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0015r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "O.III.38_0015v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0015v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "O.III.38_0015r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0015r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "O.III.38_0015v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0015v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "filename": "O.III.38_0022r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0022r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "filename": "O.III.38_0022v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0022v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "filename": "O.III.38_0022r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0022r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "filename": "O.III.38_0022v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0022v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057r.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057r.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "h1r",
+          "filename": "O.III.38_0057v.jpg",
+          "relative_path": "Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile/O.III.38_0057v.jpg",
+          "shelfmark": "O.III.38",
+          "confidence": "MEDIUM",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "a1r",
+          "filename": "C_60_o_12-001.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-001.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a1r",
+          "filename": "C_60_o_12-001.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-001.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a1r",
+          "filename": "C_60_o_12-001.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-001.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "a3r",
+          "filename": "C_60_o_12-003.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-003.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b5r",
+          "filename": "C_60_o_12-013.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-013.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b6v",
+          "filename": "C_60_o_12-014.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-014.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b6v",
+          "filename": "C_60_o_12-014.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-014.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "B",
+          "school": "Jean d'Espagnet (Enchiridion Physicae Restitutae)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "C_60_o_12-015.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-015.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "b7r",
+          "filename": "C_60_o_12-015.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-015.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        },
+        {
+          "signature_ref": "c6v",
+          "filename": "C_60_o_12-022.jpg",
+          "relative_path": "3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos/C_60_o_12-022.jpg",
+          "shelfmark": "C.60.o.12",
+          "confidence": "LOW",
+          "hand_label": "E",
+          "school": "pseudo-Geber (Jabir ibn Hayyan)"
+        }
+      ]
+    },
+    {
+      "id": "corpus-bl-alchemist-hand-b",
+      "title": "Corpus Evidence: BL alchemist Hand B",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "Hand B alchemist BL mercury",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 161-165",
+          "page_refs": [
+            "161",
+            "162",
+            "163",
+            "164"
+          ],
+          "matched_text": "<!-- Page 161 -->\n\n \nmeet with many processes, to make these  mercuries.’45  In the practical refinement of \nphysical mercury, two main laboratory methods were in practice.  \n \n(1) The first was to heat a lesser metal, such as lead.  The resulting molten metal was deemed \nto be ‘mercury’.  In fact, this resulting substance was simply the molten form of the original \nmetal. According to prevailing theories...",
+          "relevance_score": 24
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 170-176",
+          "page_refs": [
+            "170",
+            "171",
+            "172",
+            "173",
+            "174",
+            "175"
+          ],
+          "matched_text": "... applies an alchemical reading to the HP.  As this hand overwrites D, it is \nunderstood to be the last of the hands.  E, like the second hand in the BL copy, labels \npassages and woodcuts with the element or stage of the alchemical process which they were \npresumed to allegorize.  Unlike the BL alchemist, this annotator uses a minimum of \nalchemical ideograms, restricting himself to the use of the Venus symbol (♀) and a few other \nstandard signs.  In most cases, this annotator writes out the name of the alchemical ingredient \nin its entirety, as seen in this identification of the statue...",
+          "relevance_score": 24
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 158-161",
+          "page_refs": [
+            "158",
+            "159",
+            "160"
+          ],
+          "matched_text": "... Mercurii Descriptio elegans, ampla  \n \nThe true sense of the intention of this book is threefold: the full and elegant description of the energy \nand spirit of the whole nature, and of the operations of Master Mercury \n \n \nDetail, flyleaf, verso \n \n \nThis introductory annotation lays out the alchemist’s conceptual scheme, emphasises his \nareas of interest, and delineates that which he presumed the HP to be.  This annotator \napproaches the text with a broader natural-philosophical interest than simply the refinement \nof the matter before him.  He is conducting an investigation into the...",
+          "relevance_score": 23
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 133-138",
+          "page_refs": [
+            "133",
+            "134",
+            "135",
+            "136",
+            "137"
+          ],
+          "matched_text": "... own ingegno.  The HP served as both a \nresource for composition, and a means of  sharpening one’s capacity to apply that \ninformation.  The copy of the 1545 Sons of Aldus edition at shelfmark C.60.o.12 in the \nBritish Library is unique among copies featured in this study, in that it contains the hands of \ntwo clearly distinct and highly engaged annotators utilizing the text in very different \ndisciplines.  The first hand (‘Hand A’) is plausibly attributed to Ben Jonson (1572-1637). The \npresentation of further evidence to corroborate this attribution also offers the opportunity to \nadd...",
+          "relevance_score": 15
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 141-145",
+          "page_refs": [
+            "141",
+            "142",
+            "143",
+            "144"
+          ],
+          "matched_text": "... in London and the Universities would offer him the opportunity to meet \nnumerous individuals with alchemical interests.  Jonson was so well-acquainted with \nalchemical practice and the pretensions of alchemists that he composed his famous play upon \nthe same subject.20  The presence of Bourne’s hand as an intermediary, and the lack of \nengagement of B with A, however, complicate the identification of the alchemist with \nsomeone in Jonson’s circle.  B received the copy through the intermediary of Bourne, and if \nB indeed had some regard for Jonson, this fact would likely have appeared in...",
+          "relevance_score": 14
+        }
+      ]
+    },
+    {
+      "id": "corpus-buffalo-alchemist-hand-e",
+      "title": "Corpus Evidence: Buffalo alchemist Hand E",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "Hand E Buffalo alchemist Geber",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 170-176",
+          "page_refs": [
+            "170",
+            "171",
+            "172",
+            "173",
+            "174",
+            "175"
+          ],
+          "matched_text": "... applies an alchemical reading to the HP.  As this hand overwrites D, it is \nunderstood to be the last of the hands.  E, like the second hand in the BL copy, labels \npassages and woodcuts with the element or stage of the alchemical process which they were \npresumed to allegorize.  Unlike the BL alchemist, this annotator uses a minimum of \nalchemical ideograms, restricting himself to the use of the Venus symbol (♀) and a few other \nstandard signs.  In most cases, this annotator writes out the name of the alchemical ingredient \nin its entirety, as seen in this identification of the statue...",
+          "relevance_score": 29
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 186-191",
+          "page_refs": [
+            "186",
+            "187",
+            "188",
+            "189",
+            "190"
+          ],
+          "matched_text": "<!-- Page 186 -->\n\n \nthe sun and the moon.17 The emphasis upon figures perceived to be Lunar and Solar in the \nannotations, combined with repeated mentions of sulphur, indicate that this alchemist \napproached the text from within the school of pseudo-Geber.   \nThis identification of the framework within which this particular alchemist interpreted \nthe HP is intended to be a prompt for future study.  As with the BL annotator, the potential \ncommentary on alchemical themes in this...",
+          "relevance_score": 19
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 133-138",
+          "page_refs": [
+            "133",
+            "134",
+            "135",
+            "136",
+            "137"
+          ],
+          "matched_text": "... own ingegno.  The HP served as both a \nresource for composition, and a means of  sharpening one’s capacity to apply that \ninformation.  The copy of the 1545 Sons of Aldus edition at shelfmark C.60.o.12 in the \nBritish Library is unique among copies featured in this study, in that it contains the hands of \ntwo clearly distinct and highly engaged annotators utilizing the text in very different \ndisciplines.  The first hand (‘Hand A’) is plausibly attributed to Ben Jonson (1572-1637). The \npresentation of further evidence to corroborate this attribution also offers the opportunity to \nadd...",
+          "relevance_score": 15
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 141-145",
+          "page_refs": [
+            "141",
+            "142",
+            "143",
+            "144"
+          ],
+          "matched_text": "... in London and the Universities would offer him the opportunity to meet \nnumerous individuals with alchemical interests.  Jonson was so well-acquainted with \nalchemical practice and the pretensions of alchemists that he composed his famous play upon \nthe same subject.20  The presence of Bourne’s hand as an intermediary, and the lack of \nengagement of B with A, however, complicate the identification of the alchemist with \nsomeone in Jonson’s circle.  B received the copy through the intermediary of Bourne, and if \nB indeed had some regard for Jonson, this fact would likely have appeared in...",
+          "relevance_score": 14
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 224-228",
+          "page_refs": [
+            "224",
+            "225",
+            "226",
+            "227"
+          ],
+          "matched_text": "<!-- Page 224 -->\n\n \nSiena O.III.38 \n \nThe Siena copy is a perfect copy of the 1499 edition. There is no comment about the date on \nthe colophon.  It bears four hands, as distinguished by Fumagalli, three of which are \nanonymous and appear to date from the early sixteenth century, for reasons to be discussed \nbelow.  The only known owner is one ‘Fridericus David Schaller Augustanus’, who is \nrecorded as matriculating at the University of Siena in 1599. ...",
+          "relevance_score": 14
+        }
+      ]
+    },
+    {
+      "id": "corpus-d'espagnet-framework",
+      "title": "Corpus Evidence: d'Espagnet framework",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "Espagnet mercury Enchiridion",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 161-165",
+          "page_refs": [
+            "161",
+            "162",
+            "163",
+            "164"
+          ],
+          "matched_text": "... Aurora consurgens pp. 92-99 (2, n.3), quoted in Dobbs, The Hunting of the Greene Lyon, \np. 34. \n47 For a general summary see Frances A. Yates, Giordano Bruno and the Hermetic Tradition (London: \nRoutledge and Kegan Paul, 1964). \n\n\n---\n\n<!-- Page 162 -->\n\n \nconceptual schema, articulated in his Enchiridion physicae restitutae, placed a particular \nemphasis upon the operation of mercury and the quickening of the spiritus mundi. The \nEnchiridion, available in English from 1651, describes this ‘second universal cause’ as  \n \nthe spirit of the Universe, or the quickening virtue of that light...",
+          "relevance_score": 35
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 158-161",
+          "page_refs": [
+            "158",
+            "159",
+            "160"
+          ],
+          "matched_text": "...   \n\n\n---\n\n<!-- Page 159 -->\n\n \nThis chapter will trace this procedure, as it was perceived by the annotator, throughout \nthe HP.  It will propose that the distinct emphases and inflections found in this current \nannotator indicate that he was applying a theory of alchemy derived from Jean d’Espagnet \n(1564-1637) in his Enchiridion physicae restitutae.40 \n \nWriting on the flyleaf verso, the alchemical annotator offers a summary for the text and a \ndelineation of its perceived threefold purpose.   \n \nverus sensus intentionis huius libri est 3um : Geni \net Totius Naturæ energiæ &...",
+          "relevance_score": 20
+        },
+        {
+          "source_doc": "md/Word_Image_2015_apr_03_vol_31_iss_2_Nygren_Christopher_J_The_Hypnerotomachia_Pol.md",
+          "section": "Pages 4-6",
+          "page_refs": [
+            "4",
+            "5"
+          ],
+          "matched_text": "... the blessed\nMother, the Goddess Venus, and to her Son, Amor.” This\nedifice had been dedicated by Bacchus and Demeter, and\nPoliphilo goes on to describe the impressive marble reliefs\nthat adorn the archway. The text is worth citing at length:\nFigure 3. Antonio Allegri, called Correggio, Venus with Mercury and Cupid\n(‘The School of Love’), c.1525. Oil on canvas. 155.6 × 91.4 cm. London,\nNational Gallery, inventory no. NG10. © National Gallery, London /\nArt Resource, NY.\n142\nCHRISTOPHER J. NYGREN\nDownloaded by [Texas A & M International University] at 00:12 11 September 2015 \n\n\n---\n\n<!-- Page...",
+          "relevance_score": 9
+        },
+        {
+          "source_doc": "md/Word_Image_2015_apr_03_vol_31_iss_2_Nygren_Christopher_J_The_Hypnerotomachia_Pol.md",
+          "section": "Pages 6-8",
+          "page_refs": [
+            "6",
+            "7"
+          ],
+          "matched_text": "... of\nother visual models that were circulating within the Gonzaga\ncourt, such as Antico’s sculpture.\nCorreggio’s oblique reference to Antico’s sculpture compli-\ncates any direct genealogical relationship between The Education\nof Cupid and the Hypnerotomachia. Indeed, Correggio’s alterna-\ntion of Mercury’s didactic material radically alters the connota-\ntion of the scene. As Horst Bredekamp has noted, from\nCamelio’s relief to Colonna’s description, Mercury switches\nfrom a humanist educator par excellence into an anti-humanist\ndisseminator of anarchy and advocate of...",
+          "relevance_score": 4
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 180-186",
+          "page_refs": [
+            "180",
+            "181",
+            "182",
+            "183",
+            "184",
+            "185"
+          ],
+          "matched_text": "... similar lines, variations in their approaches, and in features of the alchemical process \nwhich they foreground, indicate that each adhered to a different conceptual scheme of \nalchemy.  While the BL annotator was apparently a student of D’Espagnet, due to his focus \non the catalytic effects of mercury as a bearer of solar energy, this annotator was apparently a \nfollower of pseudo-Geber.  The school of alchemy which holds as its nominal head Jābir ibn \nHayyān (latinized as ‘Geber’) and is represented in a number of pseudepigraphic texts, placed \ngreater emphasis upon mercury’s companion...",
+          "relevance_score": 3
+        }
+      ]
+    },
+    {
+      "id": "corpus-master-mercury-flyleaf",
+      "title": "Corpus Evidence: Master Mercury flyleaf",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "Mercury Magisteri flyleaf verus sensus",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 158-161",
+          "page_refs": [
+            "158",
+            "159",
+            "160"
+          ],
+          "matched_text": "... \n(1564-1637) in his Enchiridion physicae restitutae.40 \n \nWriting on the flyleaf verso, the alchemical annotator offers a summary for the text and a \ndelineation of its perceived threefold purpose.   \n \nverus sensus intentionis huius libri est 3um : Geni \net Totius Naturæ energiæ & operationum \nMagisteri Mercurii Descriptio elegans, ampla  \n \nThe true sense of the intention of this book is threefold: the full and elegant description of the energy \nand spirit of the whole nature, and of the operations of Master Mercury \n \n \nDetail, flyleaf, verso \n \n \nThis introductory annotation lays out...",
+          "relevance_score": 23
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 161-165",
+          "page_refs": [
+            "161",
+            "162",
+            "163",
+            "164"
+          ],
+          "matched_text": "<!-- Page 161 -->\n\n \nmeet with many processes, to make these  mercuries.’45  In the practical refinement of \nphysical mercury, two main laboratory methods were in practice.  \n \n(1) The first was to heat a lesser metal, such as lead.  The resulting molten metal was deemed \nto be ‘mercury’.  In fact, this resulting substance was simply the molten form of the original \nmetal. According to prevailing theories...",
+          "relevance_score": 23
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 81-84",
+          "page_refs": [
+            "81",
+            "82",
+            "83"
+          ],
+          "matched_text": "... a \nprominent role in historiography, literature, and art from the 15th century on – would he not \nhave known about it?’12  On its own, the evidence proffered by the Modena copy is an \ninsufficient basis on which to draw definite conclusions. Yet Stichel highlights the fact that \nGiambattista’s flyleaf note refers to another copy of the HP containing marginalia, which he \nhad donated to the Biblioteca Pubblica (now Comunale) of Como.13  Therefore, it was \napparent that a study comparing the Como copy with Modena may have the potential to offer \nevidence confirming the annotator’s...",
+          "relevance_score": 9
+        },
+        {
+          "source_doc": "md/Word_Image_2015_apr_03_vol_31_iss_2_Nygren_Christopher_J_The_Hypnerotomachia_Pol.md",
+          "section": "Pages 4-6",
+          "page_refs": [
+            "4",
+            "5"
+          ],
+          "matched_text": "... the blessed\nMother, the Goddess Venus, and to her Son, Amor.” This\nedifice had been dedicated by Bacchus and Demeter, and\nPoliphilo goes on to describe the impressive marble reliefs\nthat adorn the archway. The text is worth citing at length:\nFigure 3. Antonio Allegri, called Correggio, Venus with Mercury and Cupid\n(‘The School of Love’), c.1525. Oil on canvas. 155.6 × 91.4 cm. London,\nNational Gallery, inventory no. NG10. © National Gallery, London /\nArt Resource, NY.\n142\nCHRISTOPHER J. NYGREN\nDownloaded by [Texas A & M International University] at 00:12 11 September 2015 \n\n\n---\n\n<!-- Page...",
+          "relevance_score": 9
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 84-87",
+          "page_refs": [
+            "84",
+            "85",
+            "86"
+          ],
+          "matched_text": "<!-- Page 84 -->\n\n \nGiambattista’s choice of words in the footnote to the eulogy also resonates with the \nterminology that he used to describe the Modena copy in its own flyleaf note.   \n \nNell’esemplare [Modena] che ricordai, sono continue e pregevoli le note ‘marginali’, e molto utili per \nla intelligenza del testo, che può quasi dirsi poliglotto, poiché il Colonna vi parla Italiano greco latino, \ne vi sono miste voci ebraiche, caldèe, arabe.24 \n \nThe use of...",
+          "relevance_score": 4
+        }
+      ]
+    },
+    {
+      "id": "corpus-sol-luna-buffalo",
+      "title": "Corpus Evidence: Sol Luna Buffalo",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "Sol Luna gold silver Buffalo chess",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 186-191",
+          "page_refs": [
+            "186",
+            "187",
+            "188",
+            "189",
+            "190"
+          ],
+          "matched_text": "... et Ceres [Demeter] id est sol et luna’.  Hand D elaborates, equating \nBacchus with the principle of growth, ‘Baccho era creduto dagli antichi esser quella virtù \nocculta che aiuta le piante a forza de produrre in maturi frutti.’ \nE found ample expression of the Sol and Luna duality in the human chess match held at \nQueen Eleutherylida’s palace (g8r-g8v).  E also described the game as a ‘chorea \nelegantissima’ that was ‘festivamente iocando.’ (g8r).   \n \n Detail, (g8r) \n \nThe game is played by thirty-two maidens, one side dressed in silver and the other in \ngold.  The queen piece of both...",
+          "relevance_score": 46
+        },
+        {
+          "source_doc": "md/Liane_Lefaivre_Leon_Battista_Alberti_s_Hypnerotomachia_Poliphili_Re_Cognizing_th.md",
+          "section": "Pages 231-234",
+          "page_refs": [
+            "231",
+            "232",
+            "233"
+          ],
+          "matched_text": "<!-- Page 231 -->\n\nSaint-Denis. In Hugo’s palace, the columns are of “marble” and “fine gold,’ the staircase \nof “marble.” !¢ \nIn Chanson de geste (early thirteenth century), Aymeri de Narbonne dwells on the \nostentatious brightness of the materials on the outside of a fictitious palace. The gold and \ngems are as bright as the rising sun, or so bright one has to shield one’s eyes...",
+          "relevance_score": 33
+        },
+        {
+          "source_doc": "md/Liane_Lefaivre_Leon_Battista_Alberti_s_Hypnerotomachia_Poliphili_Re_Cognizing_th.md",
+          "section": "Pages 234-237",
+          "page_refs": [
+            "234",
+            "235",
+            "236"
+          ],
+          "matched_text": "... itself is of gold and of precious stones.” ** \nFinally, Florence becomes just like these distant and fictional places. The “Terze \nrime” (1459), which is a description of Cosimo de Medici’s palace in Florence, sounds no \ndifferent from these accounts. It contains as much if not more gold, silver, expensive stones, \nand bright silk. \nAND THE WALLS COMPLETELY COVERED ... \nWITH RICH CLOTHS OF GOLD, SILVER, AND SILK, \nON THE BED, ALEXANDRIAN VELVET \nENRICHED WITH FINE SILVER AND GOLD. \nA GREAT NUMBER [OF ROOMS] WERE ORNAMENTED WITH MANY BOOKS \nAND WITH ALABASTER AND BRONZE VASES...",
+          "relevance_score": 28
+        },
+        {
+          "source_doc": "md/Eugenio_Canone_Leen_Spruit_Emblematics_in_the_Early_Modern_Age_Case_Studies_on_t.md",
+          "section": "Pages 62-65",
+          "page_refs": [
+            "62",
+            "63",
+            "64"
+          ],
+          "matched_text": "... scelta di lorenzo · le choix de laurent\n63\nLaurent donne à plusieurs reprises dans son Comento\ndes indications bien précises sur le moment métapho-\nrique de la rencontre avec sa nouvelle dame: il s’agit de\nl’instant furtif  qui sépare, à l’aube, le coucher de Vénus\ndu lever du soleil. C’est l’heure à laquelle le ciel com-\nmence tout juste à s’éclairer timidement, se dégageant\nde l’obscurité qui habille encore la terre. Laurent com-\npare Simonetta à Vénus, l’étoile qui en se couchant an-\nnonce par sa disparition l’astre du jour, le Soleil, auquel\nil veut identifier la...",
+          "relevance_score": 26
+        },
+        {
+          "source_doc": "md/Liane_Lefaivre_Leon_Battista_Alberti_s_Hypnerotomachia_Poliphili_Re_Cognizing_th.md",
+          "section": "Pages 229-231",
+          "page_refs": [
+            "229",
+            "230"
+          ],
+          "matched_text": "... brass, \nand on every face were brazen gates. The Colosseum is depicted as being “of amazing size \nand beauty and with diverse vaults and it is said that the whole was covered with heaven of \nbronze and gold.” Ancient Rome is to a great extent perceived in terms of its “beauties \nof gold and silver, bronze and ivory and precious stones.” The Needle, which holds the ashes \nof Caesar, was “adorned in the lower part with tables of gilded brass, and lined in a lovely \nway with Latin letters; and above the wall, where he rests, it is decked with gold and precious \nstones. The “basilica...",
+          "relevance_score": 20
+        }
+      ]
+    },
+    {
+      "id": "corpus-alchemical-ideograms",
+      "title": "Corpus Evidence: alchemical ideograms",
+      "evidence_type": "CORPUS_SEARCH",
+      "query": "ideogram alchemical symbol sign",
+      "results": [
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 154-158",
+          "page_refs": [
+            "154",
+            "155",
+            "156",
+            "157"
+          ],
+          "matched_text": "... for which \nTaylor offers a table in The Alchemists.  Some of the signs included in this standard list have \npersisted to the present day in the form of planetary or astrological signs, but these are \nremnants from what was at one time an extensive ideographic vocabulary.37  A number of \nthese ideograms are of significant antiquity.38  Others may be of more recent coinage, or even \nsigns distinct to a particular practitioner.  Thus, by following the procession of operations \nsignified in each of these symbols, one can correlate passages of the HP with the alchemical \nprocesses presumed...",
+          "relevance_score": 36
+        },
+        {
+          "source_doc": "md/Editions_SR_25_James_Gollnick_Religious_Dreamworld_of_Apuleius_Metamorphoses_Rec.md",
+          "section": "Pages 116-119",
+          "page_refs": [
+            "116",
+            "117",
+            "118"
+          ],
+          "matched_text": "<!-- Page 116 -->\n\nThe Eros and Psyche Myth: Psychological Interpretations \n101 \nRange of Jungian Interpretations \nAll of the Jungian interpretations we have discussed view the Eros and \nPsyche story as a symbolic representation of feminine development from an \nin-depth perspective. Specifics vary as the interpreters see Psyche as symbol-\nizing a woman, women in general, consciousness or the anima (as the person-\nification of a man's unconscious). For Neumann, Psyche represents both the...",
+          "relevance_score": 25
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 149-154",
+          "page_refs": [
+            "149",
+            "150",
+            "151",
+            "152",
+            "153"
+          ],
+          "matched_text": "... \nhand viewed the HP as a complex and elaborate allegory of the magnum opus.  A variety of \ncomponents of the novel – Poliphilo, Polia, nymphs, and monuments – were considered as \nrepresentatives of ingredients in the alchemical process.  The reader labelled those features \nwhich he presumed to symbolize various chemical components by the traditional sign of the \nelement presumably allegorized within.  Some of these are standard, such as Venus’ mirror \n(♀) or the Sol sign for gold (☉). Other alchemical symbols appear to be idiosyncratic to the \npresent annotator.  A particularly...",
+          "relevance_score": 24
+        },
+        {
+          "source_doc": "md/Editions_SR_25_James_Gollnick_Religious_Dreamworld_of_Apuleius_Metamorphoses_Rec.md",
+          "section": "Pages 113-116",
+          "page_refs": [
+            "113",
+            "114",
+            "115"
+          ],
+          "matched_text": "<!-- Page 113 -->\n\nThe Religious Dreamworld of Apuleius' Metamorpho\\< ν \nwithdrawal of eros from the psyche which leaves a person without hope, \nenergy and love, paralleling what happens in the myth. Psyche's tasks thus \nsymbolize the soul work which prepares for reunion with eros and also repre-\nsent the development of the soul into an effective container for the gods' \ninspiration. \nHillman's openness to the transpersonal dimensions of eros as a link to \nthe realm of the gods illustrates the potential for a...",
+          "relevance_score": 22
+        },
+        {
+          "source_doc": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+          "section": "Pages 186-191",
+          "page_refs": [
+            "186",
+            "187",
+            "188",
+            "189",
+            "190"
+          ],
+          "matched_text": "... which this particular alchemist interpreted \nthe HP is intended to be a prompt for future study.  As with the BL annotator, the potential \ncommentary on alchemical themes in this copy is vast, and exceeds that which could be \ncomprehended into a single chapter.  The vocabulary of alchemical symbolism is also beyond \nthe scope of this dissertation.18  Here I offer some elaborations to the narrative, as discussed \nin the BL chapter, which bear upon the association of the copy with the framework of \npseudo-Geber.  \nAlchemical thought is predicated upon conceiving of the world in terms...",
+          "relevance_score": 21
+        }
+      ]
+    },
+    {
+      "id": "confidence-distribution",
+      "title": "Confidence Distribution for Alchemist Matches",
+      "evidence_type": "DB_QUERY",
+      "data": {
+        "LOW": 17,
+        "MEDIUM": 20
+      }
+    }
+  ]
+}

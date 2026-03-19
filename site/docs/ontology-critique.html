@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontology Critique - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Ontology Critique</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPONTOCRIT.md &mdash; 2,046 words</p>
+            <h2>HPONTOCRIT: Isidore Critique of the HP Ontology</h2>
+
+<blockquote>Jack Isidore forces you to question every claim. This critique examines HPONTOLOGY.md against what the project actually built, what the user actually asked for, and where the ontology&#x27;s logic breaks down.</blockquote>
+
+<hr>
+
+<h3>CRITIQUE: HPONTOLOGY.md — &quot;Modeling the Hypnerotomachia Poliphili&quot;</h3>
+
+<hr>
+
+<p>STRONGEST PASSAGE: &quot;Without an ontology, we end up with a bag of files and hope. &#x27;Image 47&#x27; means nothing until you know it depicts folio b7r of BL C.60.o.12...&quot; — This is the document&#x27;s best moment. It concretely demonstrates why structured relationships matter by tracing a single image through its chain of meaning. It grounds the abstraction in a specific, verifiable example.</p>
+
+<hr>
+
+<h3>ISSUES (by priority)</h3>
+
+<h4>1. UNSUPPORTED CLAIM: The ontology says six entities, but the system built eighteen tables for at least twelve entities</h4>
+
+<p>&quot;After examining the corpus... we identified six fundamental entity types: Work, Copy, Folio, Annotation, Image, ScholarlyWork.&quot;</p>
+
+<p>The system as built has: documents, manuscripts, images, signature_map, dissertation_refs, doc_folio_refs, matches, annotator_hands, annotators, annotations, bibliography, scholars, scholar_works, timeline_events, dictionary_terms, dictionary_term_links, document_topics, schema_version.</p>
+
+<p>That&#x27;s at least <strong>twelve distinct entity types</strong>: Work (implicit), Copy (manuscripts), Folio (signature_map), Annotation (annotations + dissertation_refs + doc_folio_refs — three tables for what the ontology calls one entity), Image (images), ScholarlyWork (documents + bibliography — two tables), Scholar (scholars), Match (matches), Annotator (annotator_hands + annotators — two tables), DictionaryTerm, TimelineEvent, Topic.</p>
+
+<p>The ontology document describes a clean six-entity model. The actual database is a messier twelve-entity model with duplicate tables (annotator_hands AND annotators, dissertation_refs AND doc_folio_refs) and entities that the ontology never mentions (scholars, dictionary terms, timeline events, topics, matches).</p>
+
+<p><strong>The ontology was written before the system was fully built and was never updated.</strong> It describes the initial design intent, not the actual architecture.</p>
+
+<p>FIX: Rewrite the ontology to describe what actually exists. Either consolidate the duplicate tables (drop annotator_hands in favor of annotators, drop dissertation_refs in favor of doc_folio_refs) or explain why both exist and how they relate.</p>
+
+<hr>
+
+<h4>2. LOGICAL GAP: The &quot;Annotation&quot; entity was promised but never populated</h4>
+
+<p>The ontology devotes a full section to Annotation as entity #4, calling it a &quot;mark left by a reader&quot; with properties for location, content, hand, type, and date estimate. It then says in &quot;What&#x27;s Missing&quot;: &quot;Currently annotations are embedded in dissertation_refs rather than being first-class entities.&quot;</p>
+
+<p>The V2 migration created an <code>annotations</code> table. It has <strong>zero rows</strong>. Meanwhile <code>dissertation_refs</code> still has 282 rows and <code>doc_folio_refs</code> (a copy of dissertation_refs with provenance columns) also has 282 rows.</p>
+
+<p>So the project has <strong>three tables</strong> for what should be one entity, and the cleanest of them is empty. The ontology describes an ideal that was never realized, and the migration added a new table without populating it or deprecating the old ones. This is the ontology&#x27;s most significant failure: it defined the right abstraction but the implementation never followed through.</p>
+
+<p>FIX: Either populate <code>annotations</code> from <code>dissertation_refs</code> (extracting the actual marginal text and annotator attribution into proper annotation records) and deprecate the old table, or acknowledge that <code>dissertation_refs</code> IS the annotations table and drop the empty one.</p>
+
+<hr>
+
+<h4>3. BURIED LEDE: The real ontological challenge is the Match, not the Annotation</h4>
+
+<p>The ontology doesn&#x27;t mention the <code>matches</code> table at all. But matches — the link between a dissertation reference and a specific image — are the <strong>core join</strong> that makes the entire site work. Every gallery card, every marginalia page, every folio detail depends on this join.</p>
+
+<p>The match is not a simple link. It carries confidence (HIGH/MEDIUM/LOW/PROVISIONAL), a method (SIGNATURE_EXACT/FOLIO_EXACT/MANUAL), a review status, and provenance. The BL confidence problem — the single biggest data quality issue in the project — is entirely a Match problem. Yet the ontology describes it as a solved three-way join (&quot;signature a4r maps to folio 4, which corresponds to BL image C_60_o_12-004.jpg&quot;) without mentioning that this join is <strong>unverified for 218 of the 610 matches</strong>.</p>
+
+<p>The match is the most intellectually interesting entity in the system. It&#x27;s where certainty degrades, where different numbering systems collide, where edition differences create ambiguity. The ontology treats it as plumbing.</p>
+
+<p>FIX: Elevate Match to a first-class entity in the ontology. Describe its properties, its confidence semantics, and the conditions under which a match can be upgraded or downgraded.</p>
+
+<hr>
+
+<h4>4. AUDIENCE ASSUMPTION: The ontology addresses no one in particular</h4>
+
+<p>Who is this document for? It opens with &quot;Why an Ontology?&quot; as if persuading a skeptic, uses FRBR-adjacent terminology (Work/Copy) without citing FRBR, then drops into SQLite column names. A librarian would find the FRBR-without-FRBR framing frustrating. A developer would skip the philosophy and want the ER diagram. A scholar would want to know how to query for &quot;all annotations by Ben Jonson on folios containing woodcuts.&quot;</p>
+
+<p>The document tries to be all three things and succeeds at none completely.</p>
+
+<p>FIX: Pick a primary audience. If it&#x27;s developers, lead with the schema and explain the domain model through the tables. If it&#x27;s scholars, lead with example queries that answer real research questions. If it&#x27;s both, split into two sections with a shared introduction.</p>
+
+<hr>
+
+<h4>5. UNSUPPORTED CLAIM: &quot;The ontology is designed to grow&quot;</h4>
+
+<p>The document claims: &quot;Adding a new copy requires: one row in manuscripts, image files, running catalog_images.py with a new parser function.&quot; This is presented as if it&#x27;s trivially extensible.</p>
+
+<p>But adding the Buffalo copy (which the user has expressed interest in) would require:</p>
+<ul>
+<li>No images (we don&#x27;t have them) — so the &quot;image files&quot; step fails immediately</li>
+<li>Buffalo has 5 interleaved hands — the annotators table supports this but the hand attribution rules in `add_hands.py` are hardcoded per-copy</li>
+<li>Buffalo&#x27;s marginalia are described only in Russell&#x27;s prose — the extraction pipeline is tied to Russell&#x27;s thesis page ranges, also hardcoded</li>
+<li>The 1499 vs. 1545 collation difference (BL is 1545, all others are 1499) is not modeled anywhere in the schema — it&#x27;s handled by a blanket LOW confidence flag</li>
+</ul>
+
+<p>&quot;Designed to grow&quot; is aspirational. The actual system is hardcoded to the specific data sources it was built from. Growth requires writing new scripts, not just inserting rows.</p>
+
+<p>FIX: Be honest about what extensibility means. Document the actual steps for adding a new copy, including the scripting work. Or better: generalize the extraction and attribution pipelines so they genuinely are copy-agnostic.</p>
+
+<hr>
+
+<h4>6. MISSING ENTITY: The User&#x27;s Requests Reveal Entities the Ontology Doesn&#x27;t Model</h4>
+
+<p>Reviewing the user&#x27;s prompts across this project reveals several entities they care about that the ontology ignores:</p>
+
+<ul>
+<li>**Translation**: The user asked for &quot;all translations and marginalia eventually.&quot; The ontology models the 1499 text as a single Work but has no concept of the 1546 French, 1592 English, 1600 alchemical, or 2024 Young translations as related-but-distinct entities. These are not just ScholarlyWorks — they&#x27;re instantiations of the Work in different languages, with different woodcut programs, different paratextual apparatus.</li>
+</ul>
+
+<ul>
+<li>**Woodcut**: The user asked about showcasing woodcuts. The ontology mentions 172 woodcuts in passing (&quot;not yet cataloged&quot;) but doesn&#x27;t model them. A woodcut is a visual entity that appears on a specific folio, may be modified across editions, and is referenced by scholars. It deserves its own table.</li>
+</ul>
+
+<ul>
+<li>**Alchemical Symbol**: The user was particularly interested in the alchemist annotators. The ontology doesn&#x27;t model individual symbols or ideograms, which are the most visually distinctive feature of the alchemical marginalia.</li>
+</ul>
+
+<ul>
+<li>**Timeline Event**: The system has a timeline_events table with 42 entries. The ontology doesn&#x27;t mention it. This is a significant omission — the user asked for &quot;a hyperlinked timeline of the reception and scholarship of the HP.&quot;</li>
+</ul>
+
+<ul>
+<li>**Dictionary Term**: 37 terms with 76 cross-links. Not in the ontology. The user explicitly asked for a Dictionary tab and the system built it, but the ontological model pretends concepts don&#x27;t exist as entities.</li>
+</ul>
+
+<p>FIX: Extend the ontology to include Translation, Woodcut, Symbol, TimelineEvent, and DictionaryTerm as entities. Or acknowledge that the six-entity model is a simplification and point to the actual schema for the full picture.</p>
+
+<hr>
+
+<h4>7. REDUNDANCY: &quot;Design Decisions and Their Rationale&quot; repeats what the domain analysis already implies</h4>
+
+<p>The section on &quot;Why signature-based addressing?&quot; answers a question nobody asked — the entire document is already organized around signatures. The section on &quot;Why SQLite?&quot; makes a reasonable argument but could be one sentence: &quot;The relationships are regular, the data is small, and SQLite has zero dependencies.&quot; The section on &quot;Why separate images from folios?&quot; is genuinely useful but repeats information from entity #5.</p>
+
+<p>FIX: Cut the first two rationale sections to one sentence each. Keep the image/folio separation explanation but move it into the Image entity section.</p>
+
+<hr>
+
+<h4>8. WEAK TRANSITION: The &quot;Current Implementation&quot; section doesn&#x27;t connect to &quot;What&#x27;s Missing&quot;</h4>
+
+<p>The document goes from &quot;here&#x27;s what the schema looks like&quot; directly to &quot;here&#x27;s what&#x27;s missing&quot; without evaluating what works. There&#x27;s no assessment of whether the current schema successfully implements the ontology it describes. The reader has to do that analysis themselves.</p>
+
+<p>In fact, the current schema DOESN&#x27;T implement the ontology — it implements something different (more tables, different relationships, duplicate entities). The gap between design and implementation is the document&#x27;s most important finding and it&#x27;s presented as a casual afterthought.</p>
+
+<p>FIX: Add an &quot;Implementation Assessment&quot; section between the schema description and the gap list. Honestly evaluate where the schema matches the ontology and where it diverges. This is the section where you admit that the six-entity model was aspirational and the eighteen-table reality is what you actually have.</p>
+
+<hr>
+
+<h4>9. LOGICAL GAP: No entity for the Reader/User of this system</h4>
+
+<p>The ontology models historical readers (Annotators) but not the modern reader — the scholar or student using this website. The user&#x27;s prompts reveal a consistent concern with how data is presented, what&#x27;s trustworthy, and what needs review. The review_status / needs_review / confidence apparatus that now pervades the schema is a response to the ontological question: &quot;Who is reading this data and what can they trust?&quot;</p>
+
+<p>The ontology doesn&#x27;t ask this question. It models the HP&#x27;s historical world but not the epistemological relationship between the system&#x27;s outputs and its users. The HPDECKARD audits address this gap, but the ontology should have anticipated it.</p>
+
+<p>FIX: Add a section on &quot;Provenance and Trust&quot; as an ontological dimension. Every entity has not just properties and relationships but also a trust level — how was this datum produced, by whom, and has it been verified? This isn&#x27;t just metadata; it&#x27;s an ontological commitment about the nature of the system&#x27;s claims.</p>
+
+<hr>
+
+<h3>REVISION PRIORITY</h3>
+
+<p>Fix <strong>Issue #2</strong> first (the empty annotations table) — it&#x27;s the widest gap between what the ontology promises and what the system delivers. Then fix <strong>Issue #1</strong> (rewrite to match reality) and <strong>Issue #6</strong> (add missing entities). The other issues are improvements; these three are structural integrity problems.</p>
+
+<hr>
+
+<h3>OVERALL</h3>
+
+<p>HPONTOLOGY.md is a well-written design document that was overtaken by events. It articulates a clean six-entity model for a Renaissance book project — Work, Copy, Folio, Annotation, Image, ScholarlyWork — and makes sensible arguments for signature-based addressing and relational storage. The writing is clear, the examples are concrete, and the opening paragraph is genuinely good.</p>
+
+<p>But the document describes a system that doesn&#x27;t exist. The actual system has eighteen tables implementing at least twelve entity types, with three tables for what the ontology calls &quot;Annotation&quot; (one of which is empty), two tables for &quot;Annotator&quot; (one a vestigial predecessor), and six entity types that the ontology doesn&#x27;t mention at all (Scholar, DictionaryTerm, TimelineEvent, Topic, Match, Translation). The ontology was written early in the project and never revisited as the user&#x27;s requests drove the system in directions the initial model didn&#x27;t anticipate.</p>
+
+<p>The deepest problem is not the gap between model and implementation — that&#x27;s normal in iterative development. The deepest problem is that the ontology doesn&#x27;t model <strong>trust</strong>. Every entity in this system exists on a spectrum from &quot;verified deterministic fact&quot; to &quot;LLM-generated guess that hasn&#x27;t been checked.&quot; The V2 migration added confidence/review fields to every table, the HPDECKARD audits formalized the boundary between deterministic and probabilistic data, and the site displays review badges everywhere. This entire apparatus addresses an ontological question — &quot;what is the epistemic status of this datum?&quot; — that the ontology document never asks. A revised ontology should make provenance and trust first-class concepts, not afterthoughts bolted on during migration.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

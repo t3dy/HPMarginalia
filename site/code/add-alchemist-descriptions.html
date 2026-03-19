@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Alchemist Descriptions - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Add Alchemist Descriptions</h2>
+            <div class="code-meta">add_alchemist_descriptions.py &mdash; 352 lines</div>
+            <p style="margin-bottom:1rem">Inserts 13 folio-specific scholarly descriptions for the two alchemist annotators from Russell Ch. 6-7.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Add scholarly descriptions to alchemist-annotated folios.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Sources: Russell 2014, Ch. 6 (BL Hand B / d&#x27;Espagnet) and Ch. 7 (Buffalo Hand E / pseudo-Geber).
+<span class="line-num">4</span>These descriptions are derived from close reading of Russell&#x27;s thesis and are tagged
+<span class="line-num">5</span>with source_method=&#x27;LLM_ASSISTED&#x27; since the extraction and synthesis was done by Claude
+<span class="line-num">6</span>reading Russell&#x27;s prose, not by Russell himself writing these summaries.
+<span class="line-num">7</span>&quot;&quot;&quot;
+<span class="line-num">8</span>
+<span class="line-num">9</span>import sqlite3
+<span class="line-num">10</span>from pathlib import Path
+<span class="line-num">11</span>
+<span class="line-num">12</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">13</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">14</span>
+<span class="line-num">15</span># Schema addition
+<span class="line-num">16</span>SCHEMA = &quot;&quot;&quot;
+<span class="line-num">17</span>CREATE TABLE IF NOT EXISTS folio_descriptions (
+<span class="line-num">18</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">19</span>    signature_ref TEXT NOT NULL,
+<span class="line-num">20</span>    manuscript_shelfmark TEXT,
+<span class="line-num">21</span>    hand_label TEXT,
+<span class="line-num">22</span>    title TEXT NOT NULL,
+<span class="line-num">23</span>    description TEXT NOT NULL,
+<span class="line-num">24</span>    alchemical_element TEXT,
+<span class="line-num">25</span>    alchemical_process TEXT,
+<span class="line-num">26</span>    alchemical_framework TEXT,
+<span class="line-num">27</span>    russell_page_ref TEXT,
+<span class="line-num">28</span>    source_method TEXT DEFAULT &#x27;LLM_ASSISTED&#x27;,
+<span class="line-num">29</span>    needs_review BOOLEAN DEFAULT 1,
+<span class="line-num">30</span>    UNIQUE(signature_ref, manuscript_shelfmark, hand_label)
+<span class="line-num">31</span>);
+<span class="line-num">32</span>&quot;&quot;&quot;
+<span class="line-num">33</span>
+<span class="line-num">34</span># BL C.60.o.12 - Hand B (d&#x27;Espagnet school)
+<span class="line-num">35</span>BL_DESCRIPTIONS = [
+<span class="line-num">36</span>    {
+<span class="line-num">37</span>        &quot;sig&quot;: &quot;flyleaf&quot;,
+<span class="line-num">38</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">39</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">40</span>        &quot;title&quot;: &quot;The Alchemist&#x27;s Manifesto: &#x27;Master Mercury&#x27;&quot;,
+<span class="line-num">41</span>        &quot;description&quot;: (
+<span class="line-num">42</span>            &quot;On the flyleaf verso, the anonymous alchemist lays out his entire interpretive &quot;
+<span class="line-num">43</span>            &quot;framework in a programmatic summary: &#x27;verus sensus intentionis huius libri est &quot;
+<span class="line-num">44</span>            &quot;3um: Geni et Totius Naturae energiae &amp; operationum Magisteri Mercurii Descriptio &quot;
+<span class="line-num">45</span>            &quot;elegans, ampla&#x27; -- the HP&#x27;s true sense is threefold: the full and elegant &quot;
+<span class="line-num">46</span>            &quot;description of the generation of all nature, its energies, and the operations of &quot;
+<span class="line-num">47</span>            &quot;&#x27;Master Mercury.&#x27; This Rosetta Stone for all subsequent annotations identifies &quot;
+<span class="line-num">48</span>            &quot;quicksilver as the supreme operative principle, reflecting Jean d&#x27;Espagnet&#x27;s &quot;
+<span class="line-num">49</span>            &quot;Enchiridion Physicae Restitutae, where mercury is the vehicle of the world spirit &quot;
+<span class="line-num">50</span>            &quot;continuously emanating from the Sun.&quot;
+<span class="line-num">51</span>        ),
+<span class="line-num">52</span>        &quot;element&quot;: &quot;Mercury (Master Mercury / Magisteri Mercurii)&quot;,
+<span class="line-num">53</span>        &quot;process&quot;: &quot;Universal generation and spirit-matter mediation&quot;,
+<span class="line-num">54</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: mercury as vehicle of spiritus mundi&quot;,
+<span class="line-num">55</span>        &quot;page&quot;: &quot;pp. 159-160&quot;,
+<span class="line-num">56</span>    },
+<span class="line-num">57</span>    {
+<span class="line-num">58</span>        &quot;sig&quot;: &quot;a1r&quot;,
+<span class="line-num">59</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">60</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">61</span>        &quot;title&quot;: &quot;Dawn as Albedo: The Sun&#x27;s First Emanation&quot;,
+<span class="line-num">62</span>        &quot;description&quot;: (
+<span class="line-num">63</span>            &quot;At the opening of Poliphilo&#x27;s narrative, Hand B annotates the dawn scene &quot;
+<span class="line-num">64</span>            &quot;with careful precision: &#x27;Tempus ergo matutinum erat, sine diluculo, uel &quot;
+<span class="line-num">65</span>            &quot;crepusculum&#x27; (It was the early morning, before dawn, or later in the evening). &quot;
+<span class="line-num">66</span>            &quot;This is not mere translation. The annotator identifies the exact solar position -- &quot;
+<span class="line-num">67</span>            &quot;the moment before the sun crests the horizon -- because in d&#x27;Espagnet&#x27;s framework, &quot;
+<span class="line-num">68</span>            &quot;the sun is the origin of the world spirit whose emanations are most potent at dawn. &quot;
+<span class="line-num">69</span>            &quot;The passage heading is labeled &#x27;AURORAE DESCRIPTIO&#x27; (Description of the Dawn). &quot;
+<span class="line-num">70</span>            &quot;Hand B also notes the etymology of Leucothea: &#x27;Leucos albus, candidus&#x27; -- white, &quot;
+<span class="line-num">71</span>            &quot;bright -- connecting the dawn goddess to the alchemical stage of Albedo (whitening).&quot;
+<span class="line-num">72</span>        ),
+<span class="line-num">73</span>        &quot;element&quot;: &quot;Sol (Sun) and Albedo (whitening stage)&quot;,
+<span class="line-num">74</span>        &quot;process&quot;: &quot;Solar emanation at dawn; beginning of the Work&quot;,
+<span class="line-num">75</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: sun as source of world spirit&quot;,
+<span class="line-num">76</span>        &quot;page&quot;: &quot;pp. 165-166&quot;,
+<span class="line-num">77</span>    },
+<span class="line-num">78</span>    {
+<span class="line-num">79</span>        &quot;sig&quot;: &quot;a3r&quot;,
+<span class="line-num">80</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">81</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">82</span>        &quot;title&quot;: &quot;The HP as Alchemical Treatise&quot;,
+<span class="line-num">83</span>        &quot;description&quot;: (
+<span class="line-num">84</span>            &quot;Hand B recognized that the HP&#x27;s own dedicatory letter mirrors the conventions &quot;
+<span class="line-num">85</span>            &quot;of alchemical texts. The letter claims the book is written so that &#x27;none but the &quot;
+<span class="line-num">86</span>            &quot;most learned should be able to penetrate the inner sanctum of his teaching&#x27; -- &quot;
+<span class="line-num">87</span>            &quot;language directly paralleling the alchemical tradition of deliberate obscurantism, &quot;
+<span class="line-num">88</span>            &quot;where knowledge is veiled &#x27;so that it might not come to the attention of the &quot;
+<span class="line-num">89</span>            &quot;greedy and the insane.&#x27; For a reader steeped in the prisca sapientia (ancient &quot;
+<span class="line-num">90</span>            &quot;wisdom), the HP&#x27;s extreme linguistic difficulty was not a flaw but a guarantee &quot;
+<span class="line-num">91</span>            &quot;of hidden knowledge. The more incomprehensible the text, the more ancient wisdom &quot;
+<span class="line-num">92</span>            &quot;it was understood to contain.&quot;
+<span class="line-num">93</span>        ),
+<span class="line-num">94</span>        &quot;element&quot;: &quot;Prisca sapientia (ancient wisdom)&quot;,
+<span class="line-num">95</span>        &quot;process&quot;: &quot;Horizon of expectation; alchemical hermeneutics&quot;,
+<span class="line-num">96</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: obscurantism as marker of authenticity&quot;,
+<span class="line-num">97</span>        &quot;page&quot;: &quot;pp. 155-156&quot;,
+<span class="line-num">98</span>    },
+<span class="line-num">99</span>    {
+<span class="line-num">100</span>        &quot;sig&quot;: &quot;a4r&quot;,
+<span class="line-num">101</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">102</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">103</span>        &quot;title&quot;: &quot;Jupiter&#x27;s Titles: Planetary Hierarchy&quot;,
+<span class="line-num">104</span>        &quot;description&quot;: (
+<span class="line-num">105</span>            &quot;Hand B extracts Poliphilo&#x27;s invocation to Jupiter, transcribing the god&#x27;s &quot;
+<span class="line-num">106</span>            &quot;divine titles into a hierarchical list on the flyleaf: &#x27;O Diespiter, Maximo, &quot;
+<span class="line-num">107</span>            &quot;Optimo, &amp; Omnipotente &amp; Opitulo...&#x27; Jupiter rules the higher, middle, and &quot;
+<span class="line-num">108</span>            &quot;lower realms. In alchemical metals, Jupiter corresponds to tin. The annotator&#x27;s &quot;
+<span class="line-num">109</span>            &quot;interest in Jupiter&#x27;s cosmic hierarchy maps onto the Hermetic principle &#x27;as above, &quot;
+<span class="line-num">110</span>            &quot;so below&#x27; -- the resonance between celestial order and material transformation &quot;
+<span class="line-num">111</span>            &quot;that underpins all alchemical practice.&quot;
+<span class="line-num">112</span>        ),
+<span class="line-num">113</span>        &quot;element&quot;: &quot;Jupiter / Tin&quot;,
+<span class="line-num">114</span>        &quot;process&quot;: &quot;Planetary-metal correspondence; cosmic hierarchy&quot;,
+<span class="line-num">115</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: Hermetic resonance between realms&quot;,
+<span class="line-num">116</span>        &quot;page&quot;: &quot;p. 167&quot;,
+<span class="line-num">117</span>    },
+<span class="line-num">118</span>    {
+<span class="line-num">119</span>        &quot;sig&quot;: &quot;b6v&quot;,
+<span class="line-num">120</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">121</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">122</span>        &quot;title&quot;: &quot;Elephant and Obelisk: Ideograms in Syntax&quot;,
+<span class="line-num">123</span>        &quot;description&quot;: (
+<span class="line-num">124</span>            &quot;The famous woodcut of the elephant bearing an obelisk -- later realized by &quot;
+<span class="line-num">125</span>            &quot;Bernini in the Piazza della Minerva for Pope Alexander VII -- is densely annotated &quot;
+<span class="line-num">126</span>            &quot;by Hand B with alchemical ideograms embedded directly in the syntax of Latin &quot;
+<span class="line-num">127</span>            &quot;sentences. The sun symbol with the suffix &#x27;-ra&#x27; reads &#x27;scintillata aurata&#x27; &quot;
+<span class="line-num">128</span>            &quot;(shimmering gold). These are not marginal glosses but a complete symbolic language: &quot;
+<span class="line-num">129</span>            &quot;compact symbols for gold, silver, mercury, Venus, and Jupiter carry Latin case &quot;
+<span class="line-num">130</span>            &quot;endings, allowing them to function as nouns and adjectives within grammatical &quot;
+<span class="line-num">131</span>            &quot;sentences. Russell notes the consistency with Newton&#x27;s Keynes MSS vocabulary, &quot;
+<span class="line-num">132</span>            &quot;suggesting a possible connection to the Royal Society or Cambridge alchemical circle.&quot;
+<span class="line-num">133</span>        ),
+<span class="line-num">134</span>        &quot;element&quot;: &quot;Multiple metals: Gold, Silver, Mercury, Venus, Jupiter&quot;,
+<span class="line-num">135</span>        &quot;process&quot;: &quot;Ideographic decipherment of the printed text&quot;,
+<span class="line-num">136</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: standardized ideographic vocabulary&quot;,
+<span class="line-num">137</span>        &quot;page&quot;: &quot;pp. 156-158&quot;,
+<span class="line-num">138</span>    },
+<span class="line-num">139</span>    {
+<span class="line-num">140</span>        &quot;sig&quot;: &quot;d8v&quot;,
+<span class="line-num">141</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">142</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">143</span>        &quot;title&quot;: &quot;Panta Tokadi: Mercury as Universal Vessel&quot;,
+<span class="line-num">144</span>        &quot;description&quot;: (
+<span class="line-num">145</span>            &quot;Facing the Panta Tokadi woodcut, Hand B translates the phrase as &#x27;rerum omnium &quot;
+<span class="line-num">146</span>            &quot;vas&#x27; -- vessel of all things -- rather than &#x27;mother of all,&#x27; as Godwin translates &quot;
+<span class="line-num">147</span>            &quot;it. This deliberate shift from biological generation to instrumental containment &quot;
+<span class="line-num">148</span>            &quot;equates the Panta Tokadi figure directly with Mercury: not a passive mother but &quot;
+<span class="line-num">149</span>            &quot;an active vessel through which the world spirit is channeled into matter. &quot;
+<span class="line-num">150</span>            &quot;The annotation reflects d&#x27;Espagnet&#x27;s concept of the &#x27;magnetick principle&#x27; -- &quot;
+<span class="line-num">151</span>            &quot;the force by which mercury draws the animating spirit of the sun into the &quot;
+<span class="line-num">152</span>            &quot;vessels of physical matter.&quot;
+<span class="line-num">153</span>        ),
+<span class="line-num">154</span>        &quot;element&quot;: &quot;Mercury as universal vessel (vas)&quot;,
+<span class="line-num">155</span>        &quot;process&quot;: &quot;Spirit-matter mediation via mercury&quot;,
+<span class="line-num">156</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: magnetick principle; mercury as conduit&quot;,
+<span class="line-num">157</span>        &quot;page&quot;: &quot;pp. 164-165&quot;,
+<span class="line-num">158</span>    },
+<span class="line-num">159</span>    {
+<span class="line-num">160</span>        &quot;sig&quot;: &quot;e1r&quot;,
+<span class="line-num">161</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">162</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">163</span>        &quot;title&quot;: &quot;Panta Tokadi: Cinnabar, Digestion, and the World Spirit&quot;,
+<span class="line-num">164</span>        &quot;description&quot;: (
+<span class="line-num">165</span>            &quot;The Panto Tokadi woodcut -- a satyr revealing a mother figure flanked by two fauns &quot;
+<span class="line-num">166</span>            &quot;bearing vessels -- receives Hand B&#x27;s most elaborate alchemical annotation. The mercury &quot;
+<span class="line-num">167</span>            &quot;symbol appears on the top frieze and above the right faun&#x27;s vessel. The left faun &quot;
+<span class="line-num">168</span>            &quot;bears the cinnabar symbol (mercury sulphide). Below the caption, B writes: &#x27;duae &quot;
+<span class="line-num">169</span>            &quot;columbae in uno vase bibentes sunt minium &amp; digestione&#x27; -- the two doves drinking &quot;
+<span class="line-num">170</span>            &quot;in one vase represent cinnabar and digestion. The streams of milk from the mother&#x27;s &quot;
+<span class="line-num">171</span>            &quot;nipples signify the generation of all things through mercury&#x27;s magnetick principle. &quot;
+<span class="line-num">172</span>            &quot;This is the key annotation revealing Hand B&#x27;s d&#x27;Espagnet-based schema at full power.&quot;
+<span class="line-num">173</span>        ),
+<span class="line-num">174</span>        &quot;element&quot;: &quot;Mercury, Cinnabar (mercury sulphide), Digestion&quot;,
+<span class="line-num">175</span>        &quot;process&quot;: &quot;Emanation of world spirit; generation through mercury&quot;,
+<span class="line-num">176</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: sun&#x27;s outpouring of animating energy via mercury&quot;,
+<span class="line-num">177</span>        &quot;page&quot;: &quot;pp. 163-165&quot;,
+<span class="line-num">178</span>    },
+<span class="line-num">179</span>    {
+<span class="line-num">180</span>        &quot;sig&quot;: &quot;E8v&quot;,
+<span class="line-num">181</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">182</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">183</span>        &quot;title&quot;: &quot;Venus Persists: The Alchemist&#x27;s Stamina&quot;,
+<span class="line-num">184</span>        &quot;description&quot;: (
+<span class="line-num">185</span>            &quot;Deep into Book II -- where most annotators&#x27; energy has long since flagged -- &quot;
+<span class="line-num">186</span>            &quot;Hand B is still at work, replacing the goddess Venus&#x27;s name with her alchemical &quot;
+<span class="line-num">187</span>            &quot;symbol: the text reads &#x27;Veneris&#x27; but the annotation substitutes the Venus/copper &quot;
+<span class="line-num">188</span>            &quot;ideogram with the Latin case ending &#x27;-eris&#x27; appended. Russell observes that this &quot;
+<span class="line-num">189</span>            &quot;demonstrates the alchemist&#x27;s remarkable persistence: &#x27;notes decline in frequency &quot;
+<span class="line-num">190</span>            &quot;and alchemical significance in Book II&#x27; but the symbolic vocabulary is maintained &quot;
+<span class="line-num">191</span>            &quot;to the end. Venus (copper) is the feminine planetary metal in the d&#x27;Espagnet system.&quot;
+<span class="line-num">192</span>        ),
+<span class="line-num">193</span>        &quot;element&quot;: &quot;Venus / Copper (feminine planetary metal)&quot;,
+<span class="line-num">194</span>        &quot;process&quot;: &quot;Persistent symbolic substitution through Book II&quot;,
+<span class="line-num">195</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: planetary-metal associations maintained throughout&quot;,
+<span class="line-num">196</span>        &quot;page&quot;: &quot;p. 157&quot;,
+<span class="line-num">197</span>    },
+<span class="line-num">198</span>    {
+<span class="line-num">199</span>        &quot;sig&quot;: &quot;y7r&quot;,
+<span class="line-num">200</span>        &quot;hand&quot;: &quot;B&quot;,
+<span class="line-num">201</span>        &quot;ms&quot;: &quot;C.60.o.12&quot;,
+<span class="line-num">202</span>        &quot;title&quot;: &quot;Fons Heptagonis: The Seven Metals&quot;,
+<span class="line-num">203</span>        &quot;description&quot;: (
+<span class="line-num">204</span>            &quot;The illustration of the heptagonal fountain -- seven-sided, with seven angles -- &quot;
+<span class="line-num">205</span>            &quot;is labeled by Hand B with the alchemical sign of a different element at each angle. &quot;
+<span class="line-num">206</span>            &quot;The seven metals correspond to the seven classical planets: gold/Sun, silver/Moon, &quot;
+<span class="line-num">207</span>            &quot;mercury/Mercury, copper/Venus, iron/Mars, tin/Jupiter, lead/Saturn. This systematic &quot;
+<span class="line-num">208</span>            &quot;labeling transforms the decorative fountain into a diagram of the complete &quot;
+<span class="line-num">209</span>            &quot;alchemical cosmos, with each planetary metal occupying its proper position. &quot;
+<span class="line-num">210</span>            &quot;The annotator labels the fountain &#x27;frogg green&#x27; (in English, confirming his &quot;
+<span class="line-num">211</span>            &quot;nationality), apparently describing the color of the ink or the patina.&quot;
+<span class="line-num">212</span>        ),
+<span class="line-num">213</span>        &quot;element&quot;: &quot;All seven planetary metals&quot;,
+<span class="line-num">214</span>        &quot;process&quot;: &quot;Complete cosmological mapping of the alchemical system&quot;,
+<span class="line-num">215</span>        &quot;framework&quot;: &quot;d&#x27;Espagnet: planetary-metal correspondence system&quot;,
+<span class="line-num">216</span>        &quot;page&quot;: &quot;p. 136&quot;,
+<span class="line-num">217</span>    },
+<span class="line-num">218</span>]
+<span class="line-num">219</span>
+<span class="line-num">220</span># Buffalo - Hand E (pseudo-Geber school)
+<span class="line-num">221</span>BUFFALO_DESCRIPTIONS = [
+<span class="line-num">222</span>    {
+<span class="line-num">223</span>        &quot;sig&quot;: &quot;b7r&quot;,
+<span class="line-num">224</span>        &quot;hand&quot;: &quot;E&quot;,
+<span class="line-num">225</span>        &quot;ms&quot;: &quot;Buffalo RBR&quot;,
+<span class="line-num">226</span>        &quot;title&quot;: &quot;Geber&#x27;s Ingenium: Opening the Alchemical Reading&quot;,
+<span class="line-num">227</span>        &quot;description&quot;: (
+<span class="line-num">228</span>            &quot;At the episode of the elephant and obelisk, with its statues of a crowned king &quot;
+<span class="line-num">229</span>            &quot;and queen, Hand E establishes the interpretive framework for everything that &quot;
+<span class="line-num">230</span>            &quot;follows. Under the motto &#x27;Gonos et Euphyia&#x27; (Labor and Industry), the annotator &quot;
+<span class="line-num">231</span>            &quot;praises Geber&#x27;s &#x27;ingenium subtile&#x27; (subtle ingenuity) -- declaring that the HP &quot;
+<span class="line-num">232</span>            &quot;will be read within a Geberian framework. Labor and industry are the essential &quot;
+<span class="line-num">233</span>            &quot;virtues of the alchemist, whose work might involve distilling the same substance &quot;
+<span class="line-num">234</span>            &quot;hundreds of times. The king and queen statues &#x27;easily commend themselves to &quot;
+<span class="line-num">235</span>            &quot;reading along the lines of Geber,&#x27; where the masculine principle (Sol/Gold) and &quot;
+<span class="line-num">236</span>            &quot;the feminine principle (Luna/Silver) are interconnected inverses.&quot;
+<span class="line-num">237</span>        ),
+<span class="line-num">238</span>        &quot;element&quot;: &quot;Sol/Luna (Gold/Silver) as gendered principles&quot;,
+<span class="line-num">239</span>        &quot;process&quot;: &quot;Initiation of Geberian reading; framework declaration&quot;,
+<span class="line-num">240</span>        &quot;framework&quot;: &quot;pseudo-Geber: Summa Perfectionis methodology&quot;,
+<span class="line-num">241</span>        &quot;page&quot;: &quot;pp. 187-188&quot;,
+<span class="line-num">242</span>    },
+<span class="line-num">243</span>    {
+<span class="line-num">244</span>        &quot;sig&quot;: &quot;c6v&quot;,
+<span class="line-num">245</span>        &quot;hand&quot;: &quot;E&quot;,
+<span class="line-num">246</span>        &quot;ms&quot;: &quot;Buffalo RBR&quot;,
+<span class="line-num">247</span>        &quot;title&quot;: &quot;Bacchus and Demeter: The Chemical Wedding Encoded&quot;,
+<span class="line-num">248</span>        &quot;description&quot;: (
+<span class="line-num">249</span>            &quot;Poliphilo views a Greek epigram: &#x27;to the blessed Mother, the Goddess Venus, &quot;
+<span class="line-num">250</span>            &quot;and to her Son, Amor, Bacchus and Demeter have given of their own substances.&#x27; &quot;
+<span class="line-num">251</span>            &quot;Hand E cuts directly to the alchemical meaning: &#x27;Bacchus et Ceres [Demeter] &quot;
+<span class="line-num">252</span>            &quot;id est sol et luna&#x27; -- Bacchus and Demeter ARE Sol and Luna. Hand D elaborates &quot;
+<span class="line-num">253</span>            &quot;that &#x27;Bacchus was believed by the ancients to be that hidden virtue which helps &quot;
+<span class="line-num">254</span>            &quot;plants to produce mature fruits.&#x27; But for the alchemist, the mythological pairing &quot;
+<span class="line-num">255</span>            &quot;encodes the chemical wedding -- the union of masculine (Sol/gold) and feminine &quot;
+<span class="line-num">256</span>            &quot;(Luna/silver) principles that produces the philosopher&#x27;s stone.&quot;
+<span class="line-num">257</span>        ),
+<span class="line-num">258</span>        &quot;element&quot;: &quot;Sol/Luna identified as Bacchus/Demeter&quot;,
+<span class="line-num">259</span>        &quot;process&quot;: &quot;Chemical wedding; union of masculine and feminine metals&quot;,
+<span class="line-num">260</span>        &quot;framework&quot;: &quot;pseudo-Geber: mythological coding of the Great Work&quot;,
+<span class="line-num">261</span>        &quot;page&quot;: &quot;pp. 187-188&quot;,
+<span class="line-num">262</span>    },
+<span class="line-num">263</span>    {
+<span class="line-num">264</span>        &quot;sig&quot;: &quot;h1r&quot;,
+<span class="line-num">265</span>        &quot;hand&quot;: &quot;E&quot;,
+<span class="line-num">266</span>        &quot;ms&quot;: &quot;Buffalo RBR&quot;,
+<span class="line-num">267</span>        &quot;title&quot;: &quot;The Chess Match: Three Rounds of Distillation&quot;,
+<span class="line-num">268</span>        &quot;description&quot;: (
+<span class="line-num">269</span>            &quot;The HP&#x27;s elaborate chess match between 32 maidens (16 silver, 16 gold) becomes, &quot;
+<span class="line-num">270</span>            &quot;in Hand E&#x27;s reading, an allegory of iterative alchemical refinement. In Round 1, &quot;
+<span class="line-num">271</span>            &quot;silver wins: the annotator writes &#x27;Argentum&#x27; with a crescent moon sketch and &quot;
+<span class="line-num">272</span>            &quot;&#x27;Rex ex argento factus victor remanet&#x27; (The king made of silver remains victor). &quot;
+<span class="line-num">273</span>            &quot;Round 2: silver wins again. Round 3: gold finally triumphs -- but E&#x27;s annotation &quot;
+<span class="line-num">274</span>            &quot;undergoes a telling correction. He first writes &#x27;Rex ex auro&#x27; (king of gold), &quot;
+<span class="line-num">275</span>            &quot;then revises to &#x27;Regina&#x27; (queen) and &#x27;aura&#x27; and &#x27;victrix&#x27; (feminine victor), &quot;
+<span class="line-num">276</span>            &quot;with the sun symbol. The final word is &#x27;Auru(m)&#x27; -- Gold, the perfected metal. &quot;
+<span class="line-num">277</span>            &quot;The correction reveals E recognizing the hermaphroditic outcome: the triumphant &quot;
+<span class="line-num">278</span>            &quot;figure combines king and queen, masculine and feminine, Sol and Luna.&quot;
+<span class="line-num">279</span>        ),
+<span class="line-num">280</span>        &quot;element&quot;: &quot;Silver (Luna) yielding to Gold (Sol); Hermaphrodite&quot;,
+<span class="line-num">281</span>        &quot;process&quot;: &quot;Iterative distillation (three rounds); coincidentia oppositorum&quot;,
+<span class="line-num">282</span>        &quot;framework&quot;: &quot;pseudo-Geber: transmutation through repeated refinement&quot;,
+<span class="line-num">283</span>        &quot;page&quot;: &quot;pp. 189-190&quot;,
+<span class="line-num">284</span>    },
+<span class="line-num">285</span>    {
+<span class="line-num">286</span>        &quot;sig&quot;: &quot;b5r&quot;,
+<span class="line-num">287</span>        &quot;hand&quot;: &quot;E&quot;,
+<span class="line-num">288</span>        &quot;ms&quot;: &quot;Buffalo RBR&quot;,
+<span class="line-num">289</span>        &quot;title&quot;: &quot;The Ambiguous Gods: Alchemical Hermaphrodites&quot;,
+<span class="line-num">290</span>        &quot;description&quot;: (
+<span class="line-num">291</span>            &quot;An epigram reading &#x27;D.AMBIG.DD&#x27; -- &#x27;dedicated to the ambiguous gods&#x27; -- &quot;
+<span class="line-num">292</span>            &quot;triggers Hand E&#x27;s most explicit statement of Geberian theory. The annotation &quot;
+<span class="line-num">293</span>            &quot;reads: &#x27;diis ambiguis id est metallis hermafroditis guarda enim metalla sunt &quot;
+<span class="line-num">294</span>            &quot;mas et foemina... aura-argentu enim in sua altitudine mas est in sua profunda &quot;
+<span class="line-num">295</span>            &quot;foeminina argentum vero in sua altitudine est foemininum in suo profundo mas.&#x27; &quot;
+<span class="line-num">296</span>            &quot;The &#x27;ambiguous gods&#x27; are metals that possess both genders: gold is masculine &quot;
+<span class="line-num">297</span>            &quot;&#x27;in its height&#x27; but feminine &#x27;in its depth&#x27;; silver is feminine in its height &quot;
+<span class="line-num">298</span>            &quot;but masculine in its depth. This paradoxical gender-inversion is the fundamental &quot;
+<span class="line-num">299</span>            &quot;principle of pseudo-Geber&#x27;s system -- the engine that makes transmutation possible.&quot;
+<span class="line-num">300</span>        ),
+<span class="line-num">301</span>        &quot;element&quot;: &quot;Hermaphroditic metals (Gold-Silver gender inversion)&quot;,
+<span class="line-num">302</span>        &quot;process&quot;: &quot;Coincidentia oppositorum; gender-inversion as transmutation principle&quot;,
+<span class="line-num">303</span>        &quot;framework&quot;: &quot;pseudo-Geber: metals as masculine-feminine inverses&quot;,
+<span class="line-num">304</span>        &quot;page&quot;: &quot;p. 190&quot;,
+<span class="line-num">305</span>    },
+<span class="line-num">306</span>]
+<span class="line-num">307</span>
+<span class="line-num">308</span>
+<span class="line-num">309</span>def main():
+<span class="line-num">310</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">311</span>    cur = conn.cursor()
+<span class="line-num">312</span>
+<span class="line-num">313</span>    print(&quot;Creating folio_descriptions table...&quot;)
+<span class="line-num">314</span>    cur.executescript(SCHEMA)
+<span class="line-num">315</span>    conn.commit()
+<span class="line-num">316</span>
+<span class="line-num">317</span>    print(&quot;Inserting BL alchemist descriptions (Hand B, d&#x27;Espagnet)...&quot;)
+<span class="line-num">318</span>    bl_count = 0
+<span class="line-num">319</span>    for d in BL_DESCRIPTIONS:
+<span class="line-num">320</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">321</span>            INSERT OR REPLACE INTO folio_descriptions
+<span class="line-num">322</span>                (signature_ref, manuscript_shelfmark, hand_label, title,
+<span class="line-num">323</span>                 description, alchemical_element, alchemical_process,
+<span class="line-num">324</span>                 alchemical_framework, russell_page_ref, source_method, needs_review)
+<span class="line-num">325</span>            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, &#x27;LLM_ASSISTED&#x27;, 1)
+<span class="line-num">326</span>        &quot;&quot;&quot;, (d[&quot;sig&quot;], d[&quot;ms&quot;], d[&quot;hand&quot;], d[&quot;title&quot;], d[&quot;description&quot;],
+<span class="line-num">327</span>              d[&quot;element&quot;], d[&quot;process&quot;], d[&quot;framework&quot;], d[&quot;page&quot;]))
+<span class="line-num">328</span>        bl_count += 1
+<span class="line-num">329</span>    conn.commit()
+<span class="line-num">330</span>    print(f&quot;  {bl_count} BL descriptions inserted&quot;)
+<span class="line-num">331</span>
+<span class="line-num">332</span>    print(&quot;Inserting Buffalo alchemist descriptions (Hand E, pseudo-Geber)...&quot;)
+<span class="line-num">333</span>    buf_count = 0
+<span class="line-num">334</span>    for d in BUFFALO_DESCRIPTIONS:
+<span class="line-num">335</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">336</span>            INSERT OR REPLACE INTO folio_descriptions
+<span class="line-num">337</span>                (signature_ref, manuscript_shelfmark, hand_label, title,
+<span class="line-num">338</span>                 description, alchemical_element, alchemical_process,
+<span class="line-num">339</span>                 alchemical_framework, russell_page_ref, source_method, needs_review)
+<span class="line-num">340</span>            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, &#x27;LLM_ASSISTED&#x27;, 1)
+<span class="line-num">341</span>        &quot;&quot;&quot;, (d[&quot;sig&quot;], d[&quot;ms&quot;], d[&quot;hand&quot;], d[&quot;title&quot;], d[&quot;description&quot;],
+<span class="line-num">342</span>              d[&quot;element&quot;], d[&quot;process&quot;], d[&quot;framework&quot;], d[&quot;page&quot;]))
+<span class="line-num">343</span>        buf_count += 1
+<span class="line-num">344</span>    conn.commit()
+<span class="line-num">345</span>    print(f&quot;  {buf_count} Buffalo descriptions inserted&quot;)
+<span class="line-num">346</span>
+<span class="line-num">347</span>    print(f&quot;\nTotal: {bl_count + buf_count} alchemist folio descriptions&quot;)
+<span class="line-num">348</span>    conn.close()
+<span class="line-num">349</span>
+<span class="line-num">350</span>
+<span class="line-num">351</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">352</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

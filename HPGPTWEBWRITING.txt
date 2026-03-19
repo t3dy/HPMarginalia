@@ -1,0 +1,139 @@
+Below is ready-to-use orientation copy for the main tabs and page types, grounded in the current site structure, architecture, and stated editorial goals in your repo docs. The site already includes Home, Marginalia, Scholars, Bibliography, Dictionary, Docs, Code, and About, with plans or active work around a Digital Edition prospectus and essay pages on Russell’s alchemical hands and the concordance method. The project’s core architecture is SQLite as source of truth, Python scripts for generation, and static HTML/CSS/JS for delivery.
+
+I have written these as short page-intro blocks or orientation blurbs, not full essays. For standalone essay pages, the essay itself can do most of the orienting, so I keep those intros brief. I also include a few reusable template blurbs for detail pages so the site feels consistent across sections. The design guidance here assumes the current scholarly, static, reading-oriented presentation rather than a more app-like UI.
+
+Home
+
+Page title intro
+
+The Hypnerotomachia Poliphili is one of the most enigmatic books of the Renaissance: a dream narrative, an architectural fantasia, a typographic monument, and a work that has accumulated centuries of commentary, interpretation, and readerly marks. This site is a digital scholarly platform devoted not only to the 1499 book itself, but to its afterlives in marginalia, bibliography, and modern scholarship.
+
+It begins from a specific research problem: how to connect James Russell’s dissertation on annotated copies of the Hypnerotomachia to the manuscript and facsimile images, folio by folio, while also building a wider framework for scholars, terms, documents, and reception history. The result is part exhibition, part concordance, and part research environment.
+
+Use the site in three ways: browse the marginalia and folio pages as a visual corpus, move through the dictionary and bibliography as a conceptual map of the field, or read the documents and code to see how the project was built and where its evidence remains provisional.
+
+Marginalia landing page
+
+Intro block
+
+This section is the site’s visual core. It gathers folios and manuscript images associated with Russell’s study of annotated copies of the Hypnerotomachia Poliphili and presents them in a browsable, page-centered form. The aim is not simply to show images, but to connect them to signatures, hands, commentary, and the larger history of reception.
+
+Some links in this section are firmer than others. Where a folio-to-image relationship is deterministic or well supported, the page can be treated as a stable scholarly pointer. Where the correspondence depends on heuristic mapping—especially in the BL material—the site marks that status visibly and does not pretend that provisional concordance is settled fact.
+
+Individual marginalia / folio page template
+
+Short orientation paragraph
+
+This page brings together the evidence we currently have for a single folio or signature position: image witness, manuscript source, Russell references, hand attribution where available, and links outward to related scholarship and concepts. It should be read as a structured dossier rather than a final editorial verdict. Confidence and review badges indicate the present status of the linkage.
+
+Scholars landing page
+
+Intro block
+
+The scholarship on the Hypnerotomachia Poliphili is wide-ranging and interdisciplinary. It spans bibliography, book history, architecture, garden studies, allegory, philology, reception history, emblematic reading, and the history of interpretation. This section organizes that scholarly landscape by person: each profile brings together the works in the collection associated with a given scholar and situates them within the larger conversation.
+
+These pages are meant to make the field legible at a glance. They are not neutral authority pages detached from the project; they are editorially structured views over the corpus, and some biographical or classificatory fields remain review-sensitive. Where content is LLM-assisted or otherwise provisional, that status should remain visible.
+
+Individual scholar page template
+
+Short orientation paragraph
+
+This profile gathers the works, themes, and project links associated with one scholar in the Hypnerotomachia corpus. It is designed to show not only what this scholar wrote, but how that work connects to the site’s dictionary terms, bibliography clusters, essays, and folio-level questions. The page is therefore both bibliographic and interpretive.
+
+Bibliography landing page
+
+Intro block
+
+This bibliography is not a simple reading list. It is the site’s map of the scholarly field: a structured record of primary sources, direct Hypnerotomachia scholarship, and related studies that help explain the book’s material form, reception, imagery, and interpretive traditions. Entries are grouped so that readers can distinguish the core literature from the wider scholarly surround.
+
+Because bibliography is one of the project’s main trust surfaces, this section places unusual emphasis on review state, collection status, and data hygiene. Some entries are already strong and well formed; others still require verification, deduplication, or tighter citation control. That uncertainty should remain visible rather than be hidden behind uniform presentation.
+
+Individual bibliography entry page template
+
+Short orientation paragraph
+
+This entry records one work in the site’s scholarly graph: bibliographic metadata, summary or annotation where available, and links to related scholars, terms, essays, or folios. It should be read as a project record with explicit provenance and review status, not as an unquestionable library catalog surrogate.
+
+Dictionary landing page
+
+Intro block
+
+The dictionary is the conceptual armature of the site. It defines the terms that recur across the Hypnerotomachia corpus and its scholarship—book-historical terms, annotation concepts, alchemical vocabulary, architectural and garden discourse, textual-visual rhetoric, and major historiographical debates. Its purpose is not merely lexical; it is to help readers move between page evidence and scholarly interpretation.
+
+This section is most useful when read alongside the folio pages, essays, and bibliography. Terms are not meant to float abstractly above the project: the long-term goal is for each entry to show why the concept matters for the Hypnerotomachia specifically, what evidence in the corpus bears on it, and how it has functioned in scholarship.
+
+Individual dictionary term page template
+
+Short orientation paragraph
+
+This entry explains a term that the project uses to connect book, image, marginalia, and scholarship. Each term page is intended to move from definition to relevance: what the term means, why it matters for the Hypnerotomachia, where it appears in the scholarly conversation, and what project evidence currently supports the entry. Review and provenance fields indicate whether the entry is still in draft, has been reviewed, or rests on more stable ground.
+
+Docs landing page
+
+Intro block
+
+This section makes the project legible as a research build rather than a black box. It gathers the internal methodological and reflective documents—ontology notes, concordance method, boundary audits, proposals, mistakes, aesthetic reviews, and related planning texts—that explain what the project thinks it is doing and where its assumptions have shifted over time.
+
+These documents are part of the scholarly apparatus, not just engineering residue. They record how the database, site, and interpretive claims were assembled, where the strongest arguments lie, and where the project has had to revise itself. Readers who want to assess trust, method, or design rationale should start here.
+
+Individual document page template
+
+Short orientation paragraph
+
+This document is presented as part of the project’s internal scholarly apparatus. Some documents define method, some critique earlier assumptions, and some record planning for future phases. Together they show how the platform’s claims, structures, and editorial decisions were made.
+
+Code landing page
+
+Intro block
+
+This section exposes the deterministic pipeline behind the site. Rather than hiding the build logic, it presents the scripts that initialize the database, parse filenames, extract references, match folios to images, seed and enrich metadata, validate assumptions, and generate the static pages. The aim is transparency and reproducibility.
+
+The project’s architectural stance is deliberately conservative: SQLite as source of truth, Python for transformation, JSON and static HTML for delivery, and as little framework machinery as possible. That simplicity is not an omission; it is part of the project’s long-term durability model.
+
+Individual code page template
+
+Short orientation paragraph
+
+This script is part of the site’s reproducible build chain. It should be understood in relation to the other pipeline stages: schema creation, ingestion, normalization, matching, validation, and page generation. Where the site makes a claim deterministically, the logic ought to be traceable here.
+
+About page
+
+Intro block
+
+This project documents the readership, marginalia, and scholarship of the Hypnerotomachia Poliphili through a static, inspectable research platform. Its immediate foundation is James Russell’s dissertation on annotated copies, but its larger ambition is to model the book as a historical and scholarly network: copies, images, signatures, annotations, scholars, bibliographic records, terms, and editorial arguments.
+
+The site is built from a simple but explicit data flow: SQLite database to Python export scripts to static HTML, CSS, and JSON. This makes the project easier to preserve, audit, and rebuild, but it also means that evidence quality, provenance, and validation matter more than interface novelty. Where the project is confident, it says so; where it is still provisional, it should say that too.
+
+Digital Edition page
+
+Intro block
+
+This page outlines the project’s eventual digital edition of the Hypnerotomachia Poliphili. It is a prospectus, not a completed edition. The goal is to show what a trustworthy edition layer would require: facsimile browsing, textual witnesses, commentary, marginalia integration, cross-links to dictionary and bibliography, and clear distinctions between what is already built, what is only partial, and what remains blocked by evidence, hosting, or review constraints.
+
+The project already has important preconditions in place—a folio-oriented database, image catalogs, reference extraction, concordance logic, and a growing scholarly graph—but these should not be confused with a finished edition. A real edition will need stronger image validation, clearer witness logic, and a more mature editorial review process before it can claim authority.
+
+Russell Alchemical Hands essay page
+
+Brief orienting lead
+
+This essay examines the subset of Russell’s research concerned with the so-called alchemical hands in annotated copies of the Hypnerotomachia. It brings together dissertation evidence, hand attribution data, and folio-level linkage in order to ask what kinds of readers these were, how their notational habits differ, and why their interventions matter for the reception history of the book. Because some of the relevant image concordance remains provisional—especially in the BL material—the essay marks uncertainty explicitly rather than smoothing it away.
+
+Concordance Method page
+
+Brief orienting lead
+
+This essay explains how the project links Russell’s signature-based dissertation references to manuscript-image folders and folio pages in the site. Its purpose is methodological rather than promotional: to make the matching process visible, to distinguish secure from provisional links, and to show where future human review or multimodal validation is still needed. The concordance is one of the project’s core achievements, but it is also one of its clearest sites of epistemic caution.
+
+Reusable “Related pages” heading blurb
+
+You are reading one part of a larger scholarly graph. The links below point to adjacent pages—terms, scholars, bibliography entries, folios, documents, or essays—that bear directly on this page’s subject and help place it within the broader Hypnerotomachia research environment.
+
+Reusable provenance / review note
+
+This page combines deterministic project data with editorial and interpretive writing. Where content is inferred, synthesized, or still awaiting review, that status is marked explicitly. Readers should treat review and confidence badges as part of the scholarly content, not as secondary interface decoration.
+
+Reusable orientation note for landing pages with cards or tables
+
+This page is designed as an entry point rather than a final destination. Use it to scan the section, identify the items most relevant to your question, and then move into the detail pages for fuller evidence, commentary, and cross-links.
+
+If you want, I can turn this into a structured implementation sheet with one block per file or template target, such as index.html, marginalia/index.html, dictionary/[slug].html, and so on.

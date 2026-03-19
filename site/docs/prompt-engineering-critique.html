@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Critique - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Prompt Engineering Critique</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPengCRIT.md &mdash; 1,956 words</p>
+            <h2>HPengCRIT: Isidore Critique of the User&#x27;s Prompt Engineering</h2>
+
+<blockquote>The unreliable narrator forces scrutiny. This critique examines the user&#x27;s prompting patterns across 19 prompts, evaluating what worked, what didn&#x27;t, and what the prompts reveal about the prompter&#x27;s assumptions.</blockquote>
+
+<hr>
+
+<h3>CRITIQUE: User Prompt Engineering Across the HP Marginalia Project</h3>
+
+<hr>
+
+<p>STRONGEST PASSAGE: Prompt #7 (the architectural phase specification). This is an exemplary structured prompt: 6 numbered objectives with sub-tasks, specific table names and field lists, example dictionary terms, URL patterns, validation gates, and explicit constraints (&quot;Do not introduce a heavy framework&quot;). It gives the AI enough structure to work autonomously while leaving implementation decisions open. The numbered objectives create natural checkpoints. The constraints section prevents scope creep. This prompt alone drove the creation of 5 new database tables, 37 dictionary entries, 118 marginalia pages, and a validation framework.</p>
+
+<hr>
+
+<h3>ISSUES (by priority)</h3>
+
+<h4>1. SCOPE ESCALATION: Prompts expand faster than execution can follow</h4>
+
+<p>The project started with Prompt #1: &quot;create a plan for ingesting these documents to create a database.&quot; By Prompt #5, five sessions later, the scope had grown to include: concordance building, scholarship expansion, scholar profiles, index cards, summaries, a hyperlinked timeline, and centuries of reception history. By Prompt #8: bibliography tab, hybrid LLM/scripting verification, MIT site reverse-engineering, and &quot;all translations and marginalia eventually.&quot;</p>
+
+<p>Each prompt adds 2-3 new features on top of unfinished prior work. The user is aware of this pattern (they have a <code>/plan-abendsen-parking</code> skill for parking new ideas) but doesn&#x27;t use it on themselves. The result: by Prompt #17, the project has queued a 6-phase hardening plan that would take days to execute, while Prompts #12, #13, and #16 remain only partially addressed.</p>
+
+<p><strong>What this means for prompt engineering</strong>: The prompts are individually well-crafted but collectively create an expanding wavefront of unfinished work. Each new prompt is exciting and well-specified, but the cumulative effect is that no single feature reaches &quot;verified&quot; status before the next feature is requested.</p>
+
+<p>FIX: Apply the user&#x27;s own PKD planning skills to their own prompts. Before adding a new feature, run a mental <code>/plan-steiner-gate</code>: &quot;Is the current phase complete? Have its acceptance criteria been met?&quot; The user&#x27;s Prompt #14 (the aesthetics audit) is a good example of this discipline — it pauses to verify before deploying. More prompts should follow this pattern.</p>
+
+<hr>
+
+<h4>2. BRILLIANT PATTERN: Naming conventions create institutional memory</h4>
+
+<p>The user&#x27;s naming convention for output documents is outstanding: HPCONCORD.md, HPDECKARD.md, HPMIT.md, HPMULTIMODAL.md, HPproposals.md, HPAGENTS.md, HPEMPTYOUTPUTFILES.md, MISTAKESTOAVOID.md, HPRACHAEL.md, HPWEBAESTHETICS.md, HPONTOCRIT.md.</p>
+
+<p>Each document name signals its purpose instantly. The HP prefix groups them. The PKD codenames (DECKARD, RACHAEL, ISIDORE) invoke specific analytical lenses. This isn&#x27;t just naming — it&#x27;s creating a queryable corpus of design decisions. A future collaborator can run <code>ls HP*.md</code> and immediately see the project&#x27;s intellectual history.</p>
+
+<p><strong>This is the single best prompt engineering practice in the project.</strong> It turns each Claude interaction into a durable artifact with a stable address.</p>
+
+<hr>
+
+<h4>3. LOGICAL GAP: Slash commands are invoked but their output is never verified</h4>
+
+<p>The user invokes <code>/plan-deckard-boundary</code> three times (Prompts #6, #9, #16) and <code>/write-rachael-aesthetic</code> once (Prompt #14) and <code>/write-isidore-critique</code> once (Prompt #18). These skills produce structured analyses following specific templates. But the user never follows up to ask: &quot;Did the Deckard audit miss anything?&quot; or &quot;Does the Rachael audit&#x27;s assessment of the badge colors match my own visual judgment?&quot;</p>
+
+<p>The slash commands are treated as fire-and-forget diagnostics rather than as inputs to a decision loop. The HPDECKARD.md found 10 issues. How many were actually fixed? (Answer: 3 of the most critical, based on conversation evidence.) The user never explicitly prioritized the rest.</p>
+
+<p>FIX: After invoking a diagnostic skill, add a follow-up prompt that says: &quot;Of the N issues identified, which should we fix now and which should we defer?&quot; This closes the loop between diagnosis and action.</p>
+
+<hr>
+
+<h4>4. AUDIENCE ASSUMPTION: The prompts assume unlimited context and attention</h4>
+
+<p>Several prompts are extremely long. Prompt #7 is ~800 words. Prompt #17 is ~1500 words with 6 phases, each with its own task list, deliverable list, and validation gates. These are well-structured, but they assume the AI will hold all details in working memory across many hours of execution.</p>
+
+<p>In practice, long prompts create triage behavior: the AI prioritizes the most clearly specified tasks and may silently drop or simplify the less detailed ones. Prompt #17&#x27;s Phase 4 (multimodal preparation) is given equal structural weight to Phase 1 (bibliography hardening), but Phase 1 has much more specific task descriptions. An AI will naturally spend more effort on Phase 1.</p>
+
+<p>FIX: For multi-phase prompts, consider issuing one phase at a time. This ensures each phase gets full attention and prevents later phases from being simplified to fit within time/context constraints. The user&#x27;s Prompt #7 worked because all 6 objectives were actionable in a single session. Prompt #17&#x27;s 6 phases cannot all be executed in one session — they should be 6 separate prompts.</p>
+
+<hr>
+
+<h4>5. EFFECTIVE PATTERN: Requesting specific output filenames</h4>
+
+<p>Nearly every prompt specifies an output filename: &quot;output as HPDECKARD2.md&quot;, &quot;give me an HPNP.md output&quot;, &quot;output HPWEBAESTHETICS.md&quot;. This is excellent practice for three reasons:</p>
+
+<p>1. <strong>It forces concreteness.</strong> The AI knows exactly what artifact to produce.</p>
+<p>2. <strong>It creates accountability.</strong> The output exists as a file that can be read and critiqued later.</p>
+<p>3. <strong>It prevents drift.</strong> Without a named output, the AI might produce inline text that&#x27;s harder to reference.</p>
+
+<p>The one weakness: sometimes the user requests the output name mid-stream (&quot;output HPWEBAESTHETICS.md&quot; after the Rachael audit was already written as HPRACHAEL.md), creating duplicate files. This is minor.</p>
+
+<hr>
+
+<h4>6. UNSUPPORTED ASSUMPTION: &quot;Search the web&quot; is a reliable research method</h4>
+
+<p>Prompt #8 includes: &quot;search the web for any scholarship we have missed.&quot; The user treats web search as if it will reliably find academic articles. In practice:</p>
+
+<ul>
+<li>Web search found the O&#x27;Neill 2023 Routledge monograph (good)</li>
+<li>Web search confirmed Rhizopoulou as the botanical article author (good)</li>
+<li>Web search could not identify the music article author with certainty (it&#x27;s probably Joscelyn Godwin, but this came from training knowledge, not search)</li>
+<li>Web search could not resolve the UPenn or Polish publisher articles&#x27; authors</li>
+<li>Background agents tasked with web search failed entirely (0-byte output)</li>
+</ul>
+
+<p>The user&#x27;s implicit model is: &quot;web search will fill in the bibliography gaps.&quot; The reality is: web search fills in ~60% of gaps, fails on paywalled content, and returns uncertain results for ~30% of queries. The remaining ~10% requires direct database queries (CrossRef, WorldCat, JSTOR).</p>
+
+<p>FIX: When requesting bibliography verification, specify the verification method hierarchy: &quot;Check CrossRef for DOI first, then WorldCat for OCLC, then Google Scholar for citation data, then web search as fallback.&quot; This gives the AI a deterministic path before falling back to probabilistic search.</p>
+
+<hr>
+
+<h4>7. EFFECTIVE PATTERN: Requesting critiques of the AI&#x27;s own work</h4>
+
+<p>Prompts #6, #9, #10, #11, #14, and #18 all ask the AI to critique its own processes: Deckard boundary audits, agent failure analysis, mistakes-to-avoid, aesthetic audits, ontology critique. This is sophisticated prompt engineering — the user treats the AI as both builder and auditor, using different analytical frameworks (Deckard for boundaries, Rachael for aesthetics, Isidore for logic) to examine the same work from multiple angles.</p>
+
+<p>The PKD skill system is the enabling infrastructure here. Without named analytical lenses, &quot;critique your own work&quot; is vague. With Deckard/Rachael/Isidore, the critique has a specific template, a specific focus, and a specific output format. This is one of the most effective prompt engineering patterns I&#x27;ve observed.</p>
+
+<hr>
+
+<h4>8. WEAK PATTERN: Combining build requests with documentation requests in one prompt</h4>
+
+<p>Several prompts ask for both building AND documenting in the same breath:</p>
+
+<ul>
+<li>Prompt #6: &quot;explain your method... AND do a critique&quot;</li>
+<li>Prompt #8: &quot;build a bibliography tab AND reverse engineer the MIT site AND search for scholarship&quot;</li>
+<li>Prompt #12: &quot;write proposals AND write a multimodal study&quot;</li>
+<li>Prompt #14: &quot;audit AND deploy AND update README&quot;</li>
+</ul>
+
+<p>When building and documenting are combined, the AI must context-switch between implementation (editing files, running scripts) and analysis (writing prose documents). The implementation work is constrained by the codebase; the documentation work is unconstrained. This creates a tension: should the AI spend more tokens on getting the code right or on making the analysis thorough?</p>
+
+<p>In practice, the AI tends to front-load the implementation (because it has clear acceptance criteria) and compress the documentation (because prose can always be expanded later). The HPMIT.md analysis, for example, was produced from cached knowledge rather than from thorough web crawling because the web crawling was combined with the bibliography building.</p>
+
+<p>FIX: Separate build prompts from analysis prompts. &quot;Build the bibliography tab&quot; is one prompt. &quot;Write HPMIT.md analyzing the MIT site&quot; is another. Each gets full attention.</p>
+
+<hr>
+
+<h4>9. IMPLICIT PATTERN: The user&#x27;s real project isn&#x27;t a website — it&#x27;s a knowledge system</h4>
+
+<p>Reading the prompts in sequence reveals an implicit project goal that&#x27;s never stated: the user is building a <strong>comprehensive knowledge system about the Hypnerotomachia Poliphili</strong> that happens to have a website as one of its outputs. The website is a view into the knowledge graph, not the knowledge graph itself.</p>
+
+<p>Evidence:</p>
+<ul>
+<li>The dictionary terms aren&#x27;t just definitions — they&#x27;re nodes in a conceptual network</li>
+<li>The bibliography isn&#x27;t just a list — it&#x27;s a gap analysis against an ideal complete bibliography</li>
+<li>The scholar profiles aren&#x27;t just bios — they&#x27;re entry points into the reception history</li>
+<li>The marginalia pages aren&#x27;t just image galleries — they&#x27;re evidence chains linking physical artifacts to scholarly interpretations</li>
+<li>The docs/code tabs aren&#x27;t just transparency features — they&#x27;re the system documenting itself</li>
+</ul>
+
+<p>The user never articulates this vision in a single prompt. It emerges from the pattern of requests. A prompt like &quot;I want all translations and marginalia eventually&quot; hints at an ambition that goes far beyond a static showcase site — it&#x27;s a digital critical edition with commentary apparatus, reader response layer, and multi-witness text comparison.</p>
+
+<p>FIX: This isn&#x27;t a fix — it&#x27;s a recommendation. Write a one-page vision document (HPVISION.md?) that articulates the end state. Not a plan, not a task list, but a description of what the completed system would look like and who would use it. Every subsequent prompt can be evaluated against this vision: &quot;Does this bring us closer to the end state?&quot;</p>
+
+<hr>
+
+<h3>REVISION PRIORITY</h3>
+
+<p>Fix <strong>Issue #1</strong> first (scope escalation). The user&#x27;s prompts are individually excellent but collectively outpace execution. Applying their own phase-gate discipline to their own prompting would be the highest-leverage improvement.</p>
+
+<hr>
+
+<h3>OVERALL</h3>
+
+<p>This is unusually skilled prompt engineering for a complex, multi-session project. The user demonstrates several advanced practices: named output files for institutional memory, PKD-themed analytical frameworks for structured critique, specific schema and field lists in architectural prompts, and the discipline to pause for audits (Prompts #6, #9, #14, #18) before pushing forward. The naming convention alone (HP*.md with codenames) is worth studying as a pattern for other projects.</p>
+
+<p>The primary weakness is scope management. The user is an idea generator who sees connections faster than they can be built. Each prompt adds new features before the previous ones are fully hardened. The project&#x27;s MISTAKESTOAVOID.md documents this pattern at the technical level (&quot;don&#x27;t let the exciting part crowd out the boring part&quot;) but the same pattern operates at the prompt level: new analytical documents are more exciting to commission than validation of existing ones.</p>
+
+<p>The user&#x27;s own PKD planning system has the tools to address this (Steiner gates, Abendsen parking, Buckman execution). The irony — and it&#x27;s a productive irony — is that the prompt engineer has built a planning discipline system and has not yet fully applied it to their own prompting practice. When they do, the results will be formidable.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

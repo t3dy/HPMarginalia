@@ -131,7 +131,70 @@ See the [Docs tab](https://t3dy.github.io/HPMarginalia/docs/index.html) for full
 | `HPEMPTYOUTPUTFILES.md` | Empty output files post-mortem |
 | `MISTAKESTOAVOID.md` | 12 lessons learned |
 | `HPRACHAEL.md` / `HPWEBAESTHETICS.md` | Visual design logic audit |
+| `HPONTOCRIT.md` | Ontology critique (9 issues, gap between model and implementation) |
+| `HPengCRIT.md` | Prompt engineering critique (9 patterns identified) |
+| `HPromptTRANSCRIPT.md` | Transcript of all user prompts |
 | `AUDIT_REPORT.md` | Validation results |
+
+## Progress Log
+
+### Phase 1: Foundation (Database + Gallery)
+- Built SQLite database with 18 tables from Russell's PhD thesis
+- Extracted 282 folio references via regex from thesis PDF
+- Cataloged 674 manuscript images (196 BL, 478 Siena)
+- Built 448-entry signature-to-folio concordance
+- Created 610 image-reference matches
+- Identified 11 annotator hands across 6 manuscript copies
+- Deployed marginalia gallery with lightbox viewer and manuscript filters
+
+### Phase 2: Scholarship Layer
+- Summarized 34 scholarly articles via LLM batch processing
+- Built 30 scholar profile pages with article summaries
+- Created 109-entry bibliography with gap analysis against Russell's 310 citations
+- Added 42 timeline events spanning 1499-2024
+- Ingested web research (Perplexity, web search) discovering O'Neill 2023 Routledge monograph, Rhizopoulou 2016/2022 botanical studies, Young 2024 new translation
+
+### Phase 3: Architecture Hardening (V2 Migration)
+- Added review/provenance fields to all tables (confidence, needs_review, reviewed, source_method)
+- Downgraded 218 BL matches from MEDIUM to LOW confidence
+- Created normalized annotators table and doc_folio_refs with provenance
+- Added document_topics junction table for multi-value topic clusters
+
+### Phase 4: Dictionary + New Page Types
+- Seeded 37 dictionary terms across 6 categories with 76 cross-reference links
+- Built 118 marginalia folio detail pages with hand attributions
+- Added bibliography tab (109 entries, 4 relevance tiers)
+- Added docs tab (19 project documents rendered as HTML)
+- Added code tab (22 pipeline scripts with line-numbered source)
+- Added about page with database statistics and provenance documentation
+
+### Phase 5: Alchemist Analysis
+- Wrote 13 folio-specific scholarly descriptions for the two alchemist annotators
+- BL Hand B (d'Espagnet school): 9 folios analyzed (flyleaf manifesto, dawn/Albedo, Elephant & Obelisk ideograms, Panta Tokadi/cinnabar/digestion, Fons Heptagonis seven metals)
+- Buffalo Hand E (pseudo-Geber school): 4 folios analyzed (Geber's ingenium, Bacchus-Demeter as Sol-Luna, chess match as distillation, hermaphroditic metals)
+
+### Phase 6: Design + Deployment
+- Extracted inline CSS into shared components.css
+- Fixed CSS path inconsistencies for GitHub Pages (relative paths throughout)
+- Synchronized navigation bar across all pages (8 tabs)
+- Warmed badge colors to match the parchment palette
+- Added orientation copy to all tab landing pages
+- Deployed via GitHub Actions to https://t3dy.github.io/HPMarginalia/
+
+### Audits Conducted
+- 2x Deckard boundary audits (deterministic vs. probabilistic tasks)
+- 1x Rachael aesthetic audit (9 design issues, 5 fixed)
+- 1x Isidore ontology critique (9 issues, 3 structural)
+- 1x Isidore prompt engineering critique (9 patterns)
+- 1x Agent usage analysis (with empty output file post-mortem)
+- 1x Validation pass (0 critical issues)
+
+### What Still Needs Human Review
+- All 34 article summaries (LLM-generated, not verified against source)
+- All 37 dictionary definitions (LLM-drafted)
+- Scholar birth/death years and institutional affiliations
+- BL photo-to-folio mapping (218 matches at LOW confidence)
+- 13 alchemist folio descriptions (LLM synthesis from Russell, not Russell's own words)
 
 ## Dependencies
 

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Design Audit - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Visual Design Audit</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPWEBAESTHETICS.md &mdash; 1,211 words</p>
+            <h2>HPRACHAEL: Visual Design Logic Audit</h2>
+
+<blockquote>Rachael is designed to be indistinguishable from real. This audit evaluates whether the visual design communicates the RIGHT things.</blockquote>
+
+<hr>
+
+<h3>COLOR SYSTEM</h3>
+
+<p><strong>INTENT</strong>: Warm, scholarly palette evoking parchment and leather — appropriate for a Renaissance book project.</p>
+
+<p><strong>REALITY</strong>: The palette is consistent and well-chosen. <code>--bg: #f5f0e8</code> (warm parchment), <code>--accent: #8b4513</code> (saddlebrown/leather), <code>--header-bg: #2c2418</code> (dark walnut). The warm earth tones correctly signal &quot;historical/scholarly&quot; without veering into kitsch.</p>
+
+<p><strong>GAP</strong>: The badge system introduces Bootstrap-derived colors (#d4edda green, #f8d7da red, #fff3cd yellow, #e2e3e5 gray) that don&#x27;t belong to the warm palette. They work functionally but feel imported from a different design system.</p>
+
+<p><strong>FIX</strong>: Warm the badge colors to match the palette. Replace Bootstrap greens/reds with earthy variants:</p>
+<ul>
+<li>HIGH confidence: `#dce8d4` / `#3d5a2d` (sage)</li>
+<li>LOW confidence: `#e8d4d0` / `#6b3028` (terracotta)</li>
+<li>Review badge: `#e8dcc8` / `#6b5420` (ochre)</li>
+<li>Collection badge: use the same sage/terracotta scheme</li>
+</ul>
+
+<hr>
+
+<h3>TYPOGRAPHY HIERARCHY</h3>
+
+<p><strong>INTENT</strong>: Serif body text (Georgia) for scholarly gravitas, sans-serif (Segoe UI/system) for UI elements and metadata.</p>
+
+<p><strong>REALITY</strong>: The dual-font system is correctly applied. Headings and body use serif; nav, badges, metadata, and labels use sans-serif. Line-height at 1.7 is generous and readable.</p>
+
+<p><strong>GAP</strong>: The heading hierarchy across generated pages is inconsistent:</p>
+<ul>
+<li>index.html: `h1` in header (2.4rem), no other headings in body</li>
+<li>Generated pages: `h1` in header (same), then `h2` as page titles (1.4rem in scholars, variable elsewhere)</li>
+<li>Dictionary pages use `h2` for term name, `h3` for category sections, `h4` for related terms — correct</li>
+<li>Docs pages use `h2`-`h4` from markdown conversion — correct</li>
+<li>**Problem**: Bibliography page has no heading hierarchy — section titles use `h3` but the page title is just a `&lt;h2&gt;` inside a div, not in a consistent location</li>
+</ul>
+
+<p><strong>FIX</strong>: All generated content pages should follow: <code>h2</code> = page title (in <code>.intro</code> or equivalent), <code>h3</code> = section headers, <code>h4</code> = subsection/entry titles. This is already mostly true but should be enforced in the template.</p>
+
+<hr>
+
+<h3>SPACING SYSTEM</h3>
+
+<p><strong>INTENT</strong>: Comfortable academic reading with generous whitespace.</p>
+
+<p><strong>REALITY</strong>: Mostly consistent. Max-widths are 800px (intro, dictionary, docs), 900px (scholars, bibliography), 1000px (marginalia, footer), 1200px (scholars grid), 1400px (gallery). The variety is intentional — narrower for reading, wider for grids.</p>
+
+<p><strong>GAP</strong>: The inline <code>&lt;style&gt;</code> blocks on generated pages repeat spacing values with slight inconsistencies. Dictionary margins are <code>2rem auto</code> while bibliography is also <code>2rem auto</code> — but docs use <code>2rem auto</code> for <code>.docs-page</code> and also <code>2rem auto</code> for <code>.doc-content</code>. The repetition is fine but the different max-widths create a subtle jarring effect when navigating between sections.</p>
+
+<p><strong>FIX</strong>: Standardize to three max-width tiers: <code>--width-reading: 800px</code>, <code>--width-content: 960px</code>, <code>--width-grid: 1200px</code>. Apply reading width to dictionary terms, docs content, and about page. Content width to scholars detail, bibliography, marginalia detail. Grid width to index pages with card layouts.</p>
+
+<hr>
+
+<h3>COMPONENT CONSISTENCY</h3>
+
+<p><strong>INTENT</strong>: Cards, badges, and tables should look like they belong to the same design system.</p>
+
+<p><strong>REALITY</strong>: Three inconsistencies found:</p>
+
+<p>1. <strong>Nav bar inconsistency</strong>: The index.html (hand-written) has a 5-link nav, while all generated pages have the current 8-link nav. A visitor clicking from the gallery to any other page will see the nav suddenly gain 3 more items. <strong>This is a functional bug, not just aesthetic.</strong></p>
+
+<p>2. <strong>CSS path inconsistency</strong>: index.html uses <code>href=&quot;style.css&quot;</code> (relative), generated pages use <code>href=&quot;/style.css&quot;</code> (absolute). On GitHub Pages served from <code>/HPMarginalia/</code>, absolute paths will break — <code>/style.css</code> will resolve to the GitHub root, not the project. All paths need to be relative or use a base URL.</p>
+
+<p>3. <strong>Inline styles vs. shared CSS</strong>: Every generated page type (dictionary, marginalia, bibliography, docs, code) injects its own <code>&lt;style&gt;</code> block with page-specific CSS. This means the same styles are duplicated across 100+ pages. Dictionary styles appear in all 38 dictionary pages identically.</p>
+
+<p><strong>FIX</strong>:</p>
+<p>1. Rebuild index.html nav via the build script (replace the hand-inserted nav with the current 8-link version)</p>
+<p>2. Make all CSS/link paths relative to the page&#x27;s location (use <code>../style.css</code> from subdirectories)</p>
+<p>3. Extract inline styles into a shared <code>site/components.css</code> loaded by all pages</p>
+
+<hr>
+
+<h3>VISUAL WEIGHT</h3>
+
+<p><strong>INTENT</strong>: The primary content (manuscript images, annotations, definitions) should dominate; metadata and navigation should be subordinate.</p>
+
+<p><strong>REALITY</strong>: Generally correct. The gallery cards lead with the image, the dictionary leads with the definition, the bibliography leads with the author/title. The badge system is appropriately small and secondary.</p>
+
+<p><strong>GAP</strong>: On marginalia detail pages, the LOW confidence badge and &quot;Unverified&quot; review badge are visually prominent because they use red/yellow colors that clash with the warm palette. For the BL copy (218 matches), every single image has both badges, creating a wall of warning that overwhelms the actual content.</p>
+
+<p><strong>FIX</strong>: On pages where ALL items have the same status (e.g., all BL images are LOW confidence), show the status once at the top of the page as a notice banner rather than on every individual image card. Reserve per-item badges for pages where items have mixed statuses.</p>
+
+<hr>
+
+<h3>BRAND COHERENCE</h3>
+
+<p><strong>INTENT</strong>: A recognizable visual identity as a serious digital humanities project.</p>
+
+<p><strong>REALITY</strong>: Strong. The warm palette, serif typography, and understated design correctly signal &quot;scholarly but accessible.&quot; The use of the HP&#x27;s own vocabulary (signature, quire, folio) in the UI reinforces the subject matter.</p>
+
+<p><strong>GAP</strong>: The site has no favicon, no open graph tags, and no meta description. When shared on social media or bookmarked, it will show a generic browser icon and no preview.</p>
+
+<p><strong>FIX</strong>: Add a favicon (a small version of a woodcut initial or the HP&#x27;s distinctive &#x27;P&#x27; initial would be appropriate). Add <code>&lt;meta name=&quot;description&quot;&gt;</code> and OG tags to the page shell.</p>
+
+<hr>
+
+<h3>DARK PATTERNS</h3>
+
+<p><strong>INTENT</strong>: None.</p>
+
+<p><strong>REALITY</strong>: None found. The site is read-only with no forms, no tracking, no cookies, no analytics. Clean.</p>
+
+<hr>
+
+<h3>FUNCTIONAL ISSUES FOUND</h3>
+
+<p>Beyond aesthetics, the audit identified these functional problems:</p>
+
+<p>1. <strong>Broken nav on index.html</strong> — missing Bibliography, Docs, Code links</p>
+<p>2. <strong>GitHub Pages path issue</strong> — absolute paths (<code>/style.css</code>) will fail when deployed to <code>t3dy.github.io/HPMarginalia/</code> because GitHub Pages serves from a subdirectory</p>
+<p>3. <strong>Inline CSS duplication</strong> — same styles repeated across 100+ generated pages, inflating total page weight</p>
+<p>4. <strong>No <code>&lt;main&gt;</code> tag in index.html</strong> — it uses <code>&lt;main&gt;</code> but the closing tag and footer structure differ from generated pages</p>
+<p>5. <strong>Scholar page footer</strong> — generated pages have a footer with provenance info; index.html has a different footer layout. The footers should be consistent.</p>
+
+<hr>
+
+<h3>SUMMARY</h3>
+
+<p><strong>9 design logic issues. 5 are CSS fixes, 2 need template refactoring, 2 need design decisions.</strong></p>
+
+<table class="doc-table">
+<tr><th>#</th><th>Issue</th><th>Type</th><th>Severity</th></tr>
+<tr><td>1</td><td>Nav bar out of sync on index.html</td><td>Template fix</td><td>**Critical**</td></tr>
+<tr><td>2</td><td>CSS absolute paths will break on GH Pages</td><td>Template fix</td><td>**Critical**</td></tr>
+<tr><td>3</td><td>Badge colors from Bootstrap, not palette</td><td>CSS fix</td><td>Minor</td></tr>
+<tr><td>4</td><td>Inline styles duplicated across 100+ pages</td><td>CSS refactor</td><td>Medium</td></tr>
+<tr><td>5</td><td>Per-item LOW badges overwhelm BL pages</td><td>Design decision</td><td>Medium</td></tr>
+<tr><td>6</td><td>Max-width inconsistencies across page types</td><td>CSS fix</td><td>Minor</td></tr>
+<tr><td>7</td><td>No favicon or OG tags</td><td>CSS/HTML fix</td><td>Minor</td></tr>
+<tr><td>8</td><td>Footer inconsistency between index and generated</td><td>Template fix</td><td>Minor</td></tr>
+<tr><td>9</td><td>Heading hierarchy inconsistency</td><td>CSS fix</td><td>Minor</td></tr>
+</table>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

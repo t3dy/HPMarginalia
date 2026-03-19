@@ -1,0 +1,809 @@
+{
+  "total_terms": 37,
+  "by_status": {
+    "DRAFT": 37
+  },
+  "by_category": {
+    "Book History & Bibliography": 10,
+    "Annotation Studies": 7,
+    "Textual & Visual Motifs": 6,
+    "Alchemical Interpretation": 6,
+    "Scholarly Debates": 5,
+    "Architecture & Gardens": 3
+  },
+  "missing_fields": [
+    {
+      "slug": "acrostic",
+      "label": "Acrostic",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "activity-book",
+      "label": "Activity Book",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "acutezze",
+      "label": "Acutezze",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "alchemical-allegory",
+      "label": "Alchemical Allegory",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "aldus-manutius",
+      "label": "Aldus Manutius",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "allegory",
+      "label": "Allegory",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "annotator-hand",
+      "label": "Annotator Hand",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "antiquarianism",
+      "label": "Antiquarianism",
+      "category": "Scholarly Debates",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "apparatus",
+      "label": "Apparatus",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "architectural-body",
+      "label": "Architectural Body",
+      "category": "Architecture & Gardens",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "authorship-debate",
+      "label": "Authorship Debate",
+      "category": "Scholarly Debates",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "chemical-wedding",
+      "label": "Chemical Wedding",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "collation",
+      "label": "Collation",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "commentary",
+      "label": "Commentary",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "cythera",
+      "label": "Cythera",
+      "category": "Architecture & Gardens",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "dream-narrative",
+      "label": "Dream Narrative",
+      "category": "Scholarly Debates",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ekphrasis",
+      "label": "Ekphrasis",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "elephant-obelisk",
+      "label": "Elephant and Obelisk",
+      "category": "Architecture & Gardens",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "emblem",
+      "label": "Emblem",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "folio",
+      "label": "Folio",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "gathering",
+      "label": "Gathering",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "hieroglyph",
+      "label": "Hieroglyph",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ideogram",
+      "label": "Ideogram (Alchemical)",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "incunabulum",
+      "label": "Incunabulum",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ingegno",
+      "label": "Ingegno",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "inventio",
+      "label": "Inventio",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "marginalia",
+      "label": "Marginalia",
+      "category": "Annotation Studies",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "master-mercury",
+      "label": "Master Mercury",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "prisca-sapientia",
+      "label": "Prisca Sapientia",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "quire",
+      "label": "Quire",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "reception-history",
+      "label": "Reception History",
+      "category": "Scholarly Debates",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "recto",
+      "label": "Recto",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "signature",
+      "label": "Signature",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "sol-luna",
+      "label": "Sol and Luna",
+      "category": "Alchemical Interpretation",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "vernacular-poetics",
+      "label": "Vernacular Poetics",
+      "category": "Scholarly Debates",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "verso",
+      "label": "Verso",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "woodcut",
+      "label": "Woodcut",
+      "category": "Textual & Visual Motifs",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    }
+  ],
+  "duplicate_slugs": [],
+  "orphaned_links": [],
+  "terms_without_links": [],
+  "weak_terms": [
+    {
+      "slug": "acrostic",
+      "label": "Acrostic",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "activity-book",
+      "label": "Activity Book",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "acutezze",
+      "label": "Acutezze",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "alchemical-allegory",
+      "label": "Alchemical Allegory",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "aldus-manutius",
+      "label": "Aldus Manutius",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "allegory",
+      "label": "Allegory",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "annotator-hand",
+      "label": "Annotator Hand",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "antiquarianism",
+      "label": "Antiquarianism",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "apparatus",
+      "label": "Apparatus",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "architectural-body",
+      "label": "Architectural Body",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "authorship-debate",
+      "label": "Authorship Debate",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "chemical-wedding",
+      "label": "Chemical Wedding",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "collation",
+      "label": "Collation",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "commentary",
+      "label": "Commentary",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "cythera",
+      "label": "Cythera",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "dream-narrative",
+      "label": "Dream Narrative",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ekphrasis",
+      "label": "Ekphrasis",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "elephant-obelisk",
+      "label": "Elephant and Obelisk",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "emblem",
+      "label": "Emblem",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "folio",
+      "label": "Folio",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "gathering",
+      "label": "Gathering",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "hieroglyph",
+      "label": "Hieroglyph",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ideogram",
+      "label": "Ideogram (Alchemical)",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "incunabulum",
+      "label": "Incunabulum",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "ingegno",
+      "label": "Ingegno",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "inventio",
+      "label": "Inventio",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "marginalia",
+      "label": "Marginalia",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "master-mercury",
+      "label": "Master Mercury",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "prisca-sapientia",
+      "label": "Prisca Sapientia",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "quire",
+      "label": "Quire",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "reception-history",
+      "label": "Reception History",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "recto",
+      "label": "Recto",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "signature",
+      "label": "Signature",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "sol-luna",
+      "label": "Sol and Luna",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "vernacular-poetics",
+      "label": "Vernacular Poetics",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "verso",
+      "label": "Verso",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    },
+    {
+      "slug": "woodcut",
+      "label": "Woodcut",
+      "missing_count": 3,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship",
+        "source_documents"
+      ]
+    }
+  ],
+  "summary": {
+    "total_terms": 37,
+    "draft_count": 37,
+    "verified_count": 0,
+    "terms_with_missing_fields": 37,
+    "weak_terms_count": 37,
+    "duplicate_slugs_count": 0,
+    "orphaned_links_count": 0,
+    "terms_without_links_count": 0,
+    "categories": 6
+  }
+}

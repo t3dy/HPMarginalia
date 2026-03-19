@@ -335,16 +335,16 @@ def build_scholars_pages(conn):
         <div class="scholars-grid">
             <div class="intro" style="margin-bottom:2rem">
                 <h2>Scholars of the <em>Hypnerotomachia</em></h2>
-                <p>The <em>Hypnerotomachia Poliphili</em> has attracted sustained scholarly
-                attention since Domenico Gnoli's 1899 study, drawing researchers from
-                art history, architectural theory, literary criticism, book history,
-                reception studies, and the history of alchemy. This index presents
-                {len(by_author)} scholars whose work shapes our understanding of the book
-                and its readers, with {len(summaries)} article and monograph summaries.</p>
-                <p>Each scholar page collects their contributions to HP studies alongside
-                publication details and topic classifications. Summaries were generated
-                with LLM assistance from our PDF corpus and are marked accordingly.
-                We welcome corrections from the scholars represented here.</p>
+                <p>The scholarship on the <em>Hypnerotomachia Poliphili</em> is wide-ranging
+                and interdisciplinary. It spans bibliography, book history, architecture,
+                garden studies, allegory, philology, reception history, emblematic reading,
+                and the history of interpretation. This section organizes that scholarly
+                landscape by person: each profile brings together the works in the collection
+                associated with a given scholar and situates them within the larger conversation.</p>
+                <p>These pages are meant to make the field legible at a glance.
+                {len(by_author)} scholars, {len(summaries)} article and monograph summaries.
+                Where content is LLM-assisted or otherwise provisional, that status
+                remains visible.</p>
             </div>
             {''.join(scholar_cards)}
         </div>"""
@@ -427,18 +427,18 @@ def build_dictionary_pages(conn):
         <div class="dictionary-index">
             <div class="intro">
                 <h2>Dictionary of the <em>Hypnerotomachia</em></h2>
-                <p>The <em>Hypnerotomachia Poliphili</em> sits at the intersection
-                of book history, architectural theory, alchemical tradition,
-                Renaissance philology, and dream literature. This dictionary
-                defines {len(terms)} terms across {len(by_category)} categories
-                that are essential for reading the book and its scholarship:
-                from bibliographic fundamentals like <em>signature</em> and
-                <em>quire</em> to interpretive concepts like <em>prisca sapientia</em>
-                and <em>chemical wedding</em>.</p>
-                <p>Terms are cross-linked&mdash;each page lists related concepts
-                and see-also references, so you can follow threads through the
-                HP's intellectual world. Definitions draw on specific scholarly
-                sources cited on each page.</p>
+                <p>The dictionary is the conceptual armature of the site. It defines
+                the {len(terms)} terms across {len(by_category)} categories that recur across the
+                <em>Hypnerotomachia</em> corpus and its scholarship&mdash;book-historical
+                terms, annotation concepts, alchemical vocabulary, architectural and garden
+                discourse, textual-visual rhetoric, and major historiographical debates.
+                Its purpose is not merely lexical; it is to help readers move between page
+                evidence and scholarly interpretation.</p>
+                <p>This section is most useful when read alongside the folio pages, essays,
+                and bibliography. Terms are cross-linked: each page lists related concepts
+                and see-also references, so you can follow threads through the HP's
+                intellectual world. Review and provenance badges indicate which entries
+                rest on stable ground and which are still in draft.</p>
             </div>
             {cat_sections}
         </div>"""
@@ -925,22 +925,19 @@ def build_bibliography_page(conn):
     body = f"""
         <div class="bib-page">
             <div class="intro">
-                <h2>Bibliography of the <em>Hypnerotomachia Poliphili</em></h2>
-                <p>This bibliography tracks editions, translations, and scholarship
-                on the <em>Hypnerotomachia Poliphili</em> from the first studies in
-                the 1890s through contemporary work in narratology, botanical
-                analysis, and reception history. It draws on the 310-entry
-                bibliography of James Russell's PhD thesis (Durham, 2014),
-                the <em>Word &amp; Image</em> special issues (1998, 2015),
-                and ongoing web research.</p>
-                <p>Entries are grouped by relevance: <strong>Primary Sources</strong>
-                (editions and translations of the HP itself), <strong>Direct
-                Scholarship</strong> (works whose primary subject is the HP),
-                <strong>Related Studies</strong> (works that engage substantially
-                with the HP as part of a broader argument), and <strong>General
-                References</strong> (methodological or contextual works cited
-                in HP scholarship). Each entry shows whether we hold the work
-                in our collection and whether the citation has been verified.</p>
+                <h2>Bibliography</h2>
+                <p>This bibliography is not a simple reading list. It is the site's
+                map of the scholarly field: a structured record of primary sources,
+                direct <em>Hypnerotomachia</em> scholarship, and related studies that
+                help explain the book's material form, reception, imagery, and
+                interpretive traditions. Entries are grouped so that readers can
+                distinguish the core literature from the wider scholarly surround.</p>
+                <p>Because bibliography is one of the project's main trust surfaces,
+                this section places emphasis on review state, collection status,
+                and data hygiene. Each entry shows whether we hold the work in our
+                collection and whether the citation has been verified. That
+                uncertainty remains visible rather than hidden behind uniform
+                presentation.</p>
             </div>
             {stats_html}
             {sections_html}
@@ -1094,6 +1091,10 @@ DOC_METADATA = {
     'HPONTOLOGY.md': ('Ontology Design', 'Data model and entity relationships for the HP knowledge base: manuscripts, folios, hands, scholars, terms.'),
     'HPSCHOLARS.md': ('Scholars Analysis', 'Strategy for building scholar profiles and article summaries from our PDF corpus.'),
     'HPWEB.md': ('Web Architecture', 'Design decisions for the static site: why no framework, how SQLite drives page generation, URL structure.'),
+    'HPONTOCRIT.md': ('Ontology Critique', 'Isidore critique of HPONTOLOGY.md: where the ontology logic breaks down, what was actually built vs claimed.'),
+    'HPWEBAESTHETICS.md': ('Visual Design Audit', 'Rachael visual design logic audit: whether the site design communicates the right things at the right trust level.'),
+    'HPengCRIT.md': ('Prompt Engineering Critique', 'Isidore critique of user prompting patterns: what worked, what failed, what the prompts reveal about assumptions.'),
+    'HPGPTWEBWRITING.txt': ('Orientation Copy', 'Ready-to-use orientation blurbs for all site tabs and page types, grounded in project architecture and editorial goals.'),
 }
 
 # Script metadata: (filename, title, one-line summary)
@@ -1120,6 +1121,7 @@ SCRIPT_METADATA = {
     'build_reading_packets.py': ('Build Reading Packets', 'Assembles structured research packets from corpus search for dictionary enrichment.'),
     'enrich_dictionary.py': ('Enrich Dictionary', 'Populates dictionary fields from reading packets with source provenance and review status.'),
     'build_essay_data.py': ('Build Essay Data', 'Extracts structured evidence from DB and corpus for the Russell and Concordance essays.'),
+    'add_alchemist_descriptions.py': ('Add Alchemist Descriptions', 'Inserts 13 folio-specific scholarly descriptions for the two alchemist annotators from Russell Ch. 6-7.'),
 }
 
 
@@ -1289,17 +1291,16 @@ def build_docs_pages():
         <div class="docs-page">
             <div class="intro">
                 <h2>Project Documents</h2>
-                <p>This project was built in public, and these {len(docs)} documents
-                record how and why each decision was made. They include the
-                concordance methodology that links Russell's folio references
-                to manuscript photographs, boundary audits distinguishing
-                deterministic processing from LLM-assisted inference, a
-                reverse-engineering of the MIT Electronic Hypnerotomachia,
-                a multimodal architecture study, content quality proposals,
-                and a frank accounting of mistakes made along the way.</p>
-                <p>Publishing these documents is itself a design choice: a
-                scholarly platform should show its working, not just its
-                conclusions.</p>
+                <p>This section makes the project legible as a research build
+                rather than a black box. It gathers {len(docs)} internal methodological
+                and reflective documents&mdash;ontology notes, concordance method,
+                boundary audits, proposals, mistakes, aesthetic reviews, and related
+                planning texts&mdash;that explain what the project thinks it is doing
+                and where its assumptions have shifted over time.</p>
+                <p>These documents are part of the scholarly apparatus, not just
+                engineering residue. They record how the database, site, and
+                interpretive claims were assembled, where the strongest arguments
+                lie, and where the project has had to revise itself.</p>
             </div>
             <table class="docs-table">
                 <thead><tr><th>Document</th><th>Description</th><th>Words</th></tr></thead>

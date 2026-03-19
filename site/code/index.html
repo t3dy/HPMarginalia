@@ -24,7 +24,7 @@
             <div class="intro">
                 <h2>Pipeline Scripts</h2>
                 <p>Every page on this site is generated from a SQLite database by
-                these 22 Python scripts. The database is the source of
+                these 23 Python scripts. The database is the source of
                 truth; the scripts are a deterministic pipeline that transforms
                 structured data into static HTML. No web framework is involved.
                 The entire site can be rebuilt from scratch with three commands.</p>
@@ -38,6 +38,12 @@
             <table class="code-table">
                 <thead><tr><th>Script</th><th>Name</th><th>Description</th><th>Lines</th></tr></thead>
                 <tbody>
+            <tr>
+                <td><a href="add-alchemist-descriptions.html">add_alchemist_descriptions.py</a></td>
+                <td>Add Alchemist Descriptions</td>
+                <td class="code-summary">Inserts 13 folio-specific scholarly descriptions for the two alchemist annotators from Russell Ch. 6-7.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">352</td>
+            </tr>
             <tr>
                 <td><a href="add-bibliography.html">add_bibliography.py</a></td>
                 <td>Add Bibliography</td>
@@ -78,7 +84,7 @@
                 <td><a href="build-site.html">build_site.py</a></td>
                 <td>Build Site</td>
                 <td class="code-summary">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2254</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2256</td>
             </tr>
             <tr>
                 <td><a href="catalog-images.html">catalog_images.py</a></td>
