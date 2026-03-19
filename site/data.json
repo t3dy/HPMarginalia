@@ -86,7 +86,10 @@
       "needs_review": true,
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "Dawn as Albedo: The Sun's First Emanation",
+      "desc_text": "At the opening of Poliphilo's narrative, Hand B annotates the dawn scene with careful precision: 'Tempus ergo matutinum erat, sine diluculo, uel crepusculum' (It was the early morning, before dawn, or later in the evening). This is not mere translation. The annotator identifies the exact solar position -- the moment before the sun crests the horizon -- because in d'Espagnet's framework, the sun is the origin of the world spirit whose emanations are most potent at dawn. The passage heading is labeled 'AURORAE DESCRIPTIO' (Description of the Dawn). Hand B also notes the etymology of Leucothea: 'Leucos albus, candidus' -- white, bright -- connecting the dawn goddess to the alchemical stage of Albedo (whitening).",
+      "alch_element": "Sol (Sun) and Albedo (whitening stage)"
     },
     {
       "ref_id": 81,
@@ -416,7 +419,10 @@
       "needs_review": true,
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "The HP as Alchemical Treatise",
+      "desc_text": "Hand B recognized that the HP's own dedicatory letter mirrors the conventions of alchemical texts. The letter claims the book is written so that 'none but the most learned should be able to penetrate the inner sanctum of his teaching' -- language directly paralleling the alchemical tradition of deliberate obscurantism, where knowledge is veiled 'so that it might not come to the attention of the greedy and the insane.' For a reader steeped in the prisca sapientia (ancient wisdom), the HP's extreme linguistic difficulty was not a flaw but a guarantee of hidden knowledge. The more incomprehensible the text, the more ancient wisdom it was understood to contain.",
+      "alch_element": "Prisca sapientia (ancient wisdom)"
     },
     {
       "ref_id": 85,
@@ -548,7 +554,10 @@
       "needs_review": true,
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "Jupiter's Titles: Planetary Hierarchy",
+      "desc_text": "Hand B extracts Poliphilo's invocation to Jupiter, transcribing the god's divine titles into a hierarchical list on the flyleaf: 'O Diespiter, Maximo, Optimo, & Omnipotente & Opitulo...' Jupiter rules the higher, middle, and lower realms. In alchemical metals, Jupiter corresponds to tin. The annotator's interest in Jupiter's cosmic hierarchy maps onto the Hermetic principle 'as above, so below' -- the resonance between celestial order and material transformation that underpins all alchemical practice.",
+      "alch_element": "Jupiter / Tin"
     },
     {
       "ref_id": 29,
@@ -1538,7 +1547,10 @@
       "needs_review": true,
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
-      "is_alchemist": true
+      "is_alchemist": true,
+      "desc_title": "Elephant and Obelisk: Ideograms in Syntax",
+      "desc_text": "The famous woodcut of the elephant bearing an obelisk -- later realized by Bernini in the Piazza della Minerva for Pope Alexander VII -- is densely annotated by Hand B with alchemical ideograms embedded directly in the syntax of Latin sentences. The sun symbol with the suffix '-ra' reads 'scintillata aurata' (shimmering gold). These are not marginal glosses but a complete symbolic language: compact symbols for gold, silver, mercury, Venus, and Jupiter carry Latin case endings, allowing them to function as nouns and adjectives within grammatical sentences. Russell notes the consistency with Newton's Keynes MSS vocabulary, suggesting a possible connection to the Royal Society or Cambridge alchemical circle.",
+      "alch_element": "Multiple metals: Gold, Silver, Mercury, Venus, Jupiter"
     },
     {
       "ref_id": 23,
@@ -3056,7 +3068,10 @@
       "needs_review": true,
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "Panta Tokadi: Mercury as Universal Vessel",
+      "desc_text": "Facing the Panta Tokadi woodcut, Hand B translates the phrase as 'rerum omnium vas' -- vessel of all things -- rather than 'mother of all,' as Godwin translates it. This deliberate shift from biological generation to instrumental containment equates the Panta Tokadi figure directly with Mercury: not a passive mother but an active vessel through which the world spirit is channeled into matter. The annotation reflects d'Espagnet's concept of the 'magnetick principle' -- the force by which mercury draws the animating spirit of the sun into the vessels of physical matter.",
+      "alch_element": "Mercury as universal vessel (vas)"
     },
     {
       "ref_id": 41,
@@ -3122,7 +3137,10 @@
       "needs_review": true,
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "Panta Tokadi: Cinnabar, Digestion, and the World Spirit",
+      "desc_text": "The Panto Tokadi woodcut -- a satyr revealing a mother figure flanked by two fauns bearing vessels -- receives Hand B's most elaborate alchemical annotation. The mercury symbol appears on the top frieze and above the right faun's vessel. The left faun bears the cinnabar symbol (mercury sulphide). Below the caption, B writes: 'duae columbae in uno vase bibentes sunt minium & digestione' -- the two doves drinking in one vase represent cinnabar and digestion. The streams of milk from the mother's nipples signify the generation of all things through mercury's magnetick principle. This is the key annotation revealing Hand B's d'Espagnet-based schema at full power.",
+      "alch_element": "Mercury, Cinnabar (mercury sulphide), Digestion"
     },
     {
       "ref_id": 40,
@@ -6576,7 +6594,10 @@
       "needs_review": true,
       "hand_label": null,
       "hand_attribution": null,
-      "is_alchemist": false
+      "is_alchemist": false,
+      "desc_title": "Fons Heptagonis: The Seven Metals",
+      "desc_text": "The illustration of the heptagonal fountain -- seven-sided, with seven angles -- is labeled by Hand B with the alchemical sign of a different element at each angle. The seven metals correspond to the seven classical planets: gold/Sun, silver/Moon, mercury/Mercury, copper/Venus, iron/Mars, tin/Jupiter, lead/Saturn. This systematic labeling transforms the decorative fountain into a diagram of the complete alchemical cosmos, with each planetary metal occupying its proper position. The annotator labels the fountain 'frogg green' (in English, confirming his nationality), apparently describing the color of the ink or the patina.",
+      "alch_element": "All seven planetary metals"
     },
     {
       "ref_id": 235,

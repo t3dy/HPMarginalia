@@ -171,12 +171,34 @@ def export_data_json(conn):
         ORDER BY COALESCE(sm.folio_number, 999), r.thesis_page
     """)
 
+    # Load folio descriptions for alchemist annotations
+    folio_descs = {}
+    try:
+        cur2 = conn.cursor()
+        cur2.execute("""
+            SELECT signature_ref, manuscript_shelfmark, hand_label,
+                   title, description, alchemical_element, alchemical_process,
+                   alchemical_framework, russell_page_ref
+            FROM folio_descriptions
+        """)
+        for fd in cur2.fetchall():
+            key = (fd[0], fd[1])
+            folio_descs[key] = {
+                'desc_title': fd[3], 'desc_text': fd[4],
+                'alch_element': fd[5], 'alch_process': fd[6],
+                'alch_framework': fd[7], 'russell_pages': fd[8],
+            }
+    except:
+        pass  # Table may not exist yet
+
     entries = []
     sigs = set()
     for row in cur.fetchall():
+        sig = row[2]
+        ms = row[3]
         entry = {
             'ref_id': row[0], 'thesis_page': row[1],
-            'signature': row[2], 'manuscript': row[3],
+            'signature': sig, 'manuscript': ms,
             'institution': row[4], 'city': row[5],
             'context': (row[6] or '')[:600],
             'marginal_text': row[7], 'chapter': row[8],
@@ -189,8 +211,14 @@ def export_data_json(conn):
             'hand_label': row[17], 'hand_attribution': row[18],
             'is_alchemist': bool(row[19]) if row[19] is not None else False,
         }
+        # Add folio description if available
+        fd = folio_descs.get((sig, ms)) or folio_descs.get((sig, None))
+        if fd:
+            entry['desc_title'] = fd['desc_title']
+            entry['desc_text'] = fd['desc_text']
+            entry['alch_element'] = fd['alch_element']
         entries.append(entry)
-        sigs.add(row[2])
+        sigs.add(sig)
 
     data = {
         'entries': entries,
@@ -632,6 +660,25 @@ def build_marginalia_pages(conn):
         .marg-grid .sig-meta { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); }
     """ + '</style>'
 
+    # Load folio descriptions (alchemist analyses)
+    folio_descs = {}
+    try:
+        cur2 = conn.cursor()
+        cur2.execute("""
+            SELECT signature_ref, manuscript_shelfmark, hand_label,
+                   title, description, alchemical_element, alchemical_process,
+                   alchemical_framework, russell_page_ref
+            FROM folio_descriptions
+        """)
+        for fd in cur2.fetchall():
+            folio_descs.setdefault(fd[0], []).append({
+                'ms': fd[1], 'hand': fd[2], 'title': fd[3],
+                'desc': fd[4], 'element': fd[5], 'process': fd[6],
+                'framework': fd[7], 'pages': fd[8],
+            })
+    except:
+        pass
+
     # Build individual folio pages
     for sig, rows in by_sig.items():
         sig_slug = sig.lower().replace(' ', '')
@@ -688,6 +735,26 @@ def build_marginalia_pages(conn):
         folio_info = f'Folio {rows[0][10] or "?"}{rows[0][11] or ""}'
         quire_info = f', Quire {rows[0][18]}' if rows[0][18] else ''
 
+        # Render folio description (alchemist analysis) if available
+        desc_html = ''
+        descs = folio_descs.get(sig, [])
+        if descs:
+            for fd in descs:
+                element_html = f'<div class="hand-info"><strong>Element:</strong> {escape(fd["element"])}</div>' if fd.get('element') else ''
+                process_html = f'<div class="hand-info"><strong>Process:</strong> {escape(fd["process"])}</div>' if fd.get('process') else ''
+                framework_html = f'<div class="hand-info"><strong>Framework:</strong> {escape(fd["framework"])}</div>' if fd.get('framework') else ''
+                pages_html = f'<div class="hand-info">Russell, {escape(fd["pages"])}</div>' if fd.get('pages') else ''
+                desc_html += f"""
+                <div class="marg-annotation" style="border-left:3px solid var(--accent); background:var(--bg)">
+                    <h4 style="color:var(--accent); margin-bottom:0.5rem; font-size:1.05rem">{escape(fd["title"])}</h4>
+                    <p style="line-height:1.7; margin-bottom:0.75rem">{escape(fd["desc"])}</p>
+                    {element_html}
+                    {process_html}
+                    {framework_html}
+                    {pages_html}
+                    <div class="hand-info" style="margin-top:0.5rem"><span class="review-badge">LLM-assisted synthesis from Russell</span></div>
+                </div>"""
+
         detail_body = f"""
         <div class="marg-detail">
             <p><a href="index.html">&larr; All Folios</a></p>
@@ -695,6 +762,7 @@ def build_marginalia_pages(conn):
             <p style="color:var(--text-muted); font-family:var(--font-sans); margin-bottom:1.5rem">
                 {folio_info}{quire_info}</p>
             <div class="marg-images">{images_html}</div>
+            {f'<h3 style="margin:1.5rem 0 1rem">Alchemical Analysis</h3>' + desc_html if desc_html else ''}
             <h3 style="margin:1.5rem 0 1rem">Annotations</h3>
             {annotations_html}
         </div>"""
