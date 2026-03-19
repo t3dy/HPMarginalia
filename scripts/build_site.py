@@ -246,91 +246,199 @@ def export_data_json(conn):
 # ============================================================
 
 def build_scholars_pages(conn):
-    """Generate scholars.html and scholar/*.html from DB + summaries.json."""
+    """Generate scholars.html and scholar/*.html from DB + summaries.json.
+
+    Uses scholar_overview, is_historical_subject, and scholar_works data
+    to build rich profiles per docs/SCHOLAR_SPEC.md.
+    """
     # Load summaries for detailed content
     summaries = []
     if SUMMARIES_PATH.exists():
         with open(SUMMARIES_PATH, encoding='utf-8') as f:
             summaries = json.load(f)
 
-    # Group by author
-    by_author = {}
+    # Index summaries by (author, title) for lookup
+    summary_lookup = {}
+    for s in summaries:
+        key = (s.get('author', ''), s.get('title', ''))
+        summary_lookup[key] = s
+
+    # Group summaries by author for backward compat
+    by_author_summaries = {}
     for s in summaries:
         author = s.get('author', 'Unknown')
-        by_author.setdefault(author, []).append(s)
+        by_author_summaries.setdefault(author, []).append(s)
 
     cur = conn.cursor()
-    # Get review status from DB
-    cur.execute("SELECT name, needs_review, source_method FROM scholars")
-    scholar_review = {}
-    for row in cur.fetchall():
-        scholar_review[row[0]] = {'needs_review': row[1], 'source_method': row[2]}
 
-    # Build scholars index
+    # Get all scholars with overview data
+    cur.execute("""
+        SELECT id, name, specialization, hp_focus, bio_notes,
+               scholar_overview, is_historical_subject,
+               needs_review, source_method, review_status
+        FROM scholars ORDER BY name
+    """)
+    all_scholars = cur.fetchall()
+
+    # Get scholar_works with bibliography data
+    cur.execute("""
+        SELECT sw.scholar_id, b.author, b.title, b.year, b.pub_type,
+               b.journal_or_publisher, sw.has_summary, sw.summary_source,
+               b.hp_relevance, b.in_collection
+        FROM scholar_works sw
+        JOIN bibliography b ON sw.bib_id = b.id
+        ORDER BY b.year DESC
+    """)
+    works_by_scholar = {}
+    for row in cur.fetchall():
+        works_by_scholar.setdefault(row[0], []).append(row)
+
     scholar_cards = []
     scholar_dir = SITE_DIR / 'scholar'
     scholar_dir.mkdir(exist_ok=True)
+    pages_built = 0
 
-    for author in sorted(by_author.keys()):
-        papers = by_author[author]
-        slug = slugify(author)
-        review = scholar_review.get(author, {'needs_review': True, 'source_method': 'LLM_ASSISTED'})
+    for scholar in all_scholars:
+        (sid, name, specialization, hp_focus, bio_notes,
+         overview, is_hist, needs_rev, source_method, rev_status) = scholar
 
-        # Collect all topics
+        slug = slugify(name)
+        works = works_by_scholar.get(sid, [])
+        author_summaries = by_author_summaries.get(name, [])
+
+        # Collect topics from summaries
         topics = set()
-        for p in papers:
+        for p in author_summaries:
             tc = p.get('topic_cluster', '')
             if tc:
                 for t in tc.split(','):
                     topics.add(t.strip())
 
         badges = topic_badges_html(','.join(topics))
-        review_html = review_badge_html(review.get('needs_review'), review.get('source_method'))
+        review_html = review_badge_html(needs_rev, source_method)
 
-        # Paper cards for index
-        paper_cards_html = ''
-        for p in papers:
-            paper_slug = slugify(p.get('title', ''))
-            summary_preview = (p.get('summary', '') or '')[:250]
-            if len(p.get('summary', '')) > 250:
-                summary_preview += '...'
-            paper_cards_html += f"""
-                <div class="paper-card">
-                    <h4><a href="{slug}.html">{escape(p.get('title', ''))}</a></h4>
-                    <div class="paper-meta">{escape(p.get('journal', ''))} ({p.get('year', '?')})</div>
-                    <div class="paper-summary">{escape(summary_preview)}</div>
+        # Historical figure badge
+        hist_badge = ' <span class="review-status-badge review-badge-provisional">Historical Figure</span>' if is_hist else ''
+
+        # Overview preview for card (300 chars)
+        overview_text = overview or ''
+        overview_first_para = overview_text.split('\n\n')[0] if overview_text else ''
+        overview_preview = overview_first_para[:300]
+        if len(overview_first_para) > 300:
+            overview_preview = overview_preview.rsplit(' ', 1)[0] + '...'
+
+        # Work count
+        work_count = len(works) or len(author_summaries)
+        work_label = f"{work_count} work{'s' if work_count != 1 else ''}" if work_count else "No works catalogued"
+
+        # Card
+        overview_card_html = ''
+        if overview_preview:
+            overview_card_html = f"""
+                <div class="scholar-overview-preview">
+                    <p>{escape(overview_preview)}
+                    <a href="scholar/{slug}.html">Read more</a></p>
                 </div>"""
 
         scholar_cards.append(f"""
         <div class="scholar-card">
-            <h3><a href="{slug}.html">{escape(author)}</a> {review_html}</h3>
-            <div class="scholar-meta">{len(papers)} paper{'s' if len(papers) != 1 else ''} {badges}</div>
-            <div class="scholar-papers">{paper_cards_html}</div>
+            <h3><a href="scholar/{slug}.html">{escape(name)}</a>{hist_badge} {review_html}</h3>
+            <div class="scholar-meta">{work_label} {badges}</div>
+            {overview_card_html}
         </div>""")
 
-        # Build individual scholar page
-        papers_detail = ''
-        for p in papers:
-            tc = p.get('topic_cluster', '')
-            papers_detail += f"""
+        # === Detail page ===
+
+        # Full overview
+        overview_html = ''
+        if overview_text:
+            paras = overview_text.split('\n\n')
+            overview_html = ''.join(f'<p>{escape(p.strip())}</p>' for p in paras if p.strip())
+            overview_html = f'<div class="scholar-overview">{overview_html}</div>'
+
+        # Works in archive (with summaries)
+        archive_works_html = ''
+        works_with_summaries = [w for w in works if w[6]]  # has_summary = True
+        if not works_with_summaries and author_summaries:
+            # Fallback to summaries.json directly
+            for p in author_summaries:
+                tc = p.get('topic_cluster', '')
+                archive_works_html += f"""
+                <div class="paper-detail">
+                    <h4>{escape(p.get('title', ''))}</h4>
+                    <div class="paper-meta">{escape(p.get('journal', ''))} ({p.get('year', '?')})
+                        {topic_badges_html(tc)}</div>
+                    <div class="paper-summary-full"><p>{escape(p.get('summary', ''))}</p></div>
+                </div>"""
+        else:
+            for w in works_with_summaries:
+                _, bauthor, btitle, byear, bpubtype, bjournal, _, _, _, _ = w
+                # Find matching summary
+                summary_text = ''
+                for s in author_summaries:
+                    if s.get('title', '') == btitle:
+                        summary_text = s.get('summary', '')
+                        break
+                tc = ''
+                for s in author_summaries:
+                    if s.get('title', '') == btitle:
+                        tc = s.get('topic_cluster', '')
+                        break
+
+                archive_works_html += f"""
+                <div class="paper-detail">
+                    <h4>{escape(btitle or '')}</h4>
+                    <div class="paper-meta">{escape(bjournal or '')} ({byear or '?'}) [{bpubtype or ''}]
+                        {topic_badges_html(tc)}</div>
+                    <div class="paper-summary-full"><p>{escape(summary_text)}</p></div>
+                </div>"""
+
+        # Other known works (without summaries)
+        other_works_html = ''
+        works_without_summaries = [w for w in works if not w[6]]
+        for w in works_without_summaries:
+            _, bauthor, btitle, byear, bpubtype, bjournal, _, _, _, _ = w
+            other_works_html += f"""
             <div class="paper-detail">
-                <h3>{escape(p.get('title', ''))}</h3>
-                <div class="paper-meta">{escape(p.get('journal', ''))} ({p.get('year', '?')})
-                    {topic_badges_html(tc)}</div>
-                <div class="paper-summary-full"><p>{escape(p.get('summary', ''))}</p></div>
+                <h4>{escape(btitle or '')}</h4>
+                <div class="paper-meta">{escape(bjournal or '')} ({byear or '?'}) [{bpubtype or ''}]</div>
+                <p class="no-summary" style="color:var(--text-muted); font-style:italic; font-size:0.9rem">Summary not yet available.</p>
             </div>"""
+
+        # Build sections
+        works_section = ''
+        if archive_works_html:
+            works_section += f'<h3>Works in Archive</h3>{archive_works_html}'
+        if other_works_html:
+            works_section += f'<h3>Other Known Works</h3>{other_works_html}'
+        if not works_section and not author_summaries:
+            works_section = '<p style="color:var(--text-muted)">No works catalogued yet.</p>'
+
+        # Provenance
+        provenance_html = f"""
+        <div class="provenance-section" style="margin-top:2rem; padding:1rem; background:var(--bg-card); border-radius:4px">
+            <h4 style="margin-top:0">Review Status / Provenance</h4>
+            <p>{review_status_badge(rev_status or 'DRAFT')} Source: {escape(source_method or 'LLM_ASSISTED')}</p>
+        </div>"""
 
         detail_body = f"""
         <div class="scholar-detail">
-            <h2>{escape(author)} {review_html}</h2>
             <p><a href="../scholars.html">&larr; All Scholars</a></p>
-            {papers_detail}
+            <h2>{escape(name)}{hist_badge} {review_html}</h2>
+            {overview_html}
+            {works_section}
+            {provenance_html}
         </div>"""
 
-        detail_page = page_shell(author, detail_body, active_nav='scholars', depth=1)
+        detail_page = page_shell(name, detail_body, active_nav='scholars', depth=1)
         (scholar_dir / f'{slug}.html').write_text(detail_page, encoding='utf-8')
+        pages_built += 1
 
     # Build index page
+    # Count stats
+    modern_count = sum(1 for s in all_scholars if not s[6])
+    hist_count = sum(1 for s in all_scholars if s[6])
+
     index_body = f"""
         <div class="scholars-grid">
             <div class="intro" style="margin-bottom:2rem">
@@ -339,10 +447,9 @@ def build_scholars_pages(conn):
                 and interdisciplinary. It spans bibliography, book history, architecture,
                 garden studies, allegory, philology, reception history, emblematic reading,
                 and the history of interpretation. This section organizes that scholarly
-                landscape by person: each profile brings together the works in the collection
-                associated with a given scholar and situates them within the larger conversation.</p>
+                landscape by person: {modern_count} modern scholars and {hist_count} historical
+                figures, with {len(summaries)} article and monograph summaries.</p>
                 <p>These pages are meant to make the field legible at a glance.
-                {len(by_author)} scholars, {len(summaries)} article and monograph summaries.
                 Where content is LLM-assisted or otherwise provisional, that status
                 remains visible.</p>
             </div>
@@ -351,7 +458,7 @@ def build_scholars_pages(conn):
 
     index_page = page_shell('Scholars', index_body, active_nav='scholars')
     (SITE_DIR / 'scholars.html').write_text(index_page, encoding='utf-8')
-    print(f"  scholars.html + {len(by_author)} scholar pages")
+    print(f"  scholars.html + {pages_built} scholar pages")
 
 
 # ============================================================
@@ -581,6 +688,33 @@ def build_dictionary_pages(conn):
                 <ul class="provenance-list">{prov_list}</ul>
             </div>'''
 
+        # Essay cross-links: terms that appear in essays
+        essay_links_html = ''
+        russell_terms = {
+            'alchemical-allegory', 'master-mercury', 'sol-luna', 'chemical-wedding',
+            'ideogram', 'annotator-hand', 'activity-book', 'prisca-sapientia',
+            'ingegno', 'marginalia', 'elephant-obelisk', 'reception-history',
+            'inventio', 'acutezze', 'commentary', 'allegory',
+            'poliphilo', 'polia', 'venus-aphrodite', 'cupid-eros',
+            'beroalde-1600', '1499-edition', '1545-edition',
+        }
+        concordance_terms = {
+            'signature', 'folio', 'collation', 'quire', 'recto', 'verso',
+            'gathering', 'annotator-hand', 'marginalia', 'incunabulum',
+            '1499-edition', '1545-edition',
+        }
+        essay_links = []
+        if slug in russell_terms:
+            essay_links.append('<a href="../russell-alchemical-hands.html">Alchemical Hands Essay</a>')
+        if slug in concordance_terms:
+            essay_links.append('<a href="../concordance-method.html">Concordance Methodology</a>')
+        if essay_links:
+            essay_links_html = f'''
+            <div class="related-terms">
+                <h4>Discussed In</h4>
+                {''.join(essay_links)}
+            </div>'''
+
         detail_body = f"""
         <div class="dict-detail">
             <p><a href="index.html">&larr; Dictionary</a></p>
@@ -596,6 +730,7 @@ def build_dictionary_pages(conn):
             {source_html}
             {scholars_html}
             {links_section}
+            {essay_links_html}
             {provenance_html}
         </div>"""
 
@@ -1624,17 +1759,26 @@ def build_russell_essay_page(conn):
         the alchemical school of the reader.</p>
 
         <div class="cross-links">
-            <h4>Related Pages</h4>
+            <h4>Related Dictionary Terms</h4>
             <a href="dictionary/alchemical-allegory.html">Alchemical Allegory</a>
             <a href="dictionary/master-mercury.html">Master Mercury</a>
             <a href="dictionary/sol-luna.html">Sol and Luna</a>
             <a href="dictionary/chemical-wedding.html">Chemical Wedding</a>
             <a href="dictionary/ideogram.html">Ideogram</a>
+            <a href="dictionary/prisca-sapientia.html">Prisca Sapientia</a>
             <a href="dictionary/annotator-hand.html">Annotator Hand</a>
             <a href="dictionary/activity-book.html">Activity Book</a>
-            <a href="dictionary/prisca-sapientia.html">Prisca Sapientia</a>
             <a href="dictionary/ingegno.html">Ingegno</a>
+            <a href="dictionary/elephant-obelisk.html">Elephant and Obelisk</a>
+            <a href="dictionary/beroalde-1600.html">Beroalde 1600 Edition</a>
+            <a href="dictionary/poliphilo.html">Poliphilo</a>
+            <a href="dictionary/polia.html">Polia</a>
+            <a href="dictionary/venus-aphrodite.html">Venus</a>
+            <a href="dictionary/cupid-eros.html">Cupid / Eros</a>
+            <h4>Related Pages</h4>
             <a href="concordance-method.html">Concordance Methodology</a>
+            <a href="scholar/james-russell.html">James Russell</a>
+            <a href="dictionary/reception-history.html">Reception History</a>
         </div>
     </div>"""
 
@@ -1860,13 +2004,21 @@ def build_concordance_essay_page(conn):
         </ul>
 
         <div class="cross-links">
-            <h4>Related Pages</h4>
+            <h4>Related Dictionary Terms</h4>
             <a href="dictionary/signature.html">Signature</a>
             <a href="dictionary/folio.html">Folio</a>
+            <a href="dictionary/recto.html">Recto</a>
+            <a href="dictionary/verso.html">Verso</a>
+            <a href="dictionary/quire.html">Quire</a>
             <a href="dictionary/collation.html">Collation</a>
+            <a href="dictionary/incunabulum.html">Incunabulum</a>
             <a href="dictionary/annotator-hand.html">Annotator Hand</a>
             <a href="dictionary/marginalia.html">Marginalia</a>
+            <a href="dictionary/1499-edition.html">1499 Edition</a>
+            <a href="dictionary/1545-edition.html">1545 Edition</a>
+            <h4>Related Pages</h4>
             <a href="russell-alchemical-hands.html">Alchemical Hands Essay</a>
+            <a href="scholar/james-russell.html">James Russell</a>
             <a href="docs/concordance-methodology.html">Concordance Methodology (Doc)</a>
             <a href="code/match-refs-to-images.html">match_refs_to_images.py</a>
             <a href="code/build-signature-map.html">build_signature_map.py</a>

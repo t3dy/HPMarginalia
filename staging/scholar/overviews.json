@@ -1,0 +1,306 @@
+[
+  {
+    "name": "Francesco Colonna",
+    "is_historical_subject": true,
+    "overview": "Francesco Colonna (d. 1527) is the presumed author of the Hypnerotomachia Poliphili, identified through the acrostic formed by the chapter initials: POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT. A Dominican friar in Venice, Colonna's attribution has been canonical since Casella and Pozzi's 1959 study, though contested by scholars proposing alternative candidates including a Roman nobleman of the same name (Calvesi 1996) and Leon Battista Alberti (Lefaivre 1997).",
+    "word_count": 65,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Aldus Manutius",
+    "is_historical_subject": true,
+    "overview": "Aldus Manutius (c. 1449-1515) was the Venetian printer who published the HP in 1499, producing what is widely regarded as the most elaborately illustrated incunabulum in the history of printing. The HP stands apart from his press's primary output of Greek scholarly texts, representing an ambitious experiment in vernacular illustration and typographic design. His son Paolo published the second edition in 1545.",
+    "word_count": 62,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Benedetto Giovio",
+    "is_historical_subject": true,
+    "overview": "Benedetto Giovio (c. 1471-1545), a humanist and natural historian from Como, annotated two copies of the HP (Modena and Como). Russell identifies his annotations as primarily extractive: Giovio read the HP as a source for botanical, zoological, and antiquarian knowledge, treating it as a Plinian natural history compendium rather than as an allegorical or literary text.",
+    "word_count": 56,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Paolo Giovio",
+    "is_historical_subject": true,
+    "overview": "Paolo Giovio (1483-1552), historian and biographer, was Benedetto's brother and may have contributed to annotations in the Modena and Como copies of the HP. He is better known for his emblem collection and biographical works than for HP scholarship per se.",
+    "word_count": 41,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Ben Jonson",
+    "is_historical_subject": true,
+    "overview": "Ben Jonson (1572-1637), the English playwright and poet, annotated the British Library copy of the HP (C.60.o.12, the 1545 edition). Russell identifies Jonson as Hand A in this copy, noting that Jonson mined the HP for stage design imagery and architectural vocabulary. Jonson's annotations represent a theatrical and literary mode of reading distinct from the alchemical annotations of the copy's other hand.",
+    "word_count": 62,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Fabio Chigi (Pope Alexander VII)",
+    "is_historical_subject": true,
+    "overview": "Fabio Chigi (1599-1667), who became Pope Alexander VII in 1655, annotated his copy of the HP (Vatican Chig.II.610) with particular attention to acutezze — instances of verbal cleverness and rhetorical ingenuity. His reading was aesthetic rather than alchemical or encyclopedic. Chigi later commissioned Bernini's elephant-obelisk sculpture in Piazza della Minerva (1667), which drew on the HP's famous woodcut.",
+    "word_count": 58,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Jean Martin",
+    "is_historical_subject": true,
+    "overview": "Jean Martin (d. 1553) produced the first French translation of the HP in 1546, adapting the text for a French courtly audience. His translation introduced the HP to the French cultural sphere, where it influenced garden design, festival culture, and the emblem tradition throughout the sixteenth and seventeenth centuries.",
+    "word_count": 49,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Beroalde de Verville",
+    "is_historical_subject": true,
+    "overview": "Beroalde de Verville (1556-1626) published a French edition of the HP in 1600 that included a 'tableau steganographique' — a systematic table mapping narrative elements to alchemical processes and substances. This edition inaugurated the tradition of reading the HP as alchemical allegory and directly influenced all subsequent alchemical annotators, including those documented by Russell in the BL and Buffalo copies.",
+    "word_count": 60,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Liane Lefaivre",
+    "is_historical_subject": false,
+    "overview": "Liane Lefaivre's 1997 monograph proposed that Leon Battista Alberti, not Francesco Colonna, was the true author of the HP. Her argument rests on architectural, philosophical, and stylistic analysis rather than traditional archival evidence. Lefaivre introduced the concept of the 'architectural body' — the idea that the HP presents architecture as an extension of embodied cognition rather than abstract geometrical form.\n\nWhether or not her Alberti attribution is accepted, Lefaivre's work shifted HP scholarship toward architectural and phenomenological analysis, demonstrating that the HP's descriptions of buildings and gardens are intellectually serious rather than merely decorative.",
+    "word_count": 94,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "James Russell",
+    "is_historical_subject": false,
+    "overview": "James Russell is the central scholarly figure for this project. His PhD thesis, submitted to Durham University in 2014, documented the marginalia in six copies of the 1499 Hypnerotomachia Poliphili, identifying eleven distinct annotator hands. Russell's work demonstrated that the HP was far from an unreadable curiosity: the Giovio brothers read it as Plinian natural history, Ben Jonson mined it for stage design, Pope Alexander VII extracted examples of verbal wit, and multiple readers interpreted it as alchemical allegory.\n\nRussell's central theoretical contribution is the concept of the HP as a 'humanistic activity book' — a text whose puzzles, obscure language, and visual-textual interplay invited readers to cultivate ingegno through creative annotation. His methodology combines codicological analysis (identifying hands by ink, ductus, and content) with intellectual history (situating each annotator within their cultural and professional context). The thesis provides the evidence base for this project's concordance pipeline, hand attribution data, and folio-level analysis.",
+    "word_count": 153,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Efthymia Priki",
+    "is_historical_subject": false,
+    "overview": "Efthymia Priki has produced some of the most wide-ranging recent scholarship on the HP. Her work spans reception history, text-image relations, and comparative dream-narrative analysis. In her 2009 study, she surveys two peak periods of engagement with the HP: early modern (through c. 1657) and the twentieth-century scholarly revival. Her 2016 work places the HP within a comparative tradition alongside the Roman de la Rose and the Byzantine Livistros and Rodamne, arguing that the dream frame enables pedagogical encounters that prepare the lover for union.\n\nPriki's text-image boundary study analyzes how the relationship between woodcuts and prose shifts across editions, demonstrating that the HP's visual program is not stable but adapts to new contexts. Her work establishes the HP as a genuinely European text whose reception crosses linguistic, cultural, and disciplinary boundaries.",
+    "word_count": 132,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "James O'Neill",
+    "is_historical_subject": false,
+    "overview": "James O'Neill's work on the HP spans authorship studies and narratological analysis. His Durham thesis examines self-transformation in the HP's narrative structure, while his co-authored study with Maggie O'Neill surveys the full range of authorship candidates. O'Neill argues that future research should use narratological analysis rather than archival evidence alone to address the authorship question, shifting the debate from external biographical evidence to internal literary form.",
+    "word_count": 66,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Anthony Blunt",
+    "is_historical_subject": false,
+    "overview": "Anthony Blunt (1907-1983), the art historian, published a foundational 1937 study of the HP's influence on seventeenth-century French art. Blunt documented how the HP's woodcuts and architectural imagery were adapted by French garden designers, festival planners, and artists, establishing the book's importance for French visual culture. His article remains the standard reference for the HP's French reception.",
+    "word_count": 57,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Charles Nodier",
+    "is_historical_subject": true,
+    "overview": "Charles Nodier (1780-1844), the French bibliophile and Romantic writer, was among the earliest modern enthusiasts of the HP, praising its typographic beauty and mysterious character. His championing of the book contributed to the nineteenth-century revival of interest in the HP as a bibliophilic and aesthetic object.",
+    "word_count": 46,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Georg Leidinger",
+    "is_historical_subject": false,
+    "overview": "Georg Leidinger's study examines Albrecht Durer's relationship to the HP, exploring connections between the German artist's visual imagination and the HP's woodcuts and architectural imagery.",
+    "word_count": 25,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Mario Praz",
+    "is_historical_subject": false,
+    "overview": "Mario Praz (1896-1982) published a 1947 study documenting foreign imitations of the HP, tracing the book's influence on English, French, and German literature. Praz established the breadth of the HP's European reception, showing that its influence extended well beyond Italy and encompassed writers from Swinburne to Beardsley.",
+    "word_count": 47,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "D. R. Edward Wright",
+    "is_historical_subject": false,
+    "overview": "D. R. Edward Wright's study in the Journal of the Warburg and Courtauld Institutes examines connections between Alberti and the HP, contributing to the debate over Albertian influence on the book's architectural and philosophical content.",
+    "word_count": 35,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Peter Ure",
+    "is_historical_subject": false,
+    "overview": "Peter Ure's 1952 notes in Notes and Queries provide early philological observations on the HP's unusual vocabulary. His brief but precise annotations remain useful for readers navigating the HP's macaronic language.",
+    "word_count": 31,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Marcel Francon",
+    "is_historical_subject": false,
+    "overview": "Marcel Francon's research examines the HP's French reception and translation history, contributing to understanding of how the book crossed linguistic and cultural boundaries.",
+    "word_count": 23,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Mark Jarzombek",
+    "is_historical_subject": false,
+    "overview": "Mark Jarzombek's 1990 study in Renaissance Studies addresses the 'structural problematics' of the HP's architectural descriptions. He argues that the architectural passages are not merely decorative but structurally constitutive of the narrative's meaning, functioning as a kind of architectural argumentation that unfolds through description.",
+    "word_count": 44,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Rosemary Trippe",
+    "is_historical_subject": false,
+    "overview": "Rosemary Trippe's 2002 study in Renaissance Quarterly argues that the HP has been understudied as literature. Through close analysis of woodcuts and their accompanying text, she demonstrates how the author adapted Petrarchan conventions — the beloved's beauty, the lover's suffering — into an interplay of word and image. Trippe's work recovers the HP's literary dimension from art-historical and architectural approaches that had dominated previous scholarship.",
+    "word_count": 65,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "L. E. Semler",
+    "is_historical_subject": false,
+    "overview": "L. E. Semler's 2006 study reframes Robert Dallington's 1592 English adaptation of the HP as deliberate cultural appropriation rather than failed translation. Semler shows that Dallington's Hypnerotomachia was designed to serve Protestant antiquarian interests in Elizabethan England, adapting the HP's Catholic and Italian content for a specifically English political and religious context.",
+    "word_count": 52,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "John Bury",
+    "is_historical_subject": false,
+    "overview": "John Bury's scholarship contributes to the architectural analysis of the HP, examining the book's representations of built form within the context of Renaissance architectural theory and practice.",
+    "word_count": 27,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Brian A. Curran",
+    "is_historical_subject": false,
+    "overview": "Brian Curran's 1998 study situates the HP's pseudo-hieroglyphic inscriptions within fifteenth-century humanist Egyptology. He shows that the HP's hieroglyphs are not authentic Egyptian writing but Renaissance inventions inspired by the rediscovery of Horapollo's Hieroglyphica, and he traces their influence on the later emblem tradition.",
+    "word_count": 44,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Tamara Griggs",
+    "is_historical_subject": false,
+    "overview": "Tamara Griggs's 1998 study argues that the HP should be understood as the culmination of fifteenth-century Italian antiquarianism rather than as Romantic escapism. She traces the HP's verbal and visual strategies to Cyriacus of Ancona's commentaria and mid-century antiquarian manuscript collections, positioning the book within the material and intellectual culture of Renaissance archaeology.",
+    "word_count": 53,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "John Dixon Hunt",
+    "is_historical_subject": false,
+    "overview": "John Dixon Hunt's 1998 study is a landmark in HP garden scholarship. Hunt argues that the HP foregrounds the process of experiencing gardens over the description of finished architectural objects, anticipating phenomenological approaches to landscape. His reading positions the HP at the origin of a tradition of garden writing that emphasizes bodily movement through designed space.",
+    "word_count": 56,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Michael Leslie",
+    "is_historical_subject": false,
+    "overview": "Michael Leslie's research addresses the HP's garden descriptions within the broader context of Renaissance garden literature and the relationship between literary gardens and actual garden design.",
+    "word_count": 26,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Roswitha Stewering",
+    "is_historical_subject": false,
+    "overview": "Roswitha Stewering's 2000 study in the Journal of the Society of Architectural Historians analyzes the HP's architectural representations as sophisticated engagements with classical building practice. She demonstrates that the HP's descriptions of columns, arches, and thermae reflect genuine knowledge of the Vitruvian tradition and contemporary architectural theory, not merely literary fantasy.",
+    "word_count": 51,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "N. Temple",
+    "is_historical_subject": false,
+    "overview": "N. Temple's study addresses architectural and political dimensions of the HP's dream narrative, reading the book's built spaces as encoding political and social meanings.",
+    "word_count": 24,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Raffaella Fabiani Giannetto",
+    "is_historical_subject": false,
+    "overview": "Raffaella Fabiani Giannetto's 2015 study connects the HP's cultivation of meraviglia (wonder) to the Sacro Bosco at Bomarzo. She argues that both deploy architectural surprise as a mode of philosophical instruction, creating environments where wonder precedes and enables understanding.",
+    "word_count": 39,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Lynne Farrington",
+    "is_historical_subject": false,
+    "overview": "Lynne Farrington's 2015 study contextualizes the HP within Aldus Manutius's career, examining the book's production within the broader output of the Aldine press and its partnership with Andrea Torresani.",
+    "word_count": 29,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "William B. Keller",
+    "is_historical_subject": false,
+    "overview": "William B. Keller's work contributes to the bibliographic and material study of the HP, examining the book's physical form and production context.",
+    "word_count": 22,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Christopher J. Nygren",
+    "is_historical_subject": false,
+    "overview": "Christopher J. Nygren's research addresses the HP within the context of Renaissance visual culture and the relationship between text and image in early modern printed books.",
+    "word_count": 26,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Eric L. Pumroy",
+    "is_historical_subject": false,
+    "overview": "Eric L. Pumroy's bibliographic work contributes to the census and cataloging of HP copies and related materials in institutional collections.",
+    "word_count": 20,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "Christophe Poncet",
+    "is_historical_subject": false,
+    "overview": "Christophe Poncet's research addresses aspects of the HP's production history and its relationship to fifteenth-century Venetian printing culture.",
+    "word_count": 18,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "James Gollnick",
+    "is_historical_subject": false,
+    "overview": "James Gollnick provides a theoretical framework for dream-narrative hermeneutics through his study of Apuleius's Metamorphoses. His work on the religious and initiatory dimensions of dream narratives offers an interpretive lens applicable to the HP's own dream structure.",
+    "word_count": 37,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "A. Segre",
+    "is_historical_subject": false,
+    "overview": "A. Segre's 1998 study provides the first critical analysis of the garden designs on the island of Cythera in the HP. Segre traces the mythological associations of Cythera's concentric garden layout and argues it anticipates sixteenth-century botanical garden design.",
+    "word_count": 39,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  },
+  {
+    "name": "James O'Neill and Maggie O'Neill",
+    "is_historical_subject": false,
+    "overview": "James O'Neill's work on the HP spans authorship studies and narratological analysis. His Durham thesis examines self-transformation in the HP's narrative structure, while his co-authored study with Maggie O'Neill surveys the full range of authorship candidates. O'Neill argues that future research should use narratological analysis rather than archival evidence alone to address the authorship question, shifting the debate from external biographical evidence to internal literary form.",
+    "word_count": 66,
+    "source_method": "LLM_ASSISTED",
+    "review_status": "DRAFT"
+  }
+]
