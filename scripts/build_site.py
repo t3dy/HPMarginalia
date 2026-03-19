@@ -1392,17 +1392,15 @@ def build_code_pages():
         <div class="code-page">
             <div class="intro">
                 <h2>Pipeline Scripts</h2>
-                <p>Every page on this site is generated from a SQLite database by
-                these {len(scripts)} Python scripts. The database is the source of
-                truth; the scripts are a deterministic pipeline that transforms
-                structured data into static HTML. No web framework is involved.
-                The entire site can be rebuilt from scratch with three commands.</p>
-                <p>Scripts are organized by function: schema initialization,
-                image cataloging, signature mapping, reference extraction,
-                image-reference matching, annotator profiling, bibliography
-                management, dictionary seeding, site generation, and validation.
-                Each script's full source is published here for transparency
-                and reproducibility.</p>
+                <p>This section exposes the deterministic pipeline behind the site.
+                Rather than hiding the build logic, it presents these {len(scripts)} Python
+                scripts that initialize the database, parse filenames, extract references,
+                match folios to images, seed and enrich metadata, validate assumptions,
+                and generate the static pages. The aim is transparency and reproducibility.</p>
+                <p>The project's architectural stance is deliberately conservative: SQLite
+                as source of truth, Python for transformation, JSON and static HTML for
+                delivery, and as little framework machinery as possible. That simplicity
+                is not an omission; it is part of the project's long-term durability model.</p>
             </div>
             <table class="code-table">
                 <thead><tr><th>Script</th><th>Name</th><th>Description</th><th>Lines</th></tr></thead>

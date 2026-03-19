@@ -23,7 +23,7 @@
         <div class="code-content">
             <p><a href="index.html">&larr; All Scripts</a></p>
             <h2>Build Site</h2>
-            <div class="code-meta">build_site.py &mdash; 2256 lines</div>
+            <div class="code-meta">build_site.py &mdash; 2253 lines</div>
             <p style="margin-bottom:1rem">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</p>
             <pre><span class="line-num">1</span>&quot;&quot;&quot;Unified site builder: generates all static pages from SQLite.
 <span class="line-num">2</span>
@@ -1318,969 +1318,966 @@
 <span class="line-num">1291</span>        &lt;div class=&quot;docs-page&quot;&gt;
 <span class="line-num">1292</span>            &lt;div class=&quot;intro&quot;&gt;
 <span class="line-num">1293</span>                &lt;h2&gt;Project Documents&lt;/h2&gt;
-<span class="line-num">1294</span>                &lt;p&gt;This project was built in public, and these {len(docs)} documents
-<span class="line-num">1295</span>                record how and why each decision was made. They include the
-<span class="line-num">1296</span>                concordance methodology that links Russell&#x27;s folio references
-<span class="line-num">1297</span>                to manuscript photographs, boundary audits distinguishing
-<span class="line-num">1298</span>                deterministic processing from LLM-assisted inference, a
-<span class="line-num">1299</span>                reverse-engineering of the MIT Electronic Hypnerotomachia,
-<span class="line-num">1300</span>                a multimodal architecture study, content quality proposals,
-<span class="line-num">1301</span>                and a frank accounting of mistakes made along the way.&lt;/p&gt;
-<span class="line-num">1302</span>                &lt;p&gt;Publishing these documents is itself a design choice: a
-<span class="line-num">1303</span>                scholarly platform should show its working, not just its
-<span class="line-num">1304</span>                conclusions.&lt;/p&gt;
-<span class="line-num">1305</span>            &lt;/div&gt;
-<span class="line-num">1306</span>            &lt;table class=&quot;docs-table&quot;&gt;
-<span class="line-num">1307</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Document&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Words&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1308</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
-<span class="line-num">1309</span>            &lt;/table&gt;
-<span class="line-num">1310</span>        &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">1311</span>
-<span class="line-num">1312</span>    index_page = page_shell(&#x27;Documents&#x27;, index_body, active_nav=&#x27;docs&#x27;, depth=1)
-<span class="line-num">1313</span>    (docs_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1314</span>    print(f&quot;  docs/index.html + {len(docs)} document pages&quot;)
+<span class="line-num">1294</span>                &lt;p&gt;This section makes the project legible as a research build
+<span class="line-num">1295</span>                rather than a black box. It gathers {len(docs)} internal methodological
+<span class="line-num">1296</span>                and reflective documents&amp;mdash;ontology notes, concordance method,
+<span class="line-num">1297</span>                boundary audits, proposals, mistakes, aesthetic reviews, and related
+<span class="line-num">1298</span>                planning texts&amp;mdash;that explain what the project thinks it is doing
+<span class="line-num">1299</span>                and where its assumptions have shifted over time.&lt;/p&gt;
+<span class="line-num">1300</span>                &lt;p&gt;These documents are part of the scholarly apparatus, not just
+<span class="line-num">1301</span>                engineering residue. They record how the database, site, and
+<span class="line-num">1302</span>                interpretive claims were assembled, where the strongest arguments
+<span class="line-num">1303</span>                lie, and where the project has had to revise itself.&lt;/p&gt;
+<span class="line-num">1304</span>            &lt;/div&gt;
+<span class="line-num">1305</span>            &lt;table class=&quot;docs-table&quot;&gt;
+<span class="line-num">1306</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Document&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Words&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1307</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
+<span class="line-num">1308</span>            &lt;/table&gt;
+<span class="line-num">1309</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1310</span>
+<span class="line-num">1311</span>    index_page = page_shell(&#x27;Documents&#x27;, index_body, active_nav=&#x27;docs&#x27;, depth=1)
+<span class="line-num">1312</span>    (docs_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1313</span>    print(f&quot;  docs/index.html + {len(docs)} document pages&quot;)
+<span class="line-num">1314</span>
 <span class="line-num">1315</span>
-<span class="line-num">1316</span>
-<span class="line-num">1317</span>def build_code_pages():
-<span class="line-num">1318</span>    &quot;&quot;&quot;Generate code/index.html and code/*.html from Python scripts.&quot;&quot;&quot;
-<span class="line-num">1319</span>    code_dir = SITE_DIR / &#x27;code&#x27;
-<span class="line-num">1320</span>    code_dir.mkdir(exist_ok=True)
-<span class="line-num">1321</span>
-<span class="line-num">1322</span>    code_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
-<span class="line-num">1323</span>        .code-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
-<span class="line-num">1324</span>        .code-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-<span class="line-num">1325</span>        .code-table th, .code-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
-<span class="line-num">1326</span>        .code-table th { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-<span class="line-num">1327</span>        .code-table td a { color: var(--accent); text-decoration: none; font-weight: 600; font-family: monospace; }
-<span class="line-num">1328</span>        .code-table td a:hover { text-decoration: underline; }
-<span class="line-num">1329</span>        .code-table .code-summary { font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">1330</span>        .code-content { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
-<span class="line-num">1331</span>        .code-content h2 { color: var(--accent); margin-bottom: 0.5rem; }
-<span class="line-num">1332</span>        .code-content pre {
-<span class="line-num">1333</span>            background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 4px;
-<span class="line-num">1334</span>            overflow-x: auto; font-size: 0.82rem; line-height: 1.5;
-<span class="line-num">1335</span>            max-height: 80vh; overflow-y: auto;
-<span class="line-num">1336</span>        }
-<span class="line-num">1337</span>        .code-content .line-num { color: #858585; user-select: none; display: inline-block; width: 3.5em; text-align: right; margin-right: 1em; }
-<span class="line-num">1338</span>        .code-meta { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-<span class="line-num">1339</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
-<span class="line-num">1340</span>
-<span class="line-num">1341</span>    scripts = []
-<span class="line-num">1342</span>    scripts_dir = BASE_DIR / &#x27;scripts&#x27;
-<span class="line-num">1343</span>
-<span class="line-num">1344</span>    for filename, (title, summary) in sorted(SCRIPT_METADATA.items()):
-<span class="line-num">1345</span>        filepath = scripts_dir / filename
-<span class="line-num">1346</span>        if not filepath.exists():
-<span class="line-num">1347</span>            continue
-<span class="line-num">1348</span>
-<span class="line-num">1349</span>        slug = slugify(filename.replace(&#x27;.py&#x27;, &#x27;&#x27;))
-<span class="line-num">1350</span>        content = filepath.read_text(encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1351</span>        line_count = len(content.splitlines())
-<span class="line-num">1352</span>
-<span class="line-num">1353</span>        scripts.append({
-<span class="line-num">1354</span>            &#x27;filename&#x27;: filename,
-<span class="line-num">1355</span>            &#x27;title&#x27;: title,
-<span class="line-num">1356</span>            &#x27;summary&#x27;: summary,
-<span class="line-num">1357</span>            &#x27;slug&#x27;: slug,
-<span class="line-num">1358</span>            &#x27;line_count&#x27;: line_count,
-<span class="line-num">1359</span>        })
-<span class="line-num">1360</span>
-<span class="line-num">1361</span>        # Build detail page with syntax-highlighted code
-<span class="line-num">1362</span>        lines = content.splitlines()
-<span class="line-num">1363</span>        code_lines = []
-<span class="line-num">1364</span>        for i, line in enumerate(lines, 1):
-<span class="line-num">1365</span>            num = f&#x27;&lt;span class=&quot;line-num&quot;&gt;{i}&lt;/span&gt;&#x27;
-<span class="line-num">1366</span>            code_lines.append(f&#x27;{num}{escape(line)}&#x27;)
-<span class="line-num">1367</span>        code_html = &#x27;\n&#x27;.join(code_lines)
-<span class="line-num">1368</span>
-<span class="line-num">1369</span>        detail_body = f&quot;&quot;&quot;
-<span class="line-num">1370</span>        &lt;div class=&quot;code-content&quot;&gt;
-<span class="line-num">1371</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; All Scripts&lt;/a&gt;&lt;/p&gt;
-<span class="line-num">1372</span>            &lt;h2&gt;{escape(title)}&lt;/h2&gt;
-<span class="line-num">1373</span>            &lt;div class=&quot;code-meta&quot;&gt;{escape(filename)} &amp;mdash; {line_count} lines&lt;/div&gt;
-<span class="line-num">1374</span>            &lt;p style=&quot;margin-bottom:1rem&quot;&gt;{escape(summary)}&lt;/p&gt;
-<span class="line-num">1375</span>            &lt;pre&gt;{code_html}&lt;/pre&gt;
-<span class="line-num">1376</span>        &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">1377</span>
-<span class="line-num">1378</span>        detail_page = page_shell(title, detail_body, active_nav=&#x27;code&#x27;, depth=1)
-<span class="line-num">1379</span>        (code_dir / f&#x27;{slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1380</span>
-<span class="line-num">1381</span>    # Build index page
-<span class="line-num">1382</span>    rows_html = &#x27;&#x27;
-<span class="line-num">1383</span>    for s in scripts:
-<span class="line-num">1384</span>        rows_html += f&quot;&quot;&quot;
-<span class="line-num">1385</span>            &lt;tr&gt;
-<span class="line-num">1386</span>                &lt;td&gt;&lt;a href=&quot;{s[&#x27;slug&#x27;]}.html&quot;&gt;{escape(s[&#x27;filename&#x27;])}&lt;/a&gt;&lt;/td&gt;
-<span class="line-num">1387</span>                &lt;td&gt;{escape(s[&#x27;title&#x27;])}&lt;/td&gt;
-<span class="line-num">1388</span>                &lt;td class=&quot;code-summary&quot;&gt;{escape(s[&#x27;summary&#x27;])}&lt;/td&gt;
-<span class="line-num">1389</span>                &lt;td style=&quot;font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap&quot;&gt;{s[&#x27;line_count&#x27;]}&lt;/td&gt;
-<span class="line-num">1390</span>            &lt;/tr&gt;&quot;&quot;&quot;
-<span class="line-num">1391</span>
-<span class="line-num">1392</span>    index_body = f&quot;&quot;&quot;
-<span class="line-num">1393</span>        &lt;div class=&quot;code-page&quot;&gt;
-<span class="line-num">1394</span>            &lt;div class=&quot;intro&quot;&gt;
-<span class="line-num">1395</span>                &lt;h2&gt;Pipeline Scripts&lt;/h2&gt;
-<span class="line-num">1396</span>                &lt;p&gt;Every page on this site is generated from a SQLite database by
-<span class="line-num">1397</span>                these {len(scripts)} Python scripts. The database is the source of
-<span class="line-num">1398</span>                truth; the scripts are a deterministic pipeline that transforms
-<span class="line-num">1399</span>                structured data into static HTML. No web framework is involved.
-<span class="line-num">1400</span>                The entire site can be rebuilt from scratch with three commands.&lt;/p&gt;
-<span class="line-num">1401</span>                &lt;p&gt;Scripts are organized by function: schema initialization,
-<span class="line-num">1402</span>                image cataloging, signature mapping, reference extraction,
-<span class="line-num">1403</span>                image-reference matching, annotator profiling, bibliography
-<span class="line-num">1404</span>                management, dictionary seeding, site generation, and validation.
-<span class="line-num">1405</span>                Each script&#x27;s full source is published here for transparency
-<span class="line-num">1406</span>                and reproducibility.&lt;/p&gt;
-<span class="line-num">1407</span>            &lt;/div&gt;
-<span class="line-num">1408</span>            &lt;table class=&quot;code-table&quot;&gt;
-<span class="line-num">1409</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Script&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Lines&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1410</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
-<span class="line-num">1411</span>            &lt;/table&gt;
-<span class="line-num">1412</span>        &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">1413</span>
-<span class="line-num">1414</span>    index_page = page_shell(&#x27;Code&#x27;, index_body, active_nav=&#x27;code&#x27;, depth=1)
-<span class="line-num">1415</span>    (code_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1416</span>    print(f&quot;  code/index.html + {len(scripts)} script pages&quot;)
-<span class="line-num">1417</span>
-<span class="line-num">1418</span>
-<span class="line-num">1419</span># ============================================================
-<span class="line-num">1420</span># Essay: Russell&#x27;s Alchemical Hands
-<span class="line-num">1421</span># ============================================================
-<span class="line-num">1422</span>
-<span class="line-num">1423</span>def build_russell_essay_page(conn):
-<span class="line-num">1424</span>    &quot;&quot;&quot;Generate russell-alchemical-hands.html from DB evidence + corpus data.&quot;&quot;&quot;
-<span class="line-num">1425</span>    cur = conn.cursor()
-<span class="line-num">1426</span>
-<span class="line-num">1427</span>    # Get alchemist hands
-<span class="line-num">1428</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1429</span>        SELECT hand_label, manuscript_shelfmark, attribution, school,
-<span class="line-num">1430</span>               description, language, ink_color, date_range, interests
-<span class="line-num">1431</span>        FROM annotator_hands WHERE is_alchemist = 1
-<span class="line-num">1432</span>    &quot;&quot;&quot;)
-<span class="line-num">1433</span>    alchemist_hands = cur.fetchall()
-<span class="line-num">1434</span>
-<span class="line-num">1435</span>    # Get alchemist refs with signatures
-<span class="line-num">1436</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1437</span>        SELECT r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
-<span class="line-num">1438</span>               r.chapter_num, r.manuscript_shelfmark, h.hand_label, h.school
-<span class="line-num">1439</span>        FROM dissertation_refs r
-<span class="line-num">1440</span>        JOIN annotator_hands h ON r.hand_id = h.id
-<span class="line-num">1441</span>        WHERE h.is_alchemist = 1
-<span class="line-num">1442</span>        ORDER BY r.thesis_page
-<span class="line-num">1443</span>    &quot;&quot;&quot;)
-<span class="line-num">1444</span>    alch_refs = cur.fetchall()
-<span class="line-num">1445</span>
-<span class="line-num">1446</span>    # Count matched images for alchemist refs
-<span class="line-num">1447</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1448</span>        SELECT mat.confidence, COUNT(*)
-<span class="line-num">1449</span>        FROM matches mat
-<span class="line-num">1450</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
-<span class="line-num">1451</span>        JOIN annotator_hands h ON r.hand_id = h.id
-<span class="line-num">1452</span>        WHERE h.is_alchemist = 1
-<span class="line-num">1453</span>        GROUP BY mat.confidence
-<span class="line-num">1454</span>    &quot;&quot;&quot;)
-<span class="line-num">1455</span>    conf_dist = {row[0]: row[1] for row in cur.fetchall()}
-<span class="line-num">1456</span>
-<span class="line-num">1457</span>    # Get specific BL refs
-<span class="line-num">1458</span>    bl_refs = [r for r in alch_refs if r[5] == &#x27;C.60.o.12&#x27;]
-<span class="line-num">1459</span>    buf_refs = [r for r in alch_refs if r[5] == &#x27;Buffalo RBR&#x27;]
-<span class="line-num">1460</span>
-<span class="line-num">1461</span>    # Build BL refs table
-<span class="line-num">1462</span>    bl_rows = &#x27;&#x27;
-<span class="line-num">1463</span>    for r in bl_refs[:20]:
-<span class="line-num">1464</span>        marginal = escape(r[3] or &#x27;&#x27;) if r[3] else &#x27;&lt;em&gt;none recorded&lt;/em&gt;&#x27;
-<span class="line-num">1465</span>        bl_rows += f&#x27;&lt;tr&gt;&lt;td&gt;{escape(r[0] or &quot;&quot;)}&lt;/td&gt;&lt;td&gt;{r[1]}&lt;/td&gt;&lt;td&gt;{marginal}&lt;/td&gt;&lt;/tr&gt;&#x27;
-<span class="line-num">1466</span>
-<span class="line-num">1467</span>    buf_rows = &#x27;&#x27;
-<span class="line-num">1468</span>    for r in buf_refs[:20]:
-<span class="line-num">1469</span>        marginal = escape(r[3] or &#x27;&#x27;) if r[3] else &#x27;&lt;em&gt;none recorded&lt;/em&gt;&#x27;
-<span class="line-num">1470</span>        buf_rows += f&#x27;&lt;tr&gt;&lt;td&gt;{escape(r[0] or &quot;&quot;)}&lt;/td&gt;&lt;td&gt;{r[1]}&lt;/td&gt;&lt;td&gt;{marginal}&lt;/td&gt;&lt;/tr&gt;&#x27;
-<span class="line-num">1471</span>
-<span class="line-num">1472</span>    essay_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
-<span class="line-num">1473</span>        .essay-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
-<span class="line-num">1474</span>        .essay-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-<span class="line-num">1475</span>        .essay-page h3 { margin: 1.5rem 0 0.5rem; }
-<span class="line-num">1476</span>        .essay-page p { line-height: 1.8; margin-bottom: 1rem; }
-<span class="line-num">1477</span>        .essay-page .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
-<span class="line-num">1478</span>        .essay-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">1479</span>        .essay-page table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
-<span class="line-num">1480</span>        .essay-page th, .essay-page td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
-<span class="line-num">1481</span>        .essay-page th { background: var(--bg); font-weight: 600; }
-<span class="line-num">1482</span>        .essay-page blockquote { border-left: 3px solid var(--accent-light); padding-left: 1rem; color: var(--text-muted); font-style: italic; margin: 1rem 0; }
-<span class="line-num">1483</span>        .essay-page .section-anchor { color: var(--text-muted); text-decoration: none; font-size: 0.8em; margin-left: 0.3rem; }
-<span class="line-num">1484</span>        .essay-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-<span class="line-num">1485</span>        .essay-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
-<span class="line-num">1486</span>        .essay-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
-<span class="line-num">1487</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
-<span class="line-num">1488</span>
-<span class="line-num">1489</span>    body = f&quot;&quot;&quot;
-<span class="line-num">1490</span>    &lt;div class=&quot;essay-page&quot;&gt;
-<span class="line-num">1491</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
-<span class="line-num">1492</span>
-<span class="line-num">1493</span>        &lt;h1&gt;Russell&#x27;s Research on the Alchemical Hands&lt;/h1&gt;
-<span class="line-num">1494</span>        &lt;p class=&quot;evidence-note&quot;&gt;This essay synthesizes evidence from James Russell&#x27;s PhD thesis
-<span class="line-num">1495</span>        (Durham, 2014) and data extracted by this project&#x27;s concordance pipeline. All claims about
-<span class="line-num">1496</span>        specific folios and images are grounded in retrieved dissertation references and matched
-<span class="line-num">1497</span>        image data. Where claims depend on provisional BL concordance data, this is marked explicitly.&lt;/p&gt;
-<span class="line-num">1498</span>
-<span class="line-num">1499</span>        &lt;h2 id=&quot;overview&quot;&gt;Overview of the Dissertation Project
-<span class="line-num">1500</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#overview&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1501</span>        &lt;p&gt;Russell&#x27;s thesis, submitted to Durham University in 2014, documented the marginalia in six
-<span class="line-num">1502</span>        copies of the 1499 &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;, identifying {len(alchemist_hands) + 9}
-<span class="line-num">1503</span>        distinct annotator hands across these copies. His work demonstrated that the HP was actively
-<span class="line-num">1504</span>        read and annotated by humanists, playwrights, a pope, and alchemists over roughly two centuries
-<span class="line-num">1505</span>        (1499&amp;ndash;1700). The thesis framed the annotated HP as a &quot;humanistic activity book&quot; in which
-<span class="line-num">1506</span>        readers cultivated &lt;em&gt;ingegno&lt;/em&gt; through creative engagement with the text and its woodcuts.&lt;/p&gt;
-<span class="line-num">1507</span>
-<span class="line-num">1508</span>        &lt;h2 id=&quot;annotated-copies&quot;&gt;Annotated Copies Relevant to the Alchemical Interpretation
-<span class="line-num">1509</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#annotated-copies&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1510</span>        &lt;p&gt;Two of the six copies studied by Russell contain alchemical annotations:&lt;/p&gt;
-<span class="line-num">1511</span>        &lt;ul&gt;
-<span class="line-num">1512</span>            &lt;li&gt;&lt;strong&gt;British Library, C.60.o.12&lt;/strong&gt; (the &quot;BL copy&quot;): Contains two hands.
-<span class="line-num">1513</span>            Hand A is attributed to Ben Jonson. Hand B is an anonymous alchemist, possibly connected
-<span class="line-num">1514</span>            to the Royal Society circle, following the framework of Jean d&#x27;Espagnet.&lt;/li&gt;
-<span class="line-num">1515</span>            &lt;li&gt;&lt;strong&gt;Buffalo Rare Book Room&lt;/strong&gt; (the &quot;Buffalo copy&quot;): Contains five interleaved
-<span class="line-num">1516</span>            hands (A&amp;ndash;E). Hand E is an anonymous alchemist following the pseudo-Geber (Jabir ibn Hayyan)
-<span class="line-num">1517</span>            school, emphasizing sulphur and Sol/Luna pairings.&lt;/li&gt;
-<span class="line-num">1518</span>        &lt;/ul&gt;
-<span class="line-num">1519</span>
-<span class="line-num">1520</span>        &lt;h2 id=&quot;bl-alchemist&quot;&gt;The BL Alchemical Hand (Hand B)
-<span class="line-num">1521</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#bl-alchemist&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1522</span>        &lt;p&gt;The BL alchemist (Hand B in C.60.o.12) is the more extensively documented of the two alchemical
-<span class="line-num">1523</span>        readers. Russell devotes Chapter 6 of his thesis primarily to this hand. On the flyleaf verso,
-<span class="line-num">1524</span>        Hand B wrote a Latin summary of the HP&#x27;s perceived true meaning:&lt;/p&gt;
-<span class="line-num">1525</span>        &lt;blockquote&gt;&quot;verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae
-<span class="line-num">1526</span>        &amp;amp; operationum Magisteri Mercurii Descriptio elegans, ampla&quot;&lt;/blockquote&gt;
-<span class="line-num">1527</span>        &lt;p&gt;This annotation declares the HP&#x27;s &quot;true sense&quot; to be the &quot;full and elegant description of
-<span class="line-num">1528</span>        the energy and spirit of the whole nature, and of the operations of Master Mercury.&quot; This
-<span class="line-num">1529</span>        reading positions mercury (quicksilver) as the catalytic principle uniting all elements,
-<span class="line-num">1530</span>        consistent with d&#x27;Espagnet&#x27;s &lt;em&gt;Enchiridion Physicae Restitutae&lt;/em&gt; (published 1623).&lt;/p&gt;
-<span class="line-num">1531</span>        &lt;p&gt;Hand B used an extensive vocabulary of alchemical ideograms&amp;mdash;compact symbols for gold,
-<span class="line-num">1532</span>        silver, mercury, Venus, Jupiter, and other elements&amp;mdash;within the syntax of Latin annotations.
-<span class="line-num">1533</span>        These signs sometimes had Latin inflections appended (e.g., the sun symbol + &quot;-ra&quot; for &quot;aurata&quot;).
-<span class="line-num">1534</span>        Russell notes that B&#x27;s ideographic vocabulary shows consistency with Newton&#x27;s Keynes MSS,
-<span class="line-num">1535</span>        suggesting a possible connection to the Royal Society or Cambridge circle.&lt;/p&gt;
-<span class="line-num">1536</span>        &lt;p class=&quot;evidence-note&quot;&gt;Source: Russell 2014, Ch. 6, pp. 154&amp;ndash;168. This project has
-<span class="line-num">1537</span>        {len(bl_refs)} dissertation references attributed to Hand B in our database.&lt;/p&gt;
-<span class="line-num">1538</span>
-<span class="line-num">1539</span>        &lt;h3&gt;BL Alchemist: Referenced Folios&lt;/h3&gt;
-<span class="line-num">1540</span>        &lt;table&gt;
-<span class="line-num">1541</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Signature&lt;/th&gt;&lt;th&gt;Thesis Page&lt;/th&gt;&lt;th&gt;Marginal Text&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1542</span>            &lt;tbody&gt;{bl_rows}&lt;/tbody&gt;
-<span class="line-num">1543</span>        &lt;/table&gt;
-<span class="line-num">1544</span>        &lt;div class=&quot;provisional&quot;&gt;Note: All BL image matches in this project are classified as LOW
-<span class="line-num">1545</span>        confidence because the BL photographs are sequentially numbered rather than labeled by folio.
-<span class="line-num">1546</span>        The BL copy is the 1545 edition; the signature map is based on the 1499 collation.
-<span class="line-num">1547</span>        Manual verification is required before these matches can be trusted.&lt;/div&gt;
-<span class="line-num">1548</span>
-<span class="line-num">1549</span>        &lt;h2 id=&quot;buffalo-alchemist&quot;&gt;The Buffalo Alchemical Hand (Hand E)
-<span class="line-num">1550</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#buffalo-alchemist&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1551</span>        &lt;p&gt;Hand E in the Buffalo copy is the latest of five interleaved hands, overwriting Hand D.
-<span class="line-num">1552</span>        Like the BL alchemist, Hand E labels passages and woodcuts with the element or stage of
-<span class="line-num">1553</span>        the alchemical process they were presumed to allegorize. However, Hand E follows a different
-<span class="line-num">1554</span>        alchemical school: the pseudo-Geber tradition, emphasizing sulphur and the Sol/Luna (Sun/Moon)
-<span class="line-num">1555</span>        duality rather than d&#x27;Espagnet&#x27;s mercury-centered framework.&lt;/p&gt;
-<span class="line-num">1556</span>        &lt;p&gt;Hand E identified the king and queen statues in the HP as Sol and Luna, and read the
-<span class="line-num">1557</span>        chess match passage (h1r) as an allegory of silver/gold transmutation. The chemical
-<span class="line-num">1558</span>        wedding&amp;mdash;the union of Sol and Luna&amp;mdash;maps onto Poliphilo and Polia&#x27;s love story
-<span class="line-num">1559</span>        in this reading.&lt;/p&gt;
-<span class="line-num">1560</span>        &lt;p class=&quot;evidence-note&quot;&gt;Source: Russell 2014, Ch. 7, pp. 170&amp;ndash;191. This project has
-<span class="line-num">1561</span>        {len(buf_refs)} dissertation references attributed to Hand E.&lt;/p&gt;
-<span class="line-num">1562</span>
-<span class="line-num">1563</span>        &lt;h3&gt;Buffalo Alchemist: Referenced Folios&lt;/h3&gt;
-<span class="line-num">1564</span>        &lt;table&gt;
-<span class="line-num">1565</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Signature&lt;/th&gt;&lt;th&gt;Thesis Page&lt;/th&gt;&lt;th&gt;Marginal Text&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1566</span>            &lt;tbody&gt;{buf_rows}&lt;/tbody&gt;
-<span class="line-num">1567</span>        &lt;/table&gt;
-<span class="line-num">1568</span>
-<span class="line-num">1569</span>        &lt;h2 id=&quot;differences&quot;&gt;Differences in Notation, Language, and Interpretive Logic
-<span class="line-num">1570</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#differences&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1571</span>        &lt;table&gt;
-<span class="line-num">1572</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Feature&lt;/th&gt;&lt;th&gt;BL Hand B&lt;/th&gt;&lt;th&gt;Buffalo Hand E&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1573</span>            &lt;tbody&gt;
-<span class="line-num">1574</span>                &lt;tr&gt;&lt;td&gt;Alchemical School&lt;/td&gt;&lt;td&gt;d&#x27;Espagnet (mercury-centered)&lt;/td&gt;&lt;td&gt;pseudo-Geber (sulphur / Sol-Luna)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1575</span>                &lt;tr&gt;&lt;td&gt;Language&lt;/td&gt;&lt;td&gt;Latin with alchemical ideograms&lt;/td&gt;&lt;td&gt;Latin and Italian, fewer ideograms&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1576</span>                &lt;tr&gt;&lt;td&gt;Central Principle&lt;/td&gt;&lt;td&gt;Master Mercury as catalytic agent&lt;/td&gt;&lt;td&gt;Sol/Luna duality and chemical wedding&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1577</span>                &lt;tr&gt;&lt;td&gt;Key Passage&lt;/td&gt;&lt;td&gt;Flyleaf verso (Master Mercury declaration)&lt;/td&gt;&lt;td&gt;h1r (chess match as transmutation)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1578</span>                &lt;tr&gt;&lt;td&gt;Notation Style&lt;/td&gt;&lt;td&gt;Extensive ideographic vocabulary&lt;/td&gt;&lt;td&gt;Minimal ideograms; more discursive&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1579</span>                &lt;tr&gt;&lt;td&gt;Approximate Date&lt;/td&gt;&lt;td&gt;Late 17th century (post-1623)&lt;/td&gt;&lt;td&gt;Unknown (latest of five hands)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1580</span>            &lt;/tbody&gt;
-<span class="line-num">1581</span>        &lt;/table&gt;
-<span class="line-num">1582</span>
-<span class="line-num">1583</span>        &lt;h2 id=&quot;images&quot;&gt;What Images We Currently Have
-<span class="line-num">1584</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#images&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1585</span>        &lt;p&gt;This project has matched {sum(conf_dist.values())} images to alchemist-attributed
-<span class="line-num">1586</span>        dissertation references. The confidence distribution is:&lt;/p&gt;
-<span class="line-num">1587</span>        &lt;ul&gt;
-<span class="line-num">1588</span>            &lt;li&gt;HIGH confidence: {conf_dist.get(&#x27;HIGH&#x27;, 0)} matches&lt;/li&gt;
-<span class="line-num">1589</span>            &lt;li&gt;MEDIUM confidence: {conf_dist.get(&#x27;MEDIUM&#x27;, 0)} matches&lt;/li&gt;
-<span class="line-num">1590</span>            &lt;li&gt;LOW confidence: {conf_dist.get(&#x27;LOW&#x27;, 0)} matches&lt;/li&gt;
-<span class="line-num">1591</span>        &lt;/ul&gt;
-<span class="line-num">1592</span>        &lt;div class=&quot;provisional&quot;&gt;The majority of BL matches are LOW confidence because the BL
-<span class="line-num">1593</span>        photograph numbering does not directly encode folio information. These matches should be
-<span class="line-num">1594</span>        treated as provisional until verified against the physical photographs.&lt;/div&gt;
-<span class="line-num">1595</span>
-<span class="line-num">1596</span>        &lt;h2 id=&quot;secure-vs-provisional&quot;&gt;What Is Secure vs. Provisional
-<span class="line-num">1597</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#secure-vs-provisional&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1598</span>        &lt;p&gt;&lt;strong&gt;Secure:&lt;/strong&gt;&lt;/p&gt;
-<span class="line-num">1599</span>        &lt;ul&gt;
-<span class="line-num">1600</span>            &lt;li&gt;The existence and general character of two alchemical annotators (BL Hand B and Buffalo Hand E)&lt;/li&gt;
-<span class="line-num">1601</span>            &lt;li&gt;The alchemical schools they followed (d&#x27;Espagnet vs. pseudo-Geber)&lt;/li&gt;
-<span class="line-num">1602</span>            &lt;li&gt;The Master Mercury declaration on the BL flyleaf&lt;/li&gt;
-<span class="line-num">1603</span>            &lt;li&gt;The folio signatures referenced by Russell in his thesis&lt;/li&gt;
-<span class="line-num">1604</span>            &lt;li&gt;The signature map for the 1499 edition&lt;/li&gt;
-<span class="line-num">1605</span>        &lt;/ul&gt;
-<span class="line-num">1606</span>        &lt;p&gt;&lt;strong&gt;Provisional:&lt;/strong&gt;&lt;/p&gt;
-<span class="line-num">1607</span>        &lt;ul&gt;
-<span class="line-num">1608</span>            &lt;li&gt;All BL photograph-to-folio matches (LOW confidence)&lt;/li&gt;
-<span class="line-num">1609</span>            &lt;li&gt;The attribution of Hand B to the Royal Society circle&lt;/li&gt;
-<span class="line-num">1610</span>            &lt;li&gt;The precise dating of Hand E relative to the other Buffalo hands&lt;/li&gt;
-<span class="line-num">1611</span>            &lt;li&gt;Any specific image claimed to show a particular alchemical annotation&lt;/li&gt;
-<span class="line-num">1612</span>        &lt;/ul&gt;
-<span class="line-num">1613</span>
-<span class="line-num">1614</span>        &lt;h2 id=&quot;reception&quot;&gt;Why the Alchemical Readers Matter for HP Reception History
-<span class="line-num">1615</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#reception&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1616</span>        &lt;p&gt;The alchemical annotations demonstrate that the HP&#x27;s readership extended well beyond
-<span class="line-num">1617</span>        antiquarian humanists and poets. The two alchemist annotators independently decoded the
-<span class="line-num">1618</span>        HP as concealing alchemical formulae beneath its love narrative&amp;mdash;yet they arrived
-<span class="line-num">1619</span>        at fundamentally different readings because they operated within different alchemical
-<span class="line-num">1620</span>        traditions. This diversity illustrates Russell&#x27;s broader argument that the HP functioned
-<span class="line-num">1621</span>        as a &quot;humanistic activity book&quot;: a text whose deliberate obscurity invited readers to
-<span class="line-num">1622</span>        impose their own interpretive frameworks.&lt;/p&gt;
-<span class="line-num">1623</span>        &lt;p&gt;The alchemical tradition of reading the HP stretches back to Beroalde de Verville&#x27;s
-<span class="line-num">1624</span>        1600 French edition, which included a &quot;tableau steganographique&quot; listing alchemical
-<span class="line-num">1625</span>        equivalents for the narrative&#x27;s symbols. The BL and Buffalo annotations show that this
-<span class="line-num">1626</span>        tradition persisted into the seventeenth century and took distinct forms depending on
-<span class="line-num">1627</span>        the alchemical school of the reader.&lt;/p&gt;
-<span class="line-num">1628</span>
-<span class="line-num">1629</span>        &lt;div class=&quot;cross-links&quot;&gt;
-<span class="line-num">1630</span>            &lt;h4&gt;Related Pages&lt;/h4&gt;
-<span class="line-num">1631</span>            &lt;a href=&quot;dictionary/alchemical-allegory.html&quot;&gt;Alchemical Allegory&lt;/a&gt;
-<span class="line-num">1632</span>            &lt;a href=&quot;dictionary/master-mercury.html&quot;&gt;Master Mercury&lt;/a&gt;
-<span class="line-num">1633</span>            &lt;a href=&quot;dictionary/sol-luna.html&quot;&gt;Sol and Luna&lt;/a&gt;
-<span class="line-num">1634</span>            &lt;a href=&quot;dictionary/chemical-wedding.html&quot;&gt;Chemical Wedding&lt;/a&gt;
-<span class="line-num">1635</span>            &lt;a href=&quot;dictionary/ideogram.html&quot;&gt;Ideogram&lt;/a&gt;
-<span class="line-num">1636</span>            &lt;a href=&quot;dictionary/annotator-hand.html&quot;&gt;Annotator Hand&lt;/a&gt;
-<span class="line-num">1637</span>            &lt;a href=&quot;dictionary/activity-book.html&quot;&gt;Activity Book&lt;/a&gt;
-<span class="line-num">1638</span>            &lt;a href=&quot;dictionary/prisca-sapientia.html&quot;&gt;Prisca Sapientia&lt;/a&gt;
-<span class="line-num">1639</span>            &lt;a href=&quot;dictionary/ingegno.html&quot;&gt;Ingegno&lt;/a&gt;
-<span class="line-num">1640</span>            &lt;a href=&quot;concordance-method.html&quot;&gt;Concordance Methodology&lt;/a&gt;
-<span class="line-num">1641</span>        &lt;/div&gt;
-<span class="line-num">1642</span>    &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">1643</span>
-<span class="line-num">1644</span>    page = page_shell(&quot;Russell&#x27;s Alchemical Hands&quot;, body, active_nav=&#x27;russell&#x27;,
-<span class="line-num">1645</span>                       extra_css=essay_css)
-<span class="line-num">1646</span>    (SITE_DIR / &#x27;russell-alchemical-hands.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1647</span>    print(&quot;  russell-alchemical-hands.html&quot;)
-<span class="line-num">1648</span>
-<span class="line-num">1649</span>
-<span class="line-num">1650</span># ============================================================
-<span class="line-num">1651</span># Essay: Concordance Methodology
-<span class="line-num">1652</span># ============================================================
-<span class="line-num">1653</span>
-<span class="line-num">1654</span>def build_concordance_essay_page(conn):
-<span class="line-num">1655</span>    &quot;&quot;&quot;Generate concordance-method.html explaining the matching pipeline.&quot;&quot;&quot;
-<span class="line-num">1656</span>    cur = conn.cursor()
-<span class="line-num">1657</span>
-<span class="line-num">1658</span>    # Gather stats
-<span class="line-num">1659</span>    cur.execute(&quot;SELECT COUNT(*) FROM signature_map&quot;)
-<span class="line-num">1660</span>    sig_count = cur.fetchone()[0]
-<span class="line-num">1661</span>    cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs&quot;)
-<span class="line-num">1662</span>    ref_count = cur.fetchone()[0]
-<span class="line-num">1663</span>    cur.execute(&quot;SELECT COUNT(*) FROM images&quot;)
-<span class="line-num">1664</span>    img_count = cur.fetchone()[0]
-<span class="line-num">1665</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches&quot;)
-<span class="line-num">1666</span>    match_count = cur.fetchone()[0]
+<span class="line-num">1316</span>def build_code_pages():
+<span class="line-num">1317</span>    &quot;&quot;&quot;Generate code/index.html and code/*.html from Python scripts.&quot;&quot;&quot;
+<span class="line-num">1318</span>    code_dir = SITE_DIR / &#x27;code&#x27;
+<span class="line-num">1319</span>    code_dir.mkdir(exist_ok=True)
+<span class="line-num">1320</span>
+<span class="line-num">1321</span>    code_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1322</span>        .code-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1323</span>        .code-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+<span class="line-num">1324</span>        .code-table th, .code-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+<span class="line-num">1325</span>        .code-table th { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+<span class="line-num">1326</span>        .code-table td a { color: var(--accent); text-decoration: none; font-weight: 600; font-family: monospace; }
+<span class="line-num">1327</span>        .code-table td a:hover { text-decoration: underline; }
+<span class="line-num">1328</span>        .code-table .code-summary { font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1329</span>        .code-content { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1330</span>        .code-content h2 { color: var(--accent); margin-bottom: 0.5rem; }
+<span class="line-num">1331</span>        .code-content pre {
+<span class="line-num">1332</span>            background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 4px;
+<span class="line-num">1333</span>            overflow-x: auto; font-size: 0.82rem; line-height: 1.5;
+<span class="line-num">1334</span>            max-height: 80vh; overflow-y: auto;
+<span class="line-num">1335</span>        }
+<span class="line-num">1336</span>        .code-content .line-num { color: #858585; user-select: none; display: inline-block; width: 3.5em; text-align: right; margin-right: 1em; }
+<span class="line-num">1337</span>        .code-meta { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+<span class="line-num">1338</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1339</span>
+<span class="line-num">1340</span>    scripts = []
+<span class="line-num">1341</span>    scripts_dir = BASE_DIR / &#x27;scripts&#x27;
+<span class="line-num">1342</span>
+<span class="line-num">1343</span>    for filename, (title, summary) in sorted(SCRIPT_METADATA.items()):
+<span class="line-num">1344</span>        filepath = scripts_dir / filename
+<span class="line-num">1345</span>        if not filepath.exists():
+<span class="line-num">1346</span>            continue
+<span class="line-num">1347</span>
+<span class="line-num">1348</span>        slug = slugify(filename.replace(&#x27;.py&#x27;, &#x27;&#x27;))
+<span class="line-num">1349</span>        content = filepath.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1350</span>        line_count = len(content.splitlines())
+<span class="line-num">1351</span>
+<span class="line-num">1352</span>        scripts.append({
+<span class="line-num">1353</span>            &#x27;filename&#x27;: filename,
+<span class="line-num">1354</span>            &#x27;title&#x27;: title,
+<span class="line-num">1355</span>            &#x27;summary&#x27;: summary,
+<span class="line-num">1356</span>            &#x27;slug&#x27;: slug,
+<span class="line-num">1357</span>            &#x27;line_count&#x27;: line_count,
+<span class="line-num">1358</span>        })
+<span class="line-num">1359</span>
+<span class="line-num">1360</span>        # Build detail page with syntax-highlighted code
+<span class="line-num">1361</span>        lines = content.splitlines()
+<span class="line-num">1362</span>        code_lines = []
+<span class="line-num">1363</span>        for i, line in enumerate(lines, 1):
+<span class="line-num">1364</span>            num = f&#x27;&lt;span class=&quot;line-num&quot;&gt;{i}&lt;/span&gt;&#x27;
+<span class="line-num">1365</span>            code_lines.append(f&#x27;{num}{escape(line)}&#x27;)
+<span class="line-num">1366</span>        code_html = &#x27;\n&#x27;.join(code_lines)
+<span class="line-num">1367</span>
+<span class="line-num">1368</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">1369</span>        &lt;div class=&quot;code-content&quot;&gt;
+<span class="line-num">1370</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; All Scripts&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1371</span>            &lt;h2&gt;{escape(title)}&lt;/h2&gt;
+<span class="line-num">1372</span>            &lt;div class=&quot;code-meta&quot;&gt;{escape(filename)} &amp;mdash; {line_count} lines&lt;/div&gt;
+<span class="line-num">1373</span>            &lt;p style=&quot;margin-bottom:1rem&quot;&gt;{escape(summary)}&lt;/p&gt;
+<span class="line-num">1374</span>            &lt;pre&gt;{code_html}&lt;/pre&gt;
+<span class="line-num">1375</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1376</span>
+<span class="line-num">1377</span>        detail_page = page_shell(title, detail_body, active_nav=&#x27;code&#x27;, depth=1)
+<span class="line-num">1378</span>        (code_dir / f&#x27;{slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1379</span>
+<span class="line-num">1380</span>    # Build index page
+<span class="line-num">1381</span>    rows_html = &#x27;&#x27;
+<span class="line-num">1382</span>    for s in scripts:
+<span class="line-num">1383</span>        rows_html += f&quot;&quot;&quot;
+<span class="line-num">1384</span>            &lt;tr&gt;
+<span class="line-num">1385</span>                &lt;td&gt;&lt;a href=&quot;{s[&#x27;slug&#x27;]}.html&quot;&gt;{escape(s[&#x27;filename&#x27;])}&lt;/a&gt;&lt;/td&gt;
+<span class="line-num">1386</span>                &lt;td&gt;{escape(s[&#x27;title&#x27;])}&lt;/td&gt;
+<span class="line-num">1387</span>                &lt;td class=&quot;code-summary&quot;&gt;{escape(s[&#x27;summary&#x27;])}&lt;/td&gt;
+<span class="line-num">1388</span>                &lt;td style=&quot;font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap&quot;&gt;{s[&#x27;line_count&#x27;]}&lt;/td&gt;
+<span class="line-num">1389</span>            &lt;/tr&gt;&quot;&quot;&quot;
+<span class="line-num">1390</span>
+<span class="line-num">1391</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">1392</span>        &lt;div class=&quot;code-page&quot;&gt;
+<span class="line-num">1393</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">1394</span>                &lt;h2&gt;Pipeline Scripts&lt;/h2&gt;
+<span class="line-num">1395</span>                &lt;p&gt;This section exposes the deterministic pipeline behind the site.
+<span class="line-num">1396</span>                Rather than hiding the build logic, it presents these {len(scripts)} Python
+<span class="line-num">1397</span>                scripts that initialize the database, parse filenames, extract references,
+<span class="line-num">1398</span>                match folios to images, seed and enrich metadata, validate assumptions,
+<span class="line-num">1399</span>                and generate the static pages. The aim is transparency and reproducibility.&lt;/p&gt;
+<span class="line-num">1400</span>                &lt;p&gt;The project&#x27;s architectural stance is deliberately conservative: SQLite
+<span class="line-num">1401</span>                as source of truth, Python for transformation, JSON and static HTML for
+<span class="line-num">1402</span>                delivery, and as little framework machinery as possible. That simplicity
+<span class="line-num">1403</span>                is not an omission; it is part of the project&#x27;s long-term durability model.&lt;/p&gt;
+<span class="line-num">1404</span>            &lt;/div&gt;
+<span class="line-num">1405</span>            &lt;table class=&quot;code-table&quot;&gt;
+<span class="line-num">1406</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Script&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Lines&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1407</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
+<span class="line-num">1408</span>            &lt;/table&gt;
+<span class="line-num">1409</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1410</span>
+<span class="line-num">1411</span>    index_page = page_shell(&#x27;Code&#x27;, index_body, active_nav=&#x27;code&#x27;, depth=1)
+<span class="line-num">1412</span>    (code_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1413</span>    print(f&quot;  code/index.html + {len(scripts)} script pages&quot;)
+<span class="line-num">1414</span>
+<span class="line-num">1415</span>
+<span class="line-num">1416</span># ============================================================
+<span class="line-num">1417</span># Essay: Russell&#x27;s Alchemical Hands
+<span class="line-num">1418</span># ============================================================
+<span class="line-num">1419</span>
+<span class="line-num">1420</span>def build_russell_essay_page(conn):
+<span class="line-num">1421</span>    &quot;&quot;&quot;Generate russell-alchemical-hands.html from DB evidence + corpus data.&quot;&quot;&quot;
+<span class="line-num">1422</span>    cur = conn.cursor()
+<span class="line-num">1423</span>
+<span class="line-num">1424</span>    # Get alchemist hands
+<span class="line-num">1425</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1426</span>        SELECT hand_label, manuscript_shelfmark, attribution, school,
+<span class="line-num">1427</span>               description, language, ink_color, date_range, interests
+<span class="line-num">1428</span>        FROM annotator_hands WHERE is_alchemist = 1
+<span class="line-num">1429</span>    &quot;&quot;&quot;)
+<span class="line-num">1430</span>    alchemist_hands = cur.fetchall()
+<span class="line-num">1431</span>
+<span class="line-num">1432</span>    # Get alchemist refs with signatures
+<span class="line-num">1433</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1434</span>        SELECT r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
+<span class="line-num">1435</span>               r.chapter_num, r.manuscript_shelfmark, h.hand_label, h.school
+<span class="line-num">1436</span>        FROM dissertation_refs r
+<span class="line-num">1437</span>        JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">1438</span>        WHERE h.is_alchemist = 1
+<span class="line-num">1439</span>        ORDER BY r.thesis_page
+<span class="line-num">1440</span>    &quot;&quot;&quot;)
+<span class="line-num">1441</span>    alch_refs = cur.fetchall()
+<span class="line-num">1442</span>
+<span class="line-num">1443</span>    # Count matched images for alchemist refs
+<span class="line-num">1444</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1445</span>        SELECT mat.confidence, COUNT(*)
+<span class="line-num">1446</span>        FROM matches mat
+<span class="line-num">1447</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
+<span class="line-num">1448</span>        JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">1449</span>        WHERE h.is_alchemist = 1
+<span class="line-num">1450</span>        GROUP BY mat.confidence
+<span class="line-num">1451</span>    &quot;&quot;&quot;)
+<span class="line-num">1452</span>    conf_dist = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">1453</span>
+<span class="line-num">1454</span>    # Get specific BL refs
+<span class="line-num">1455</span>    bl_refs = [r for r in alch_refs if r[5] == &#x27;C.60.o.12&#x27;]
+<span class="line-num">1456</span>    buf_refs = [r for r in alch_refs if r[5] == &#x27;Buffalo RBR&#x27;]
+<span class="line-num">1457</span>
+<span class="line-num">1458</span>    # Build BL refs table
+<span class="line-num">1459</span>    bl_rows = &#x27;&#x27;
+<span class="line-num">1460</span>    for r in bl_refs[:20]:
+<span class="line-num">1461</span>        marginal = escape(r[3] or &#x27;&#x27;) if r[3] else &#x27;&lt;em&gt;none recorded&lt;/em&gt;&#x27;
+<span class="line-num">1462</span>        bl_rows += f&#x27;&lt;tr&gt;&lt;td&gt;{escape(r[0] or &quot;&quot;)}&lt;/td&gt;&lt;td&gt;{r[1]}&lt;/td&gt;&lt;td&gt;{marginal}&lt;/td&gt;&lt;/tr&gt;&#x27;
+<span class="line-num">1463</span>
+<span class="line-num">1464</span>    buf_rows = &#x27;&#x27;
+<span class="line-num">1465</span>    for r in buf_refs[:20]:
+<span class="line-num">1466</span>        marginal = escape(r[3] or &#x27;&#x27;) if r[3] else &#x27;&lt;em&gt;none recorded&lt;/em&gt;&#x27;
+<span class="line-num">1467</span>        buf_rows += f&#x27;&lt;tr&gt;&lt;td&gt;{escape(r[0] or &quot;&quot;)}&lt;/td&gt;&lt;td&gt;{r[1]}&lt;/td&gt;&lt;td&gt;{marginal}&lt;/td&gt;&lt;/tr&gt;&#x27;
+<span class="line-num">1468</span>
+<span class="line-num">1469</span>    essay_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1470</span>        .essay-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1471</span>        .essay-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+<span class="line-num">1472</span>        .essay-page h3 { margin: 1.5rem 0 0.5rem; }
+<span class="line-num">1473</span>        .essay-page p { line-height: 1.8; margin-bottom: 1rem; }
+<span class="line-num">1474</span>        .essay-page .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
+<span class="line-num">1475</span>        .essay-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1476</span>        .essay-page table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+<span class="line-num">1477</span>        .essay-page th, .essay-page td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+<span class="line-num">1478</span>        .essay-page th { background: var(--bg); font-weight: 600; }
+<span class="line-num">1479</span>        .essay-page blockquote { border-left: 3px solid var(--accent-light); padding-left: 1rem; color: var(--text-muted); font-style: italic; margin: 1rem 0; }
+<span class="line-num">1480</span>        .essay-page .section-anchor { color: var(--text-muted); text-decoration: none; font-size: 0.8em; margin-left: 0.3rem; }
+<span class="line-num">1481</span>        .essay-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+<span class="line-num">1482</span>        .essay-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+<span class="line-num">1483</span>        .essay-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+<span class="line-num">1484</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1485</span>
+<span class="line-num">1486</span>    body = f&quot;&quot;&quot;
+<span class="line-num">1487</span>    &lt;div class=&quot;essay-page&quot;&gt;
+<span class="line-num">1488</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1489</span>
+<span class="line-num">1490</span>        &lt;h1&gt;Russell&#x27;s Research on the Alchemical Hands&lt;/h1&gt;
+<span class="line-num">1491</span>        &lt;p class=&quot;evidence-note&quot;&gt;This essay synthesizes evidence from James Russell&#x27;s PhD thesis
+<span class="line-num">1492</span>        (Durham, 2014) and data extracted by this project&#x27;s concordance pipeline. All claims about
+<span class="line-num">1493</span>        specific folios and images are grounded in retrieved dissertation references and matched
+<span class="line-num">1494</span>        image data. Where claims depend on provisional BL concordance data, this is marked explicitly.&lt;/p&gt;
+<span class="line-num">1495</span>
+<span class="line-num">1496</span>        &lt;h2 id=&quot;overview&quot;&gt;Overview of the Dissertation Project
+<span class="line-num">1497</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#overview&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1498</span>        &lt;p&gt;Russell&#x27;s thesis, submitted to Durham University in 2014, documented the marginalia in six
+<span class="line-num">1499</span>        copies of the 1499 &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;, identifying {len(alchemist_hands) + 9}
+<span class="line-num">1500</span>        distinct annotator hands across these copies. His work demonstrated that the HP was actively
+<span class="line-num">1501</span>        read and annotated by humanists, playwrights, a pope, and alchemists over roughly two centuries
+<span class="line-num">1502</span>        (1499&amp;ndash;1700). The thesis framed the annotated HP as a &quot;humanistic activity book&quot; in which
+<span class="line-num">1503</span>        readers cultivated &lt;em&gt;ingegno&lt;/em&gt; through creative engagement with the text and its woodcuts.&lt;/p&gt;
+<span class="line-num">1504</span>
+<span class="line-num">1505</span>        &lt;h2 id=&quot;annotated-copies&quot;&gt;Annotated Copies Relevant to the Alchemical Interpretation
+<span class="line-num">1506</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#annotated-copies&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1507</span>        &lt;p&gt;Two of the six copies studied by Russell contain alchemical annotations:&lt;/p&gt;
+<span class="line-num">1508</span>        &lt;ul&gt;
+<span class="line-num">1509</span>            &lt;li&gt;&lt;strong&gt;British Library, C.60.o.12&lt;/strong&gt; (the &quot;BL copy&quot;): Contains two hands.
+<span class="line-num">1510</span>            Hand A is attributed to Ben Jonson. Hand B is an anonymous alchemist, possibly connected
+<span class="line-num">1511</span>            to the Royal Society circle, following the framework of Jean d&#x27;Espagnet.&lt;/li&gt;
+<span class="line-num">1512</span>            &lt;li&gt;&lt;strong&gt;Buffalo Rare Book Room&lt;/strong&gt; (the &quot;Buffalo copy&quot;): Contains five interleaved
+<span class="line-num">1513</span>            hands (A&amp;ndash;E). Hand E is an anonymous alchemist following the pseudo-Geber (Jabir ibn Hayyan)
+<span class="line-num">1514</span>            school, emphasizing sulphur and Sol/Luna pairings.&lt;/li&gt;
+<span class="line-num">1515</span>        &lt;/ul&gt;
+<span class="line-num">1516</span>
+<span class="line-num">1517</span>        &lt;h2 id=&quot;bl-alchemist&quot;&gt;The BL Alchemical Hand (Hand B)
+<span class="line-num">1518</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#bl-alchemist&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1519</span>        &lt;p&gt;The BL alchemist (Hand B in C.60.o.12) is the more extensively documented of the two alchemical
+<span class="line-num">1520</span>        readers. Russell devotes Chapter 6 of his thesis primarily to this hand. On the flyleaf verso,
+<span class="line-num">1521</span>        Hand B wrote a Latin summary of the HP&#x27;s perceived true meaning:&lt;/p&gt;
+<span class="line-num">1522</span>        &lt;blockquote&gt;&quot;verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae
+<span class="line-num">1523</span>        &amp;amp; operationum Magisteri Mercurii Descriptio elegans, ampla&quot;&lt;/blockquote&gt;
+<span class="line-num">1524</span>        &lt;p&gt;This annotation declares the HP&#x27;s &quot;true sense&quot; to be the &quot;full and elegant description of
+<span class="line-num">1525</span>        the energy and spirit of the whole nature, and of the operations of Master Mercury.&quot; This
+<span class="line-num">1526</span>        reading positions mercury (quicksilver) as the catalytic principle uniting all elements,
+<span class="line-num">1527</span>        consistent with d&#x27;Espagnet&#x27;s &lt;em&gt;Enchiridion Physicae Restitutae&lt;/em&gt; (published 1623).&lt;/p&gt;
+<span class="line-num">1528</span>        &lt;p&gt;Hand B used an extensive vocabulary of alchemical ideograms&amp;mdash;compact symbols for gold,
+<span class="line-num">1529</span>        silver, mercury, Venus, Jupiter, and other elements&amp;mdash;within the syntax of Latin annotations.
+<span class="line-num">1530</span>        These signs sometimes had Latin inflections appended (e.g., the sun symbol + &quot;-ra&quot; for &quot;aurata&quot;).
+<span class="line-num">1531</span>        Russell notes that B&#x27;s ideographic vocabulary shows consistency with Newton&#x27;s Keynes MSS,
+<span class="line-num">1532</span>        suggesting a possible connection to the Royal Society or Cambridge circle.&lt;/p&gt;
+<span class="line-num">1533</span>        &lt;p class=&quot;evidence-note&quot;&gt;Source: Russell 2014, Ch. 6, pp. 154&amp;ndash;168. This project has
+<span class="line-num">1534</span>        {len(bl_refs)} dissertation references attributed to Hand B in our database.&lt;/p&gt;
+<span class="line-num">1535</span>
+<span class="line-num">1536</span>        &lt;h3&gt;BL Alchemist: Referenced Folios&lt;/h3&gt;
+<span class="line-num">1537</span>        &lt;table&gt;
+<span class="line-num">1538</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Signature&lt;/th&gt;&lt;th&gt;Thesis Page&lt;/th&gt;&lt;th&gt;Marginal Text&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1539</span>            &lt;tbody&gt;{bl_rows}&lt;/tbody&gt;
+<span class="line-num">1540</span>        &lt;/table&gt;
+<span class="line-num">1541</span>        &lt;div class=&quot;provisional&quot;&gt;Note: All BL image matches in this project are classified as LOW
+<span class="line-num">1542</span>        confidence because the BL photographs are sequentially numbered rather than labeled by folio.
+<span class="line-num">1543</span>        The BL copy is the 1545 edition; the signature map is based on the 1499 collation.
+<span class="line-num">1544</span>        Manual verification is required before these matches can be trusted.&lt;/div&gt;
+<span class="line-num">1545</span>
+<span class="line-num">1546</span>        &lt;h2 id=&quot;buffalo-alchemist&quot;&gt;The Buffalo Alchemical Hand (Hand E)
+<span class="line-num">1547</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#buffalo-alchemist&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1548</span>        &lt;p&gt;Hand E in the Buffalo copy is the latest of five interleaved hands, overwriting Hand D.
+<span class="line-num">1549</span>        Like the BL alchemist, Hand E labels passages and woodcuts with the element or stage of
+<span class="line-num">1550</span>        the alchemical process they were presumed to allegorize. However, Hand E follows a different
+<span class="line-num">1551</span>        alchemical school: the pseudo-Geber tradition, emphasizing sulphur and the Sol/Luna (Sun/Moon)
+<span class="line-num">1552</span>        duality rather than d&#x27;Espagnet&#x27;s mercury-centered framework.&lt;/p&gt;
+<span class="line-num">1553</span>        &lt;p&gt;Hand E identified the king and queen statues in the HP as Sol and Luna, and read the
+<span class="line-num">1554</span>        chess match passage (h1r) as an allegory of silver/gold transmutation. The chemical
+<span class="line-num">1555</span>        wedding&amp;mdash;the union of Sol and Luna&amp;mdash;maps onto Poliphilo and Polia&#x27;s love story
+<span class="line-num">1556</span>        in this reading.&lt;/p&gt;
+<span class="line-num">1557</span>        &lt;p class=&quot;evidence-note&quot;&gt;Source: Russell 2014, Ch. 7, pp. 170&amp;ndash;191. This project has
+<span class="line-num">1558</span>        {len(buf_refs)} dissertation references attributed to Hand E.&lt;/p&gt;
+<span class="line-num">1559</span>
+<span class="line-num">1560</span>        &lt;h3&gt;Buffalo Alchemist: Referenced Folios&lt;/h3&gt;
+<span class="line-num">1561</span>        &lt;table&gt;
+<span class="line-num">1562</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Signature&lt;/th&gt;&lt;th&gt;Thesis Page&lt;/th&gt;&lt;th&gt;Marginal Text&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1563</span>            &lt;tbody&gt;{buf_rows}&lt;/tbody&gt;
+<span class="line-num">1564</span>        &lt;/table&gt;
+<span class="line-num">1565</span>
+<span class="line-num">1566</span>        &lt;h2 id=&quot;differences&quot;&gt;Differences in Notation, Language, and Interpretive Logic
+<span class="line-num">1567</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#differences&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1568</span>        &lt;table&gt;
+<span class="line-num">1569</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Feature&lt;/th&gt;&lt;th&gt;BL Hand B&lt;/th&gt;&lt;th&gt;Buffalo Hand E&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1570</span>            &lt;tbody&gt;
+<span class="line-num">1571</span>                &lt;tr&gt;&lt;td&gt;Alchemical School&lt;/td&gt;&lt;td&gt;d&#x27;Espagnet (mercury-centered)&lt;/td&gt;&lt;td&gt;pseudo-Geber (sulphur / Sol-Luna)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1572</span>                &lt;tr&gt;&lt;td&gt;Language&lt;/td&gt;&lt;td&gt;Latin with alchemical ideograms&lt;/td&gt;&lt;td&gt;Latin and Italian, fewer ideograms&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1573</span>                &lt;tr&gt;&lt;td&gt;Central Principle&lt;/td&gt;&lt;td&gt;Master Mercury as catalytic agent&lt;/td&gt;&lt;td&gt;Sol/Luna duality and chemical wedding&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1574</span>                &lt;tr&gt;&lt;td&gt;Key Passage&lt;/td&gt;&lt;td&gt;Flyleaf verso (Master Mercury declaration)&lt;/td&gt;&lt;td&gt;h1r (chess match as transmutation)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1575</span>                &lt;tr&gt;&lt;td&gt;Notation Style&lt;/td&gt;&lt;td&gt;Extensive ideographic vocabulary&lt;/td&gt;&lt;td&gt;Minimal ideograms; more discursive&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1576</span>                &lt;tr&gt;&lt;td&gt;Approximate Date&lt;/td&gt;&lt;td&gt;Late 17th century (post-1623)&lt;/td&gt;&lt;td&gt;Unknown (latest of five hands)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1577</span>            &lt;/tbody&gt;
+<span class="line-num">1578</span>        &lt;/table&gt;
+<span class="line-num">1579</span>
+<span class="line-num">1580</span>        &lt;h2 id=&quot;images&quot;&gt;What Images We Currently Have
+<span class="line-num">1581</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#images&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1582</span>        &lt;p&gt;This project has matched {sum(conf_dist.values())} images to alchemist-attributed
+<span class="line-num">1583</span>        dissertation references. The confidence distribution is:&lt;/p&gt;
+<span class="line-num">1584</span>        &lt;ul&gt;
+<span class="line-num">1585</span>            &lt;li&gt;HIGH confidence: {conf_dist.get(&#x27;HIGH&#x27;, 0)} matches&lt;/li&gt;
+<span class="line-num">1586</span>            &lt;li&gt;MEDIUM confidence: {conf_dist.get(&#x27;MEDIUM&#x27;, 0)} matches&lt;/li&gt;
+<span class="line-num">1587</span>            &lt;li&gt;LOW confidence: {conf_dist.get(&#x27;LOW&#x27;, 0)} matches&lt;/li&gt;
+<span class="line-num">1588</span>        &lt;/ul&gt;
+<span class="line-num">1589</span>        &lt;div class=&quot;provisional&quot;&gt;The majority of BL matches are LOW confidence because the BL
+<span class="line-num">1590</span>        photograph numbering does not directly encode folio information. These matches should be
+<span class="line-num">1591</span>        treated as provisional until verified against the physical photographs.&lt;/div&gt;
+<span class="line-num">1592</span>
+<span class="line-num">1593</span>        &lt;h2 id=&quot;secure-vs-provisional&quot;&gt;What Is Secure vs. Provisional
+<span class="line-num">1594</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#secure-vs-provisional&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1595</span>        &lt;p&gt;&lt;strong&gt;Secure:&lt;/strong&gt;&lt;/p&gt;
+<span class="line-num">1596</span>        &lt;ul&gt;
+<span class="line-num">1597</span>            &lt;li&gt;The existence and general character of two alchemical annotators (BL Hand B and Buffalo Hand E)&lt;/li&gt;
+<span class="line-num">1598</span>            &lt;li&gt;The alchemical schools they followed (d&#x27;Espagnet vs. pseudo-Geber)&lt;/li&gt;
+<span class="line-num">1599</span>            &lt;li&gt;The Master Mercury declaration on the BL flyleaf&lt;/li&gt;
+<span class="line-num">1600</span>            &lt;li&gt;The folio signatures referenced by Russell in his thesis&lt;/li&gt;
+<span class="line-num">1601</span>            &lt;li&gt;The signature map for the 1499 edition&lt;/li&gt;
+<span class="line-num">1602</span>        &lt;/ul&gt;
+<span class="line-num">1603</span>        &lt;p&gt;&lt;strong&gt;Provisional:&lt;/strong&gt;&lt;/p&gt;
+<span class="line-num">1604</span>        &lt;ul&gt;
+<span class="line-num">1605</span>            &lt;li&gt;All BL photograph-to-folio matches (LOW confidence)&lt;/li&gt;
+<span class="line-num">1606</span>            &lt;li&gt;The attribution of Hand B to the Royal Society circle&lt;/li&gt;
+<span class="line-num">1607</span>            &lt;li&gt;The precise dating of Hand E relative to the other Buffalo hands&lt;/li&gt;
+<span class="line-num">1608</span>            &lt;li&gt;Any specific image claimed to show a particular alchemical annotation&lt;/li&gt;
+<span class="line-num">1609</span>        &lt;/ul&gt;
+<span class="line-num">1610</span>
+<span class="line-num">1611</span>        &lt;h2 id=&quot;reception&quot;&gt;Why the Alchemical Readers Matter for HP Reception History
+<span class="line-num">1612</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#reception&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1613</span>        &lt;p&gt;The alchemical annotations demonstrate that the HP&#x27;s readership extended well beyond
+<span class="line-num">1614</span>        antiquarian humanists and poets. The two alchemist annotators independently decoded the
+<span class="line-num">1615</span>        HP as concealing alchemical formulae beneath its love narrative&amp;mdash;yet they arrived
+<span class="line-num">1616</span>        at fundamentally different readings because they operated within different alchemical
+<span class="line-num">1617</span>        traditions. This diversity illustrates Russell&#x27;s broader argument that the HP functioned
+<span class="line-num">1618</span>        as a &quot;humanistic activity book&quot;: a text whose deliberate obscurity invited readers to
+<span class="line-num">1619</span>        impose their own interpretive frameworks.&lt;/p&gt;
+<span class="line-num">1620</span>        &lt;p&gt;The alchemical tradition of reading the HP stretches back to Beroalde de Verville&#x27;s
+<span class="line-num">1621</span>        1600 French edition, which included a &quot;tableau steganographique&quot; listing alchemical
+<span class="line-num">1622</span>        equivalents for the narrative&#x27;s symbols. The BL and Buffalo annotations show that this
+<span class="line-num">1623</span>        tradition persisted into the seventeenth century and took distinct forms depending on
+<span class="line-num">1624</span>        the alchemical school of the reader.&lt;/p&gt;
+<span class="line-num">1625</span>
+<span class="line-num">1626</span>        &lt;div class=&quot;cross-links&quot;&gt;
+<span class="line-num">1627</span>            &lt;h4&gt;Related Pages&lt;/h4&gt;
+<span class="line-num">1628</span>            &lt;a href=&quot;dictionary/alchemical-allegory.html&quot;&gt;Alchemical Allegory&lt;/a&gt;
+<span class="line-num">1629</span>            &lt;a href=&quot;dictionary/master-mercury.html&quot;&gt;Master Mercury&lt;/a&gt;
+<span class="line-num">1630</span>            &lt;a href=&quot;dictionary/sol-luna.html&quot;&gt;Sol and Luna&lt;/a&gt;
+<span class="line-num">1631</span>            &lt;a href=&quot;dictionary/chemical-wedding.html&quot;&gt;Chemical Wedding&lt;/a&gt;
+<span class="line-num">1632</span>            &lt;a href=&quot;dictionary/ideogram.html&quot;&gt;Ideogram&lt;/a&gt;
+<span class="line-num">1633</span>            &lt;a href=&quot;dictionary/annotator-hand.html&quot;&gt;Annotator Hand&lt;/a&gt;
+<span class="line-num">1634</span>            &lt;a href=&quot;dictionary/activity-book.html&quot;&gt;Activity Book&lt;/a&gt;
+<span class="line-num">1635</span>            &lt;a href=&quot;dictionary/prisca-sapientia.html&quot;&gt;Prisca Sapientia&lt;/a&gt;
+<span class="line-num">1636</span>            &lt;a href=&quot;dictionary/ingegno.html&quot;&gt;Ingegno&lt;/a&gt;
+<span class="line-num">1637</span>            &lt;a href=&quot;concordance-method.html&quot;&gt;Concordance Methodology&lt;/a&gt;
+<span class="line-num">1638</span>        &lt;/div&gt;
+<span class="line-num">1639</span>    &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1640</span>
+<span class="line-num">1641</span>    page = page_shell(&quot;Russell&#x27;s Alchemical Hands&quot;, body, active_nav=&#x27;russell&#x27;,
+<span class="line-num">1642</span>                       extra_css=essay_css)
+<span class="line-num">1643</span>    (SITE_DIR / &#x27;russell-alchemical-hands.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1644</span>    print(&quot;  russell-alchemical-hands.html&quot;)
+<span class="line-num">1645</span>
+<span class="line-num">1646</span>
+<span class="line-num">1647</span># ============================================================
+<span class="line-num">1648</span># Essay: Concordance Methodology
+<span class="line-num">1649</span># ============================================================
+<span class="line-num">1650</span>
+<span class="line-num">1651</span>def build_concordance_essay_page(conn):
+<span class="line-num">1652</span>    &quot;&quot;&quot;Generate concordance-method.html explaining the matching pipeline.&quot;&quot;&quot;
+<span class="line-num">1653</span>    cur = conn.cursor()
+<span class="line-num">1654</span>
+<span class="line-num">1655</span>    # Gather stats
+<span class="line-num">1656</span>    cur.execute(&quot;SELECT COUNT(*) FROM signature_map&quot;)
+<span class="line-num">1657</span>    sig_count = cur.fetchone()[0]
+<span class="line-num">1658</span>    cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs&quot;)
+<span class="line-num">1659</span>    ref_count = cur.fetchone()[0]
+<span class="line-num">1660</span>    cur.execute(&quot;SELECT COUNT(*) FROM images&quot;)
+<span class="line-num">1661</span>    img_count = cur.fetchone()[0]
+<span class="line-num">1662</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches&quot;)
+<span class="line-num">1663</span>    match_count = cur.fetchone()[0]
+<span class="line-num">1664</span>
+<span class="line-num">1665</span>    cur.execute(&quot;SELECT confidence, COUNT(*) FROM matches GROUP BY confidence&quot;)
+<span class="line-num">1666</span>    conf_dist = {row[0]: row[1] for row in cur.fetchall()}
 <span class="line-num">1667</span>
-<span class="line-num">1668</span>    cur.execute(&quot;SELECT confidence, COUNT(*) FROM matches GROUP BY confidence&quot;)
-<span class="line-num">1669</span>    conf_dist = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">1668</span>    cur.execute(&quot;SELECT match_method, COUNT(*) FROM matches GROUP BY match_method&quot;)
+<span class="line-num">1669</span>    method_dist = {row[0]: row[1] for row in cur.fetchall()}
 <span class="line-num">1670</span>
-<span class="line-num">1671</span>    cur.execute(&quot;SELECT match_method, COUNT(*) FROM matches GROUP BY match_method&quot;)
-<span class="line-num">1672</span>    method_dist = {row[0]: row[1] for row in cur.fetchall()}
-<span class="line-num">1673</span>
-<span class="line-num">1674</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1675</span>        SELECT m.shelfmark, mat.confidence, COUNT(*)
-<span class="line-num">1676</span>        FROM matches mat
-<span class="line-num">1677</span>        JOIN images i ON mat.image_id = i.id
-<span class="line-num">1678</span>        JOIN manuscripts m ON i.manuscript_id = m.id
-<span class="line-num">1679</span>        GROUP BY m.shelfmark, mat.confidence
-<span class="line-num">1680</span>    &quot;&quot;&quot;)
-<span class="line-num">1681</span>    ms_conf = {}
-<span class="line-num">1682</span>    for row in cur.fetchall():
-<span class="line-num">1683</span>        ms_conf.setdefault(row[0], {})[row[1]] = row[2]
+<span class="line-num">1671</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1672</span>        SELECT m.shelfmark, mat.confidence, COUNT(*)
+<span class="line-num">1673</span>        FROM matches mat
+<span class="line-num">1674</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">1675</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">1676</span>        GROUP BY m.shelfmark, mat.confidence
+<span class="line-num">1677</span>    &quot;&quot;&quot;)
+<span class="line-num">1678</span>    ms_conf = {}
+<span class="line-num">1679</span>    for row in cur.fetchall():
+<span class="line-num">1680</span>        ms_conf.setdefault(row[0], {})[row[1]] = row[2]
+<span class="line-num">1681</span>
+<span class="line-num">1682</span>    siena_data = ms_conf.get(&#x27;O.III.38&#x27;, {})
+<span class="line-num">1683</span>    bl_data = ms_conf.get(&#x27;C.60.o.12&#x27;, {})
 <span class="line-num">1684</span>
-<span class="line-num">1685</span>    siena_data = ms_conf.get(&#x27;O.III.38&#x27;, {})
-<span class="line-num">1686</span>    bl_data = ms_conf.get(&#x27;C.60.o.12&#x27;, {})
-<span class="line-num">1687</span>
-<span class="line-num">1688</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1689</span>        SELECT m.shelfmark, COUNT(DISTINCT i.id) FROM images i
-<span class="line-num">1690</span>        JOIN manuscripts m ON i.manuscript_id = m.id
-<span class="line-num">1691</span>        GROUP BY m.shelfmark
-<span class="line-num">1692</span>    &quot;&quot;&quot;)
-<span class="line-num">1693</span>    img_by_ms = {row[0]: row[1] for row in cur.fetchall()}
-<span class="line-num">1694</span>
-<span class="line-num">1695</span>    cur.execute(&quot;&quot;&quot;
-<span class="line-num">1696</span>        SELECT manuscript_shelfmark, COUNT(*) FROM dissertation_refs
-<span class="line-num">1697</span>        WHERE manuscript_shelfmark IS NOT NULL
-<span class="line-num">1698</span>        GROUP BY manuscript_shelfmark ORDER BY COUNT(*) DESC
-<span class="line-num">1699</span>    &quot;&quot;&quot;)
-<span class="line-num">1700</span>    ref_by_ms = {row[0]: row[1] for row in cur.fetchall()}
-<span class="line-num">1701</span>
-<span class="line-num">1702</span>    essay_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
-<span class="line-num">1703</span>        .essay-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
-<span class="line-num">1704</span>        .essay-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-<span class="line-num">1705</span>        .essay-page h3 { margin: 1.5rem 0 0.5rem; }
-<span class="line-num">1706</span>        .essay-page p { line-height: 1.8; margin-bottom: 1rem; }
-<span class="line-num">1707</span>        .essay-page .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
-<span class="line-num">1708</span>        .essay-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">1709</span>        .essay-page table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
-<span class="line-num">1710</span>        .essay-page th, .essay-page td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
-<span class="line-num">1711</span>        .essay-page th { background: var(--bg); font-weight: 600; }
-<span class="line-num">1712</span>        .essay-page .process-flow {{ display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; }}
-<span class="line-num">1713</span>        .essay-page .process-step {{ flex: 1; min-width: 200px; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }}
-<span class="line-num">1714</span>        .essay-page .process-step .step-num {{ display: inline-block; width: 1.5rem; height: 1.5rem; background: var(--accent); color: white; border-radius: 50%; text-align: center; line-height: 1.5rem; font-size: 0.8rem; margin-right: 0.3rem; }}
-<span class="line-num">1715</span>        .essay-page .process-step h4 {{ margin: 0 0 0.5rem 0; font-size: 0.9rem; }}
-<span class="line-num">1716</span>        .essay-page .process-step p {{ font-size: 0.85rem; margin: 0; line-height: 1.5; }}
-<span class="line-num">1717</span>        .essay-page .section-anchor { color: var(--text-muted); text-decoration: none; font-size: 0.8em; margin-left: 0.3rem; }
-<span class="line-num">1718</span>        .essay-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-<span class="line-num">1719</span>        .essay-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
-<span class="line-num">1720</span>        .essay-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
-<span class="line-num">1721</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
-<span class="line-num">1722</span>
-<span class="line-num">1723</span>    body = f&quot;&quot;&quot;
-<span class="line-num">1724</span>    &lt;div class=&quot;essay-page&quot;&gt;
-<span class="line-num">1725</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
-<span class="line-num">1726</span>
-<span class="line-num">1727</span>        &lt;h1&gt;Concordance Methodology&lt;/h1&gt;
-<span class="line-num">1728</span>        &lt;p class=&quot;evidence-note&quot;&gt;This page documents the actual methods used to build the concordance
-<span class="line-num">1729</span>        between Russell&#x27;s dissertation references and the manuscript photograph collections. All
-<span class="line-num">1730</span>        statistics are drawn from the project database. Uncertainty and provisional status are
-<span class="line-num">1731</span>        marked explicitly throughout.&lt;/p&gt;
-<span class="line-num">1732</span>
-<span class="line-num">1733</span>        &lt;h2 id=&quot;problem&quot;&gt;The Problem Russell Presents
-<span class="line-num">1734</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#problem&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1735</span>        &lt;p&gt;Russell&#x27;s thesis references folios by signature (e.g., &quot;b6v&quot;, &quot;h1r&quot;) rather than by
-<span class="line-num">1736</span>        page number, since the 1499 edition has no printed pagination. Our manuscript photograph
-<span class="line-num">1737</span>        collections, however, use different naming conventions: the Siena images use folio numbers
-<span class="line-num">1738</span>        with recto/verso suffixes (e.g., O.III.38_0014r.jpg), while the BL images use sequential
-<span class="line-num">1739</span>        numbers (C_60_o_12-001.jpg through C_60_o_12-196.jpg). The core challenge is mapping
-<span class="line-num">1740</span>        Russell&#x27;s {ref_count} signature-based references to the {img_count} available photographs.&lt;/p&gt;
-<span class="line-num">1741</span>
-<span class="line-num">1742</span>        &lt;h2 id=&quot;image-sets&quot;&gt;BL vs. Siena Image Sets
-<span class="line-num">1743</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#image-sets&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1744</span>        &lt;table&gt;
-<span class="line-num">1745</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Property&lt;/th&gt;&lt;th&gt;Siena O.III.38&lt;/th&gt;&lt;th&gt;BL C.60.o.12&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1746</span>            &lt;tbody&gt;
-<span class="line-num">1747</span>                &lt;tr&gt;&lt;td&gt;Images&lt;/td&gt;&lt;td&gt;{img_by_ms.get(&#x27;O.III.38&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{img_by_ms.get(&#x27;C.60.o.12&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1748</span>                &lt;tr&gt;&lt;td&gt;Naming&lt;/td&gt;&lt;td&gt;Folio number + r/v suffix&lt;/td&gt;&lt;td&gt;Sequential number only&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1749</span>                &lt;tr&gt;&lt;td&gt;Edition&lt;/td&gt;&lt;td&gt;1499 Aldine&lt;/td&gt;&lt;td&gt;1545 Aldine (second edition)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1750</span>                &lt;tr&gt;&lt;td&gt;Folio mapping&lt;/td&gt;&lt;td&gt;Directly encoded in filename&lt;/td&gt;&lt;td&gt;Requires inference&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1751</span>                &lt;tr&gt;&lt;td&gt;Matching confidence&lt;/td&gt;&lt;td&gt;HIGH / MEDIUM&lt;/td&gt;&lt;td&gt;LOW (all provisional)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1752</span>            &lt;/tbody&gt;
-<span class="line-num">1753</span>        &lt;/table&gt;
-<span class="line-num">1754</span>        &lt;div class=&quot;provisional&quot;&gt;The BL copy is the 1545 edition, not the 1499. The signature map
-<span class="line-num">1755</span>        is based on the 1499 collation formula. While the 1545 edition largely follows the same
-<span class="line-num">1756</span>        structure, any pagination differences between editions would make sequential-number-to-folio
-<span class="line-num">1757</span>        inference unreliable. All BL matches must be treated as provisional.&lt;/div&gt;
-<span class="line-num">1758</span>
-<span class="line-num">1759</span>        &lt;h2 id=&quot;signature-map&quot;&gt;How the Signature Map Works
-<span class="line-num">1760</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#signature-map&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1761</span>        &lt;p&gt;The signature map is a deterministic lookup table of {sig_count} entries generated from
-<span class="line-num">1762</span>        the 1499 collation formula: a&amp;ndash;z&lt;sup&gt;8&lt;/sup&gt; (omitting j, u, w), A&amp;ndash;F&lt;sup&gt;8&lt;/sup&gt;,
-<span class="line-num">1763</span>        G&lt;sup&gt;4&lt;/sup&gt;. Each quire has 8 leaves (except G with 4), and each leaf has recto and verso
-<span class="line-num">1764</span>        sides. The map converts any valid signature (e.g., &quot;b6v&quot;) to a sequential folio number
-<span class="line-num">1765</span>        and vice versa.&lt;/p&gt;
-<span class="line-num">1766</span>        &lt;p&gt;This map is generated by &lt;code&gt;build_signature_map.py&lt;/code&gt; and is fully deterministic.
-<span class="line-num">1767</span>        It is correct for the 1499 edition. Its applicability to the 1545 edition is assumed but
-<span class="line-num">1768</span>        not verified.&lt;/p&gt;
-<span class="line-num">1769</span>
-<span class="line-num">1770</span>        &lt;h2 id=&quot;ref-extraction&quot;&gt;How Dissertation References Were Extracted
-<span class="line-num">1771</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#ref-extraction&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1772</span>        &lt;p&gt;Russell&#x27;s thesis PDF was processed by &lt;code&gt;extract_references.py&lt;/code&gt; using PyMuPDF
-<span class="line-num">1773</span>        for text extraction and regular expressions for signature pattern matching. The script
-<span class="line-num">1774</span>        extracted {ref_count} references, distributed across manuscripts:&lt;/p&gt;
-<span class="line-num">1775</span>        &lt;table&gt;
-<span class="line-num">1776</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Manuscript&lt;/th&gt;&lt;th&gt;References&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1777</span>            &lt;tbody&gt;{&#x27;&#x27;.join(f&quot;&lt;tr&gt;&lt;td&gt;{escape(k)}&lt;/td&gt;&lt;td&gt;{v}&lt;/td&gt;&lt;/tr&gt;&quot; for k, v in sorted(ref_by_ms.items(), key=lambda x: -x[1]))}&lt;/tbody&gt;
-<span class="line-num">1778</span>        &lt;/table&gt;
-<span class="line-num">1779</span>
-<span class="line-num">1780</span>        &lt;h2 id=&quot;image-parsing&quot;&gt;How Image Filenames Were Parsed
-<span class="line-num">1781</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#image-parsing&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1782</span>        &lt;p&gt;&lt;code&gt;catalog_images.py&lt;/code&gt; parses image filenames from two manuscript collections into
-<span class="line-num">1783</span>        structured records with folio number, side (recto/verso), and page type. The Siena images
-<span class="line-num">1784</span>        encode folio information directly (O.III.38_0014r.jpg = folio 14 recto). The BL images
-<span class="line-num">1785</span>        use sequential numbers that do not directly encode folio information.&lt;/p&gt;
-<span class="line-num">1786</span>
-<span class="line-num">1787</span>        &lt;h2 id=&quot;matching&quot;&gt;How Matching Was Performed
-<span class="line-num">1788</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#matching&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1789</span>        &lt;div class=&quot;process-flow&quot;&gt;
-<span class="line-num">1790</span>            &lt;div class=&quot;process-step&quot;&gt;
-<span class="line-num">1791</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;1&lt;/span&gt; Signature Lookup&lt;/h4&gt;
-<span class="line-num">1792</span>                &lt;p&gt;Convert each dissertation reference&#x27;s signature (e.g., &quot;b6v&quot;) to a folio number
-<span class="line-num">1793</span>                using the signature map.&lt;/p&gt;
-<span class="line-num">1794</span>            &lt;/div&gt;
-<span class="line-num">1795</span>            &lt;div class=&quot;process-step&quot;&gt;
-<span class="line-num">1796</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;2&lt;/span&gt; Manuscript Filter&lt;/h4&gt;
-<span class="line-num">1797</span>                &lt;p&gt;Filter images to the manuscript shelfmark specified in the dissertation reference.&lt;/p&gt;
-<span class="line-num">1798</span>            &lt;/div&gt;
-<span class="line-num">1799</span>            &lt;div class=&quot;process-step&quot;&gt;
-<span class="line-num">1800</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;3&lt;/span&gt; Folio Match&lt;/h4&gt;
-<span class="line-num">1801</span>                &lt;p&gt;Match the computed folio number to images with the same folio number and side.&lt;/p&gt;
-<span class="line-num">1802</span>            &lt;/div&gt;
-<span class="line-num">1803</span>            &lt;div class=&quot;process-step&quot;&gt;
-<span class="line-num">1804</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;4&lt;/span&gt; Fallback Cross-Match&lt;/h4&gt;
-<span class="line-num">1805</span>                &lt;p&gt;If no direct match, attempt cross-manuscript matching (lower confidence).&lt;/p&gt;
-<span class="line-num">1806</span>            &lt;/div&gt;
-<span class="line-num">1807</span>            &lt;div class=&quot;process-step&quot;&gt;
-<span class="line-num">1808</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;5&lt;/span&gt; Confidence Assignment&lt;/h4&gt;
-<span class="line-num">1809</span>                &lt;p&gt;Assign HIGH (exact Siena match), MEDIUM (folio-based), or LOW (BL sequential inference).&lt;/p&gt;
-<span class="line-num">1810</span>            &lt;/div&gt;
-<span class="line-num">1811</span>        &lt;/div&gt;
-<span class="line-num">1812</span>
-<span class="line-num">1813</span>        &lt;h2 id=&quot;confidence&quot;&gt;Where Confidence Is High vs. Low
-<span class="line-num">1814</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#confidence&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1815</span>        &lt;table&gt;
-<span class="line-num">1816</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Confidence&lt;/th&gt;&lt;th&gt;Matches&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1817</span>            &lt;tbody&gt;
-<span class="line-num">1818</span>                &lt;tr&gt;&lt;td&gt;HIGH&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;Siena images with explicit folio+side in filename, matched by signature lookup&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1819</span>                &lt;tr&gt;&lt;td&gt;MEDIUM&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;Siena images matched by folio number (cross-manuscript or side ambiguous)&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1820</span>                &lt;tr&gt;&lt;td&gt;LOW&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;td&gt;BL images where sequential photo number is assumed to equal folio number&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1821</span>            &lt;/tbody&gt;
-<span class="line-num">1822</span>        &lt;/table&gt;
-<span class="line-num">1823</span>
-<span class="line-num">1824</span>        &lt;h3&gt;By Manuscript&lt;/h3&gt;
-<span class="line-num">1825</span>        &lt;table&gt;
-<span class="line-num">1826</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Manuscript&lt;/th&gt;&lt;th&gt;HIGH&lt;/th&gt;&lt;th&gt;MEDIUM&lt;/th&gt;&lt;th&gt;LOW&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-<span class="line-num">1827</span>            &lt;tbody&gt;
-<span class="line-num">1828</span>                &lt;tr&gt;&lt;td&gt;Siena O.III.38&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1829</span>                &lt;tr&gt;&lt;td&gt;BL C.60.o.12&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
-<span class="line-num">1830</span>            &lt;/tbody&gt;
-<span class="line-num">1831</span>        &lt;/table&gt;
-<span class="line-num">1832</span>
-<span class="line-num">1833</span>        &lt;h2 id=&quot;bl-provisional&quot;&gt;Why BL Matches Are Provisional
-<span class="line-num">1834</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#bl-provisional&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1835</span>        &lt;div class=&quot;provisional&quot;&gt;&lt;strong&gt;Critical caveat:&lt;/strong&gt; All {sum(bl_data.values())} BL matches
-<span class="line-num">1836</span>        are classified as LOW confidence. The BL photographs are sequentially numbered (001&amp;ndash;196)
-<span class="line-num">1837</span>        without folio labels. Our matching pipeline assumes that photo N corresponds to folio N, but
-<span class="line-num">1838</span>        this assumption is unverified. The BL copy is the 1545 edition, not the 1499 edition from which
-<span class="line-num">1839</span>        the signature map was built. Any differences in pagination, inserted leaves, or missing leaves
-<span class="line-num">1840</span>        between editions would invalidate this mapping. These matches require manual verification
-<span class="line-num">1841</span>        against the physical photographs.&lt;/div&gt;
-<span class="line-num">1842</span>
-<span class="line-num">1843</span>        &lt;h2 id=&quot;human-review&quot;&gt;What Human Review Is Still Needed
-<span class="line-num">1844</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#human-review&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1845</span>        &lt;ul&gt;
-<span class="line-num">1846</span>            &lt;li&gt;Verify BL photograph-to-folio correspondence against physical or high-resolution images&lt;/li&gt;
-<span class="line-num">1847</span>            &lt;li&gt;Confirm that the 1545 edition follows the same collation as the 1499&lt;/li&gt;
-<span class="line-num">1848</span>            &lt;li&gt;Spot-check MEDIUM confidence Siena matches for side (recto/verso) accuracy&lt;/li&gt;
-<span class="line-num">1849</span>            &lt;li&gt;Review hand attribution for edge cases where multiple hands annotate the same folio&lt;/li&gt;
-<span class="line-num">1850</span>            &lt;li&gt;Validate marginal text transcriptions against original manuscript images&lt;/li&gt;
-<span class="line-num">1851</span>        &lt;/ul&gt;
-<span class="line-num">1852</span>
-<span class="line-num">1853</span>        &lt;h2 id=&quot;future&quot;&gt;How This Methodology Supports Future Scholarship
-<span class="line-num">1854</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#future&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-<span class="line-num">1855</span>        &lt;p&gt;The concordance pipeline produces a structured, queryable dataset linking Russell&#x27;s
-<span class="line-num">1856</span>        close reading to digital images. Once the BL matches are verified, this enables:&lt;/p&gt;
-<span class="line-num">1857</span>        &lt;ul&gt;
-<span class="line-num">1858</span>            &lt;li&gt;Folio-level browsing of annotations alongside manuscript images&lt;/li&gt;
-<span class="line-num">1859</span>            &lt;li&gt;Systematic comparison of annotation density across copies&lt;/li&gt;
-<span class="line-num">1860</span>            &lt;li&gt;Identification of folios that attracted multiple annotators&lt;/li&gt;
-<span class="line-num">1861</span>            &lt;li&gt;Cross-referencing between annotations and the dictionary of terms&lt;/li&gt;
-<span class="line-num">1862</span>            &lt;li&gt;Future multimodal analysis using computer vision on manuscript images&lt;/li&gt;
-<span class="line-num">1863</span>        &lt;/ul&gt;
-<span class="line-num">1864</span>
-<span class="line-num">1865</span>        &lt;div class=&quot;cross-links&quot;&gt;
-<span class="line-num">1866</span>            &lt;h4&gt;Related Pages&lt;/h4&gt;
-<span class="line-num">1867</span>            &lt;a href=&quot;dictionary/signature.html&quot;&gt;Signature&lt;/a&gt;
-<span class="line-num">1868</span>            &lt;a href=&quot;dictionary/folio.html&quot;&gt;Folio&lt;/a&gt;
-<span class="line-num">1869</span>            &lt;a href=&quot;dictionary/collation.html&quot;&gt;Collation&lt;/a&gt;
-<span class="line-num">1870</span>            &lt;a href=&quot;dictionary/annotator-hand.html&quot;&gt;Annotator Hand&lt;/a&gt;
-<span class="line-num">1871</span>            &lt;a href=&quot;dictionary/marginalia.html&quot;&gt;Marginalia&lt;/a&gt;
-<span class="line-num">1872</span>            &lt;a href=&quot;russell-alchemical-hands.html&quot;&gt;Alchemical Hands Essay&lt;/a&gt;
-<span class="line-num">1873</span>            &lt;a href=&quot;docs/concordance-methodology.html&quot;&gt;Concordance Methodology (Doc)&lt;/a&gt;
-<span class="line-num">1874</span>            &lt;a href=&quot;code/match-refs-to-images.html&quot;&gt;match_refs_to_images.py&lt;/a&gt;
-<span class="line-num">1875</span>            &lt;a href=&quot;code/build-signature-map.html&quot;&gt;build_signature_map.py&lt;/a&gt;
-<span class="line-num">1876</span>        &lt;/div&gt;
-<span class="line-num">1877</span>    &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">1878</span>
-<span class="line-num">1879</span>    page = page_shell(&#x27;Concordance Methodology&#x27;, body, active_nav=&#x27;concordance&#x27;,
-<span class="line-num">1880</span>                       extra_css=essay_css)
-<span class="line-num">1881</span>    (SITE_DIR / &#x27;concordance-method.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">1882</span>    print(&quot;  concordance-method.html&quot;)
-<span class="line-num">1883</span>
-<span class="line-num">1884</span>
-<span class="line-num">1885</span># ============================================================
-<span class="line-num">1886</span># Digital Edition stub page
-<span class="line-num">1887</span># ============================================================
-<span class="line-num">1888</span>
-<span class="line-num">1889</span>def build_digital_edition_page(conn):
-<span class="line-num">1890</span>    &quot;&quot;&quot;Generate digital-edition.html as an honest editorial prospectus.&quot;&quot;&quot;
-<span class="line-num">1891</span>    cur = conn.cursor()
-<span class="line-num">1892</span>
-<span class="line-num">1893</span>    # Gather current state stats
-<span class="line-num">1894</span>    cur.execute(&quot;SELECT COUNT(*) FROM dictionary_terms&quot;)
-<span class="line-num">1895</span>    dict_count = cur.fetchone()[0]
-<span class="line-num">1896</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography&quot;)
-<span class="line-num">1897</span>    bib_count = cur.fetchone()[0]
-<span class="line-num">1898</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholars&quot;)
-<span class="line-num">1899</span>    scholar_count = cur.fetchone()[0]
-<span class="line-num">1900</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches&quot;)
-<span class="line-num">1901</span>    match_count = cur.fetchone()[0]
-<span class="line-num">1902</span>    cur.execute(&quot;SELECT COUNT(*) FROM images&quot;)
-<span class="line-num">1903</span>    img_count = cur.fetchone()[0]
-<span class="line-num">1904</span>    cur.execute(&quot;SELECT COUNT(*) FROM signature_map&quot;)
-<span class="line-num">1905</span>    sig_count = cur.fetchone()[0]
-<span class="line-num">1906</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotator_hands&quot;)
-<span class="line-num">1907</span>    hand_count = cur.fetchone()[0]
-<span class="line-num">1908</span>
-<span class="line-num">1909</span>    edition_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
-<span class="line-num">1910</span>        .edition-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
-<span class="line-num">1911</span>        .edition-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-<span class="line-num">1912</span>        .edition-page h3 { margin: 1.5rem 0 0.5rem; }
-<span class="line-num">1913</span>        .edition-page p { line-height: 1.8; margin-bottom: 1rem; }
-<span class="line-num">1914</span>        .edition-page .status-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0; font-size: 0.9rem; }
-<span class="line-num">1915</span>        .edition-page .status-icon { font-weight: bold; }
-<span class="line-num">1916</span>        .edition-page .status-done { color: #155724; }
-<span class="line-num">1917</span>        .edition-page .status-partial { color: #856404; }
-<span class="line-num">1918</span>        .edition-page .status-planned { color: var(--text-muted); }
-<span class="line-num">1919</span>        .edition-page .status-blocked { color: #721c24; }
-<span class="line-num">1920</span>        .edition-page .roadmap-phase { margin: 1rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
-<span class="line-num">1921</span>        .edition-page .roadmap-phase h4 { margin: 0 0 0.5rem 0; }
-<span class="line-num">1922</span>        .edition-page .roadmap-phase p { margin: 0; font-size: 0.9rem; }
-<span class="line-num">1923</span>        .edition-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">1924</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
-<span class="line-num">1925</span>
-<span class="line-num">1926</span>    body = f&quot;&quot;&quot;
-<span class="line-num">1927</span>    &lt;div class=&quot;edition-page&quot;&gt;
-<span class="line-num">1928</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
-<span class="line-num">1929</span>
-<span class="line-num">1930</span>        &lt;h1&gt;Digital Edition: Editorial Prospectus&lt;/h1&gt;
-<span class="line-num">1931</span>        &lt;p class=&quot;evidence-note&quot;&gt;This page describes the vision, current state, and roadmap for a
-<span class="line-num">1932</span>        comprehensive digital edition of the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;. It is not a
-<span class="line-num">1933</span>        finished edition. It is a statement of intent, a map of what exists, and an honest
-<span class="line-num">1934</span>        accounting of what remains to be built.&lt;/p&gt;
-<span class="line-num">1935</span>
-<span class="line-num">1936</span>        &lt;h2 id=&quot;vision&quot;&gt;What This Edition Will Include&lt;/h2&gt;
-<span class="line-num">1937</span>        &lt;p&gt;The eventual digital edition aims to provide:&lt;/p&gt;
-<span class="line-num">1938</span>        &lt;ul&gt;
-<span class="line-num">1939</span>            &lt;li&gt;&lt;strong&gt;Facsimile browsing:&lt;/strong&gt; Page-by-page viewing of manuscript photographs
-<span class="line-num">1940</span>            from multiple copies, with folio-level navigation via the signature map.&lt;/li&gt;
-<span class="line-num">1941</span>            &lt;li&gt;&lt;strong&gt;Transcription:&lt;/strong&gt; Diplomatic transcription of the 1499 text, linked
-<span class="line-num">1942</span>            to facsimile images at the folio level.&lt;/li&gt;
-<span class="line-num">1943</span>            &lt;li&gt;&lt;strong&gt;Translation witnesses:&lt;/strong&gt; Parallel display of the 1499 Italian,
-<span class="line-num">1944</span>            Godwin&#x27;s 1999 English translation, and the 1546 French adaptation.&lt;/li&gt;
-<span class="line-num">1945</span>            &lt;li&gt;&lt;strong&gt;Folio-level commentary:&lt;/strong&gt; Annotation layers showing marginalia
-<span class="line-num">1946</span>            transcriptions, hand attributions, and interpretive notes.&lt;/li&gt;
-<span class="line-num">1947</span>            &lt;li&gt;&lt;strong&gt;Marginalia overlays:&lt;/strong&gt; Visual overlays highlighting annotated
-<span class="line-num">1948</span>            passages on manuscript images, linked to the commentary apparatus.&lt;/li&gt;
-<span class="line-num">1949</span>            &lt;li&gt;&lt;strong&gt;Dictionary cross-links:&lt;/strong&gt; Inline links from edition text to the
-<span class="line-num">1950</span>            dictionary of HP-specific terminology.&lt;/li&gt;
-<span class="line-num">1951</span>            &lt;li&gt;&lt;strong&gt;Bibliography integration:&lt;/strong&gt; Citation links from commentary to the
-<span class="line-num">1952</span>            bibliography, enabling readers to trace scholarly arguments to their sources.&lt;/li&gt;
-<span class="line-num">1953</span>            &lt;li&gt;&lt;strong&gt;Copy comparison:&lt;/strong&gt; Side-by-side viewing of the same folio across
-<span class="line-num">1954</span>            different annotated copies, showing how different readers engaged with the same
-<span class="line-num">1955</span>            passages.&lt;/li&gt;
-<span class="line-num">1956</span>        &lt;/ul&gt;
-<span class="line-num">1957</span>
-<span class="line-num">1958</span>        &lt;h2 id=&quot;current-state&quot;&gt;What Is Already Built&lt;/h2&gt;
-<span class="line-num">1959</span>        &lt;div class=&quot;status-grid&quot;&gt;
-<span class="line-num">1960</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1961</span>            &lt;span&gt;Signature map ({sig_count} entries, deterministic from 1499 collation)&lt;/span&gt;
-<span class="line-num">1962</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1963</span>            &lt;span&gt;Image catalog ({img_count} photographs from 2 manuscripts)&lt;/span&gt;
-<span class="line-num">1964</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1965</span>            &lt;span&gt;Dissertation reference extraction ({match_count} matches)&lt;/span&gt;
-<span class="line-num">1966</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1967</span>            &lt;span&gt;Hand attribution ({hand_count} annotator hands identified)&lt;/span&gt;
-<span class="line-num">1968</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1969</span>            &lt;span&gt;Dictionary ({dict_count} terms with corpus evidence)&lt;/span&gt;
-<span class="line-num">1970</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1971</span>            &lt;span&gt;Bibliography ({bib_count} works) and scholar profiles ({scholar_count})&lt;/span&gt;
-<span class="line-num">1972</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1973</span>            &lt;span&gt;Marginalia gallery with confidence scoring&lt;/span&gt;
-<span class="line-num">1974</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
-<span class="line-num">1975</span>            &lt;span&gt;Corpus search infrastructure (PDF-to-markdown, chunking, search)&lt;/span&gt;
-<span class="line-num">1976</span>        &lt;/div&gt;
-<span class="line-num">1977</span>
-<span class="line-num">1978</span>        &lt;h2 id=&quot;provisional&quot;&gt;What Remains Provisional&lt;/h2&gt;
-<span class="line-num">1979</span>        &lt;ul&gt;
-<span class="line-num">1980</span>            &lt;li&gt;All BL C.60.o.12 image-to-folio matches are LOW confidence (sequential photo numbers
-<span class="line-num">1981</span>            assumed to equal folio numbers; unverified)&lt;/li&gt;
-<span class="line-num">1982</span>            &lt;li&gt;Scholar summaries and dictionary definitions were generated with LLM assistance and
-<span class="line-num">1983</span>            are marked DRAFT; they have not been verified by domain experts&lt;/li&gt;
-<span class="line-num">1984</span>            &lt;li&gt;Hand attributions beyond Russell&#x27;s thesis data are inferred, not verified&lt;/li&gt;
-<span class="line-num">1985</span>            &lt;li&gt;No transcription of the HP text itself exists in this project yet&lt;/li&gt;
-<span class="line-num">1986</span>            &lt;li&gt;No translation texts are integrated&lt;/li&gt;
-<span class="line-num">1987</span>        &lt;/ul&gt;
-<span class="line-num">1988</span>
-<span class="line-num">1989</span>        &lt;h2 id=&quot;roadmap&quot;&gt;Phased Roadmap&lt;/h2&gt;
-<span class="line-num">1990</span>
-<span class="line-num">1991</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">1992</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-partial&quot;&gt;[partial]&lt;/span&gt; Phase 1: Data Foundation&lt;/h4&gt;
-<span class="line-num">1993</span>            &lt;p&gt;Build the concordance pipeline, image catalog, signature map, and reference extraction.
-<span class="line-num">1994</span>            &lt;strong&gt;Status:&lt;/strong&gt; Complete for Siena; BL matches provisional.&lt;/p&gt;
-<span class="line-num">1995</span>        &lt;/div&gt;
-<span class="line-num">1996</span>
-<span class="line-num">1997</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">1998</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-partial&quot;&gt;[partial]&lt;/span&gt; Phase 2: Scholarly Apparatus&lt;/h4&gt;
-<span class="line-num">1999</span>            &lt;p&gt;Dictionary, bibliography, scholar profiles, hand attribution, corpus search.
-<span class="line-num">2000</span>            &lt;strong&gt;Status:&lt;/strong&gt; Substantially built; entries at DRAFT status pending expert review.&lt;/p&gt;
-<span class="line-num">2001</span>        &lt;/div&gt;
-<span class="line-num">2002</span>
-<span class="line-num">2003</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2004</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 3: Image Hosting&lt;/h4&gt;
-<span class="line-num">2005</span>            &lt;p&gt;Host manuscript photographs at sufficient resolution for scholarly use. Requires:
-<span class="line-num">2006</span>            institutional permission for BL images; storage solution for 674+ high-resolution photographs;
-<span class="line-num">2007</span>            IIIF-compatible image serving if feasible.&lt;/p&gt;
-<span class="line-num">2008</span>        &lt;/div&gt;
-<span class="line-num">2009</span>
-<span class="line-num">2010</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2011</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 4: Transcription&lt;/h4&gt;
-<span class="line-num">2012</span>            &lt;p&gt;Create or integrate a diplomatic transcription of the 1499 text. Could begin with
-<span class="line-num">2013</span>            OCR of the Da Capo edition, validated against facsimile images. Requires: careful
-<span class="line-num">2014</span>            handling of the HP&#x27;s unusual orthography and embedded hieroglyphs.&lt;/p&gt;
-<span class="line-num">2015</span>        &lt;/div&gt;
-<span class="line-num">2016</span>
-<span class="line-num">2017</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2018</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 5: Translation Integration&lt;/h4&gt;
-<span class="line-num">2019</span>            &lt;p&gt;Align existing English translation (Godwin 1999) and French adaptation (1546) at
-<span class="line-num">2020</span>            the folio level. Requires: copyright clearance or use of public-domain translations.&lt;/p&gt;
-<span class="line-num">2021</span>        &lt;/div&gt;
-<span class="line-num">2022</span>
-<span class="line-num">2023</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2024</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-blocked&quot;&gt;[blocked]&lt;/span&gt; Phase 6: Multimodal Validation&lt;/h4&gt;
-<span class="line-num">2025</span>            &lt;p&gt;Use computer vision to verify BL photograph-to-folio mappings by reading visible
-<span class="line-num">2026</span>            signature marks in images. Requires: high-resolution images and vision model access.
-<span class="line-num">2027</span>            See the &lt;a href=&quot;docs/multimodal-rag-study.html&quot;&gt;Multimodal RAG Study&lt;/a&gt; for analysis.&lt;/p&gt;
-<span class="line-num">2028</span>        &lt;/div&gt;
-<span class="line-num">2029</span>
-<span class="line-num">2030</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2031</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 7: Commentary &amp;amp; Overlays&lt;/h4&gt;
-<span class="line-num">2032</span>            &lt;p&gt;Build folio-level commentary with marginalia overlays, cross-linked to dictionary
-<span class="line-num">2033</span>            and bibliography. Requires: verified image matches, transcribed annotations, and
-<span class="line-num">2034</span>            editorial review infrastructure.&lt;/p&gt;
-<span class="line-num">2035</span>        &lt;/div&gt;
-<span class="line-num">2036</span>
-<span class="line-num">2037</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
-<span class="line-num">2038</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 8: Copy Comparison&lt;/h4&gt;
-<span class="line-num">2039</span>            &lt;p&gt;Enable side-by-side comparison of the same folio across different annotated copies.
-<span class="line-num">2040</span>            Requires: all preceding phases substantially complete, plus a viewer capable of
-<span class="line-num">2041</span>            synchronized scrolling across manuscript images.&lt;/p&gt;
-<span class="line-num">2042</span>        &lt;/div&gt;
-<span class="line-num">2043</span>
-<span class="line-num">2044</span>        &lt;h2 id=&quot;limitations&quot;&gt;Current Limitations&lt;/h2&gt;
-<span class="line-num">2045</span>        &lt;ul&gt;
-<span class="line-num">2046</span>            &lt;li&gt;This project has no independent transcription of the HP text&lt;/li&gt;
-<span class="line-num">2047</span>            &lt;li&gt;Manuscript images are stored locally and not hosted for web viewing at scale&lt;/li&gt;
-<span class="line-num">2048</span>            &lt;li&gt;The editorial review process is informal and has no structured workflow&lt;/li&gt;
-<span class="line-num">2049</span>            &lt;li&gt;The 1545/1499 edition difference for the BL copy is unresolved&lt;/li&gt;
-<span class="line-num">2050</span>            &lt;li&gt;No institutional collaboration or peer review is currently in place&lt;/li&gt;
-<span class="line-num">2051</span>        &lt;/ul&gt;
-<span class="line-num">2052</span>
-<span class="line-num">2053</span>        &lt;div class=&quot;evidence-note&quot;&gt;This prospectus was generated from the project&#x27;s SQLite database
-<span class="line-num">2054</span>        and reflects the current state of the data as of the most recent build. It will be updated
-<span class="line-num">2055</span>        as the project progresses.&lt;/div&gt;
-<span class="line-num">2056</span>    &lt;/div&gt;&quot;&quot;&quot;
-<span class="line-num">2057</span>
-<span class="line-num">2058</span>    page = page_shell(&#x27;Digital Edition&#x27;, body, active_nav=&#x27;edition&#x27;, extra_css=edition_css)
-<span class="line-num">2059</span>    (SITE_DIR / &#x27;digital-edition.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">2060</span>    print(&quot;  digital-edition.html&quot;)
-<span class="line-num">2061</span>
-<span class="line-num">2062</span>
-<span class="line-num">2063</span># ============================================================
-<span class="line-num">2064</span># Update main index.html with nav
-<span class="line-num">2065</span># ============================================================
-<span class="line-num">2066</span>
-<span class="line-num">2067</span>def update_index_nav():
-<span class="line-num">2068</span>    &quot;&quot;&quot;Replace nav bar in index.html with current version, fix CSS links.&quot;&quot;&quot;
-<span class="line-num">2069</span>    index_path = SITE_DIR / &#x27;index.html&#x27;
-<span class="line-num">2070</span>    if not index_path.exists():
-<span class="line-num">2071</span>        return
+<span class="line-num">1685</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1686</span>        SELECT m.shelfmark, COUNT(DISTINCT i.id) FROM images i
+<span class="line-num">1687</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">1688</span>        GROUP BY m.shelfmark
+<span class="line-num">1689</span>    &quot;&quot;&quot;)
+<span class="line-num">1690</span>    img_by_ms = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">1691</span>
+<span class="line-num">1692</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">1693</span>        SELECT manuscript_shelfmark, COUNT(*) FROM dissertation_refs
+<span class="line-num">1694</span>        WHERE manuscript_shelfmark IS NOT NULL
+<span class="line-num">1695</span>        GROUP BY manuscript_shelfmark ORDER BY COUNT(*) DESC
+<span class="line-num">1696</span>    &quot;&quot;&quot;)
+<span class="line-num">1697</span>    ref_by_ms = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">1698</span>
+<span class="line-num">1699</span>    essay_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1700</span>        .essay-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1701</span>        .essay-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+<span class="line-num">1702</span>        .essay-page h3 { margin: 1.5rem 0 0.5rem; }
+<span class="line-num">1703</span>        .essay-page p { line-height: 1.8; margin-bottom: 1rem; }
+<span class="line-num">1704</span>        .essay-page .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
+<span class="line-num">1705</span>        .essay-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1706</span>        .essay-page table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+<span class="line-num">1707</span>        .essay-page th, .essay-page td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+<span class="line-num">1708</span>        .essay-page th { background: var(--bg); font-weight: 600; }
+<span class="line-num">1709</span>        .essay-page .process-flow {{ display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; }}
+<span class="line-num">1710</span>        .essay-page .process-step {{ flex: 1; min-width: 200px; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }}
+<span class="line-num">1711</span>        .essay-page .process-step .step-num {{ display: inline-block; width: 1.5rem; height: 1.5rem; background: var(--accent); color: white; border-radius: 50%; text-align: center; line-height: 1.5rem; font-size: 0.8rem; margin-right: 0.3rem; }}
+<span class="line-num">1712</span>        .essay-page .process-step h4 {{ margin: 0 0 0.5rem 0; font-size: 0.9rem; }}
+<span class="line-num">1713</span>        .essay-page .process-step p {{ font-size: 0.85rem; margin: 0; line-height: 1.5; }}
+<span class="line-num">1714</span>        .essay-page .section-anchor { color: var(--text-muted); text-decoration: none; font-size: 0.8em; margin-left: 0.3rem; }
+<span class="line-num">1715</span>        .essay-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+<span class="line-num">1716</span>        .essay-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+<span class="line-num">1717</span>        .essay-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+<span class="line-num">1718</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1719</span>
+<span class="line-num">1720</span>    body = f&quot;&quot;&quot;
+<span class="line-num">1721</span>    &lt;div class=&quot;essay-page&quot;&gt;
+<span class="line-num">1722</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1723</span>
+<span class="line-num">1724</span>        &lt;h1&gt;Concordance Methodology&lt;/h1&gt;
+<span class="line-num">1725</span>        &lt;p class=&quot;evidence-note&quot;&gt;This page documents the actual methods used to build the concordance
+<span class="line-num">1726</span>        between Russell&#x27;s dissertation references and the manuscript photograph collections. All
+<span class="line-num">1727</span>        statistics are drawn from the project database. Uncertainty and provisional status are
+<span class="line-num">1728</span>        marked explicitly throughout.&lt;/p&gt;
+<span class="line-num">1729</span>
+<span class="line-num">1730</span>        &lt;h2 id=&quot;problem&quot;&gt;The Problem Russell Presents
+<span class="line-num">1731</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#problem&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1732</span>        &lt;p&gt;Russell&#x27;s thesis references folios by signature (e.g., &quot;b6v&quot;, &quot;h1r&quot;) rather than by
+<span class="line-num">1733</span>        page number, since the 1499 edition has no printed pagination. Our manuscript photograph
+<span class="line-num">1734</span>        collections, however, use different naming conventions: the Siena images use folio numbers
+<span class="line-num">1735</span>        with recto/verso suffixes (e.g., O.III.38_0014r.jpg), while the BL images use sequential
+<span class="line-num">1736</span>        numbers (C_60_o_12-001.jpg through C_60_o_12-196.jpg). The core challenge is mapping
+<span class="line-num">1737</span>        Russell&#x27;s {ref_count} signature-based references to the {img_count} available photographs.&lt;/p&gt;
+<span class="line-num">1738</span>
+<span class="line-num">1739</span>        &lt;h2 id=&quot;image-sets&quot;&gt;BL vs. Siena Image Sets
+<span class="line-num">1740</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#image-sets&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1741</span>        &lt;table&gt;
+<span class="line-num">1742</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Property&lt;/th&gt;&lt;th&gt;Siena O.III.38&lt;/th&gt;&lt;th&gt;BL C.60.o.12&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1743</span>            &lt;tbody&gt;
+<span class="line-num">1744</span>                &lt;tr&gt;&lt;td&gt;Images&lt;/td&gt;&lt;td&gt;{img_by_ms.get(&#x27;O.III.38&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{img_by_ms.get(&#x27;C.60.o.12&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1745</span>                &lt;tr&gt;&lt;td&gt;Naming&lt;/td&gt;&lt;td&gt;Folio number + r/v suffix&lt;/td&gt;&lt;td&gt;Sequential number only&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1746</span>                &lt;tr&gt;&lt;td&gt;Edition&lt;/td&gt;&lt;td&gt;1499 Aldine&lt;/td&gt;&lt;td&gt;1545 Aldine (second edition)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1747</span>                &lt;tr&gt;&lt;td&gt;Folio mapping&lt;/td&gt;&lt;td&gt;Directly encoded in filename&lt;/td&gt;&lt;td&gt;Requires inference&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1748</span>                &lt;tr&gt;&lt;td&gt;Matching confidence&lt;/td&gt;&lt;td&gt;HIGH / MEDIUM&lt;/td&gt;&lt;td&gt;LOW (all provisional)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1749</span>            &lt;/tbody&gt;
+<span class="line-num">1750</span>        &lt;/table&gt;
+<span class="line-num">1751</span>        &lt;div class=&quot;provisional&quot;&gt;The BL copy is the 1545 edition, not the 1499. The signature map
+<span class="line-num">1752</span>        is based on the 1499 collation formula. While the 1545 edition largely follows the same
+<span class="line-num">1753</span>        structure, any pagination differences between editions would make sequential-number-to-folio
+<span class="line-num">1754</span>        inference unreliable. All BL matches must be treated as provisional.&lt;/div&gt;
+<span class="line-num">1755</span>
+<span class="line-num">1756</span>        &lt;h2 id=&quot;signature-map&quot;&gt;How the Signature Map Works
+<span class="line-num">1757</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#signature-map&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1758</span>        &lt;p&gt;The signature map is a deterministic lookup table of {sig_count} entries generated from
+<span class="line-num">1759</span>        the 1499 collation formula: a&amp;ndash;z&lt;sup&gt;8&lt;/sup&gt; (omitting j, u, w), A&amp;ndash;F&lt;sup&gt;8&lt;/sup&gt;,
+<span class="line-num">1760</span>        G&lt;sup&gt;4&lt;/sup&gt;. Each quire has 8 leaves (except G with 4), and each leaf has recto and verso
+<span class="line-num">1761</span>        sides. The map converts any valid signature (e.g., &quot;b6v&quot;) to a sequential folio number
+<span class="line-num">1762</span>        and vice versa.&lt;/p&gt;
+<span class="line-num">1763</span>        &lt;p&gt;This map is generated by &lt;code&gt;build_signature_map.py&lt;/code&gt; and is fully deterministic.
+<span class="line-num">1764</span>        It is correct for the 1499 edition. Its applicability to the 1545 edition is assumed but
+<span class="line-num">1765</span>        not verified.&lt;/p&gt;
+<span class="line-num">1766</span>
+<span class="line-num">1767</span>        &lt;h2 id=&quot;ref-extraction&quot;&gt;How Dissertation References Were Extracted
+<span class="line-num">1768</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#ref-extraction&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1769</span>        &lt;p&gt;Russell&#x27;s thesis PDF was processed by &lt;code&gt;extract_references.py&lt;/code&gt; using PyMuPDF
+<span class="line-num">1770</span>        for text extraction and regular expressions for signature pattern matching. The script
+<span class="line-num">1771</span>        extracted {ref_count} references, distributed across manuscripts:&lt;/p&gt;
+<span class="line-num">1772</span>        &lt;table&gt;
+<span class="line-num">1773</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Manuscript&lt;/th&gt;&lt;th&gt;References&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1774</span>            &lt;tbody&gt;{&#x27;&#x27;.join(f&quot;&lt;tr&gt;&lt;td&gt;{escape(k)}&lt;/td&gt;&lt;td&gt;{v}&lt;/td&gt;&lt;/tr&gt;&quot; for k, v in sorted(ref_by_ms.items(), key=lambda x: -x[1]))}&lt;/tbody&gt;
+<span class="line-num">1775</span>        &lt;/table&gt;
+<span class="line-num">1776</span>
+<span class="line-num">1777</span>        &lt;h2 id=&quot;image-parsing&quot;&gt;How Image Filenames Were Parsed
+<span class="line-num">1778</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#image-parsing&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1779</span>        &lt;p&gt;&lt;code&gt;catalog_images.py&lt;/code&gt; parses image filenames from two manuscript collections into
+<span class="line-num">1780</span>        structured records with folio number, side (recto/verso), and page type. The Siena images
+<span class="line-num">1781</span>        encode folio information directly (O.III.38_0014r.jpg = folio 14 recto). The BL images
+<span class="line-num">1782</span>        use sequential numbers that do not directly encode folio information.&lt;/p&gt;
+<span class="line-num">1783</span>
+<span class="line-num">1784</span>        &lt;h2 id=&quot;matching&quot;&gt;How Matching Was Performed
+<span class="line-num">1785</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#matching&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1786</span>        &lt;div class=&quot;process-flow&quot;&gt;
+<span class="line-num">1787</span>            &lt;div class=&quot;process-step&quot;&gt;
+<span class="line-num">1788</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;1&lt;/span&gt; Signature Lookup&lt;/h4&gt;
+<span class="line-num">1789</span>                &lt;p&gt;Convert each dissertation reference&#x27;s signature (e.g., &quot;b6v&quot;) to a folio number
+<span class="line-num">1790</span>                using the signature map.&lt;/p&gt;
+<span class="line-num">1791</span>            &lt;/div&gt;
+<span class="line-num">1792</span>            &lt;div class=&quot;process-step&quot;&gt;
+<span class="line-num">1793</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;2&lt;/span&gt; Manuscript Filter&lt;/h4&gt;
+<span class="line-num">1794</span>                &lt;p&gt;Filter images to the manuscript shelfmark specified in the dissertation reference.&lt;/p&gt;
+<span class="line-num">1795</span>            &lt;/div&gt;
+<span class="line-num">1796</span>            &lt;div class=&quot;process-step&quot;&gt;
+<span class="line-num">1797</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;3&lt;/span&gt; Folio Match&lt;/h4&gt;
+<span class="line-num">1798</span>                &lt;p&gt;Match the computed folio number to images with the same folio number and side.&lt;/p&gt;
+<span class="line-num">1799</span>            &lt;/div&gt;
+<span class="line-num">1800</span>            &lt;div class=&quot;process-step&quot;&gt;
+<span class="line-num">1801</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;4&lt;/span&gt; Fallback Cross-Match&lt;/h4&gt;
+<span class="line-num">1802</span>                &lt;p&gt;If no direct match, attempt cross-manuscript matching (lower confidence).&lt;/p&gt;
+<span class="line-num">1803</span>            &lt;/div&gt;
+<span class="line-num">1804</span>            &lt;div class=&quot;process-step&quot;&gt;
+<span class="line-num">1805</span>                &lt;h4&gt;&lt;span class=&quot;step-num&quot;&gt;5&lt;/span&gt; Confidence Assignment&lt;/h4&gt;
+<span class="line-num">1806</span>                &lt;p&gt;Assign HIGH (exact Siena match), MEDIUM (folio-based), or LOW (BL sequential inference).&lt;/p&gt;
+<span class="line-num">1807</span>            &lt;/div&gt;
+<span class="line-num">1808</span>        &lt;/div&gt;
+<span class="line-num">1809</span>
+<span class="line-num">1810</span>        &lt;h2 id=&quot;confidence&quot;&gt;Where Confidence Is High vs. Low
+<span class="line-num">1811</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#confidence&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1812</span>        &lt;table&gt;
+<span class="line-num">1813</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Confidence&lt;/th&gt;&lt;th&gt;Matches&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1814</span>            &lt;tbody&gt;
+<span class="line-num">1815</span>                &lt;tr&gt;&lt;td&gt;HIGH&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;Siena images with explicit folio+side in filename, matched by signature lookup&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1816</span>                &lt;tr&gt;&lt;td&gt;MEDIUM&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;Siena images matched by folio number (cross-manuscript or side ambiguous)&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1817</span>                &lt;tr&gt;&lt;td&gt;LOW&lt;/td&gt;&lt;td&gt;{conf_dist.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;td&gt;BL images where sequential photo number is assumed to equal folio number&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1818</span>            &lt;/tbody&gt;
+<span class="line-num">1819</span>        &lt;/table&gt;
+<span class="line-num">1820</span>
+<span class="line-num">1821</span>        &lt;h3&gt;By Manuscript&lt;/h3&gt;
+<span class="line-num">1822</span>        &lt;table&gt;
+<span class="line-num">1823</span>            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Manuscript&lt;/th&gt;&lt;th&gt;HIGH&lt;/th&gt;&lt;th&gt;MEDIUM&lt;/th&gt;&lt;th&gt;LOW&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1824</span>            &lt;tbody&gt;
+<span class="line-num">1825</span>                &lt;tr&gt;&lt;td&gt;Siena O.III.38&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{siena_data.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1826</span>                &lt;tr&gt;&lt;td&gt;BL C.60.o.12&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;HIGH&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;MEDIUM&#x27;, 0)}&lt;/td&gt;&lt;td&gt;{bl_data.get(&#x27;LOW&#x27;, 0)}&lt;/td&gt;&lt;/tr&gt;
+<span class="line-num">1827</span>            &lt;/tbody&gt;
+<span class="line-num">1828</span>        &lt;/table&gt;
+<span class="line-num">1829</span>
+<span class="line-num">1830</span>        &lt;h2 id=&quot;bl-provisional&quot;&gt;Why BL Matches Are Provisional
+<span class="line-num">1831</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#bl-provisional&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1832</span>        &lt;div class=&quot;provisional&quot;&gt;&lt;strong&gt;Critical caveat:&lt;/strong&gt; All {sum(bl_data.values())} BL matches
+<span class="line-num">1833</span>        are classified as LOW confidence. The BL photographs are sequentially numbered (001&amp;ndash;196)
+<span class="line-num">1834</span>        without folio labels. Our matching pipeline assumes that photo N corresponds to folio N, but
+<span class="line-num">1835</span>        this assumption is unverified. The BL copy is the 1545 edition, not the 1499 edition from which
+<span class="line-num">1836</span>        the signature map was built. Any differences in pagination, inserted leaves, or missing leaves
+<span class="line-num">1837</span>        between editions would invalidate this mapping. These matches require manual verification
+<span class="line-num">1838</span>        against the physical photographs.&lt;/div&gt;
+<span class="line-num">1839</span>
+<span class="line-num">1840</span>        &lt;h2 id=&quot;human-review&quot;&gt;What Human Review Is Still Needed
+<span class="line-num">1841</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#human-review&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1842</span>        &lt;ul&gt;
+<span class="line-num">1843</span>            &lt;li&gt;Verify BL photograph-to-folio correspondence against physical or high-resolution images&lt;/li&gt;
+<span class="line-num">1844</span>            &lt;li&gt;Confirm that the 1545 edition follows the same collation as the 1499&lt;/li&gt;
+<span class="line-num">1845</span>            &lt;li&gt;Spot-check MEDIUM confidence Siena matches for side (recto/verso) accuracy&lt;/li&gt;
+<span class="line-num">1846</span>            &lt;li&gt;Review hand attribution for edge cases where multiple hands annotate the same folio&lt;/li&gt;
+<span class="line-num">1847</span>            &lt;li&gt;Validate marginal text transcriptions against original manuscript images&lt;/li&gt;
+<span class="line-num">1848</span>        &lt;/ul&gt;
+<span class="line-num">1849</span>
+<span class="line-num">1850</span>        &lt;h2 id=&quot;future&quot;&gt;How This Methodology Supports Future Scholarship
+<span class="line-num">1851</span>            &lt;a class=&quot;section-anchor&quot; href=&quot;#future&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+<span class="line-num">1852</span>        &lt;p&gt;The concordance pipeline produces a structured, queryable dataset linking Russell&#x27;s
+<span class="line-num">1853</span>        close reading to digital images. Once the BL matches are verified, this enables:&lt;/p&gt;
+<span class="line-num">1854</span>        &lt;ul&gt;
+<span class="line-num">1855</span>            &lt;li&gt;Folio-level browsing of annotations alongside manuscript images&lt;/li&gt;
+<span class="line-num">1856</span>            &lt;li&gt;Systematic comparison of annotation density across copies&lt;/li&gt;
+<span class="line-num">1857</span>            &lt;li&gt;Identification of folios that attracted multiple annotators&lt;/li&gt;
+<span class="line-num">1858</span>            &lt;li&gt;Cross-referencing between annotations and the dictionary of terms&lt;/li&gt;
+<span class="line-num">1859</span>            &lt;li&gt;Future multimodal analysis using computer vision on manuscript images&lt;/li&gt;
+<span class="line-num">1860</span>        &lt;/ul&gt;
+<span class="line-num">1861</span>
+<span class="line-num">1862</span>        &lt;div class=&quot;cross-links&quot;&gt;
+<span class="line-num">1863</span>            &lt;h4&gt;Related Pages&lt;/h4&gt;
+<span class="line-num">1864</span>            &lt;a href=&quot;dictionary/signature.html&quot;&gt;Signature&lt;/a&gt;
+<span class="line-num">1865</span>            &lt;a href=&quot;dictionary/folio.html&quot;&gt;Folio&lt;/a&gt;
+<span class="line-num">1866</span>            &lt;a href=&quot;dictionary/collation.html&quot;&gt;Collation&lt;/a&gt;
+<span class="line-num">1867</span>            &lt;a href=&quot;dictionary/annotator-hand.html&quot;&gt;Annotator Hand&lt;/a&gt;
+<span class="line-num">1868</span>            &lt;a href=&quot;dictionary/marginalia.html&quot;&gt;Marginalia&lt;/a&gt;
+<span class="line-num">1869</span>            &lt;a href=&quot;russell-alchemical-hands.html&quot;&gt;Alchemical Hands Essay&lt;/a&gt;
+<span class="line-num">1870</span>            &lt;a href=&quot;docs/concordance-methodology.html&quot;&gt;Concordance Methodology (Doc)&lt;/a&gt;
+<span class="line-num">1871</span>            &lt;a href=&quot;code/match-refs-to-images.html&quot;&gt;match_refs_to_images.py&lt;/a&gt;
+<span class="line-num">1872</span>            &lt;a href=&quot;code/build-signature-map.html&quot;&gt;build_signature_map.py&lt;/a&gt;
+<span class="line-num">1873</span>        &lt;/div&gt;
+<span class="line-num">1874</span>    &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1875</span>
+<span class="line-num">1876</span>    page = page_shell(&#x27;Concordance Methodology&#x27;, body, active_nav=&#x27;concordance&#x27;,
+<span class="line-num">1877</span>                       extra_css=essay_css)
+<span class="line-num">1878</span>    (SITE_DIR / &#x27;concordance-method.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1879</span>    print(&quot;  concordance-method.html&quot;)
+<span class="line-num">1880</span>
+<span class="line-num">1881</span>
+<span class="line-num">1882</span># ============================================================
+<span class="line-num">1883</span># Digital Edition stub page
+<span class="line-num">1884</span># ============================================================
+<span class="line-num">1885</span>
+<span class="line-num">1886</span>def build_digital_edition_page(conn):
+<span class="line-num">1887</span>    &quot;&quot;&quot;Generate digital-edition.html as an honest editorial prospectus.&quot;&quot;&quot;
+<span class="line-num">1888</span>    cur = conn.cursor()
+<span class="line-num">1889</span>
+<span class="line-num">1890</span>    # Gather current state stats
+<span class="line-num">1891</span>    cur.execute(&quot;SELECT COUNT(*) FROM dictionary_terms&quot;)
+<span class="line-num">1892</span>    dict_count = cur.fetchone()[0]
+<span class="line-num">1893</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography&quot;)
+<span class="line-num">1894</span>    bib_count = cur.fetchone()[0]
+<span class="line-num">1895</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholars&quot;)
+<span class="line-num">1896</span>    scholar_count = cur.fetchone()[0]
+<span class="line-num">1897</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches&quot;)
+<span class="line-num">1898</span>    match_count = cur.fetchone()[0]
+<span class="line-num">1899</span>    cur.execute(&quot;SELECT COUNT(*) FROM images&quot;)
+<span class="line-num">1900</span>    img_count = cur.fetchone()[0]
+<span class="line-num">1901</span>    cur.execute(&quot;SELECT COUNT(*) FROM signature_map&quot;)
+<span class="line-num">1902</span>    sig_count = cur.fetchone()[0]
+<span class="line-num">1903</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotator_hands&quot;)
+<span class="line-num">1904</span>    hand_count = cur.fetchone()[0]
+<span class="line-num">1905</span>
+<span class="line-num">1906</span>    edition_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1907</span>        .edition-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1908</span>        .edition-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+<span class="line-num">1909</span>        .edition-page h3 { margin: 1.5rem 0 0.5rem; }
+<span class="line-num">1910</span>        .edition-page p { line-height: 1.8; margin-bottom: 1rem; }
+<span class="line-num">1911</span>        .edition-page .status-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0; font-size: 0.9rem; }
+<span class="line-num">1912</span>        .edition-page .status-icon { font-weight: bold; }
+<span class="line-num">1913</span>        .edition-page .status-done { color: #155724; }
+<span class="line-num">1914</span>        .edition-page .status-partial { color: #856404; }
+<span class="line-num">1915</span>        .edition-page .status-planned { color: var(--text-muted); }
+<span class="line-num">1916</span>        .edition-page .status-blocked { color: #721c24; }
+<span class="line-num">1917</span>        .edition-page .roadmap-phase { margin: 1rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
+<span class="line-num">1918</span>        .edition-page .roadmap-phase h4 { margin: 0 0 0.5rem 0; }
+<span class="line-num">1919</span>        .edition-page .roadmap-phase p { margin: 0; font-size: 0.9rem; }
+<span class="line-num">1920</span>        .edition-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1921</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1922</span>
+<span class="line-num">1923</span>    body = f&quot;&quot;&quot;
+<span class="line-num">1924</span>    &lt;div class=&quot;edition-page&quot;&gt;
+<span class="line-num">1925</span>        &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Home&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1926</span>
+<span class="line-num">1927</span>        &lt;h1&gt;Digital Edition: Editorial Prospectus&lt;/h1&gt;
+<span class="line-num">1928</span>        &lt;p class=&quot;evidence-note&quot;&gt;This page describes the vision, current state, and roadmap for a
+<span class="line-num">1929</span>        comprehensive digital edition of the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;. It is not a
+<span class="line-num">1930</span>        finished edition. It is a statement of intent, a map of what exists, and an honest
+<span class="line-num">1931</span>        accounting of what remains to be built.&lt;/p&gt;
+<span class="line-num">1932</span>
+<span class="line-num">1933</span>        &lt;h2 id=&quot;vision&quot;&gt;What This Edition Will Include&lt;/h2&gt;
+<span class="line-num">1934</span>        &lt;p&gt;The eventual digital edition aims to provide:&lt;/p&gt;
+<span class="line-num">1935</span>        &lt;ul&gt;
+<span class="line-num">1936</span>            &lt;li&gt;&lt;strong&gt;Facsimile browsing:&lt;/strong&gt; Page-by-page viewing of manuscript photographs
+<span class="line-num">1937</span>            from multiple copies, with folio-level navigation via the signature map.&lt;/li&gt;
+<span class="line-num">1938</span>            &lt;li&gt;&lt;strong&gt;Transcription:&lt;/strong&gt; Diplomatic transcription of the 1499 text, linked
+<span class="line-num">1939</span>            to facsimile images at the folio level.&lt;/li&gt;
+<span class="line-num">1940</span>            &lt;li&gt;&lt;strong&gt;Translation witnesses:&lt;/strong&gt; Parallel display of the 1499 Italian,
+<span class="line-num">1941</span>            Godwin&#x27;s 1999 English translation, and the 1546 French adaptation.&lt;/li&gt;
+<span class="line-num">1942</span>            &lt;li&gt;&lt;strong&gt;Folio-level commentary:&lt;/strong&gt; Annotation layers showing marginalia
+<span class="line-num">1943</span>            transcriptions, hand attributions, and interpretive notes.&lt;/li&gt;
+<span class="line-num">1944</span>            &lt;li&gt;&lt;strong&gt;Marginalia overlays:&lt;/strong&gt; Visual overlays highlighting annotated
+<span class="line-num">1945</span>            passages on manuscript images, linked to the commentary apparatus.&lt;/li&gt;
+<span class="line-num">1946</span>            &lt;li&gt;&lt;strong&gt;Dictionary cross-links:&lt;/strong&gt; Inline links from edition text to the
+<span class="line-num">1947</span>            dictionary of HP-specific terminology.&lt;/li&gt;
+<span class="line-num">1948</span>            &lt;li&gt;&lt;strong&gt;Bibliography integration:&lt;/strong&gt; Citation links from commentary to the
+<span class="line-num">1949</span>            bibliography, enabling readers to trace scholarly arguments to their sources.&lt;/li&gt;
+<span class="line-num">1950</span>            &lt;li&gt;&lt;strong&gt;Copy comparison:&lt;/strong&gt; Side-by-side viewing of the same folio across
+<span class="line-num">1951</span>            different annotated copies, showing how different readers engaged with the same
+<span class="line-num">1952</span>            passages.&lt;/li&gt;
+<span class="line-num">1953</span>        &lt;/ul&gt;
+<span class="line-num">1954</span>
+<span class="line-num">1955</span>        &lt;h2 id=&quot;current-state&quot;&gt;What Is Already Built&lt;/h2&gt;
+<span class="line-num">1956</span>        &lt;div class=&quot;status-grid&quot;&gt;
+<span class="line-num">1957</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1958</span>            &lt;span&gt;Signature map ({sig_count} entries, deterministic from 1499 collation)&lt;/span&gt;
+<span class="line-num">1959</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1960</span>            &lt;span&gt;Image catalog ({img_count} photographs from 2 manuscripts)&lt;/span&gt;
+<span class="line-num">1961</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1962</span>            &lt;span&gt;Dissertation reference extraction ({match_count} matches)&lt;/span&gt;
+<span class="line-num">1963</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1964</span>            &lt;span&gt;Hand attribution ({hand_count} annotator hands identified)&lt;/span&gt;
+<span class="line-num">1965</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1966</span>            &lt;span&gt;Dictionary ({dict_count} terms with corpus evidence)&lt;/span&gt;
+<span class="line-num">1967</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1968</span>            &lt;span&gt;Bibliography ({bib_count} works) and scholar profiles ({scholar_count})&lt;/span&gt;
+<span class="line-num">1969</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1970</span>            &lt;span&gt;Marginalia gallery with confidence scoring&lt;/span&gt;
+<span class="line-num">1971</span>            &lt;span class=&quot;status-icon status-done&quot;&gt;[done]&lt;/span&gt;
+<span class="line-num">1972</span>            &lt;span&gt;Corpus search infrastructure (PDF-to-markdown, chunking, search)&lt;/span&gt;
+<span class="line-num">1973</span>        &lt;/div&gt;
+<span class="line-num">1974</span>
+<span class="line-num">1975</span>        &lt;h2 id=&quot;provisional&quot;&gt;What Remains Provisional&lt;/h2&gt;
+<span class="line-num">1976</span>        &lt;ul&gt;
+<span class="line-num">1977</span>            &lt;li&gt;All BL C.60.o.12 image-to-folio matches are LOW confidence (sequential photo numbers
+<span class="line-num">1978</span>            assumed to equal folio numbers; unverified)&lt;/li&gt;
+<span class="line-num">1979</span>            &lt;li&gt;Scholar summaries and dictionary definitions were generated with LLM assistance and
+<span class="line-num">1980</span>            are marked DRAFT; they have not been verified by domain experts&lt;/li&gt;
+<span class="line-num">1981</span>            &lt;li&gt;Hand attributions beyond Russell&#x27;s thesis data are inferred, not verified&lt;/li&gt;
+<span class="line-num">1982</span>            &lt;li&gt;No transcription of the HP text itself exists in this project yet&lt;/li&gt;
+<span class="line-num">1983</span>            &lt;li&gt;No translation texts are integrated&lt;/li&gt;
+<span class="line-num">1984</span>        &lt;/ul&gt;
+<span class="line-num">1985</span>
+<span class="line-num">1986</span>        &lt;h2 id=&quot;roadmap&quot;&gt;Phased Roadmap&lt;/h2&gt;
+<span class="line-num">1987</span>
+<span class="line-num">1988</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">1989</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-partial&quot;&gt;[partial]&lt;/span&gt; Phase 1: Data Foundation&lt;/h4&gt;
+<span class="line-num">1990</span>            &lt;p&gt;Build the concordance pipeline, image catalog, signature map, and reference extraction.
+<span class="line-num">1991</span>            &lt;strong&gt;Status:&lt;/strong&gt; Complete for Siena; BL matches provisional.&lt;/p&gt;
+<span class="line-num">1992</span>        &lt;/div&gt;
+<span class="line-num">1993</span>
+<span class="line-num">1994</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">1995</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-partial&quot;&gt;[partial]&lt;/span&gt; Phase 2: Scholarly Apparatus&lt;/h4&gt;
+<span class="line-num">1996</span>            &lt;p&gt;Dictionary, bibliography, scholar profiles, hand attribution, corpus search.
+<span class="line-num">1997</span>            &lt;strong&gt;Status:&lt;/strong&gt; Substantially built; entries at DRAFT status pending expert review.&lt;/p&gt;
+<span class="line-num">1998</span>        &lt;/div&gt;
+<span class="line-num">1999</span>
+<span class="line-num">2000</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2001</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 3: Image Hosting&lt;/h4&gt;
+<span class="line-num">2002</span>            &lt;p&gt;Host manuscript photographs at sufficient resolution for scholarly use. Requires:
+<span class="line-num">2003</span>            institutional permission for BL images; storage solution for 674+ high-resolution photographs;
+<span class="line-num">2004</span>            IIIF-compatible image serving if feasible.&lt;/p&gt;
+<span class="line-num">2005</span>        &lt;/div&gt;
+<span class="line-num">2006</span>
+<span class="line-num">2007</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2008</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 4: Transcription&lt;/h4&gt;
+<span class="line-num">2009</span>            &lt;p&gt;Create or integrate a diplomatic transcription of the 1499 text. Could begin with
+<span class="line-num">2010</span>            OCR of the Da Capo edition, validated against facsimile images. Requires: careful
+<span class="line-num">2011</span>            handling of the HP&#x27;s unusual orthography and embedded hieroglyphs.&lt;/p&gt;
+<span class="line-num">2012</span>        &lt;/div&gt;
+<span class="line-num">2013</span>
+<span class="line-num">2014</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2015</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 5: Translation Integration&lt;/h4&gt;
+<span class="line-num">2016</span>            &lt;p&gt;Align existing English translation (Godwin 1999) and French adaptation (1546) at
+<span class="line-num">2017</span>            the folio level. Requires: copyright clearance or use of public-domain translations.&lt;/p&gt;
+<span class="line-num">2018</span>        &lt;/div&gt;
+<span class="line-num">2019</span>
+<span class="line-num">2020</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2021</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-blocked&quot;&gt;[blocked]&lt;/span&gt; Phase 6: Multimodal Validation&lt;/h4&gt;
+<span class="line-num">2022</span>            &lt;p&gt;Use computer vision to verify BL photograph-to-folio mappings by reading visible
+<span class="line-num">2023</span>            signature marks in images. Requires: high-resolution images and vision model access.
+<span class="line-num">2024</span>            See the &lt;a href=&quot;docs/multimodal-rag-study.html&quot;&gt;Multimodal RAG Study&lt;/a&gt; for analysis.&lt;/p&gt;
+<span class="line-num">2025</span>        &lt;/div&gt;
+<span class="line-num">2026</span>
+<span class="line-num">2027</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2028</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 7: Commentary &amp;amp; Overlays&lt;/h4&gt;
+<span class="line-num">2029</span>            &lt;p&gt;Build folio-level commentary with marginalia overlays, cross-linked to dictionary
+<span class="line-num">2030</span>            and bibliography. Requires: verified image matches, transcribed annotations, and
+<span class="line-num">2031</span>            editorial review infrastructure.&lt;/p&gt;
+<span class="line-num">2032</span>        &lt;/div&gt;
+<span class="line-num">2033</span>
+<span class="line-num">2034</span>        &lt;div class=&quot;roadmap-phase&quot;&gt;
+<span class="line-num">2035</span>            &lt;h4&gt;&lt;span class=&quot;status-icon status-planned&quot;&gt;[planned]&lt;/span&gt; Phase 8: Copy Comparison&lt;/h4&gt;
+<span class="line-num">2036</span>            &lt;p&gt;Enable side-by-side comparison of the same folio across different annotated copies.
+<span class="line-num">2037</span>            Requires: all preceding phases substantially complete, plus a viewer capable of
+<span class="line-num">2038</span>            synchronized scrolling across manuscript images.&lt;/p&gt;
+<span class="line-num">2039</span>        &lt;/div&gt;
+<span class="line-num">2040</span>
+<span class="line-num">2041</span>        &lt;h2 id=&quot;limitations&quot;&gt;Current Limitations&lt;/h2&gt;
+<span class="line-num">2042</span>        &lt;ul&gt;
+<span class="line-num">2043</span>            &lt;li&gt;This project has no independent transcription of the HP text&lt;/li&gt;
+<span class="line-num">2044</span>            &lt;li&gt;Manuscript images are stored locally and not hosted for web viewing at scale&lt;/li&gt;
+<span class="line-num">2045</span>            &lt;li&gt;The editorial review process is informal and has no structured workflow&lt;/li&gt;
+<span class="line-num">2046</span>            &lt;li&gt;The 1545/1499 edition difference for the BL copy is unresolved&lt;/li&gt;
+<span class="line-num">2047</span>            &lt;li&gt;No institutional collaboration or peer review is currently in place&lt;/li&gt;
+<span class="line-num">2048</span>        &lt;/ul&gt;
+<span class="line-num">2049</span>
+<span class="line-num">2050</span>        &lt;div class=&quot;evidence-note&quot;&gt;This prospectus was generated from the project&#x27;s SQLite database
+<span class="line-num">2051</span>        and reflects the current state of the data as of the most recent build. It will be updated
+<span class="line-num">2052</span>        as the project progresses.&lt;/div&gt;
+<span class="line-num">2053</span>    &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">2054</span>
+<span class="line-num">2055</span>    page = page_shell(&#x27;Digital Edition&#x27;, body, active_nav=&#x27;edition&#x27;, extra_css=edition_css)
+<span class="line-num">2056</span>    (SITE_DIR / &#x27;digital-edition.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2057</span>    print(&quot;  digital-edition.html&quot;)
+<span class="line-num">2058</span>
+<span class="line-num">2059</span>
+<span class="line-num">2060</span># ============================================================
+<span class="line-num">2061</span># Update main index.html with nav
+<span class="line-num">2062</span># ============================================================
+<span class="line-num">2063</span>
+<span class="line-num">2064</span>def update_index_nav():
+<span class="line-num">2065</span>    &quot;&quot;&quot;Replace nav bar in index.html with current version, fix CSS links.&quot;&quot;&quot;
+<span class="line-num">2066</span>    index_path = SITE_DIR / &#x27;index.html&#x27;
+<span class="line-num">2067</span>    if not index_path.exists():
+<span class="line-num">2068</span>        return
+<span class="line-num">2069</span>
+<span class="line-num">2070</span>    content = index_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2071</span>    updated = False
 <span class="line-num">2072</span>
-<span class="line-num">2073</span>    content = index_path.read_text(encoding=&#x27;utf-8&#x27;)
-<span class="line-num">2074</span>    updated = False
-<span class="line-num">2075</span>
-<span class="line-num">2076</span>    # Replace any existing nav with current 8-link version
-<span class="line-num">2077</span>    import re
-<span class="line-num">2078</span>    nav = nav_html(&#x27;home&#x27;)
-<span class="line-num">2079</span>    old_nav_pattern = r&#x27;&lt;nav class=&quot;site-nav&quot;&gt;.*?&lt;/nav&gt;&#x27;
-<span class="line-num">2080</span>    if re.search(old_nav_pattern, content):
-<span class="line-num">2081</span>        content = re.sub(old_nav_pattern, nav, content)
-<span class="line-num">2082</span>        updated = True
-<span class="line-num">2083</span>    elif &#x27;site-nav&#x27; not in content:
-<span class="line-num">2084</span>        content = content.replace(
-<span class="line-num">2085</span>            &#x27;&lt;/div&gt;\n    &lt;/header&gt;&#x27;,
-<span class="line-num">2086</span>            f&#x27;    {nav}\n        &lt;/div&gt;\n    &lt;/header&gt;&#x27;,
-<span class="line-num">2087</span>            1
-<span class="line-num">2088</span>        )
-<span class="line-num">2089</span>        updated = True
-<span class="line-num">2090</span>
-<span class="line-num">2091</span>    # Fix CSS links: add scholars.css and components.css if missing
-<span class="line-num">2092</span>    if &#x27;scholars.css&#x27; not in content:
-<span class="line-num">2093</span>        content = content.replace(
-<span class="line-num">2094</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;&#x27;,
-<span class="line-num">2095</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;scholars.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;components.css&quot;&gt;&#x27;
-<span class="line-num">2096</span>        )
-<span class="line-num">2097</span>        updated = True
-<span class="line-num">2098</span>
-<span class="line-num">2099</span>    # Add meta description if missing
-<span class="line-num">2100</span>    if &#x27;meta name=&quot;description&quot;&#x27; not in content:
-<span class="line-num">2101</span>        content = content.replace(
-<span class="line-num">2102</span>            &#x27;&lt;meta name=&quot;viewport&quot;&#x27;,
-<span class="line-num">2103</span>            &#x27;&lt;meta name=&quot;description&quot; content=&quot;Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)&quot;&gt;\n    &lt;meta name=&quot;viewport&quot;&#x27;
-<span class="line-num">2104</span>        )
-<span class="line-num">2105</span>        updated = True
-<span class="line-num">2106</span>
-<span class="line-num">2107</span>    if updated:
-<span class="line-num">2108</span>        index_path.write_text(content, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">2109</span>        print(&quot;  index.html: nav + CSS updated&quot;)
-<span class="line-num">2110</span>
-<span class="line-num">2111</span>
-<span class="line-num">2112</span># ============================================================
-<span class="line-num">2113</span># Update CSS for new components
-<span class="line-num">2114</span># ============================================================
-<span class="line-num">2115</span>
-<span class="line-num">2116</span>def update_styles():
-<span class="line-num">2117</span>    &quot;&quot;&quot;Append new styles to style.css for nav, badges, etc.&quot;&quot;&quot;
-<span class="line-num">2118</span>    css_path = SITE_DIR / &#x27;style.css&#x27;
-<span class="line-num">2119</span>    content = css_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2073</span>    # Replace any existing nav with current 8-link version
+<span class="line-num">2074</span>    import re
+<span class="line-num">2075</span>    nav = nav_html(&#x27;home&#x27;)
+<span class="line-num">2076</span>    old_nav_pattern = r&#x27;&lt;nav class=&quot;site-nav&quot;&gt;.*?&lt;/nav&gt;&#x27;
+<span class="line-num">2077</span>    if re.search(old_nav_pattern, content):
+<span class="line-num">2078</span>        content = re.sub(old_nav_pattern, nav, content)
+<span class="line-num">2079</span>        updated = True
+<span class="line-num">2080</span>    elif &#x27;site-nav&#x27; not in content:
+<span class="line-num">2081</span>        content = content.replace(
+<span class="line-num">2082</span>            &#x27;&lt;/div&gt;\n    &lt;/header&gt;&#x27;,
+<span class="line-num">2083</span>            f&#x27;    {nav}\n        &lt;/div&gt;\n    &lt;/header&gt;&#x27;,
+<span class="line-num">2084</span>            1
+<span class="line-num">2085</span>        )
+<span class="line-num">2086</span>        updated = True
+<span class="line-num">2087</span>
+<span class="line-num">2088</span>    # Fix CSS links: add scholars.css and components.css if missing
+<span class="line-num">2089</span>    if &#x27;scholars.css&#x27; not in content:
+<span class="line-num">2090</span>        content = content.replace(
+<span class="line-num">2091</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;&#x27;,
+<span class="line-num">2092</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;scholars.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;components.css&quot;&gt;&#x27;
+<span class="line-num">2093</span>        )
+<span class="line-num">2094</span>        updated = True
+<span class="line-num">2095</span>
+<span class="line-num">2096</span>    # Add meta description if missing
+<span class="line-num">2097</span>    if &#x27;meta name=&quot;description&quot;&#x27; not in content:
+<span class="line-num">2098</span>        content = content.replace(
+<span class="line-num">2099</span>            &#x27;&lt;meta name=&quot;viewport&quot;&#x27;,
+<span class="line-num">2100</span>            &#x27;&lt;meta name=&quot;description&quot; content=&quot;Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)&quot;&gt;\n    &lt;meta name=&quot;viewport&quot;&#x27;
+<span class="line-num">2101</span>        )
+<span class="line-num">2102</span>        updated = True
+<span class="line-num">2103</span>
+<span class="line-num">2104</span>    if updated:
+<span class="line-num">2105</span>        index_path.write_text(content, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2106</span>        print(&quot;  index.html: nav + CSS updated&quot;)
+<span class="line-num">2107</span>
+<span class="line-num">2108</span>
+<span class="line-num">2109</span># ============================================================
+<span class="line-num">2110</span># Update CSS for new components
+<span class="line-num">2111</span># ============================================================
+<span class="line-num">2112</span>
+<span class="line-num">2113</span>def update_styles():
+<span class="line-num">2114</span>    &quot;&quot;&quot;Append new styles to style.css for nav, badges, etc.&quot;&quot;&quot;
+<span class="line-num">2115</span>    css_path = SITE_DIR / &#x27;style.css&#x27;
+<span class="line-num">2116</span>    content = css_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2117</span>
+<span class="line-num">2118</span>    if &#x27;site-nav&#x27; in content:
+<span class="line-num">2119</span>        return  # Already updated
 <span class="line-num">2120</span>
-<span class="line-num">2121</span>    if &#x27;site-nav&#x27; in content:
-<span class="line-num">2122</span>        return  # Already updated
-<span class="line-num">2123</span>
-<span class="line-num">2124</span>    additions = &quot;&quot;&quot;
-<span class="line-num">2125</span>
-<span class="line-num">2126</span>/* ===== Site Navigation ===== */
-<span class="line-num">2127</span>.site-nav {
-<span class="line-num">2128</span>    margin-top: 1.5rem;
-<span class="line-num">2129</span>    display: flex;
-<span class="line-num">2130</span>    justify-content: center;
-<span class="line-num">2131</span>    gap: 0.25rem;
-<span class="line-num">2132</span>    flex-wrap: wrap;
-<span class="line-num">2133</span>}
-<span class="line-num">2134</span>
-<span class="line-num">2135</span>.site-nav a {
-<span class="line-num">2136</span>    color: #9a8c7a;
-<span class="line-num">2137</span>    text-decoration: none;
-<span class="line-num">2138</span>    font-family: var(--font-sans);
-<span class="line-num">2139</span>    font-size: 0.9rem;
-<span class="line-num">2140</span>    padding: 0.4rem 1rem;
-<span class="line-num">2141</span>    border-radius: 3px;
-<span class="line-num">2142</span>    transition: all 0.2s;
-<span class="line-num">2143</span>}
-<span class="line-num">2144</span>
-<span class="line-num">2145</span>.site-nav a:hover {
-<span class="line-num">2146</span>    color: var(--accent-light);
-<span class="line-num">2147</span>    background: rgba(255,255,255,0.05);
-<span class="line-num">2148</span>}
-<span class="line-num">2149</span>
-<span class="line-num">2150</span>.site-nav a.active {
-<span class="line-num">2151</span>    color: var(--header-text);
-<span class="line-num">2152</span>    background: rgba(255,255,255,0.1);
-<span class="line-num">2153</span>}
-<span class="line-num">2154</span>
-<span class="line-num">2155</span>/* ===== Review &amp; Confidence Badges ===== */
-<span class="line-num">2156</span>.review-badge {
-<span class="line-num">2157</span>    display: inline-block;
-<span class="line-num">2158</span>    padding: 0.1rem 0.4rem;
-<span class="line-num">2159</span>    background: #fff3cd;
-<span class="line-num">2160</span>    color: #856404;
-<span class="line-num">2161</span>    border-radius: 2px;
-<span class="line-num">2162</span>    font-size: 0.65rem;
-<span class="line-num">2163</span>    font-weight: 600;
-<span class="line-num">2164</span>    font-family: var(--font-sans);
-<span class="line-num">2165</span>    text-transform: uppercase;
-<span class="line-num">2166</span>    letter-spacing: 0.03em;
-<span class="line-num">2167</span>    vertical-align: middle;
-<span class="line-num">2168</span>    margin-left: 0.3rem;
-<span class="line-num">2169</span>}
-<span class="line-num">2170</span>
-<span class="line-num">2171</span>.confidence-badge {
-<span class="line-num">2172</span>    display: inline-block;
-<span class="line-num">2173</span>    padding: 0.1rem 0.4rem;
-<span class="line-num">2174</span>    border-radius: 2px;
-<span class="line-num">2175</span>    font-size: 0.65rem;
-<span class="line-num">2176</span>    font-weight: 600;
-<span class="line-num">2177</span>    font-family: var(--font-sans);
-<span class="line-num">2178</span>    text-transform: uppercase;
-<span class="line-num">2179</span>    letter-spacing: 0.03em;
-<span class="line-num">2180</span>    vertical-align: middle;
-<span class="line-num">2181</span>    margin-left: 0.3rem;
-<span class="line-num">2182</span>}
-<span class="line-num">2183</span>
-<span class="line-num">2184</span>.confidence-high { background: #d4edda; color: #155724; }
-<span class="line-num">2185</span>.confidence-medium { background: #fff3cd; color: #856404; }
-<span class="line-num">2186</span>.confidence-low { background: #f8d7da; color: #721c24; }
-<span class="line-num">2187</span>.confidence-provisional { background: #e2e3e5; color: #383d41; }
-<span class="line-num">2188</span>
-<span class="line-num">2189</span>/* ===== Review Status Badges ===== */
-<span class="line-num">2190</span>.review-status-badge {
-<span class="line-num">2191</span>    display: inline-block;
-<span class="line-num">2192</span>    padding: 0.15rem 0.5rem;
-<span class="line-num">2193</span>    border-radius: 3px;
-<span class="line-num">2194</span>    font-size: 0.65rem;
-<span class="line-num">2195</span>    font-weight: 700;
-<span class="line-num">2196</span>    font-family: var(--font-sans);
-<span class="line-num">2197</span>    text-transform: uppercase;
-<span class="line-num">2198</span>    letter-spacing: 0.04em;
-<span class="line-num">2199</span>    vertical-align: middle;
-<span class="line-num">2200</span>    margin-left: 0.3rem;
-<span class="line-num">2201</span>}
-<span class="line-num">2202</span>.review-badge-draft { background: #fff3cd; color: #856404; }
-<span class="line-num">2203</span>.review-badge-reviewed { background: #cce5ff; color: #004085; }
-<span class="line-num">2204</span>.review-badge-verified { background: #d4edda; color: #155724; }
-<span class="line-num">2205</span>.review-badge-provisional { background: #e2e3e5; color: #383d41; }
-<span class="line-num">2206</span>
-<span class="line-num">2207</span>/* ===== Dictionary enrichment sections ===== */
-<span class="line-num">2208</span>.dict-section { margin-top: 1.5rem; }
-<span class="line-num">2209</span>.dict-section h3 { font-size: 1rem; color: var(--accent); margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
-<span class="line-num">2210</span>.dict-section p { line-height: 1.7; }
-<span class="line-num">2211</span>.evidence-list { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
-<span class="line-num">2212</span>.evidence-list li { margin-bottom: 0.5rem; }
-<span class="line-num">2213</span>.source-docs { font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">2214</span>.source-pages { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
-<span class="line-num">2215</span>.provenance-section { background: var(--bg-card); padding: 1rem; border-radius: 4px; margin-top: 2rem; }
-<span class="line-num">2216</span>.provenance-status { margin-bottom: 0.5rem; }
-<span class="line-num">2217</span>.provenance-list { font-size: 0.85rem; color: var(--text-muted); }
-<span class="line-num">2218</span>.provenance-list li { margin-bottom: 0.3rem; }
-<span class="line-num">2219</span>&quot;&quot;&quot;
+<span class="line-num">2121</span>    additions = &quot;&quot;&quot;
+<span class="line-num">2122</span>
+<span class="line-num">2123</span>/* ===== Site Navigation ===== */
+<span class="line-num">2124</span>.site-nav {
+<span class="line-num">2125</span>    margin-top: 1.5rem;
+<span class="line-num">2126</span>    display: flex;
+<span class="line-num">2127</span>    justify-content: center;
+<span class="line-num">2128</span>    gap: 0.25rem;
+<span class="line-num">2129</span>    flex-wrap: wrap;
+<span class="line-num">2130</span>}
+<span class="line-num">2131</span>
+<span class="line-num">2132</span>.site-nav a {
+<span class="line-num">2133</span>    color: #9a8c7a;
+<span class="line-num">2134</span>    text-decoration: none;
+<span class="line-num">2135</span>    font-family: var(--font-sans);
+<span class="line-num">2136</span>    font-size: 0.9rem;
+<span class="line-num">2137</span>    padding: 0.4rem 1rem;
+<span class="line-num">2138</span>    border-radius: 3px;
+<span class="line-num">2139</span>    transition: all 0.2s;
+<span class="line-num">2140</span>}
+<span class="line-num">2141</span>
+<span class="line-num">2142</span>.site-nav a:hover {
+<span class="line-num">2143</span>    color: var(--accent-light);
+<span class="line-num">2144</span>    background: rgba(255,255,255,0.05);
+<span class="line-num">2145</span>}
+<span class="line-num">2146</span>
+<span class="line-num">2147</span>.site-nav a.active {
+<span class="line-num">2148</span>    color: var(--header-text);
+<span class="line-num">2149</span>    background: rgba(255,255,255,0.1);
+<span class="line-num">2150</span>}
+<span class="line-num">2151</span>
+<span class="line-num">2152</span>/* ===== Review &amp; Confidence Badges ===== */
+<span class="line-num">2153</span>.review-badge {
+<span class="line-num">2154</span>    display: inline-block;
+<span class="line-num">2155</span>    padding: 0.1rem 0.4rem;
+<span class="line-num">2156</span>    background: #fff3cd;
+<span class="line-num">2157</span>    color: #856404;
+<span class="line-num">2158</span>    border-radius: 2px;
+<span class="line-num">2159</span>    font-size: 0.65rem;
+<span class="line-num">2160</span>    font-weight: 600;
+<span class="line-num">2161</span>    font-family: var(--font-sans);
+<span class="line-num">2162</span>    text-transform: uppercase;
+<span class="line-num">2163</span>    letter-spacing: 0.03em;
+<span class="line-num">2164</span>    vertical-align: middle;
+<span class="line-num">2165</span>    margin-left: 0.3rem;
+<span class="line-num">2166</span>}
+<span class="line-num">2167</span>
+<span class="line-num">2168</span>.confidence-badge {
+<span class="line-num">2169</span>    display: inline-block;
+<span class="line-num">2170</span>    padding: 0.1rem 0.4rem;
+<span class="line-num">2171</span>    border-radius: 2px;
+<span class="line-num">2172</span>    font-size: 0.65rem;
+<span class="line-num">2173</span>    font-weight: 600;
+<span class="line-num">2174</span>    font-family: var(--font-sans);
+<span class="line-num">2175</span>    text-transform: uppercase;
+<span class="line-num">2176</span>    letter-spacing: 0.03em;
+<span class="line-num">2177</span>    vertical-align: middle;
+<span class="line-num">2178</span>    margin-left: 0.3rem;
+<span class="line-num">2179</span>}
+<span class="line-num">2180</span>
+<span class="line-num">2181</span>.confidence-high { background: #d4edda; color: #155724; }
+<span class="line-num">2182</span>.confidence-medium { background: #fff3cd; color: #856404; }
+<span class="line-num">2183</span>.confidence-low { background: #f8d7da; color: #721c24; }
+<span class="line-num">2184</span>.confidence-provisional { background: #e2e3e5; color: #383d41; }
+<span class="line-num">2185</span>
+<span class="line-num">2186</span>/* ===== Review Status Badges ===== */
+<span class="line-num">2187</span>.review-status-badge {
+<span class="line-num">2188</span>    display: inline-block;
+<span class="line-num">2189</span>    padding: 0.15rem 0.5rem;
+<span class="line-num">2190</span>    border-radius: 3px;
+<span class="line-num">2191</span>    font-size: 0.65rem;
+<span class="line-num">2192</span>    font-weight: 700;
+<span class="line-num">2193</span>    font-family: var(--font-sans);
+<span class="line-num">2194</span>    text-transform: uppercase;
+<span class="line-num">2195</span>    letter-spacing: 0.04em;
+<span class="line-num">2196</span>    vertical-align: middle;
+<span class="line-num">2197</span>    margin-left: 0.3rem;
+<span class="line-num">2198</span>}
+<span class="line-num">2199</span>.review-badge-draft { background: #fff3cd; color: #856404; }
+<span class="line-num">2200</span>.review-badge-reviewed { background: #cce5ff; color: #004085; }
+<span class="line-num">2201</span>.review-badge-verified { background: #d4edda; color: #155724; }
+<span class="line-num">2202</span>.review-badge-provisional { background: #e2e3e5; color: #383d41; }
+<span class="line-num">2203</span>
+<span class="line-num">2204</span>/* ===== Dictionary enrichment sections ===== */
+<span class="line-num">2205</span>.dict-section { margin-top: 1.5rem; }
+<span class="line-num">2206</span>.dict-section h3 { font-size: 1rem; color: var(--accent); margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
+<span class="line-num">2207</span>.dict-section p { line-height: 1.7; }
+<span class="line-num">2208</span>.evidence-list { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+<span class="line-num">2209</span>.evidence-list li { margin-bottom: 0.5rem; }
+<span class="line-num">2210</span>.source-docs { font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">2211</span>.source-pages { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+<span class="line-num">2212</span>.provenance-section { background: var(--bg-card); padding: 1rem; border-radius: 4px; margin-top: 2rem; }
+<span class="line-num">2213</span>.provenance-status { margin-bottom: 0.5rem; }
+<span class="line-num">2214</span>.provenance-list { font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">2215</span>.provenance-list li { margin-bottom: 0.3rem; }
+<span class="line-num">2216</span>&quot;&quot;&quot;
+<span class="line-num">2217</span>
+<span class="line-num">2218</span>    css_path.write_text(content + additions, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">2219</span>    print(&quot;  style.css: nav + badge styles added&quot;)
 <span class="line-num">2220</span>
-<span class="line-num">2221</span>    css_path.write_text(content + additions, encoding=&#x27;utf-8&#x27;)
-<span class="line-num">2222</span>    print(&quot;  style.css: nav + badge styles added&quot;)
-<span class="line-num">2223</span>
-<span class="line-num">2224</span>
-<span class="line-num">2225</span># ============================================================
-<span class="line-num">2226</span># Main
-<span class="line-num">2227</span># ============================================================
+<span class="line-num">2221</span>
+<span class="line-num">2222</span># ============================================================
+<span class="line-num">2223</span># Main
+<span class="line-num">2224</span># ============================================================
+<span class="line-num">2225</span>
+<span class="line-num">2226</span>def main():
+<span class="line-num">2227</span>    print(&quot;=== Building Site ===\n&quot;)
 <span class="line-num">2228</span>
-<span class="line-num">2229</span>def main():
-<span class="line-num">2230</span>    print(&quot;=== Building Site ===\n&quot;)
-<span class="line-num">2231</span>
-<span class="line-num">2232</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">2229</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">2230</span>
+<span class="line-num">2231</span>    print(&quot;Exporting data...&quot;)
+<span class="line-num">2232</span>    export_data_json(conn)
 <span class="line-num">2233</span>
-<span class="line-num">2234</span>    print(&quot;Exporting data...&quot;)
-<span class="line-num">2235</span>    export_data_json(conn)
-<span class="line-num">2236</span>
-<span class="line-num">2237</span>    print(&quot;\nBuilding pages...&quot;)
-<span class="line-num">2238</span>    update_styles()
-<span class="line-num">2239</span>    update_index_nav()
-<span class="line-num">2240</span>    build_scholars_pages(conn)
-<span class="line-num">2241</span>    build_dictionary_pages(conn)
-<span class="line-num">2242</span>    build_marginalia_pages(conn)
-<span class="line-num">2243</span>    build_bibliography_page(conn)
-<span class="line-num">2244</span>    build_docs_pages()
-<span class="line-num">2245</span>    build_code_pages()
-<span class="line-num">2246</span>    build_about_page(conn)
-<span class="line-num">2247</span>    build_russell_essay_page(conn)
-<span class="line-num">2248</span>    build_concordance_essay_page(conn)
-<span class="line-num">2249</span>    build_digital_edition_page(conn)
+<span class="line-num">2234</span>    print(&quot;\nBuilding pages...&quot;)
+<span class="line-num">2235</span>    update_styles()
+<span class="line-num">2236</span>    update_index_nav()
+<span class="line-num">2237</span>    build_scholars_pages(conn)
+<span class="line-num">2238</span>    build_dictionary_pages(conn)
+<span class="line-num">2239</span>    build_marginalia_pages(conn)
+<span class="line-num">2240</span>    build_bibliography_page(conn)
+<span class="line-num">2241</span>    build_docs_pages()
+<span class="line-num">2242</span>    build_code_pages()
+<span class="line-num">2243</span>    build_about_page(conn)
+<span class="line-num">2244</span>    build_russell_essay_page(conn)
+<span class="line-num">2245</span>    build_concordance_essay_page(conn)
+<span class="line-num">2246</span>    build_digital_edition_page(conn)
+<span class="line-num">2247</span>
+<span class="line-num">2248</span>    conn.close()
+<span class="line-num">2249</span>    print(&quot;\n=== Build Complete ===&quot;)
 <span class="line-num">2250</span>
-<span class="line-num">2251</span>    conn.close()
-<span class="line-num">2252</span>    print(&quot;\n=== Build Complete ===&quot;)
-<span class="line-num">2253</span>
-<span class="line-num">2254</span>
-<span class="line-num">2255</span>if __name__ == &quot;__main__&quot;:
-<span class="line-num">2256</span>    main()</pre>
+<span class="line-num">2251</span>
+<span class="line-num">2252</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">2253</span>    main()</pre>
         </div>
     </main>
     <footer>
