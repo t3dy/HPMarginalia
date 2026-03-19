@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concordance Methodology - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scholars.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        .essay-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .essay-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        .essay-page h3 { margin: 1.5rem 0 0.5rem; }
+        .essay-page p { line-height: 1.8; margin-bottom: 1rem; }
+        .essay-page .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
+        .essay-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+        .essay-page table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        .essay-page th, .essay-page td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+        .essay-page th { background: var(--bg); font-weight: 600; }
+        .essay-page .process-flow {{ display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; }}
+        .essay-page .process-step {{ flex: 1; min-width: 200px; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }}
+        .essay-page .process-step .step-num {{ display: inline-block; width: 1.5rem; height: 1.5rem; background: var(--accent); color: white; border-radius: 50%; text-align: center; line-height: 1.5rem; font-size: 0.8rem; margin-right: 0.3rem; }}
+        .essay-page .process-step h4 {{ margin: 0 0 0.5rem 0; font-size: 0.9rem; }}
+        .essay-page .process-step p {{ font-size: 0.85rem; margin: 0; line-height: 1.5; }}
+        .essay-page .section-anchor { color: var(--text-muted); text-decoration: none; font-size: 0.8em; margin-left: 0.3rem; }
+        .essay-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .essay-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .essay-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="digital-edition.html">Edition</a><a href="russell-alchemical-hands.html">Alchemical Hands</a><a href="concordance-method.html" class="active">Concordance</a><a href="about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+    <div class="essay-page">
+        <p><a href="index.html">&larr; Home</a></p>
+
+        <h1>Concordance Methodology</h1>
+        <p class="evidence-note">This page documents the actual methods used to build the concordance
+        between Russell's dissertation references and the manuscript photograph collections. All
+        statistics are drawn from the project database. Uncertainty and provisional status are
+        marked explicitly throughout.</p>
+
+        <h2 id="problem">The Problem Russell Presents
+            <a class="section-anchor" href="#problem">#</a></h2>
+        <p>Russell's thesis references folios by signature (e.g., "b6v", "h1r") rather than by
+        page number, since the 1499 edition has no printed pagination. Our manuscript photograph
+        collections, however, use different naming conventions: the Siena images use folio numbers
+        with recto/verso suffixes (e.g., O.III.38_0014r.jpg), while the BL images use sequential
+        numbers (C_60_o_12-001.jpg through C_60_o_12-196.jpg). The core challenge is mapping
+        Russell's 282 signature-based references to the 674 available photographs.</p>
+
+        <h2 id="image-sets">BL vs. Siena Image Sets
+            <a class="section-anchor" href="#image-sets">#</a></h2>
+        <table>
+            <thead><tr><th>Property</th><th>Siena O.III.38</th><th>BL C.60.o.12</th></tr></thead>
+            <tbody>
+                <tr><td>Images</td><td>478</td><td>196</td></tr>
+                <tr><td>Naming</td><td>Folio number + r/v suffix</td><td>Sequential number only</td></tr>
+                <tr><td>Edition</td><td>1499 Aldine</td><td>1545 Aldine (second edition)</td></tr>
+                <tr><td>Folio mapping</td><td>Directly encoded in filename</td><td>Requires inference</td></tr>
+                <tr><td>Matching confidence</td><td>HIGH / MEDIUM</td><td>LOW (all provisional)</td></tr>
+            </tbody>
+        </table>
+        <div class="provisional">The BL copy is the 1545 edition, not the 1499. The signature map
+        is based on the 1499 collation formula. While the 1545 edition largely follows the same
+        structure, any pagination differences between editions would make sequential-number-to-folio
+        inference unreliable. All BL matches must be treated as provisional.</div>
+
+        <h2 id="signature-map">How the Signature Map Works
+            <a class="section-anchor" href="#signature-map">#</a></h2>
+        <p>The signature map is a deterministic lookup table of 448 entries generated from
+        the 1499 collation formula: a&ndash;z<sup>8</sup> (omitting j, u, w), A&ndash;F<sup>8</sup>,
+        G<sup>4</sup>. Each quire has 8 leaves (except G with 4), and each leaf has recto and verso
+        sides. The map converts any valid signature (e.g., "b6v") to a sequential folio number
+        and vice versa.</p>
+        <p>This map is generated by <code>build_signature_map.py</code> and is fully deterministic.
+        It is correct for the 1499 edition. Its applicability to the 1545 edition is assumed but
+        not verified.</p>
+
+        <h2 id="ref-extraction">How Dissertation References Were Extracted
+            <a class="section-anchor" href="#ref-extraction">#</a></h2>
+        <p>Russell's thesis PDF was processed by <code>extract_references.py</code> using PyMuPDF
+        for text extraction and regular expressions for signature pattern matching. The script
+        extracted 282 references, distributed across manuscripts:</p>
+        <table>
+            <thead><tr><th>Manuscript</th><th>References</th></tr></thead>
+            <tbody><tr><td>Buffalo RBR</td><td>59</td></tr><tr><td>Inc.Stam.Chig.II.610</td><td>55</td></tr><tr><td>C.60.o.12</td><td>50</td></tr><tr><td>INCUN A.5.13</td><td>42</td></tr><tr><td>Modena (Panini)</td><td>29</td></tr><tr><td>O.III.38</td><td>28</td></tr></tbody>
+        </table>
+
+        <h2 id="image-parsing">How Image Filenames Were Parsed
+            <a class="section-anchor" href="#image-parsing">#</a></h2>
+        <p><code>catalog_images.py</code> parses image filenames from two manuscript collections into
+        structured records with folio number, side (recto/verso), and page type. The Siena images
+        encode folio information directly (O.III.38_0014r.jpg = folio 14 recto). The BL images
+        use sequential numbers that do not directly encode folio information.</p>
+
+        <h2 id="matching">How Matching Was Performed
+            <a class="section-anchor" href="#matching">#</a></h2>
+        <div class="process-flow">
+            <div class="process-step">
+                <h4><span class="step-num">1</span> Signature Lookup</h4>
+                <p>Convert each dissertation reference's signature (e.g., "b6v") to a folio number
+                using the signature map.</p>
+            </div>
+            <div class="process-step">
+                <h4><span class="step-num">2</span> Manuscript Filter</h4>
+                <p>Filter images to the manuscript shelfmark specified in the dissertation reference.</p>
+            </div>
+            <div class="process-step">
+                <h4><span class="step-num">3</span> Folio Match</h4>
+                <p>Match the computed folio number to images with the same folio number and side.</p>
+            </div>
+            <div class="process-step">
+                <h4><span class="step-num">4</span> Fallback Cross-Match</h4>
+                <p>If no direct match, attempt cross-manuscript matching (lower confidence).</p>
+            </div>
+            <div class="process-step">
+                <h4><span class="step-num">5</span> Confidence Assignment</h4>
+                <p>Assign HIGH (exact Siena match), MEDIUM (folio-based), or LOW (BL sequential inference).</p>
+            </div>
+        </div>
+
+        <h2 id="confidence">Where Confidence Is High vs. Low
+            <a class="section-anchor" href="#confidence">#</a></h2>
+        <table>
+            <thead><tr><th>Confidence</th><th>Matches</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>HIGH</td><td>26</td><td>Siena images with explicit folio+side in filename, matched by signature lookup</td></tr>
+                <tr><td>MEDIUM</td><td>366</td><td>Siena images matched by folio number (cross-manuscript or side ambiguous)</td></tr>
+                <tr><td>LOW</td><td>218</td><td>BL images where sequential photo number is assumed to equal folio number</td></tr>
+            </tbody>
+        </table>
+
+        <h3>By Manuscript</h3>
+        <table>
+            <thead><tr><th>Manuscript</th><th>HIGH</th><th>MEDIUM</th><th>LOW</th></tr></thead>
+            <tbody>
+                <tr><td>Siena O.III.38</td><td>26</td><td>366</td><td>0</td></tr>
+                <tr><td>BL C.60.o.12</td><td>0</td><td>0</td><td>218</td></tr>
+            </tbody>
+        </table>
+
+        <h2 id="bl-provisional">Why BL Matches Are Provisional
+            <a class="section-anchor" href="#bl-provisional">#</a></h2>
+        <div class="provisional"><strong>Critical caveat:</strong> All 218 BL matches
+        are classified as LOW confidence. The BL photographs are sequentially numbered (001&ndash;196)
+        without folio labels. Our matching pipeline assumes that photo N corresponds to folio N, but
+        this assumption is unverified. The BL copy is the 1545 edition, not the 1499 edition from which
+        the signature map was built. Any differences in pagination, inserted leaves, or missing leaves
+        between editions would invalidate this mapping. These matches require manual verification
+        against the physical photographs.</div>
+
+        <h2 id="human-review">What Human Review Is Still Needed
+            <a class="section-anchor" href="#human-review">#</a></h2>
+        <ul>
+            <li>Verify BL photograph-to-folio correspondence against physical or high-resolution images</li>
+            <li>Confirm that the 1545 edition follows the same collation as the 1499</li>
+            <li>Spot-check MEDIUM confidence Siena matches for side (recto/verso) accuracy</li>
+            <li>Review hand attribution for edge cases where multiple hands annotate the same folio</li>
+            <li>Validate marginal text transcriptions against original manuscript images</li>
+        </ul>
+
+        <h2 id="future">How This Methodology Supports Future Scholarship
+            <a class="section-anchor" href="#future">#</a></h2>
+        <p>The concordance pipeline produces a structured, queryable dataset linking Russell's
+        close reading to digital images. Once the BL matches are verified, this enables:</p>
+        <ul>
+            <li>Folio-level browsing of annotations alongside manuscript images</li>
+            <li>Systematic comparison of annotation density across copies</li>
+            <li>Identification of folios that attracted multiple annotators</li>
+            <li>Cross-referencing between annotations and the dictionary of terms</li>
+            <li>Future multimodal analysis using computer vision on manuscript images</li>
+        </ul>
+
+        <div class="cross-links">
+            <h4>Related Pages</h4>
+            <a href="dictionary/signature.html">Signature</a>
+            <a href="dictionary/folio.html">Folio</a>
+            <a href="dictionary/collation.html">Collation</a>
+            <a href="dictionary/annotator-hand.html">Annotator Hand</a>
+            <a href="dictionary/marginalia.html">Marginalia</a>
+            <a href="russell-alchemical-hands.html">Alchemical Hands Essay</a>
+            <a href="docs/concordance-methodology.html">Concordance Methodology (Doc)</a>
+            <a href="code/match-refs-to-images.html">match_refs_to_images.py</a>
+            <a href="code/build-signature-map.html">build_signature_map.py</a>
+        </div>
+    </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

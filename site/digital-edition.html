@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Edition - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scholars.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        .edition-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .edition-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        .edition-page h3 { margin: 1.5rem 0 0.5rem; }
+        .edition-page p { line-height: 1.8; margin-bottom: 1rem; }
+        .edition-page .status-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0; font-size: 0.9rem; }
+        .edition-page .status-icon { font-weight: bold; }
+        .edition-page .status-done { color: #155724; }
+        .edition-page .status-partial { color: #856404; }
+        .edition-page .status-planned { color: var(--text-muted); }
+        .edition-page .status-blocked { color: #721c24; }
+        .edition-page .roadmap-phase { margin: 1rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
+        .edition-page .roadmap-phase h4 { margin: 0 0 0.5rem 0; }
+        .edition-page .roadmap-phase p { margin: 0; font-size: 0.9rem; }
+        .edition-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="digital-edition.html" class="active">Edition</a><a href="russell-alchemical-hands.html">Alchemical Hands</a><a href="concordance-method.html">Concordance</a><a href="about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+    <div class="edition-page">
+        <p><a href="index.html">&larr; Home</a></p>
+
+        <h1>Digital Edition: Editorial Prospectus</h1>
+        <p class="evidence-note">This page describes the vision, current state, and roadmap for a
+        comprehensive digital edition of the <em>Hypnerotomachia Poliphili</em>. It is not a
+        finished edition. It is a statement of intent, a map of what exists, and an honest
+        accounting of what remains to be built.</p>
+
+        <h2 id="vision">What This Edition Will Include</h2>
+        <p>The eventual digital edition aims to provide:</p>
+        <ul>
+            <li><strong>Facsimile browsing:</strong> Page-by-page viewing of manuscript photographs
+            from multiple copies, with folio-level navigation via the signature map.</li>
+            <li><strong>Transcription:</strong> Diplomatic transcription of the 1499 text, linked
+            to facsimile images at the folio level.</li>
+            <li><strong>Translation witnesses:</strong> Parallel display of the 1499 Italian,
+            Godwin's 1999 English translation, and the 1546 French adaptation.</li>
+            <li><strong>Folio-level commentary:</strong> Annotation layers showing marginalia
+            transcriptions, hand attributions, and interpretive notes.</li>
+            <li><strong>Marginalia overlays:</strong> Visual overlays highlighting annotated
+            passages on manuscript images, linked to the commentary apparatus.</li>
+            <li><strong>Dictionary cross-links:</strong> Inline links from edition text to the
+            dictionary of HP-specific terminology.</li>
+            <li><strong>Bibliography integration:</strong> Citation links from commentary to the
+            bibliography, enabling readers to trace scholarly arguments to their sources.</li>
+            <li><strong>Copy comparison:</strong> Side-by-side viewing of the same folio across
+            different annotated copies, showing how different readers engaged with the same
+            passages.</li>
+        </ul>
+
+        <h2 id="current-state">What Is Already Built</h2>
+        <div class="status-grid">
+            <span class="status-icon status-done">[done]</span>
+            <span>Signature map (448 entries, deterministic from 1499 collation)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Image catalog (674 photographs from 2 manuscripts)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Dissertation reference extraction (610 matches)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Hand attribution (11 annotator hands identified)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Dictionary (37 terms with corpus evidence)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Bibliography (109 works) and scholar profiles (60)</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Marginalia gallery with confidence scoring</span>
+            <span class="status-icon status-done">[done]</span>
+            <span>Corpus search infrastructure (PDF-to-markdown, chunking, search)</span>
+        </div>
+
+        <h2 id="provisional">What Remains Provisional</h2>
+        <ul>
+            <li>All BL C.60.o.12 image-to-folio matches are LOW confidence (sequential photo numbers
+            assumed to equal folio numbers; unverified)</li>
+            <li>Scholar summaries and dictionary definitions were generated with LLM assistance and
+            are marked DRAFT; they have not been verified by domain experts</li>
+            <li>Hand attributions beyond Russell's thesis data are inferred, not verified</li>
+            <li>No transcription of the HP text itself exists in this project yet</li>
+            <li>No translation texts are integrated</li>
+        </ul>
+
+        <h2 id="roadmap">Phased Roadmap</h2>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-partial">[partial]</span> Phase 1: Data Foundation</h4>
+            <p>Build the concordance pipeline, image catalog, signature map, and reference extraction.
+            <strong>Status:</strong> Complete for Siena; BL matches provisional.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-partial">[partial]</span> Phase 2: Scholarly Apparatus</h4>
+            <p>Dictionary, bibliography, scholar profiles, hand attribution, corpus search.
+            <strong>Status:</strong> Substantially built; entries at DRAFT status pending expert review.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-planned">[planned]</span> Phase 3: Image Hosting</h4>
+            <p>Host manuscript photographs at sufficient resolution for scholarly use. Requires:
+            institutional permission for BL images; storage solution for 674+ high-resolution photographs;
+            IIIF-compatible image serving if feasible.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-planned">[planned]</span> Phase 4: Transcription</h4>
+            <p>Create or integrate a diplomatic transcription of the 1499 text. Could begin with
+            OCR of the Da Capo edition, validated against facsimile images. Requires: careful
+            handling of the HP's unusual orthography and embedded hieroglyphs.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-planned">[planned]</span> Phase 5: Translation Integration</h4>
+            <p>Align existing English translation (Godwin 1999) and French adaptation (1546) at
+            the folio level. Requires: copyright clearance or use of public-domain translations.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-blocked">[blocked]</span> Phase 6: Multimodal Validation</h4>
+            <p>Use computer vision to verify BL photograph-to-folio mappings by reading visible
+            signature marks in images. Requires: high-resolution images and vision model access.
+            See the <a href="docs/multimodal-rag-study.html">Multimodal RAG Study</a> for analysis.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-planned">[planned]</span> Phase 7: Commentary &amp; Overlays</h4>
+            <p>Build folio-level commentary with marginalia overlays, cross-linked to dictionary
+            and bibliography. Requires: verified image matches, transcribed annotations, and
+            editorial review infrastructure.</p>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4><span class="status-icon status-planned">[planned]</span> Phase 8: Copy Comparison</h4>
+            <p>Enable side-by-side comparison of the same folio across different annotated copies.
+            Requires: all preceding phases substantially complete, plus a viewer capable of
+            synchronized scrolling across manuscript images.</p>
+        </div>
+
+        <h2 id="limitations">Current Limitations</h2>
+        <ul>
+            <li>This project has no independent transcription of the HP text</li>
+            <li>Manuscript images are stored locally and not hosted for web viewing at scale</li>
+            <li>The editorial review process is informal and has no structured workflow</li>
+            <li>The 1545/1499 edition difference for the BL copy is unresolved</li>
+            <li>No institutional collaboration or peer review is currently in place</li>
+        </ul>
+
+        <div class="evidence-note">This prospectus was generated from the project's SQLite database
+        and reflects the current state of the data as of the most recent build. It will be updated
+        as the project progresses.</div>
+    </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

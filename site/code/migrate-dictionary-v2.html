@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Schema V2 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Dictionary Schema V2</h2>
+            <div class="code-meta">migrate_dictionary_v2.py &mdash; 55 lines</div>
+            <p style="margin-bottom:1rem">Extends dictionary_terms with significance, source tracking, provenance, and confidence columns.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Extend dictionary_terms schema with new columns for enrichment pipeline.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Adds columns for:
+<span class="line-num">4</span>- significance fields (HP-specific and scholarship-wide)
+<span class="line-num">5</span>- source document tracking
+<span class="line-num">6</span>- source method and notes
+<span class="line-num">7</span>- confidence level
+<span class="line-num">8</span>
+<span class="line-num">9</span>Idempotent: safe to run multiple times.
+<span class="line-num">10</span>&quot;&quot;&quot;
+<span class="line-num">11</span>
+<span class="line-num">12</span>import sqlite3
+<span class="line-num">13</span>from pathlib import Path
+<span class="line-num">14</span>
+<span class="line-num">15</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">16</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">17</span>
+<span class="line-num">18</span>NEW_COLUMNS = [
+<span class="line-num">19</span>    (&quot;significance_to_hp&quot;, &quot;TEXT&quot;),
+<span class="line-num">20</span>    (&quot;significance_to_scholarship&quot;, &quot;TEXT&quot;),
+<span class="line-num">21</span>    (&quot;related_scholars&quot;, &quot;TEXT&quot;),
+<span class="line-num">22</span>    (&quot;see_also_text&quot;, &quot;TEXT&quot;),
+<span class="line-num">23</span>    (&quot;source_documents&quot;, &quot;TEXT&quot;),
+<span class="line-num">24</span>    (&quot;source_page_refs&quot;, &quot;TEXT&quot;),
+<span class="line-num">25</span>    (&quot;source_quotes_short&quot;, &quot;TEXT&quot;),
+<span class="line-num">26</span>    (&quot;source_method&quot;, &quot;TEXT&quot;),
+<span class="line-num">27</span>    (&quot;confidence&quot;, &quot;TEXT DEFAULT &#x27;MEDIUM&#x27;&quot;),
+<span class="line-num">28</span>    (&quot;notes&quot;, &quot;TEXT&quot;),
+<span class="line-num">29</span>]
+<span class="line-num">30</span>
+<span class="line-num">31</span>
+<span class="line-num">32</span>def main():
+<span class="line-num">33</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">34</span>    cur = conn.cursor()
+<span class="line-num">35</span>
+<span class="line-num">36</span>    # Get existing columns
+<span class="line-num">37</span>    cur.execute(&quot;PRAGMA table_info(dictionary_terms)&quot;)
+<span class="line-num">38</span>    existing = {row[1] for row in cur.fetchall()}
+<span class="line-num">39</span>
+<span class="line-num">40</span>    added = 0
+<span class="line-num">41</span>    for col_name, col_type in NEW_COLUMNS:
+<span class="line-num">42</span>        if col_name not in existing:
+<span class="line-num">43</span>            cur.execute(f&quot;ALTER TABLE dictionary_terms ADD COLUMN {col_name} {col_type}&quot;)
+<span class="line-num">44</span>            print(f&quot;  Added column: {col_name} ({col_type})&quot;)
+<span class="line-num">45</span>            added += 1
+<span class="line-num">46</span>        else:
+<span class="line-num">47</span>            print(f&quot;  Column exists: {col_name}&quot;)
+<span class="line-num">48</span>
+<span class="line-num">49</span>    conn.commit()
+<span class="line-num">50</span>    conn.close()
+<span class="line-num">51</span>    print(f&quot;\nDone. Added {added} new columns.&quot;)
+<span class="line-num">52</span>
+<span class="line-num">53</span>
+<span class="line-num">54</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">55</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

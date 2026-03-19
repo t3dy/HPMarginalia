@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Reading Packets - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Build Reading Packets</h2>
+            <div class="code-meta">build_reading_packets.py &mdash; 158 lines</div>
+            <p style="margin-bottom:1rem">Assembles structured research packets from corpus search for dictionary enrichment.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Build structured reading packets for dictionary term enrichment.
+<span class="line-num">2</span>
+<span class="line-num">3</span>For each dictionary term (or a specified subset), this script:
+<span class="line-num">4</span>1. Searches the chunk corpus for relevant passages
+<span class="line-num">5</span>2. Assembles a structured packet with full provenance
+<span class="line-num">6</span>3. Writes packets to /staging/packets/[slug].json
+<span class="line-num">7</span>
+<span class="line-num">8</span>Packets contain ONLY retrieved evidence. No generated interpretations.
+<span class="line-num">9</span>Downstream enrichment scripts use packets as input.
+<span class="line-num">10</span>&quot;&quot;&quot;
+<span class="line-num">11</span>
+<span class="line-num">12</span>import sqlite3
+<span class="line-num">13</span>import json
+<span class="line-num">14</span>from pathlib import Path
+<span class="line-num">15</span>
+<span class="line-num">16</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">17</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">18</span>STAGING_DIR = BASE_DIR / &quot;staging&quot;
+<span class="line-num">19</span>PACKETS_DIR = STAGING_DIR / &quot;packets&quot;
+<span class="line-num">20</span>
+<span class="line-num">21</span># Import corpus search
+<span class="line-num">22</span>import sys
+<span class="line-num">23</span>sys.path.insert(0, str(BASE_DIR / &quot;scripts&quot;))
+<span class="line-num">24</span>from corpus_search import search_by_term, search_chunks
+<span class="line-num">25</span>
+<span class="line-num">26</span>
+<span class="line-num">27</span># Synonyms / alternate forms for better search coverage
+<span class="line-num">28</span>TERM_SYNONYMS = {
+<span class="line-num">29</span>    &#x27;signature&#x27;: [&#x27;signature mark&#x27;, &#x27;sig.&#x27;, &#x27;quire mark&#x27;],
+<span class="line-num">30</span>    &#x27;quire&#x27;: [&#x27;gathering&#x27;, &#x27;quaternion&#x27;],
+<span class="line-num">31</span>    &#x27;folio&#x27;: [&#x27;leaf&#x27;, &#x27;fol.&#x27;],
+<span class="line-num">32</span>    &#x27;marginalia&#x27;: [&#x27;marginal note&#x27;, &#x27;annotation&#x27;, &#x27;margin&#x27;],
+<span class="line-num">33</span>    &#x27;annotator-hand&#x27;: [&#x27;hand A&#x27;, &#x27;hand B&#x27;, &#x27;hand C&#x27;, &#x27;hand D&#x27;, &#x27;hand E&#x27;,
+<span class="line-num">34</span>                        &#x27;annotator&#x27;, &#x27;handwriting&#x27;],
+<span class="line-num">35</span>    &#x27;alchemical-allegory&#x27;: [&#x27;alchemical reading&#x27;, &#x27;alchemical interpretation&#x27;,
+<span class="line-num">36</span>                            &#x27;alchemist&#x27;],
+<span class="line-num">37</span>    &#x27;master-mercury&#x27;: [&#x27;mercury&#x27;, &#x27;Mercurii&#x27;, &#x27;quicksilver&#x27;, &quot;d&#x27;Espagnet&quot;],
+<span class="line-num">38</span>    &#x27;sol-luna&#x27;: [&#x27;Sol and Luna&#x27;, &#x27;sun and moon&#x27;, &#x27;gold and silver&#x27;],
+<span class="line-num">39</span>    &#x27;chemical-wedding&#x27;: [&#x27;chemical marriage&#x27;, &#x27;chymische Hochzeit&#x27;,
+<span class="line-num">40</span>                         &#x27;hermaphrodite&#x27;],
+<span class="line-num">41</span>    &#x27;prisca-sapientia&#x27;: [&#x27;ancient wisdom&#x27;, &#x27;prisca theologia&#x27;,
+<span class="line-num">42</span>                         &#x27;Hermes Trismegistus&#x27;],
+<span class="line-num">43</span>    &#x27;woodcut&#x27;: [&#x27;illustration&#x27;, &#x27;woodblock&#x27;, &#x27;woodcuts&#x27;],
+<span class="line-num">44</span>    &#x27;acrostic&#x27;: [&#x27;POLIAM FRATER&#x27;, &#x27;chapter initials&#x27;],
+<span class="line-num">45</span>    &#x27;hieroglyph&#x27;: [&#x27;hieroglyphic&#x27;, &#x27;Horapollo&#x27;, &#x27;pseudo-Egyptian&#x27;],
+<span class="line-num">46</span>    &#x27;emblem&#x27;: [&#x27;emblem book&#x27;, &#x27;Alciato&#x27;, &#x27;pictura&#x27;],
+<span class="line-num">47</span>    &#x27;ekphrasis&#x27;: [&#x27;ekphrastic&#x27;, &#x27;verbal description&#x27;],
+<span class="line-num">48</span>    &#x27;incunabulum&#x27;: [&#x27;incunabula&#x27;, &#x27;ISTC&#x27;, &#x27;fifteenth-century printing&#x27;],
+<span class="line-num">49</span>    &#x27;aldus-manutius&#x27;: [&#x27;Aldus&#x27;, &#x27;Manutius&#x27;, &#x27;Aldine&#x27;],
+<span class="line-num">50</span>    &#x27;authorship-debate&#x27;: [&#x27;Francesco Colonna&#x27;, &#x27;Alberti&#x27;, &#x27;authorship&#x27;],
+<span class="line-num">51</span>    &#x27;dream-narrative&#x27;: [&#x27;dream&#x27;, &#x27;Poliphilo falls asleep&#x27;, &#x27;dream-within&#x27;],
+<span class="line-num">52</span>    &#x27;elephant-obelisk&#x27;: [&#x27;elephant&#x27;, &#x27;obelisk&#x27;, &#x27;Bernini&#x27;, &#x27;b6v&#x27;, &#x27;b7r&#x27;],
+<span class="line-num">53</span>    &#x27;ideogram&#x27;: [&#x27;alchemical symbol&#x27;, &#x27;alchemical sign&#x27;, &#x27;ideogram&#x27;],
+<span class="line-num">54</span>    &#x27;activity-book&#x27;: [&#x27;activity book&#x27;, &#x27;humanistic activity&#x27;],
+<span class="line-num">55</span>    &#x27;inventio&#x27;: [&#x27;invention&#x27;, &#x27;rhetorical invention&#x27;],
+<span class="line-num">56</span>    &#x27;ingegno&#x27;: [&#x27;ingenium&#x27;, &#x27;wit&#x27;, &#x27;ingegno&#x27;],
+<span class="line-num">57</span>    &#x27;acutezze&#x27;: [&#x27;acutezza&#x27;, &#x27;wit&#x27;, &#x27;Alexander VII&#x27;, &#x27;Chigi&#x27;],
+<span class="line-num">58</span>    &#x27;cythera&#x27;: [&#x27;Cythera&#x27;, &#x27;island of Venus&#x27;, &#x27;circular garden&#x27;],
+<span class="line-num">59</span>    &#x27;reception-history&#x27;: [&#x27;reception&#x27;, &#x27;readership&#x27;, &#x27;readers&#x27;],
+<span class="line-num">60</span>    &#x27;antiquarianism&#x27;: [&#x27;antiquarian&#x27;, &#x27;Cyriacus&#x27;, &#x27;ancient monuments&#x27;],
+<span class="line-num">61</span>    &#x27;vernacular-poetics&#x27;: [&#x27;Petrarchan&#x27;, &#x27;vernacular&#x27;, &#x27;Italian poetry&#x27;],
+<span class="line-num">62</span>    &#x27;collation&#x27;: [&#x27;collation formula&#x27;, &#x27;a-z8&#x27;, &#x27;bibliographic structure&#x27;],
+<span class="line-num">63</span>    &#x27;apparatus&#x27;: [&#x27;critical edition&#x27;, &#x27;textual notes&#x27;, &#x27;apparatus criticus&#x27;],
+<span class="line-num">64</span>    &#x27;commentary&#x27;: [&#x27;commentator&#x27;, &#x27;gloss&#x27;, &#x27;interpretation&#x27;],
+<span class="line-num">65</span>    &#x27;allegory&#x27;: [&#x27;allegorical&#x27;, &#x27;allegory of love&#x27;],
+<span class="line-num">66</span>    &#x27;architectural-body&#x27;: [&#x27;architectural body&#x27;, &#x27;Lefaivre&#x27;, &#x27;embodied&#x27;],
+<span class="line-num">67</span>    &#x27;recto&#x27;: [&#x27;recto&#x27;],
+<span class="line-num">68</span>    &#x27;verso&#x27;: [&#x27;verso&#x27;],
+<span class="line-num">69</span>    &#x27;gathering&#x27;: [&#x27;gathering&#x27;, &#x27;quaternion&#x27;],
+<span class="line-num">70</span>}
+<span class="line-num">71</span>
+<span class="line-num">72</span>
+<span class="line-num">73</span>def build_packet(term_slug, term_label, category, current_status):
+<span class="line-num">74</span>    &quot;&quot;&quot;Build a reading packet for a single dictionary term.
+<span class="line-num">75</span>
+<span class="line-num">76</span>    Returns a structured dict with retrieved evidence only.
+<span class="line-num">77</span>    &quot;&quot;&quot;
+<span class="line-num">78</span>    synonyms = TERM_SYNONYMS.get(term_slug, [])
+<span class="line-num">79</span>
+<span class="line-num">80</span>    # Search using term label + synonyms
+<span class="line-num">81</span>    results = search_by_term(term_label, synonyms=synonyms)
+<span class="line-num">82</span>
+<span class="line-num">83</span>    passages = []
+<span class="line-num">84</span>    for r in results:
+<span class="line-num">85</span>        passages.append({
+<span class="line-num">86</span>            &#x27;text&#x27;: r[&#x27;matched_text&#x27;],
+<span class="line-num">87</span>            &#x27;source_doc&#x27;: r[&#x27;source_doc&#x27;],
+<span class="line-num">88</span>            &#x27;chunk_path&#x27;: r[&#x27;chunk_path&#x27;],
+<span class="line-num">89</span>            &#x27;section&#x27;: r[&#x27;section&#x27;],
+<span class="line-num">90</span>            &#x27;page_refs&#x27;: r[&#x27;page_refs&#x27;],
+<span class="line-num">91</span>            &#x27;relevance_score&#x27;: r[&#x27;relevance_score&#x27;],
+<span class="line-num">92</span>        })
+<span class="line-num">93</span>
+<span class="line-num">94</span>    return {
+<span class="line-num">95</span>        &#x27;term&#x27;: term_label,
+<span class="line-num">96</span>        &#x27;slug&#x27;: term_slug,
+<span class="line-num">97</span>        &#x27;category&#x27;: category,
+<span class="line-num">98</span>        &#x27;current_review_status&#x27;: current_status,
+<span class="line-num">99</span>        &#x27;passage_count&#x27;: len(passages),
+<span class="line-num">100</span>        &#x27;passages&#x27;: passages,
+<span class="line-num">101</span>        &#x27;search_terms_used&#x27;: [term_label] + synonyms,
+<span class="line-num">102</span>        &#x27;source_method&#x27;: &#x27;CORPUS_EXTRACTION&#x27;,
+<span class="line-num">103</span>    }
+<span class="line-num">104</span>
+<span class="line-num">105</span>
+<span class="line-num">106</span>def build_all_packets(filter_status=None, filter_slugs=None):
+<span class="line-num">107</span>    &quot;&quot;&quot;Build reading packets for all (or filtered) dictionary terms.
+<span class="line-num">108</span>
+<span class="line-num">109</span>    Args:
+<span class="line-num">110</span>        filter_status: Only build for terms with this review_status (e.g. &#x27;DRAFT&#x27;)
+<span class="line-num">111</span>        filter_slugs: Only build for these specific slugs
+<span class="line-num">112</span>    &quot;&quot;&quot;
+<span class="line-num">113</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">114</span>    cur = conn.cursor()
+<span class="line-num">115</span>
+<span class="line-num">116</span>    query = &quot;SELECT slug, label, category, review_status FROM dictionary_terms&quot;
+<span class="line-num">117</span>    params = []
+<span class="line-num">118</span>    if filter_status:
+<span class="line-num">119</span>        query += &quot; WHERE review_status = ?&quot;
+<span class="line-num">120</span>        params.append(filter_status)
+<span class="line-num">121</span>    query += &quot; ORDER BY slug&quot;
+<span class="line-num">122</span>
+<span class="line-num">123</span>    cur.execute(query, params)
+<span class="line-num">124</span>    terms = cur.fetchall()
+<span class="line-num">125</span>    conn.close()
+<span class="line-num">126</span>
+<span class="line-num">127</span>    PACKETS_DIR.mkdir(parents=True, exist_ok=True)
+<span class="line-num">128</span>
+<span class="line-num">129</span>    built = 0
+<span class="line-num">130</span>    for slug, label, category, status in terms:
+<span class="line-num">131</span>        if filter_slugs and slug not in filter_slugs:
+<span class="line-num">132</span>            continue
+<span class="line-num">133</span>
+<span class="line-num">134</span>        print(f&quot;  Building packet: {slug} ({category})&quot;)
+<span class="line-num">135</span>        packet = build_packet(slug, label, category, status)
+<span class="line-num">136</span>
+<span class="line-num">137</span>        packet_path = PACKETS_DIR / f&quot;{slug}.json&quot;
+<span class="line-num">138</span>        with open(packet_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">139</span>            json.dump(packet, f, indent=2, ensure_ascii=False)
+<span class="line-num">140</span>
+<span class="line-num">141</span>        built += 1
+<span class="line-num">142</span>        print(f&quot;    -&gt; {packet[&#x27;passage_count&#x27;]} passages found&quot;)
+<span class="line-num">143</span>
+<span class="line-num">144</span>    print(f&quot;\nBuilt {built} reading packets in {PACKETS_DIR}&quot;)
+<span class="line-num">145</span>    return built
+<span class="line-num">146</span>
+<span class="line-num">147</span>
+<span class="line-num">148</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">149</span>    import sys
+<span class="line-num">150</span>    print(&quot;=== Building Reading Packets ===\n&quot;)
+<span class="line-num">151</span>
+<span class="line-num">152</span>    if len(sys.argv) &gt; 1:
+<span class="line-num">153</span>        # Build for specific slugs
+<span class="line-num">154</span>        slugs = sys.argv[1:]
+<span class="line-num">155</span>        build_all_packets(filter_slugs=slugs)
+<span class="line-num">156</span>    else:
+<span class="line-num">157</span>        # Build for all DRAFT terms
+<span class="line-num">158</span>        build_all_packets(filter_status=&#x27;DRAFT&#x27;)</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

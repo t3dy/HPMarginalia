@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrich Dictionary - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Enrich Dictionary</h2>
+            <div class="code-meta">enrich_dictionary.py &mdash; 170 lines</div>
+            <p style="margin-bottom:1rem">Populates dictionary fields from reading packets with source provenance and review status.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Enrich dictionary entries from reading packets.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Reads structured packets from /staging/packets/ and populates:
+<span class="line-num">4</span>- source_documents: documents where the term appears
+<span class="line-num">5</span>- source_page_refs: page references from matched chunks
+<span class="line-num">6</span>- source_quotes_short: brief representative quotes
+<span class="line-num">7</span>- significance_to_hp: why the term matters for the HP (generated, marked DRAFT)
+<span class="line-num">8</span>- significance_to_scholarship: why it matters for scholarship (generated, marked DRAFT)
+<span class="line-num">9</span>- source_method: CORPUS_EXTRACTION for retrieved data, LLM_ASSISTED for generated prose
+<span class="line-num">10</span>
+<span class="line-num">11</span>RULES:
+<span class="line-num">12</span>- Never overwrites fields where review_status = &#x27;VERIFIED&#x27;
+<span class="line-num">13</span>- Sets source_method on all populated fields
+<span class="line-num">14</span>- All generated prose is marked review_status = &#x27;DRAFT&#x27;
+<span class="line-num">15</span>- Provenance is preserved in notes field
+<span class="line-num">16</span>&quot;&quot;&quot;
+<span class="line-num">17</span>
+<span class="line-num">18</span>import sqlite3
+<span class="line-num">19</span>import json
+<span class="line-num">20</span>from pathlib import Path
+<span class="line-num">21</span>from datetime import datetime
+<span class="line-num">22</span>
+<span class="line-num">23</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">24</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">25</span>PACKETS_DIR = BASE_DIR / &quot;staging&quot; / &quot;packets&quot;
+<span class="line-num">26</span>
+<span class="line-num">27</span># Map source_doc paths to readable document titles
+<span class="line-num">28</span>DOC_TITLES = {
+<span class="line-num">29</span>    &#x27;PhD_Thesis_James_Russell&#x27;: &#x27;Russell 2014 (PhD thesis)&#x27;,
+<span class="line-num">30</span>    &#x27;Crossing_the_text_image_boundary&#x27;: &#x27;Priki (text-image boundary)&#x27;,
+<span class="line-num">31</span>    &#x27;Dream_Narratives_and_Initiation&#x27;: &#x27;Priki 2016 (dream narratives)&#x27;,
+<span class="line-num">32</span>    &#x27;E_Thesis_Durham&#x27;: &quot;O&#x27;Neill (Durham thesis)&quot;,
+<span class="line-num">33</span>    &#x27;Gollnick_Religious_Dreamworld&#x27;: &#x27;Gollnick (Apuleius dreamworld)&#x27;,
+<span class="line-num">34</span>    &#x27;Elucidating_and_Enigmatizing&#x27;: &#x27;Priki 2009 (reception)&#x27;,
+<span class="line-num">35</span>    &#x27;Canone_Leen_Spruit_Emblematics&#x27;: &#x27;Canone &amp; Spruit (emblematics)&#x27;,
+<span class="line-num">36</span>    &#x27;Francesco_Colonna_Hypnerotomachia_Poliphili_Da_Capo&#x27;: &#x27;HP (Da Capo edition)&#x27;,
+<span class="line-num">37</span>    &#x27;Francesco_Colonna_Rino_Avesani&#x27;: &#x27;Avesani et al. (Colonna studies)&#x27;,
+<span class="line-num">38</span>    &#x27;Albrecht_Durer&#x27;: &#x27;Leidinger (Durer and HP)&#x27;,
+<span class="line-num">39</span>    &#x27;Hypnerotomachia_by_Francesco_Colonna&#x27;: &#x27;HP primary text&#x27;,
+<span class="line-num">40</span>    &#x27;Mario_Praz&#x27;: &#x27;Praz 1947 (foreign imitators)&#x27;,
+<span class="line-num">41</span>    &#x27;Anthony_Blunt&#x27;: &#x27;Blunt 1937 (HP in French art)&#x27;,
+<span class="line-num">42</span>    &#x27;Edward_Wright_Alberti&#x27;: &#x27;Wright (Alberti and HP)&#x27;,
+<span class="line-num">43</span>    &#x27;Liane_Lefaivre&#x27;: &#x27;Lefaivre 1997 (Alberti attribution)&#x27;,
+<span class="line-num">44</span>    &#x27;Ure_Peter&#x27;: &#x27;Ure 1952 (vocabulary notes)&#x27;,
+<span class="line-num">45</span>    &#x27;Rosemary_Trippe&#x27;: &#x27;Trippe 2002 (text-image)&#x27;,
+<span class="line-num">46</span>    &#x27;Mark_Jarzombek&#x27;: &#x27;Jarzombek 1990 (structural problematics)&#x27;,
+<span class="line-num">47</span>    &#x27;Semler&#x27;: &#x27;Semler 2006 (Dallington)&#x27;,
+<span class="line-num">48</span>    &#x27;Narrative_in_Search_of_an_Author&#x27;: &quot;O&#x27;Neill (authorship)&quot;,
+<span class="line-num">49</span>}
+<span class="line-num">50</span>
+<span class="line-num">51</span>
+<span class="line-num">52</span>def _identify_doc(source_doc_str):
+<span class="line-num">53</span>    &quot;&quot;&quot;Map a source_doc path to a readable title.&quot;&quot;&quot;
+<span class="line-num">54</span>    for key, title in DOC_TITLES.items():
+<span class="line-num">55</span>        if key in source_doc_str:
+<span class="line-num">56</span>            return title
+<span class="line-num">57</span>    return source_doc_str.split(&#x27;/&#x27;)[-1].replace(&#x27;.md&#x27;, &#x27;&#x27;)
+<span class="line-num">58</span>
+<span class="line-num">59</span>
+<span class="line-num">60</span>def _extract_source_documents(passages):
+<span class="line-num">61</span>    &quot;&quot;&quot;Extract unique source document titles from passages.&quot;&quot;&quot;
+<span class="line-num">62</span>    docs = set()
+<span class="line-num">63</span>    for p in passages:
+<span class="line-num">64</span>        doc = _identify_doc(p.get(&#x27;source_doc&#x27;, &#x27;&#x27;))
+<span class="line-num">65</span>        docs.add(doc)
+<span class="line-num">66</span>    return sorted(docs)
+<span class="line-num">67</span>
+<span class="line-num">68</span>
+<span class="line-num">69</span>def _extract_page_refs(passages, max_refs=15):
+<span class="line-num">70</span>    &quot;&quot;&quot;Extract and deduplicate page references.&quot;&quot;&quot;
+<span class="line-num">71</span>    all_refs = []
+<span class="line-num">72</span>    for p in passages:
+<span class="line-num">73</span>        for ref in p.get(&#x27;page_refs&#x27;, []):
+<span class="line-num">74</span>            if ref not in all_refs:
+<span class="line-num">75</span>                all_refs.append(ref)
+<span class="line-num">76</span>    return all_refs[:max_refs]
+<span class="line-num">77</span>
+<span class="line-num">78</span>
+<span class="line-num">79</span>def _extract_short_quotes(passages, max_quotes=3, max_len=200):
+<span class="line-num">80</span>    &quot;&quot;&quot;Extract short representative quotes from top-scoring passages.&quot;&quot;&quot;
+<span class="line-num">81</span>    quotes = []
+<span class="line-num">82</span>    for p in sorted(passages, key=lambda x: x.get(&#x27;relevance_score&#x27;, 0), reverse=True):
+<span class="line-num">83</span>        text = p.get(&#x27;text&#x27;, &#x27;&#x27;).strip()
+<span class="line-num">84</span>        if len(text) &lt; 50:
+<span class="line-num">85</span>            continue
+<span class="line-num">86</span>        # Truncate to max_len
+<span class="line-num">87</span>        if len(text) &gt; max_len:
+<span class="line-num">88</span>            text = text[:max_len].rsplit(&#x27; &#x27;, 1)[0] + &#x27;...&#x27;
+<span class="line-num">89</span>        doc = _identify_doc(p.get(&#x27;source_doc&#x27;, &#x27;&#x27;))
+<span class="line-num">90</span>        quotes.append(f&quot;{text} [{doc}]&quot;)
+<span class="line-num">91</span>        if len(quotes) &gt;= max_quotes:
+<span class="line-num">92</span>            break
+<span class="line-num">93</span>    return quotes
+<span class="line-num">94</span>
+<span class="line-num">95</span>
+<span class="line-num">96</span>def enrich_from_packets():
+<span class="line-num">97</span>    &quot;&quot;&quot;Read all packets and update dictionary_terms in DB.&quot;&quot;&quot;
+<span class="line-num">98</span>    if not PACKETS_DIR.exists():
+<span class="line-num">99</span>        print(&quot;No packets directory found. Run build_reading_packets.py first.&quot;)
+<span class="line-num">100</span>        return
+<span class="line-num">101</span>
+<span class="line-num">102</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">103</span>    cur = conn.cursor()
+<span class="line-num">104</span>
+<span class="line-num">105</span>    # Check which terms are VERIFIED (do not touch)
+<span class="line-num">106</span>    cur.execute(&quot;SELECT slug, review_status FROM dictionary_terms&quot;)
+<span class="line-num">107</span>    term_statuses = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">108</span>
+<span class="line-num">109</span>    enriched = 0
+<span class="line-num">110</span>    skipped_verified = 0
+<span class="line-num">111</span>
+<span class="line-num">112</span>    for packet_file in sorted(PACKETS_DIR.glob(&#x27;*.json&#x27;)):
+<span class="line-num">113</span>        with open(packet_file, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">114</span>            packet = json.load(f)
+<span class="line-num">115</span>
+<span class="line-num">116</span>        slug = packet[&#x27;slug&#x27;]
+<span class="line-num">117</span>        status = term_statuses.get(slug)
+<span class="line-num">118</span>
+<span class="line-num">119</span>        if status == &#x27;VERIFIED&#x27;:
+<span class="line-num">120</span>            print(f&quot;  SKIP (VERIFIED): {slug}&quot;)
+<span class="line-num">121</span>            skipped_verified += 1
+<span class="line-num">122</span>            continue
+<span class="line-num">123</span>
+<span class="line-num">124</span>        passages = packet.get(&#x27;passages&#x27;, [])
+<span class="line-num">125</span>        if not passages:
+<span class="line-num">126</span>            print(f&quot;  SKIP (no passages): {slug}&quot;)
+<span class="line-num">127</span>            continue
+<span class="line-num">128</span>
+<span class="line-num">129</span>        # Extract structured data from passages
+<span class="line-num">130</span>        source_docs = _extract_source_documents(passages)
+<span class="line-num">131</span>        page_refs = _extract_page_refs(passages)
+<span class="line-num">132</span>        short_quotes = _extract_short_quotes(passages)
+<span class="line-num">133</span>
+<span class="line-num">134</span>        # Build update values
+<span class="line-num">135</span>        updates = {
+<span class="line-num">136</span>            &#x27;source_documents&#x27;: &#x27;; &#x27;.join(source_docs) if source_docs else None,
+<span class="line-num">137</span>            &#x27;source_page_refs&#x27;: &#x27;, &#x27;.join(f&#x27;p. {r}&#x27; for r in page_refs) if page_refs else None,
+<span class="line-num">138</span>            &#x27;source_quotes_short&#x27;: &#x27; | &#x27;.join(short_quotes) if short_quotes else None,
+<span class="line-num">139</span>            &#x27;source_method&#x27;: &#x27;CORPUS_EXTRACTION&#x27;,
+<span class="line-num">140</span>            &#x27;confidence&#x27;: &#x27;MEDIUM&#x27;,
+<span class="line-num">141</span>            &#x27;notes&#x27;: f&quot;Enriched from corpus reading packets on {datetime.now().strftime(&#x27;%Y-%m-%d&#x27;)}. &quot;
+<span class="line-num">142</span>                     f&quot;{len(passages)} passages retrieved from {len(source_docs)} documents.&quot;,
+<span class="line-num">143</span>            &#x27;updated_at&#x27;: datetime.now().isoformat(),
+<span class="line-num">144</span>        }
+<span class="line-num">145</span>
+<span class="line-num">146</span>        # Only update non-NULL fields
+<span class="line-num">147</span>        set_clauses = []
+<span class="line-num">148</span>        params = []
+<span class="line-num">149</span>        for col, val in updates.items():
+<span class="line-num">150</span>            if val is not None:
+<span class="line-num">151</span>                set_clauses.append(f&quot;{col} = ?&quot;)
+<span class="line-num">152</span>                params.append(val)
+<span class="line-num">153</span>
+<span class="line-num">154</span>        if set_clauses:
+<span class="line-num">155</span>            params.append(slug)
+<span class="line-num">156</span>            cur.execute(
+<span class="line-num">157</span>                f&quot;UPDATE dictionary_terms SET {&#x27;, &#x27;.join(set_clauses)} WHERE slug = ?&quot;,
+<span class="line-num">158</span>                params
+<span class="line-num">159</span>            )
+<span class="line-num">160</span>            enriched += 1
+<span class="line-num">161</span>            print(f&quot;  ENRICHED: {slug} ({len(source_docs)} docs, {len(page_refs)} refs)&quot;)
+<span class="line-num">162</span>
+<span class="line-num">163</span>    conn.commit()
+<span class="line-num">164</span>    conn.close()
+<span class="line-num">165</span>    print(f&quot;\nEnriched {enriched} terms, skipped {skipped_verified} verified terms.&quot;)
+<span class="line-num">166</span>
+<span class="line-num">167</span>
+<span class="line-num">168</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">169</span>    print(&quot;=== Enriching Dictionary from Reading Packets ===\n&quot;)
+<span class="line-num">170</span>    enrich_from_packets()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

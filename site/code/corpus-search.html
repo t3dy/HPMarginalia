@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corpus Search - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Corpus Search</h2>
+            <div class="code-meta">corpus_search.py &mdash; 220 lines</div>
+            <p style="margin-bottom:1rem">Keyword-based search across markdown chunks and documents with provenance tracking.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Corpus search utilities: search across markdown chunks and full documents.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Provides keyword-based search across the /chunks/ and /md/ directories
+<span class="line-num">4</span>with provenance tracking. No embeddings required.
+<span class="line-num">5</span>
+<span class="line-num">6</span>Functions:
+<span class="line-num">7</span>    search_chunks(query, top_n=20) -&gt; list of match dicts
+<span class="line-num">8</span>    search_by_term(term_slug, synonyms=None) -&gt; list of match dicts
+<span class="line-num">9</span>    search_documents(query, doc_filter=None) -&gt; list of match dicts
+<span class="line-num">10</span>&quot;&quot;&quot;
+<span class="line-num">11</span>
+<span class="line-num">12</span>import re
+<span class="line-num">13</span>import os
+<span class="line-num">14</span>from pathlib import Path
+<span class="line-num">15</span>
+<span class="line-num">16</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">17</span>CHUNKS_DIR = BASE_DIR / &quot;chunks&quot;
+<span class="line-num">18</span>MD_DIR = BASE_DIR / &quot;md&quot;
+<span class="line-num">19</span>
+<span class="line-num">20</span>
+<span class="line-num">21</span>def _parse_chunk_frontmatter(text):
+<span class="line-num">22</span>    &quot;&quot;&quot;Extract YAML frontmatter from a chunk file.&quot;&quot;&quot;
+<span class="line-num">23</span>    meta = {}
+<span class="line-num">24</span>    if text.startswith(&#x27;---&#x27;):
+<span class="line-num">25</span>        end = text.find(&#x27;---&#x27;, 3)
+<span class="line-num">26</span>        if end &gt; 0:
+<span class="line-num">27</span>            for line in text[3:end].strip().split(&#x27;\n&#x27;):
+<span class="line-num">28</span>                if &#x27;:&#x27; in line:
+<span class="line-num">29</span>                    key, val = line.split(&#x27;:&#x27;, 1)
+<span class="line-num">30</span>                    val = val.strip().strip(&#x27;&quot;&#x27;).strip(&quot;&#x27;&quot;)
+<span class="line-num">31</span>                    meta[key.strip()] = val
+<span class="line-num">32</span>    return meta
+<span class="line-num">33</span>
+<span class="line-num">34</span>
+<span class="line-num">35</span>def _extract_page_refs(text):
+<span class="line-num">36</span>    &quot;&quot;&quot;Extract page markers from chunk text.&quot;&quot;&quot;
+<span class="line-num">37</span>    return re.findall(r&#x27;&lt;!-- Page (\d+) --&gt;&#x27;, text)
+<span class="line-num">38</span>
+<span class="line-num">39</span>
+<span class="line-num">40</span>def _score_match(text, query_terms):
+<span class="line-num">41</span>    &quot;&quot;&quot;Score a text block by frequency and proximity of query terms.&quot;&quot;&quot;
+<span class="line-num">42</span>    text_lower = text.lower()
+<span class="line-num">43</span>    score = 0
+<span class="line-num">44</span>    for term in query_terms:
+<span class="line-num">45</span>        count = text_lower.count(term.lower())
+<span class="line-num">46</span>        score += count
+<span class="line-num">47</span>    return score
+<span class="line-num">48</span>
+<span class="line-num">49</span>
+<span class="line-num">50</span>def _context_window(text, query_terms, window=300):
+<span class="line-num">51</span>    &quot;&quot;&quot;Extract the best context window around the query terms.&quot;&quot;&quot;
+<span class="line-num">52</span>    text_lower = text.lower()
+<span class="line-num">53</span>    best_pos = -1
+<span class="line-num">54</span>    best_score = 0
+<span class="line-num">55</span>
+<span class="line-num">56</span>    for term in query_terms:
+<span class="line-num">57</span>        pos = text_lower.find(term.lower())
+<span class="line-num">58</span>        if pos &gt;= 0:
+<span class="line-num">59</span>            # Score this position by counting nearby term occurrences
+<span class="line-num">60</span>            start = max(0, pos - window)
+<span class="line-num">61</span>            end = min(len(text), pos + window)
+<span class="line-num">62</span>            snippet = text_lower[start:end]
+<span class="line-num">63</span>            score = sum(snippet.count(t.lower()) for t in query_terms)
+<span class="line-num">64</span>            if score &gt; best_score:
+<span class="line-num">65</span>                best_score = score
+<span class="line-num">66</span>                best_pos = pos
+<span class="line-num">67</span>
+<span class="line-num">68</span>    if best_pos &lt; 0:
+<span class="line-num">69</span>        return text[:window * 2] if len(text) &gt; window * 2 else text
+<span class="line-num">70</span>
+<span class="line-num">71</span>    start = max(0, best_pos - window)
+<span class="line-num">72</span>    end = min(len(text), best_pos + window)
+<span class="line-num">73</span>    snippet = text[start:end].strip()
+<span class="line-num">74</span>
+<span class="line-num">75</span>    # Clean up snippet boundaries
+<span class="line-num">76</span>    if start &gt; 0:
+<span class="line-num">77</span>        first_space = snippet.find(&#x27; &#x27;)
+<span class="line-num">78</span>        if first_space &gt; 0:
+<span class="line-num">79</span>            snippet = &#x27;...&#x27; + snippet[first_space:]
+<span class="line-num">80</span>    if end &lt; len(text):
+<span class="line-num">81</span>        last_space = snippet.rfind(&#x27; &#x27;)
+<span class="line-num">82</span>        if last_space &gt; 0:
+<span class="line-num">83</span>            snippet = snippet[:last_space] + &#x27;...&#x27;
+<span class="line-num">84</span>
+<span class="line-num">85</span>    return snippet
+<span class="line-num">86</span>
+<span class="line-num">87</span>
+<span class="line-num">88</span>def search_chunks(query, top_n=20):
+<span class="line-num">89</span>    &quot;&quot;&quot;Search across all chunk files for passages matching query.
+<span class="line-num">90</span>
+<span class="line-num">91</span>    Args:
+<span class="line-num">92</span>        query: Search string (can be multiple words)
+<span class="line-num">93</span>        top_n: Maximum results to return
+<span class="line-num">94</span>
+<span class="line-num">95</span>    Returns:
+<span class="line-num">96</span>        List of dicts: {chunk_path, source_doc, section, page_refs,
+<span class="line-num">97</span>                        matched_text, relevance_score, word_count}
+<span class="line-num">98</span>    &quot;&quot;&quot;
+<span class="line-num">99</span>    if not CHUNKS_DIR.exists():
+<span class="line-num">100</span>        return []
+<span class="line-num">101</span>
+<span class="line-num">102</span>    query_terms = [t for t in query.lower().split() if len(t) &gt; 2]
+<span class="line-num">103</span>    if not query_terms:
+<span class="line-num">104</span>        return []
+<span class="line-num">105</span>
+<span class="line-num">106</span>    results = []
+<span class="line-num">107</span>
+<span class="line-num">108</span>    for doc_dir in sorted(CHUNKS_DIR.iterdir()):
+<span class="line-num">109</span>        if not doc_dir.is_dir():
+<span class="line-num">110</span>            continue
+<span class="line-num">111</span>        for chunk_file in sorted(doc_dir.glob(&#x27;chunk_*.md&#x27;)):
+<span class="line-num">112</span>            text = chunk_file.read_text(encoding=&#x27;utf-8&#x27;, errors=&#x27;replace&#x27;)
+<span class="line-num">113</span>            meta = _parse_chunk_frontmatter(text)
+<span class="line-num">114</span>
+<span class="line-num">115</span>            # Strip frontmatter for content search
+<span class="line-num">116</span>            body_start = text.find(&#x27;---&#x27;, 3)
+<span class="line-num">117</span>            body = text[body_start + 3:].strip() if body_start &gt; 0 else text
+<span class="line-num">118</span>
+<span class="line-num">119</span>            score = _score_match(body, query_terms)
+<span class="line-num">120</span>            if score == 0:
+<span class="line-num">121</span>                continue
+<span class="line-num">122</span>
+<span class="line-num">123</span>            page_refs = _extract_page_refs(body)
+<span class="line-num">124</span>            context = _context_window(body, query_terms)
+<span class="line-num">125</span>
+<span class="line-num">126</span>            results.append({
+<span class="line-num">127</span>                &#x27;chunk_path&#x27;: str(chunk_file.relative_to(BASE_DIR)),
+<span class="line-num">128</span>                &#x27;source_doc&#x27;: meta.get(&#x27;source&#x27;, str(doc_dir.name)),
+<span class="line-num">129</span>                &#x27;section&#x27;: meta.get(&#x27;section&#x27;, &#x27;&#x27;),
+<span class="line-num">130</span>                &#x27;page_refs&#x27;: page_refs,
+<span class="line-num">131</span>                &#x27;matched_text&#x27;: context,
+<span class="line-num">132</span>                &#x27;relevance_score&#x27;: score,
+<span class="line-num">133</span>                &#x27;word_count&#x27;: int(meta.get(&#x27;word_count&#x27;, 0)),
+<span class="line-num">134</span>            })
+<span class="line-num">135</span>
+<span class="line-num">136</span>    results.sort(key=lambda x: x[&#x27;relevance_score&#x27;], reverse=True)
+<span class="line-num">137</span>    return results[:top_n]
+<span class="line-num">138</span>
+<span class="line-num">139</span>
+<span class="line-num">140</span>def search_by_term(term_label, synonyms=None):
+<span class="line-num">141</span>    &quot;&quot;&quot;Search for a dictionary term across all chunks.
+<span class="line-num">142</span>
+<span class="line-num">143</span>    Args:
+<span class="line-num">144</span>        term_label: The term label (e.g. &quot;Signature&quot;)
+<span class="line-num">145</span>        synonyms: Optional list of alternative forms to search
+<span class="line-num">146</span>
+<span class="line-num">147</span>    Returns:
+<span class="line-num">148</span>        List of match dicts (same format as search_chunks)
+<span class="line-num">149</span>    &quot;&quot;&quot;
+<span class="line-num">150</span>    search_terms = [term_label]
+<span class="line-num">151</span>    if synonyms:
+<span class="line-num">152</span>        search_terms.extend(synonyms)
+<span class="line-num">153</span>
+<span class="line-num">154</span>    all_results = []
+<span class="line-num">155</span>    seen_paths = set()
+<span class="line-num">156</span>
+<span class="line-num">157</span>    for term in search_terms:
+<span class="line-num">158</span>        results = search_chunks(term, top_n=30)
+<span class="line-num">159</span>        for r in results:
+<span class="line-num">160</span>            if r[&#x27;chunk_path&#x27;] not in seen_paths:
+<span class="line-num">161</span>                seen_paths.add(r[&#x27;chunk_path&#x27;])
+<span class="line-num">162</span>                all_results.append(r)
+<span class="line-num">163</span>
+<span class="line-num">164</span>    all_results.sort(key=lambda x: x[&#x27;relevance_score&#x27;], reverse=True)
+<span class="line-num">165</span>    return all_results[:20]
+<span class="line-num">166</span>
+<span class="line-num">167</span>
+<span class="line-num">168</span>def search_documents(query, doc_filter=None):
+<span class="line-num">169</span>    &quot;&quot;&quot;Search across full markdown documents (not chunks).
+<span class="line-num">170</span>
+<span class="line-num">171</span>    Args:
+<span class="line-num">172</span>        query: Search string
+<span class="line-num">173</span>        doc_filter: Optional substring to filter document filenames
+<span class="line-num">174</span>
+<span class="line-num">175</span>    Returns:
+<span class="line-num">176</span>        List of dicts: {doc_path, page_refs, matched_text, relevance_score}
+<span class="line-num">177</span>    &quot;&quot;&quot;
+<span class="line-num">178</span>    if not MD_DIR.exists():
+<span class="line-num">179</span>        return []
+<span class="line-num">180</span>
+<span class="line-num">181</span>    query_terms = [t for t in query.lower().split() if len(t) &gt; 2]
+<span class="line-num">182</span>    if not query_terms:
+<span class="line-num">183</span>        return []
+<span class="line-num">184</span>
+<span class="line-num">185</span>    results = []
+<span class="line-num">186</span>
+<span class="line-num">187</span>    for md_file in sorted(MD_DIR.glob(&#x27;*.md&#x27;)):
+<span class="line-num">188</span>        if doc_filter and doc_filter.lower() not in md_file.name.lower():
+<span class="line-num">189</span>            continue
+<span class="line-num">190</span>
+<span class="line-num">191</span>        text = md_file.read_text(encoding=&#x27;utf-8&#x27;, errors=&#x27;replace&#x27;)
+<span class="line-num">192</span>        score = _score_match(text, query_terms)
+<span class="line-num">193</span>        if score == 0:
+<span class="line-num">194</span>            continue
+<span class="line-num">195</span>
+<span class="line-num">196</span>        page_refs = _extract_page_refs(text)
+<span class="line-num">197</span>        context = _context_window(text, query_terms)
+<span class="line-num">198</span>
+<span class="line-num">199</span>        results.append({
+<span class="line-num">200</span>            &#x27;doc_path&#x27;: str(md_file.relative_to(BASE_DIR)),
+<span class="line-num">201</span>            &#x27;page_refs&#x27;: page_refs,
+<span class="line-num">202</span>            &#x27;matched_text&#x27;: context,
+<span class="line-num">203</span>            &#x27;relevance_score&#x27;: score,
+<span class="line-num">204</span>        })
+<span class="line-num">205</span>
+<span class="line-num">206</span>    results.sort(key=lambda x: x[&#x27;relevance_score&#x27;], reverse=True)
+<span class="line-num">207</span>    return results
+<span class="line-num">208</span>
+<span class="line-num">209</span>
+<span class="line-num">210</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">211</span>    import sys
+<span class="line-num">212</span>    query = &#x27; &#x27;.join(sys.argv[1:]) if len(sys.argv) &gt; 1 else &quot;alchemical mercury&quot;
+<span class="line-num">213</span>    print(f&quot;Searching chunks for: &#x27;{query}&#x27;\n&quot;)
+<span class="line-num">214</span>    results = search_chunks(query, top_n=10)
+<span class="line-num">215</span>    for i, r in enumerate(results, 1):
+<span class="line-num">216</span>        print(f&quot;{i}. [{r[&#x27;relevance_score&#x27;]}] {r[&#x27;source_doc&#x27;]}&quot;)
+<span class="line-num">217</span>        print(f&quot;   Section: {r[&#x27;section&#x27;]}&quot;)
+<span class="line-num">218</span>        print(f&quot;   Pages: {&#x27;, &#x27;.join(r[&#x27;page_refs&#x27;][:5])}&quot;)
+<span class="line-num">219</span>        print(f&quot;   Match: {r[&#x27;matched_text&#x27;][:200]}...&quot;)
+<span class="line-num">220</span>        print()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

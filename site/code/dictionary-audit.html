@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Audit - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Dictionary Audit</h2>
+            <div class="code-meta">dictionary_audit.py &mdash; 160 lines</div>
+            <p style="margin-bottom:1rem">Audits dictionary coverage: missing fields, duplicate slugs, orphaned links, weak terms.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Dictionary coverage audit: identifies terms needing improvement.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Checks for:
+<span class="line-num">4</span>- Missing fields (significance, source_documents, etc.)
+<span class="line-num">5</span>- Terms stuck at DRAFT status
+<span class="line-num">6</span>- Duplicate slugs
+<span class="line-num">7</span>- Orphaned links (links to nonexistent terms)
+<span class="line-num">8</span>- Terms with no related links
+<span class="line-num">9</span>- Coverage by category
+<span class="line-num">10</span>
+<span class="line-num">11</span>Outputs JSON report to staging/dictionary_audit.json and console summary.
+<span class="line-num">12</span>&quot;&quot;&quot;
+<span class="line-num">13</span>
+<span class="line-num">14</span>import sqlite3
+<span class="line-num">15</span>import json
+<span class="line-num">16</span>from pathlib import Path
+<span class="line-num">17</span>
+<span class="line-num">18</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">19</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">20</span>STAGING_DIR = BASE_DIR / &quot;staging&quot;
+<span class="line-num">21</span>
+<span class="line-num">22</span>
+<span class="line-num">23</span>def audit():
+<span class="line-num">24</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">25</span>    conn.row_factory = sqlite3.Row
+<span class="line-num">26</span>    cur = conn.cursor()
+<span class="line-num">27</span>
+<span class="line-num">28</span>    report = {
+<span class="line-num">29</span>        &#x27;total_terms&#x27;: 0,
+<span class="line-num">30</span>        &#x27;by_status&#x27;: {},
+<span class="line-num">31</span>        &#x27;by_category&#x27;: {},
+<span class="line-num">32</span>        &#x27;missing_fields&#x27;: [],
+<span class="line-num">33</span>        &#x27;duplicate_slugs&#x27;: [],
+<span class="line-num">34</span>        &#x27;orphaned_links&#x27;: [],
+<span class="line-num">35</span>        &#x27;terms_without_links&#x27;: [],
+<span class="line-num">36</span>        &#x27;weak_terms&#x27;: [],
+<span class="line-num">37</span>        &#x27;summary&#x27;: {},
+<span class="line-num">38</span>    }
+<span class="line-num">39</span>
+<span class="line-num">40</span>    # Total terms
+<span class="line-num">41</span>    cur.execute(&quot;SELECT COUNT(*) FROM dictionary_terms&quot;)
+<span class="line-num">42</span>    report[&#x27;total_terms&#x27;] = cur.fetchone()[0]
+<span class="line-num">43</span>
+<span class="line-num">44</span>    # By status
+<span class="line-num">45</span>    cur.execute(&quot;SELECT review_status, COUNT(*) FROM dictionary_terms GROUP BY review_status&quot;)
+<span class="line-num">46</span>    report[&#x27;by_status&#x27;] = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">47</span>
+<span class="line-num">48</span>    # By category
+<span class="line-num">49</span>    cur.execute(&quot;SELECT category, COUNT(*) FROM dictionary_terms GROUP BY category ORDER BY COUNT(*) DESC&quot;)
+<span class="line-num">50</span>    report[&#x27;by_category&#x27;] = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">51</span>
+<span class="line-num">52</span>    # Check for missing fields on each term
+<span class="line-num">53</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">54</span>        SELECT slug, label, category, definition_short, definition_long,
+<span class="line-num">55</span>               source_basis, review_status, significance_to_hp,
+<span class="line-num">56</span>               significance_to_scholarship, source_documents, source_page_refs,
+<span class="line-num">57</span>               source_method, confidence
+<span class="line-num">58</span>        FROM dictionary_terms ORDER BY slug
+<span class="line-num">59</span>    &quot;&quot;&quot;)
+<span class="line-num">60</span>
+<span class="line-num">61</span>    important_fields = [
+<span class="line-num">62</span>        &#x27;definition_long&#x27;, &#x27;source_basis&#x27;, &#x27;significance_to_hp&#x27;,
+<span class="line-num">63</span>        &#x27;significance_to_scholarship&#x27;, &#x27;source_documents&#x27;
+<span class="line-num">64</span>    ]
+<span class="line-num">65</span>
+<span class="line-num">66</span>    for row in cur.fetchall():
+<span class="line-num">67</span>        missing = []
+<span class="line-num">68</span>        for field in important_fields:
+<span class="line-num">69</span>            val = row[field] if field in row.keys() else None
+<span class="line-num">70</span>            if not val or (isinstance(val, str) and val.strip() == &#x27;&#x27;):
+<span class="line-num">71</span>                missing.append(field)
+<span class="line-num">72</span>
+<span class="line-num">73</span>        if missing:
+<span class="line-num">74</span>            report[&#x27;missing_fields&#x27;].append({
+<span class="line-num">75</span>                &#x27;slug&#x27;: row[&#x27;slug&#x27;],
+<span class="line-num">76</span>                &#x27;label&#x27;: row[&#x27;label&#x27;],
+<span class="line-num">77</span>                &#x27;category&#x27;: row[&#x27;category&#x27;],
+<span class="line-num">78</span>                &#x27;review_status&#x27;: row[&#x27;review_status&#x27;],
+<span class="line-num">79</span>                &#x27;missing&#x27;: missing,
+<span class="line-num">80</span>            })
+<span class="line-num">81</span>
+<span class="line-num">82</span>        # &quot;Weak&quot; = DRAFT + missing 2+ important fields
+<span class="line-num">83</span>        if row[&#x27;review_status&#x27;] == &#x27;DRAFT&#x27; and len(missing) &gt;= 2:
+<span class="line-num">84</span>            report[&#x27;weak_terms&#x27;].append({
+<span class="line-num">85</span>                &#x27;slug&#x27;: row[&#x27;slug&#x27;],
+<span class="line-num">86</span>                &#x27;label&#x27;: row[&#x27;label&#x27;],
+<span class="line-num">87</span>                &#x27;missing_count&#x27;: len(missing),
+<span class="line-num">88</span>                &#x27;missing&#x27;: missing,
+<span class="line-num">89</span>            })
+<span class="line-num">90</span>
+<span class="line-num">91</span>    # Duplicate slugs
+<span class="line-num">92</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">93</span>        SELECT slug, COUNT(*) FROM dictionary_terms
+<span class="line-num">94</span>        GROUP BY slug HAVING COUNT(*) &gt; 1
+<span class="line-num">95</span>    &quot;&quot;&quot;)
+<span class="line-num">96</span>    report[&#x27;duplicate_slugs&#x27;] = [row[0] for row in cur.fetchall()]
+<span class="line-num">97</span>
+<span class="line-num">98</span>    # Orphaned links
+<span class="line-num">99</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">100</span>        SELECT l.id, l.term_id, l.linked_term_id
+<span class="line-num">101</span>        FROM dictionary_term_links l
+<span class="line-num">102</span>        LEFT JOIN dictionary_terms t1 ON l.term_id = t1.id
+<span class="line-num">103</span>        LEFT JOIN dictionary_terms t2 ON l.linked_term_id = t2.id
+<span class="line-num">104</span>        WHERE t1.id IS NULL OR t2.id IS NULL
+<span class="line-num">105</span>    &quot;&quot;&quot;)
+<span class="line-num">106</span>    report[&#x27;orphaned_links&#x27;] = [dict(row) for row in cur.fetchall()]
+<span class="line-num">107</span>
+<span class="line-num">108</span>    # Terms without any links
+<span class="line-num">109</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">110</span>        SELECT t.slug, t.label FROM dictionary_terms t
+<span class="line-num">111</span>        LEFT JOIN dictionary_term_links l ON t.id = l.term_id
+<span class="line-num">112</span>        WHERE l.id IS NULL
+<span class="line-num">113</span>    &quot;&quot;&quot;)
+<span class="line-num">114</span>    report[&#x27;terms_without_links&#x27;] = [{&#x27;slug&#x27;: row[0], &#x27;label&#x27;: row[1]} for row in cur.fetchall()]
+<span class="line-num">115</span>
+<span class="line-num">116</span>    # Summary
+<span class="line-num">117</span>    report[&#x27;summary&#x27;] = {
+<span class="line-num">118</span>        &#x27;total_terms&#x27;: report[&#x27;total_terms&#x27;],
+<span class="line-num">119</span>        &#x27;draft_count&#x27;: report[&#x27;by_status&#x27;].get(&#x27;DRAFT&#x27;, 0),
+<span class="line-num">120</span>        &#x27;verified_count&#x27;: report[&#x27;by_status&#x27;].get(&#x27;VERIFIED&#x27;, 0),
+<span class="line-num">121</span>        &#x27;terms_with_missing_fields&#x27;: len(report[&#x27;missing_fields&#x27;]),
+<span class="line-num">122</span>        &#x27;weak_terms_count&#x27;: len(report[&#x27;weak_terms&#x27;]),
+<span class="line-num">123</span>        &#x27;duplicate_slugs_count&#x27;: len(report[&#x27;duplicate_slugs&#x27;]),
+<span class="line-num">124</span>        &#x27;orphaned_links_count&#x27;: len(report[&#x27;orphaned_links&#x27;]),
+<span class="line-num">125</span>        &#x27;terms_without_links_count&#x27;: len(report[&#x27;terms_without_links&#x27;]),
+<span class="line-num">126</span>        &#x27;categories&#x27;: len(report[&#x27;by_category&#x27;]),
+<span class="line-num">127</span>    }
+<span class="line-num">128</span>
+<span class="line-num">129</span>    conn.close()
+<span class="line-num">130</span>
+<span class="line-num">131</span>    # Write report
+<span class="line-num">132</span>    STAGING_DIR.mkdir(exist_ok=True)
+<span class="line-num">133</span>    report_path = STAGING_DIR / &quot;dictionary_audit.json&quot;
+<span class="line-num">134</span>    with open(report_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">135</span>        json.dump(report, f, indent=2, ensure_ascii=False)
+<span class="line-num">136</span>
+<span class="line-num">137</span>    # Console output
+<span class="line-num">138</span>    print(&quot;=== Dictionary Audit ===\n&quot;)
+<span class="line-num">139</span>    print(f&quot;Total terms: {report[&#x27;total_terms&#x27;]}&quot;)
+<span class="line-num">140</span>    print(f&quot;By status: {report[&#x27;by_status&#x27;]}&quot;)
+<span class="line-num">141</span>    print(f&quot;Categories: {len(report[&#x27;by_category&#x27;])}&quot;)
+<span class="line-num">142</span>    for cat, count in report[&#x27;by_category&#x27;].items():
+<span class="line-num">143</span>        print(f&quot;  {cat}: {count}&quot;)
+<span class="line-num">144</span>    print(f&quot;\nTerms with missing important fields: {len(report[&#x27;missing_fields&#x27;])}&quot;)
+<span class="line-num">145</span>    print(f&quot;Weak terms (DRAFT + 2+ missing): {len(report[&#x27;weak_terms&#x27;])}&quot;)
+<span class="line-num">146</span>    if report[&#x27;weak_terms&#x27;]:
+<span class="line-num">147</span>        for wt in report[&#x27;weak_terms&#x27;]:
+<span class="line-num">148</span>            print(f&quot;  - {wt[&#x27;slug&#x27;]}: missing {&#x27;, &#x27;.join(wt[&#x27;missing&#x27;])}&quot;)
+<span class="line-num">149</span>    print(f&quot;Duplicate slugs: {len(report[&#x27;duplicate_slugs&#x27;])}&quot;)
+<span class="line-num">150</span>    print(f&quot;Orphaned links: {len(report[&#x27;orphaned_links&#x27;])}&quot;)
+<span class="line-num">151</span>    print(f&quot;Terms without links: {len(report[&#x27;terms_without_links&#x27;])}&quot;)
+<span class="line-num">152</span>    if report[&#x27;terms_without_links&#x27;]:
+<span class="line-num">153</span>        for t in report[&#x27;terms_without_links&#x27;]:
+<span class="line-num">154</span>            print(f&quot;  - {t[&#x27;slug&#x27;]}&quot;)
+<span class="line-num">155</span>    print(f&quot;\nReport written to: {report_path}&quot;)
+<span class="line-num">156</span>    return report
+<span class="line-num">157</span>
+<span class="line-num">158</span>
+<span class="line-num">159</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">160</span>    audit()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

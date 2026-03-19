@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Essay Data - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Build Essay Data</h2>
+            <div class="code-meta">build_essay_data.py &mdash; 318 lines</div>
+            <p style="margin-bottom:1rem">Extracts structured evidence from DB and corpus for the Russell and Concordance essays.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Extract and structure evidence for the two essay pages.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Produces:
+<span class="line-num">4</span>- staging/essay_russell.json: evidence for the Russell Alchemical Hands essay
+<span class="line-num">5</span>- staging/essay_concordance.json: evidence for the Concordance Methodology essay
+<span class="line-num">6</span>
+<span class="line-num">7</span>All data is retrieved evidence + DB queries. No generated interpretation.
+<span class="line-num">8</span>&quot;&quot;&quot;
+<span class="line-num">9</span>
+<span class="line-num">10</span>import sqlite3
+<span class="line-num">11</span>import json
+<span class="line-num">12</span>from pathlib import Path
+<span class="line-num">13</span>
+<span class="line-num">14</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">15</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">16</span>STAGING_DIR = BASE_DIR / &quot;staging&quot;
+<span class="line-num">17</span>
+<span class="line-num">18</span>import sys
+<span class="line-num">19</span>sys.path.insert(0, str(BASE_DIR / &quot;scripts&quot;))
+<span class="line-num">20</span>from corpus_search import search_chunks
+<span class="line-num">21</span>
+<span class="line-num">22</span>
+<span class="line-num">23</span>def build_russell_essay_data():
+<span class="line-num">24</span>    &quot;&quot;&quot;Gather evidence for the Russell Alchemical Hands essay.&quot;&quot;&quot;
+<span class="line-num">25</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">26</span>    conn.row_factory = sqlite3.Row
+<span class="line-num">27</span>    cur = conn.cursor()
+<span class="line-num">28</span>
+<span class="line-num">29</span>    data = {
+<span class="line-num">30</span>        &#x27;title&#x27;: &quot;Russell&#x27;s Research on the Alchemical Hands&quot;,
+<span class="line-num">31</span>        &#x27;source_method&#x27;: &#x27;CORPUS_EXTRACTION&#x27;,
+<span class="line-num">32</span>        &#x27;sections&#x27;: [],
+<span class="line-num">33</span>    }
+<span class="line-num">34</span>
+<span class="line-num">35</span>    # 1. Get all annotator hands, especially alchemists
+<span class="line-num">36</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">37</span>        SELECT hand_label, manuscript_shelfmark, attribution, is_alchemist,
+<span class="line-num">38</span>               school, language, ink_color, date_range, description, interests
+<span class="line-num">39</span>        FROM annotator_hands ORDER BY manuscript_shelfmark, hand_label
+<span class="line-num">40</span>    &quot;&quot;&quot;)
+<span class="line-num">41</span>    all_hands = [dict(row) for row in cur.fetchall()]
+<span class="line-num">42</span>    alchemist_hands = [h for h in all_hands if h[&#x27;is_alchemist&#x27;]]
+<span class="line-num">43</span>
+<span class="line-num">44</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">45</span>        &#x27;id&#x27;: &#x27;annotator-hands-overview&#x27;,
+<span class="line-num">46</span>        &#x27;title&#x27;: &#x27;All Annotator Hands in the Corpus&#x27;,
+<span class="line-num">47</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">48</span>        &#x27;data&#x27;: all_hands,
+<span class="line-num">49</span>    })
+<span class="line-num">50</span>
+<span class="line-num">51</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">52</span>        &#x27;id&#x27;: &#x27;alchemist-hands&#x27;,
+<span class="line-num">53</span>        &#x27;title&#x27;: &#x27;Alchemist Annotators&#x27;,
+<span class="line-num">54</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">55</span>        &#x27;data&#x27;: alchemist_hands,
+<span class="line-num">56</span>    })
+<span class="line-num">57</span>
+<span class="line-num">58</span>    # 2. Get dissertation refs attributed to alchemist hands
+<span class="line-num">59</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">60</span>        SELECT r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
+<span class="line-num">61</span>               r.chapter_num, r.manuscript_shelfmark,
+<span class="line-num">62</span>               h.hand_label, h.attribution, h.school
+<span class="line-num">63</span>        FROM dissertation_refs r
+<span class="line-num">64</span>        JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">65</span>        WHERE h.is_alchemist = 1
+<span class="line-num">66</span>        ORDER BY r.thesis_page
+<span class="line-num">67</span>    &quot;&quot;&quot;)
+<span class="line-num">68</span>    alchemist_refs = [dict(row) for row in cur.fetchall()]
+<span class="line-num">69</span>
+<span class="line-num">70</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">71</span>        &#x27;id&#x27;: &#x27;alchemist-refs&#x27;,
+<span class="line-num">72</span>        &#x27;title&#x27;: &#x27;Dissertation References to Alchemical Annotations&#x27;,
+<span class="line-num">73</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">74</span>        &#x27;count&#x27;: len(alchemist_refs),
+<span class="line-num">75</span>        &#x27;data&#x27;: alchemist_refs[:50],  # cap for file size
+<span class="line-num">76</span>    })
+<span class="line-num">77</span>
+<span class="line-num">78</span>    # 3. Get images matched to alchemist refs
+<span class="line-num">79</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">80</span>        SELECT r.signature_ref, i.filename, i.relative_path,
+<span class="line-num">81</span>               m.shelfmark, mat.confidence,
+<span class="line-num">82</span>               h.hand_label, h.school
+<span class="line-num">83</span>        FROM matches mat
+<span class="line-num">84</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
+<span class="line-num">85</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">86</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">87</span>        JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">88</span>        WHERE h.is_alchemist = 1
+<span class="line-num">89</span>        ORDER BY mat.confidence DESC, r.signature_ref
+<span class="line-num">90</span>    &quot;&quot;&quot;)
+<span class="line-num">91</span>    alchemist_images = [dict(row) for row in cur.fetchall()]
+<span class="line-num">92</span>
+<span class="line-num">93</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">94</span>        &#x27;id&#x27;: &#x27;alchemist-images&#x27;,
+<span class="line-num">95</span>        &#x27;title&#x27;: &#x27;Images Matched to Alchemical Annotations&#x27;,
+<span class="line-num">96</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">97</span>        &#x27;count&#x27;: len(alchemist_images),
+<span class="line-num">98</span>        &#x27;data&#x27;: alchemist_images[:30],
+<span class="line-num">99</span>    })
+<span class="line-num">100</span>
+<span class="line-num">101</span>    # 4. Search corpus for key alchemical evidence
+<span class="line-num">102</span>    searches = [
+<span class="line-num">103</span>        (&#x27;BL alchemist Hand B&#x27;, &#x27;Hand B alchemist BL mercury&#x27;),
+<span class="line-num">104</span>        (&#x27;Buffalo alchemist Hand E&#x27;, &#x27;Hand E Buffalo alchemist Geber&#x27;),
+<span class="line-num">105</span>        (&quot;d&#x27;Espagnet framework&quot;, &quot;Espagnet mercury Enchiridion&quot;),
+<span class="line-num">106</span>        (&#x27;Master Mercury flyleaf&#x27;, &#x27;Mercury Magisteri flyleaf verus sensus&#x27;),
+<span class="line-num">107</span>        (&#x27;Sol Luna Buffalo&#x27;, &#x27;Sol Luna gold silver Buffalo chess&#x27;),
+<span class="line-num">108</span>        (&#x27;alchemical ideograms&#x27;, &#x27;ideogram alchemical symbol sign&#x27;),
+<span class="line-num">109</span>    ]
+<span class="line-num">110</span>
+<span class="line-num">111</span>    for label, query in searches:
+<span class="line-num">112</span>        results = search_chunks(query, top_n=5)
+<span class="line-num">113</span>        data[&#x27;sections&#x27;].append({
+<span class="line-num">114</span>            &#x27;id&#x27;: f&#x27;corpus-{label.lower().replace(&quot; &quot;, &quot;-&quot;)}&#x27;,
+<span class="line-num">115</span>            &#x27;title&#x27;: f&#x27;Corpus Evidence: {label}&#x27;,
+<span class="line-num">116</span>            &#x27;evidence_type&#x27;: &#x27;CORPUS_SEARCH&#x27;,
+<span class="line-num">117</span>            &#x27;query&#x27;: query,
+<span class="line-num">118</span>            &#x27;results&#x27;: [{
+<span class="line-num">119</span>                &#x27;source_doc&#x27;: r[&#x27;source_doc&#x27;],
+<span class="line-num">120</span>                &#x27;section&#x27;: r[&#x27;section&#x27;],
+<span class="line-num">121</span>                &#x27;page_refs&#x27;: r[&#x27;page_refs&#x27;],
+<span class="line-num">122</span>                &#x27;matched_text&#x27;: r[&#x27;matched_text&#x27;],
+<span class="line-num">123</span>                &#x27;relevance_score&#x27;: r[&#x27;relevance_score&#x27;],
+<span class="line-num">124</span>            } for r in results],
+<span class="line-num">125</span>        })
+<span class="line-num">126</span>
+<span class="line-num">127</span>    # 5. Match statistics
+<span class="line-num">128</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">129</span>        SELECT mat.confidence, COUNT(*)
+<span class="line-num">130</span>        FROM matches mat
+<span class="line-num">131</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
+<span class="line-num">132</span>        JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">133</span>        WHERE h.is_alchemist = 1
+<span class="line-num">134</span>        GROUP BY mat.confidence
+<span class="line-num">135</span>    &quot;&quot;&quot;)
+<span class="line-num">136</span>    confidence_dist = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">137</span>
+<span class="line-num">138</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">139</span>        &#x27;id&#x27;: &#x27;confidence-distribution&#x27;,
+<span class="line-num">140</span>        &#x27;title&#x27;: &#x27;Confidence Distribution for Alchemist Matches&#x27;,
+<span class="line-num">141</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">142</span>        &#x27;data&#x27;: confidence_dist,
+<span class="line-num">143</span>    })
+<span class="line-num">144</span>
+<span class="line-num">145</span>    conn.close()
+<span class="line-num">146</span>
+<span class="line-num">147</span>    out_path = STAGING_DIR / &quot;essay_russell.json&quot;
+<span class="line-num">148</span>    with open(out_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">149</span>        json.dump(data, f, indent=2, ensure_ascii=False)
+<span class="line-num">150</span>    print(f&quot;Russell essay data: {out_path}&quot;)
+<span class="line-num">151</span>    return data
+<span class="line-num">152</span>
+<span class="line-num">153</span>
+<span class="line-num">154</span>def build_concordance_essay_data():
+<span class="line-num">155</span>    &quot;&quot;&quot;Gather evidence for the Concordance Methodology essay.&quot;&quot;&quot;
+<span class="line-num">156</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">157</span>    conn.row_factory = sqlite3.Row
+<span class="line-num">158</span>    cur = conn.cursor()
+<span class="line-num">159</span>
+<span class="line-num">160</span>    data = {
+<span class="line-num">161</span>        &#x27;title&#x27;: &#x27;Concordance Methodology&#x27;,
+<span class="line-num">162</span>        &#x27;source_method&#x27;: &#x27;DETERMINISTIC&#x27;,
+<span class="line-num">163</span>        &#x27;sections&#x27;: [],
+<span class="line-num">164</span>    }
+<span class="line-num">165</span>
+<span class="line-num">166</span>    # 1. Manuscript overview
+<span class="line-num">167</span>    cur.execute(&quot;SELECT * FROM manuscripts&quot;)
+<span class="line-num">168</span>    manuscripts = [dict(row) for row in cur.fetchall()]
+<span class="line-num">169</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">170</span>        &#x27;id&#x27;: &#x27;manuscripts&#x27;,
+<span class="line-num">171</span>        &#x27;title&#x27;: &#x27;Manuscripts in the Corpus&#x27;,
+<span class="line-num">172</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">173</span>        &#x27;data&#x27;: manuscripts,
+<span class="line-num">174</span>    })
+<span class="line-num">175</span>
+<span class="line-num">176</span>    # 2. Signature map stats
+<span class="line-num">177</span>    cur.execute(&quot;SELECT COUNT(*) FROM signature_map&quot;)
+<span class="line-num">178</span>    sig_count = cur.fetchone()[0]
+<span class="line-num">179</span>    cur.execute(&quot;SELECT MIN(signature), MAX(signature) FROM signature_map&quot;)
+<span class="line-num">180</span>    sig_range = cur.fetchone()
+<span class="line-num">181</span>    cur.execute(&quot;SELECT quire, COUNT(*) FROM signature_map GROUP BY quire ORDER BY quire&quot;)
+<span class="line-num">182</span>    quire_counts = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">183</span>
+<span class="line-num">184</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">185</span>        &#x27;id&#x27;: &#x27;signature-map&#x27;,
+<span class="line-num">186</span>        &#x27;title&#x27;: &#x27;Signature Map Statistics&#x27;,
+<span class="line-num">187</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">188</span>        &#x27;data&#x27;: {
+<span class="line-num">189</span>            &#x27;total_signatures&#x27;: sig_count,
+<span class="line-num">190</span>            &#x27;range&#x27;: [sig_range[0], sig_range[1]],
+<span class="line-num">191</span>            &#x27;quires&#x27;: quire_counts,
+<span class="line-num">192</span>        },
+<span class="line-num">193</span>    })
+<span class="line-num">194</span>
+<span class="line-num">195</span>    # 3. Dissertation refs stats
+<span class="line-num">196</span>    cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs&quot;)
+<span class="line-num">197</span>    ref_count = cur.fetchone()[0]
+<span class="line-num">198</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">199</span>        SELECT ref_type, COUNT(*) FROM dissertation_refs
+<span class="line-num">200</span>        GROUP BY ref_type ORDER BY COUNT(*) DESC
+<span class="line-num">201</span>    &quot;&quot;&quot;)
+<span class="line-num">202</span>    ref_types = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">203</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">204</span>        SELECT manuscript_shelfmark, COUNT(*) FROM dissertation_refs
+<span class="line-num">205</span>        WHERE manuscript_shelfmark IS NOT NULL
+<span class="line-num">206</span>        GROUP BY manuscript_shelfmark ORDER BY COUNT(*) DESC
+<span class="line-num">207</span>    &quot;&quot;&quot;)
+<span class="line-num">208</span>    ref_by_ms = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">209</span>
+<span class="line-num">210</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">211</span>        &#x27;id&#x27;: &#x27;dissertation-refs&#x27;,
+<span class="line-num">212</span>        &#x27;title&#x27;: &#x27;Dissertation Reference Extraction&#x27;,
+<span class="line-num">213</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">214</span>        &#x27;data&#x27;: {
+<span class="line-num">215</span>            &#x27;total_refs&#x27;: ref_count,
+<span class="line-num">216</span>            &#x27;by_type&#x27;: ref_types,
+<span class="line-num">217</span>            &#x27;by_manuscript&#x27;: ref_by_ms,
+<span class="line-num">218</span>        },
+<span class="line-num">219</span>    })
+<span class="line-num">220</span>
+<span class="line-num">221</span>    # 4. Image catalog stats
+<span class="line-num">222</span>    cur.execute(&quot;SELECT COUNT(*) FROM images&quot;)
+<span class="line-num">223</span>    img_count = cur.fetchone()[0]
+<span class="line-num">224</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">225</span>        SELECT m.shelfmark, COUNT(*) FROM images i
+<span class="line-num">226</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">227</span>        GROUP BY m.shelfmark
+<span class="line-num">228</span>    &quot;&quot;&quot;)
+<span class="line-num">229</span>    img_by_ms = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">230</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">231</span>        SELECT page_type, COUNT(*) FROM images
+<span class="line-num">232</span>        GROUP BY page_type ORDER BY COUNT(*) DESC
+<span class="line-num">233</span>    &quot;&quot;&quot;)
+<span class="line-num">234</span>    img_by_type = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">235</span>
+<span class="line-num">236</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">237</span>        &#x27;id&#x27;: &#x27;image-catalog&#x27;,
+<span class="line-num">238</span>        &#x27;title&#x27;: &#x27;Image Catalog Statistics&#x27;,
+<span class="line-num">239</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">240</span>        &#x27;data&#x27;: {
+<span class="line-num">241</span>            &#x27;total_images&#x27;: img_count,
+<span class="line-num">242</span>            &#x27;by_manuscript&#x27;: img_by_ms,
+<span class="line-num">243</span>            &#x27;by_type&#x27;: img_by_type,
+<span class="line-num">244</span>        },
+<span class="line-num">245</span>    })
+<span class="line-num">246</span>
+<span class="line-num">247</span>    # 5. Match statistics
+<span class="line-num">248</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches&quot;)
+<span class="line-num">249</span>    match_count = cur.fetchone()[0]
+<span class="line-num">250</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">251</span>        SELECT confidence, COUNT(*) FROM matches
+<span class="line-num">252</span>        GROUP BY confidence ORDER BY COUNT(*) DESC
+<span class="line-num">253</span>    &quot;&quot;&quot;)
+<span class="line-num">254</span>    match_conf = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">255</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">256</span>        SELECT match_method, COUNT(*) FROM matches
+<span class="line-num">257</span>        GROUP BY match_method ORDER BY COUNT(*) DESC
+<span class="line-num">258</span>    &quot;&quot;&quot;)
+<span class="line-num">259</span>    match_methods = {row[0]: row[1] for row in cur.fetchall()}
+<span class="line-num">260</span>
+<span class="line-num">261</span>    # BL vs Siena breakdown
+<span class="line-num">262</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">263</span>        SELECT m.shelfmark, mat.confidence, COUNT(*)
+<span class="line-num">264</span>        FROM matches mat
+<span class="line-num">265</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">266</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">267</span>        GROUP BY m.shelfmark, mat.confidence
+<span class="line-num">268</span>    &quot;&quot;&quot;)
+<span class="line-num">269</span>    ms_conf = {}
+<span class="line-num">270</span>    for row in cur.fetchall():
+<span class="line-num">271</span>        ms_conf.setdefault(row[0], {})[row[1]] = row[2]
+<span class="line-num">272</span>
+<span class="line-num">273</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">274</span>        &#x27;id&#x27;: &#x27;matching-stats&#x27;,
+<span class="line-num">275</span>        &#x27;title&#x27;: &#x27;Matching Pipeline Statistics&#x27;,
+<span class="line-num">276</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">277</span>        &#x27;data&#x27;: {
+<span class="line-num">278</span>            &#x27;total_matches&#x27;: match_count,
+<span class="line-num">279</span>            &#x27;by_confidence&#x27;: match_conf,
+<span class="line-num">280</span>            &#x27;by_method&#x27;: match_methods,
+<span class="line-num">281</span>            &#x27;by_manuscript_and_confidence&#x27;: ms_conf,
+<span class="line-num">282</span>        },
+<span class="line-num">283</span>    })
+<span class="line-num">284</span>
+<span class="line-num">285</span>    # 6. Hand attribution stats
+<span class="line-num">286</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotator_hands&quot;)
+<span class="line-num">287</span>    hand_count = cur.fetchone()[0]
+<span class="line-num">288</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">289</span>        SELECT hand_label, manuscript_shelfmark, attribution, is_alchemist
+<span class="line-num">290</span>        FROM annotator_hands ORDER BY manuscript_shelfmark
+<span class="line-num">291</span>    &quot;&quot;&quot;)
+<span class="line-num">292</span>    hands = [dict(row) for row in cur.fetchall()]
+<span class="line-num">293</span>
+<span class="line-num">294</span>    data[&#x27;sections&#x27;].append({
+<span class="line-num">295</span>        &#x27;id&#x27;: &#x27;hand-attribution&#x27;,
+<span class="line-num">296</span>        &#x27;title&#x27;: &#x27;Hand Attribution Data&#x27;,
+<span class="line-num">297</span>        &#x27;evidence_type&#x27;: &#x27;DB_QUERY&#x27;,
+<span class="line-num">298</span>        &#x27;data&#x27;: {
+<span class="line-num">299</span>            &#x27;total_hands&#x27;: hand_count,
+<span class="line-num">300</span>            &#x27;hands&#x27;: hands,
+<span class="line-num">301</span>        },
+<span class="line-num">302</span>    })
+<span class="line-num">303</span>
+<span class="line-num">304</span>    conn.close()
+<span class="line-num">305</span>
+<span class="line-num">306</span>    out_path = STAGING_DIR / &quot;essay_concordance.json&quot;
+<span class="line-num">307</span>    with open(out_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">308</span>        json.dump(data, f, indent=2, ensure_ascii=False)
+<span class="line-num">309</span>    print(f&quot;Concordance essay data: {out_path}&quot;)
+<span class="line-num">310</span>    return data
+<span class="line-num">311</span>
+<span class="line-num">312</span>
+<span class="line-num">313</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">314</span>    print(&quot;=== Building Essay Data ===\n&quot;)
+<span class="line-num">315</span>    STAGING_DIR.mkdir(exist_ok=True)
+<span class="line-num">316</span>    build_russell_essay_data()
+<span class="line-num">317</span>    build_concordance_essay_data()
+<span class="line-num">318</span>    print(&quot;\nDone.&quot;)</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
