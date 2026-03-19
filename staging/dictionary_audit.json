@@ -1,17 +1,45 @@
 {
-  "total_terms": 37,
+  "total_terms": 80,
   "by_status": {
-    "DRAFT": 37
+    "DRAFT": 80
   },
   "by_category": {
-    "Book History & Bibliography": 10,
+    "Book History & Bibliography": 13,
+    "Architecture & Built Form": 10,
     "Annotation Studies": 7,
     "Textual & Visual Motifs": 6,
+    "Characters & Figures": 6,
     "Alchemical Interpretation": 6,
     "Scholarly Debates": 5,
+    "Aesthetic Concepts": 5,
+    "Visual & Typographic": 4,
+    "Processions & Ritual": 4,
+    "Places & Settings": 4,
+    "Gardens & Landscape": 4,
+    "Material Culture": 3,
     "Architecture & Gardens": 3
   },
   "missing_fields": [
+    {
+      "slug": "1499-edition",
+      "label": "1499 Edition",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "1545-edition",
+      "label": "1545 Edition",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
     {
       "slug": "acrostic",
       "label": "Acrostic",
@@ -19,8 +47,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -30,8 +57,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -41,8 +67,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -52,8 +77,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -63,8 +87,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -74,8 +97,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "amphitheatre",
+      "label": "Amphitheatre",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -85,8 +117,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -96,8 +127,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -107,8 +137,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -118,8 +147,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -129,8 +157,37 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "bath-thermae",
+      "label": "Bath / Thermae",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "beroalde-1600",
+      "label": "Beroalde de Verville's 1600 Edition",
+      "category": "Book History & Bibliography",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "chalcedony",
+      "label": "Chalcedony",
+      "category": "Material Culture",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -140,8 +197,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "circular-garden",
+      "label": "Circular Garden",
+      "category": "Gardens & Landscape",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -151,8 +217,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "column-orders",
+      "label": "Column Orders",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -162,8 +237,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "cupid-eros",
+      "label": "Cupid / Eros",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -173,8 +257,37 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "dark-forest",
+      "label": "Dark Forest (Selva Oscura)",
+      "category": "Places & Settings",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "decorum",
+      "label": "Decorum",
+      "category": "Aesthetic Concepts",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "disegno",
+      "label": "Disegno",
+      "category": "Aesthetic Concepts",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -184,8 +297,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "dream-within-dream",
+      "label": "Dream within a Dream",
+      "category": "Processions & Ritual",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -195,8 +317,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -206,8 +327,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "eleuterylida",
+      "label": "Queen Eleuterylida",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -217,8 +347,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -228,8 +357,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "fountain",
+      "label": "Fountain",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -239,8 +377,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "grotesque",
+      "label": "Grotesque",
+      "category": "Aesthetic Concepts",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -250,8 +397,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "historiated-initial",
+      "label": "Historiated Initial",
+      "category": "Visual & Typographic",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -261,8 +417,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "in-text-inscription",
+      "label": "In-Text Inscription",
+      "category": "Visual & Typographic",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -272,8 +437,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -283,8 +447,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -294,8 +457,37 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "jasper",
+      "label": "Jasper",
+      "category": "Material Culture",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "labyrinth",
+      "label": "Labyrinth",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "macaronic-language",
+      "label": "Macaronic Language",
+      "category": "Visual & Typographic",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -305,8 +497,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -316,8 +507,97 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "meraviglia",
+      "label": "Meraviglia (Wonder)",
+      "category": "Aesthetic Concepts",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "navigation-cythera",
+      "label": "Navigation to Cythera",
+      "category": "Processions & Ritual",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "nymphs-five-senses",
+      "label": "Nymphs of the Five Senses",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "obelisk",
+      "label": "Obelisk",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "pergola",
+      "label": "Pergola",
+      "category": "Gardens & Landscape",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "polia",
+      "label": "Polia",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "poliphilo",
+      "label": "Poliphilo",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "porphyry",
+      "label": "Porphyry",
+      "category": "Material Culture",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "portal",
+      "label": "Portal",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -327,8 +607,28 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "pseudo-latin",
+      "label": "Pseudo-Latin",
+      "category": "Visual & Typographic",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
         "significance_to_scholarship",
         "source_documents"
+      ]
+    },
+    {
+      "slug": "pyramid",
+      "label": "Pyramid",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -338,8 +638,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -349,8 +648,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -360,8 +658,27 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "ruined-temple",
+      "label": "Ruined Temple",
+      "category": "Places & Settings",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "sacrifice-priapus",
+      "label": "Sacrifice to Priapus",
+      "category": "Processions & Ritual",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -371,8 +688,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "sleeping-nymph-fountain",
+      "label": "Sleeping Nymph Fountain",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -382,8 +708,77 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "thelemia",
+      "label": "Thelemia (Gate of Free Will)",
+      "category": "Places & Settings",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "topiary",
+      "label": "Topiary",
+      "category": "Gardens & Landscape",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-arch",
+      "label": "Triumphal Arch",
+      "category": "Architecture & Built Form",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-gate",
+      "label": "Triumphal Gate",
+      "category": "Places & Settings",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-procession",
+      "label": "Triumphal Procession",
+      "category": "Processions & Ritual",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "varieta",
+      "label": "Varieta (Variety)",
+      "category": "Aesthetic Concepts",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "venus-aphrodite",
+      "label": "Venus / Aphrodite",
+      "category": "Characters & Figures",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -393,8 +788,7 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
@@ -404,8 +798,17 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "water-garden",
+      "label": "Water Garden",
+      "category": "Gardens & Landscape",
+      "review_status": "DRAFT",
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
@@ -415,395 +818,750 @@
       "review_status": "DRAFT",
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     }
   ],
   "duplicate_slugs": [],
   "orphaned_links": [],
-  "terms_without_links": [],
+  "terms_without_links": [
+    {
+      "slug": "amphitheatre",
+      "label": "Amphitheatre"
+    }
+  ],
   "weak_terms": [
+    {
+      "slug": "1499-edition",
+      "label": "1499 Edition",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "1545-edition",
+      "label": "1545 Edition",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
     {
       "slug": "acrostic",
       "label": "Acrostic",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "activity-book",
       "label": "Activity Book",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "acutezze",
       "label": "Acutezze",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "alchemical-allegory",
       "label": "Alchemical Allegory",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "aldus-manutius",
       "label": "Aldus Manutius",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "allegory",
       "label": "Allegory",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "amphitheatre",
+      "label": "Amphitheatre",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "annotator-hand",
       "label": "Annotator Hand",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "antiquarianism",
       "label": "Antiquarianism",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "apparatus",
       "label": "Apparatus",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "architectural-body",
       "label": "Architectural Body",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "authorship-debate",
       "label": "Authorship Debate",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "bath-thermae",
+      "label": "Bath / Thermae",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "beroalde-1600",
+      "label": "Beroalde de Verville's 1600 Edition",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "chalcedony",
+      "label": "Chalcedony",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "chemical-wedding",
       "label": "Chemical Wedding",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "circular-garden",
+      "label": "Circular Garden",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "collation",
       "label": "Collation",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "column-orders",
+      "label": "Column Orders",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "commentary",
       "label": "Commentary",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "cupid-eros",
+      "label": "Cupid / Eros",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "cythera",
       "label": "Cythera",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "dark-forest",
+      "label": "Dark Forest (Selva Oscura)",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "decorum",
+      "label": "Decorum",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "disegno",
+      "label": "Disegno",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "dream-narrative",
       "label": "Dream Narrative",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "dream-within-dream",
+      "label": "Dream within a Dream",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "ekphrasis",
       "label": "Ekphrasis",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "elephant-obelisk",
       "label": "Elephant and Obelisk",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "eleuterylida",
+      "label": "Queen Eleuterylida",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "emblem",
       "label": "Emblem",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "folio",
       "label": "Folio",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "fountain",
+      "label": "Fountain",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "gathering",
       "label": "Gathering",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "grotesque",
+      "label": "Grotesque",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "hieroglyph",
       "label": "Hieroglyph",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "historiated-initial",
+      "label": "Historiated Initial",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "ideogram",
       "label": "Ideogram (Alchemical)",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "in-text-inscription",
+      "label": "In-Text Inscription",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "incunabulum",
       "label": "Incunabulum",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "ingegno",
       "label": "Ingegno",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "inventio",
       "label": "Inventio",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "jasper",
+      "label": "Jasper",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "labyrinth",
+      "label": "Labyrinth",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "macaronic-language",
+      "label": "Macaronic Language",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "marginalia",
       "label": "Marginalia",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "master-mercury",
       "label": "Master Mercury",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "meraviglia",
+      "label": "Meraviglia (Wonder)",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "navigation-cythera",
+      "label": "Navigation to Cythera",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "nymphs-five-senses",
+      "label": "Nymphs of the Five Senses",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "obelisk",
+      "label": "Obelisk",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "pergola",
+      "label": "Pergola",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "polia",
+      "label": "Polia",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "poliphilo",
+      "label": "Poliphilo",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "porphyry",
+      "label": "Porphyry",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "portal",
+      "label": "Portal",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "prisca-sapientia",
       "label": "Prisca Sapientia",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "pseudo-latin",
+      "label": "Pseudo-Latin",
       "missing_count": 3,
       "missing": [
         "significance_to_hp",
         "significance_to_scholarship",
         "source_documents"
+      ]
+    },
+    {
+      "slug": "pyramid",
+      "label": "Pyramid",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "quire",
       "label": "Quire",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "reception-history",
       "label": "Reception History",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "recto",
       "label": "Recto",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "ruined-temple",
+      "label": "Ruined Temple",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "sacrifice-priapus",
+      "label": "Sacrifice to Priapus",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "signature",
       "label": "Signature",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "sleeping-nymph-fountain",
+      "label": "Sleeping Nymph Fountain",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "sol-luna",
       "label": "Sol and Luna",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "thelemia",
+      "label": "Thelemia (Gate of Free Will)",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "topiary",
+      "label": "Topiary",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-arch",
+      "label": "Triumphal Arch",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-gate",
+      "label": "Triumphal Gate",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "triumphal-procession",
+      "label": "Triumphal Procession",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "varieta",
+      "label": "Varieta (Variety)",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "venus-aphrodite",
+      "label": "Venus / Aphrodite",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "vernacular-poetics",
       "label": "Vernacular Poetics",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "verso",
       "label": "Verso",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
+      ]
+    },
+    {
+      "slug": "water-garden",
+      "label": "Water Garden",
+      "missing_count": 2,
+      "missing": [
+        "significance_to_hp",
+        "significance_to_scholarship"
       ]
     },
     {
       "slug": "woodcut",
       "label": "Woodcut",
-      "missing_count": 3,
+      "missing_count": 2,
       "missing": [
         "significance_to_hp",
-        "significance_to_scholarship",
-        "source_documents"
+        "significance_to_scholarship"
       ]
     }
   ],
   "summary": {
-    "total_terms": 37,
-    "draft_count": 37,
+    "total_terms": 80,
+    "draft_count": 80,
     "verified_count": 0,
-    "terms_with_missing_fields": 37,
-    "weak_terms_count": 37,
+    "terms_with_missing_fields": 80,
+    "weak_terms_count": 80,
     "duplicate_slugs_count": 0,
     "orphaned_links_count": 0,
-    "terms_without_links_count": 0,
-    "categories": 6
+    "terms_without_links_count": 1,
+    "categories": 14
   }
 }
