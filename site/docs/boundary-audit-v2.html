@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boundary Audit v2 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Boundary Audit v2</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPDECKARD2.md &mdash; 1,596 words</p>
+            <h2>HPDECKARD2: Boundary Map v2 -- Bibliography &amp; Digital Edition Expansion</h2>
+
+<blockquote>Second Deckard audit, covering the bibliography expansion, web research ingestion, digital edition planning, and the agent orchestration layer.</blockquote>
+
+<h3>Current System State (Post-V2 Migration)</h3>
+
+<ul>
+<li>**18 database tables**, 97 bibliography entries, 52 scholars, 37 dictionary terms</li>
+<li>**13 Python scripts** in the pipeline, all deterministic</li>
+<li>**LLM-assisted content** generated in conversation, hardcoded into scripts, then loaded into DB</li>
+<li>**New data sources**: HPPERPLEXITY.txt (web research), web search results, MIT site analysis</li>
+</ul>
+
+<hr>
+
+<h3>DETERMINISTIC TASKS</h3>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Current Method</th><th>Verdict</th></tr>
+<tr><td>Signature map generation</td><td>Aldine collation formula in Python</td><td>CORRECT</td></tr>
+<tr><td>Image filename parsing</td><td>Regex on known naming conventions</td><td>CORRECT</td></tr>
+<tr><td>Folio-to-image matching</td><td>SQL join on folio numbers</td><td>CORRECT</td></tr>
+<tr><td>Site page generation</td><td>Jinja-like string templates in build_site.py</td><td>CORRECT</td></tr>
+<tr><td>Dictionary page generation</td><td>DB query -&gt; HTML template</td><td>CORRECT</td></tr>
+<tr><td>Marginalia page generation</td><td>DB query -&gt; HTML template</td><td>CORRECT</td></tr>
+<tr><td>JSON data export</td><td>SQL query -&gt; JSON serialization</td><td>CORRECT</td></tr>
+<tr><td>Schema migration</td><td>Idempotent SQL DDL</td><td>CORRECT</td></tr>
+<tr><td>Validation checks</td><td>SQL integrity queries</td><td>CORRECT</td></tr>
+</table>
+
+<p><strong>All 13 scripts remain purely deterministic. No LLM in the codebase.</strong> This is correct.</p>
+
+<hr>
+
+<h3>PROBABILISTIC TASKS</h3>
+
+<h4>Currently Done by LLM in Conversation</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Where</th><th>Appropriate?</th><th>Risk Level</th></tr>
+<tr><td>Article summarization (34 papers)</td><td>Claude agents -&gt; summaries.json</td><td>YES</td><td>MEDIUM -- summaries not human-verified</td></tr>
+<tr><td>Perplexity research ingestion</td><td>Claude reading HPPERPLEXITY.txt -&gt; ingest_perplexity.py</td><td>YES</td><td>LOW -- URLs are verifiable</td></tr>
+<tr><td>Web scholarship search</td><td>Claude web search -&gt; manual extraction</td><td>YES</td><td>MEDIUM -- author/title/year need verification</td></tr>
+<tr><td>MIT site analysis</td><td>Claude WebFetch -&gt; HPMIT.md</td><td>YES</td><td>LOW -- architectural analysis, not factual claims</td></tr>
+<tr><td>Hand attribution from thesis text</td><td>Claude reading Russell -&gt; add_hands.py</td><td>YES</td><td>MEDIUM -- signature-hand mapping is interpretive</td></tr>
+<tr><td>Dictionary definition writing</td><td>Claude -&gt; seed_dictionary.py</td><td>YES</td><td>MEDIUM -- definitions cite sources but are original compositions</td></tr>
+<tr><td>Scholar metadata (birth/death, nationality)</td><td>Claude -&gt; add_bibliography.py</td><td>YES</td><td>HIGH -- factual claims that could be wrong</td></tr>
+<tr><td>Bibliography gap analysis</td><td>Claude reading Russell&#x27;s bibliography</td><td>YES</td><td>LOW -- gap detection is mechanical; titles are checkable</td></tr>
+</table>
+
+<h4>Planned Tasks That SHOULD Be Probabilistic</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Why Probabilistic</th></tr>
+<tr><td>**Bibliography verification**</td><td>Checking if a cited work actually exists, confirming author names and publication details, requires web lookup + judgment</td></tr>
+<tr><td>**Citation formatting**</td><td>Converting messy bibliographic data into consistent format (Chicago, MLA) requires understanding of citation conventions</td></tr>
+<tr><td>**Cross-referencing scholars to works**</td><td>Author name matching is fuzzy (e.g., &quot;James O&#x27;Neill&quot; vs &quot;James Calum O&#x27;Neill&quot; vs &quot;O&#x27;Neill, James C.&quot;)</td></tr>
+<tr><td>**Topic cluster assignment**</td><td>Single works span multiple topics; classification requires reading comprehension</td></tr>
+<tr><td>**Woodcut identification**</td><td>Mapping woodcut subjects (&quot;Elephant and Obelisk&quot;, &quot;Fons Heptagonis&quot;) to specific page images</td></tr>
+<tr><td>**Timeline event extraction from prose**</td><td>Finding datable events in article text requires NLP</td></tr>
+</table>
+
+<h4>Planned Tasks That SHOULD Be Deterministic</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Why Deterministic</th></tr>
+<tr><td>**Bibliography deduplication**</td><td>Matching author+title+year strings; fuzzy string matching (Levenshtein) suffices</td></tr>
+<tr><td>**DOI/ISBN lookup**</td><td>CrossRef and WorldCat APIs return structured data deterministically</td></tr>
+<tr><td>**Citation formatting from structured data**</td><td>Given author/title/year/journal, formatting is rule-based</td></tr>
+<tr><td>**URL validation**</td><td>HTTP HEAD request to check if a URL is alive</td></tr>
+<tr><td>**IIIF manifest generation**</td><td>Given image dimensions and folio numbers, manifest structure is formulaic</td></tr>
+</table>
+
+<hr>
+
+<h3>BOUNDARY VIOLATIONS</h3>
+
+<h4>WASTE: LLM Doing What Code Could Do</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Current State</th><th>Recommendation</th></tr>
+<tr><td>**Scholar-bibliography name matching**</td><td>Currently done by SQL LIKE with manual fixup</td><td>Use Levenshtein distance or token-set-ratio matching. Libraries like `fuzzywuzzy` or `rapidfuzz` handle this deterministically.</td></tr>
+<tr><td>**URL alive checking**</td><td>Not done at all -- HPPERPLEXITY.txt URLs unchecked</td><td>Add a `scripts/check_urls.py` that sends HEAD requests to all URLs in the bibliography table</td></tr>
+<tr><td>**Bibliography deduplication**</td><td>Relies on exact title match in INSERT OR IGNORE</td><td>Add fuzzy dedup: normalize titles (lowercase, strip articles, normalize whitespace) before insert</td></tr>
+</table>
+
+<h4>RISK: Deterministic Code Doing What Needs Judgment</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Current State</th><th>Risk</th></tr>
+<tr><td>**BL photo-folio assumption**</td><td>match_refs_to_images.py assumes photo_number = folio_number</td><td>Now marked LOW confidence (fixed in V2), but still presented as valid matches. Should show &quot;PROVISIONAL: unverified mapping&quot; on BL pages.</td></tr>
+<tr><td>**Single topic_cluster per bibliography entry**</td><td>bibliography.topic_cluster is a single TEXT field</td><td>A work like Stewering&#x27;s straddles architecture AND text-image. The document_topics junction table exists but isn&#x27;t fully populated.</td></tr>
+<tr><td>**Author name as scholar identifier**</td><td>scholars.name is UNIQUE but author names aren&#x27;t unique globally</td><td>&quot;James O&#x27;Neill&quot; vs &quot;James Calum O&#x27;Neill&quot; -- these are the same person. Need a normalization step.</td></tr>
+</table>
+
+<h4>DANGER: Unvalidated LLM Output Entering the System</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Source</th><th>Danger</th></tr>
+<tr><td>**Perplexity research with &quot;Unknown&quot; authors**</td><td>ingest_perplexity.py inserted 4 entries with &quot;Unknown (botanical study)&quot; etc.</td><td>These entries will appear on the bibliography page with no verifiable author. The web search found the actual authors (Rhizopoulou et al. 2016; Godwin 2020) but the DB wasn&#x27;t updated.</td></tr>
+<tr><td>**Scholar birth/death years**</td><td>add_bibliography.py hardcodes dates from conversation</td><td>E.g., &quot;Myriam Billanovich&quot; birth/death years are listed as None -- but if they were guessed wrong, the error would propagate silently.</td></tr>
+<tr><td>**New Routledge volume misattributed**</td><td>HPPERPLEXITY.txt lists &quot;Various (ed. unknown)&quot; for the O&#x27;Neill 2023 Routledge book</td><td>Web search confirms this is James Calum O&#x27;Neill&#x27;s *The Allegory of Love in the Early Renaissance*. The DB entry is wrong.</td></tr>
+</table>
+
+<hr>
+
+<h3>SPECIFIC RECOMMENDATIONS</h3>
+
+<h4>Immediate (Before Building Bibliography Tab)</h4>
+
+<p>1. <strong>Fix the 4 &quot;Unknown&quot; author entries</strong> from ingest_perplexity.py:</p>
+<ul>
+<li>&quot;Unknown (botanical study)&quot; -&gt; Sophia Rhizopoulou et al.</li>
+<li>&quot;Unknown (musicological study)&quot; -&gt; Joscelyn Godwin</li>
+<li>&quot;Unknown (UPenn repository)&quot; -&gt; needs URL fetch to identify</li>
+<li>&quot;Unknown (Polish publisher)&quot; -&gt; needs URL fetch to identify</li>
+<li>&quot;Various (ed. unknown)&quot; -&gt; James Calum O&#x27;Neill</li>
+</ul>
+
+<p>2. <strong>Add the new scholarship found in web search</strong>:</p>
+<ul>
+<li>O&#x27;Neill 2023, *The Allegory of Love in the Early Renaissance* (Routledge) -- this is a major new monograph</li>
+<li>Rhizopoulou et al. 2022, botanical content revisited (Botany Letters 170:1)</li>
+<li>Priki 2020, Mirrors and Mirroring (Bloomsbury chapter)</li>
+<li>Koutsogiannis 2024, Greek antiquity images in HP</li>
+<li>Guo 2021, HP and its afterlife (ICLACE proceedings)</li>
+<li>Paul Summers Young, new English translation (Black Letter Press / Anathema Publishing)</li>
+<li>O&#x27;Neill 2022, botanical symbolism (Word &amp; Image 39:2)</li>
+</ul>
+
+<p>3. <strong>Add a <code>verified</code> flag</strong> to bibliography entries, separate from <code>needs_review</code>. An entry can be reviewed (someone looked at it) but still unverified (hasn&#x27;t been checked against WorldCat/CrossRef).</p>
+
+<h4>For the Bibliography Tab</h4>
+
+<p>4. <strong>Hybrid verification pipeline</strong>:</p>
+<pre><code class="lang-">
+   Step 1 (DETERMINISTIC): Normalize author names, deduplicate by fuzzy title match
+   Step 2 (DETERMINISTIC): Look up DOI/ISBN via CrossRef API for each entry
+   Step 3 (DETERMINISTIC): Validate URLs with HEAD requests
+   Step 4 (LLM-ASSISTED): For entries without DOI, search the web to verify existence
+   Step 5 (DETERMINISTIC): Format citations in Chicago style from structured data
+   Step 6 (HUMAN): Review flagged entries where verification failed
+</code></pre>
+
+<p>5. <strong>Display bibliography entries with provenance badges</strong>:</p>
+<ul>
+<li>&quot;In Collection&quot; (we have the PDF)</li>
+<li>&quot;Verified&quot; (confirmed via CrossRef/WorldCat)</li>
+<li>&quot;Cited&quot; (appears in Russell&#x27;s bibliography but not independently verified)</li>
+<li>&quot;Discovered&quot; (found via web search, needs verification)</li>
+</ul>
+
+<h4>For the Digital Edition Tab</h4>
+
+<p>6. <strong>The text transcription is the critical dependency</strong>. The MIT site has a transcription but it&#x27;s locked in HTML with no structured data. Options:</p>
+<ul>
+<li>Extract from the MIT site (copyright: MIT Press 1997)</li>
+<li>Use the Project Gutenberg text of the 1592 English (public domain)</li>
+<li>Commission a fresh transcription from the public-domain 1499 images</li>
+<li>License the Pozzi &amp; Ciapponi critical edition text</li>
+</ul>
+
+<p>7. <strong>The marginalia overlay is our unique contribution</strong> and should be the Phase 1 deliverable for the edition tab. We already have the data (282 folio refs, 610 image matches, 11 annotator hands). The text transcription can come later.</p>
+
+<hr>
+
+<h3>BOUNDARY MAP SUMMARY</h3>
+
+<pre><code class="lang-">
+DETERMINISTIC (13/13 scripts -- CORRECT)
+|-- Schema, migration, seed       [migrate_v2, seed_dictionary, init_db]
+|-- File parsing                  [catalog_images, pdf_to_markdown]
+|-- Reference extraction          [extract_references]
+|-- Matching                      [match_refs_to_images, build_signature_map]
+|-- Export &amp; generation           [build_site, export_showcase_data, build_scholar_profiles]
+|-- Ingestion                     [ingest_perplexity, add_hands, add_bibliography]
+|-- Validation                    [validate]
+
+PROBABILISTIC (done in conversation, not in code)
+|-- Article summarization         APPROPRIATE but unvalidated
+|-- Web research ingestion        APPROPRIATE, partially verified
+|-- Hand attribution              APPROPRIATE but approximate
+|-- Dictionary definitions        APPROPRIATE, cites sources
+|-- Scholar metadata              RISKY -- factual claims without cross-reference
+|-- MIT site analysis             APPROPRIATE, low risk
+
+BOUNDARY VIOLATIONS
+|-- WASTE (3): name matching, URL checking, deduplication
+|-- RISK (3): BL photo mapping, single topic clusters, name normalization
+|-- DANGER (3): Unknown authors in DB, wrong Routledge attribution, scholar dates
+
+PLANNED HYBRID PIPELINE (bibliography verification)
+|-- Steps 1,2,3,5: DETERMINISTIC (normalize, CrossRef, URL check, format)
+|-- Step 4: LLM-ASSISTED (web verification of unresolvable entries)
+|-- Step 6: HUMAN (review flagged entries)
+</code></pre>
+
+<p><strong>Overall assessment</strong>: The system&#x27;s deterministic core is sound. The boundary violations are concentrated in the <strong>ingestion layer</strong> where LLM-generated content enters the database without validation gates. The fix is to add a verification pipeline (deterministic where possible, LLM-assisted where necessary, human-reviewed for flagged items) before displaying content as authoritative. The bibliography tab should be the first feature to implement this hybrid verification model.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

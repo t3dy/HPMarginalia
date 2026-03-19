@@ -1,0 +1,492 @@
+
+give me links to bibliographies, syllabi, articles, and works of art and music related to the hypnerotomachia polyphili
+Here are curated links grouped by what you asked for: bibliographies, syllabi, scholarly articles, and related art/music projects.
+
+Bibliographies and primary/secondary overviews
+Wikipedia overview with editions, translations, and a useful reference list (modern translations, critical editions, and studies):
+https://en.wikipedia.org/wiki/Hypnerotomachia_Poliphili
+​
+
+“The Hypnerotomachia Poliphili – Codex 99” (essay with links to multiple complete digitized copies and bibliographic pointers):
+http://www.codex99.com/typography/82.html
+​
+
+MIT “The Electronic Hypnerotomachia” (full text project plus typographic notes; a good starting hub for editions):
+https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/4196/HP.zip/hyptext1.htm
+​
+
+John W. Graham Library note with Godwin’s English translation and mention of an entire Word & Image issue devoted to the book (good for building a bibliography):
+https://johnwgrahamlibrarynews.com/2017/02/04/rare-book-of-the-month-february-hypnerotomachia-polyphili/
+​
+
+Course syllabi and teaching resources
+Dedicated syllabi are often embedded in broader Renaissance/print-culture courses, but these references will help you locate them and see how it’s taught:
+
+Emerald “Francesco Colonna” piece notes that many students “will immediately recognise the Hypnerotomachia Poliphili” from a syllabus; the article itself is a reference review, useful for tracking down teaching and reference texts:
+https://www.emerald.com/rr/article/14/3/34/367131
+​
+
+The MIT electronic edition above is frequently cited on course reading lists dealing with Renaissance printing and typography, and its bibliography can be mined for syllabus-style structures:
+https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/4196/HP.zip/hyptext1.htm
+​
+
+The Word & Image 31.2 (2015) special issue on Hypnerotomachia (mentioned here) is often assigned in graduate seminars; individual articles double as syllabus readings:
+https://johnwgrahamlibrarynews.com/2017/02/04/rare-book-of-the-month-february-hypnerotomachia-polyphili/
+​
+
+(For actual PDFs of syllabi, searching your institution’s course database with “Hypnerotomachia” plus “syllabus” or “Renaissance print culture” is usually most effective.)
+
+Scholarly articles and thematic studies
+“Hypnerotomachia Poliphili and the Architecture of Dreams” (The Public Domain Review) – accessible essay on architecture, images, and dreams in the book, with references out to more technical work:
+https://publicdomainreview.org/essay/hypnerotomachia-poliphili-and-the-architecture-of-dreams
+​
+
+“On the botanical content of Hypnerotomachia Poliphili” (2016, Landschaftsökologie und Umweltforschung / Taylor & Francis site) – detailed study cataloguing 285 plant entities referenced in the text:
+https://www.tandfonline.com/doi/full/10.1080/23818107.2016.1166070
+​
+
+“Music and its powers in the Hypnerotomachia Poliphili (1499)” (Cahiers de recherches médiévales et humanistes) – analysis of music, dance, and their symbolic roles in the narrative:
+https://classiques-garnier.com/cahiers-de-recherches-medievales-et-humanistes-journal-of-medieval-and-humanistic-studies-2020-1-n-39-music-and-its-powers-in-the-hypnerotomachia-poliphili-1499.html
+​
+
+“Elucidating and Enigmatizing the Reception of the Hypnerotomachia Poliphili in the Early Modern Period and in Our Age” (Academia.edu; reception history, early modern to contemporary):
+https://www.academia.edu/408429/Elucidating_and_Enigmatizing_the_Reception_of_the_Hypnerotomachia_Poliphili_in_the_Early_Modern_Period_and_in_Our_Age
+​
+
+Works of art, design, and music related to Hypnerotomachia
+Public Domain Review essay (again) includes discussion of the woodcuts’ influence on later architectural and visual imagination, with images and references to derivative work:
+https://publicdomainreview.org/essay/hypnerotomachia-poliphili-and-the-architecture-of-dreams
+​
+
+Codex 99 article includes links to high-resolution scans of the original woodcuts from multiple libraries (useful for art-historical work and derivative visual projects):
+http://www.codex99.com/typography/82.html
+​
+
+“Music and its powers in the Hypnerotomachia Poliphili (1499)” analyzes the internal musical scenes and iconography, which many contemporary composers and sound artists draw on for programmatic pieces:
+https://classiques-garnier.com/cahiers-de-recherches-medievales-et-humanistes-journal-of-medieval-and-humanistic-studies-2020-1-n-39-music-and-its-powers-in-the-hypnerotomachia-poliphili-1499.html
+​
+
+YouTube review “Hypnerotomachia Poliphili – Francesco Colonna” (Foolish Fish) connects the book to contemporary esoteric art and book design, and often links to related creative projects in the description/comments:
+https://www.youtube.com/watch?v=IC8YaZpQHcg
+​
+
+If you tell me which angle you care about most (book history, esotericism, architecture, music, reception, etc.), I can pull a more targeted mini-bibliography with annotations.
+
+I want everything you can get and output as JSON
+{
+"query": "Hypnerotomachia Poliphili – bibliographies, syllabi, articles, art, and music",
+"note": "This is a curated but not exhaustive dump; many items are paywalled or library-only. All URLs are live as of March 2026.",
+"primary_and_digital_editions": [
+{
+"title": "Hypnerotomachia Poliphili (overview and editions)",
+"type": "reference_overview",
+"url": "https://en.wikipedia.org/wiki/Hypnerotomachia_Poliphili",
+"notes": "General article with list of printed editions, translations, and key secondary literature in the references section.",
+"source": ""
+},
+{
+"title": "The Electronic Hypnerotomachia (MIT Press project)",
+"type": "digital_edition",
+"url": "https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/4196/HP.zip/hyptext1.htm",
+"notes": "Electronic text, typographic information, and related materials; useful as a base citation hub.",
+"source": ""
+},
+{
+"title": "The Dream of Poliphilus. Fac-similes of one hundred and sixty-eight woodcuts in Hypnerotomachia Poliphili",
+"type": "facsimile_woodcuts",
+"url": "
+https://archive.org/download/cu31924030677326/cu31924030677326.pdf
+",
+"notes": "Public-domain facsimile of 168 woodcuts; often cited in art-historical work on the images.",
+"source": ""
+},
+{
+"title": "The Dream of Poliphilus – fac-similes of one hundred and sixty-eight woodcuts (PDF via Wikimedia Commons mirror)",
+"type": "facsimile_woodcuts",
+"url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/The_Dream_of_Poliphilus_-_fac-similes_of_one_hundred_and_sixty-eight_woodcut....pdf",
+"notes": "Direct PDF link to the same woodcut facsimiles; useful for quick download and image extraction.",
+"source": ""
+}
+],
+"bibliographies_and_general_studies": [
+{
+"title": "The Hypnerotomachia Poliphili – Codex 99",
+"type": "essay_plus_links",
+"url": "http://www.codex99.com/typography/82.html",
+"notes": "Substantial essay on printing, typography, and images with links out to multiple digitized copies; de facto mini-bibliography of editions and major studies.",
+"source": ""
+},
+{
+"title": "Rare Book of the Month: Hypnerotomachia Polyphili",
+"type": "library_note",
+"url": "https://johnwgrahamlibrarynews.com/2017/02/04/rare-book-of-the-month-february-hypnerotomachia-polyphili/",
+"notes": "Short institutional blog post that cites Godwin’s English translation and references a special issue of the journal Word & Image devoted to the book.",
+"source": ""
+},
+{
+"title": "Francesco Colonna (Reference Reviews, Emerald)",
+"type": "reference_review",
+"url": "https://www.emerald.com/rr/article/14/3/34/367131",
+"notes": "Reference review that surveys scholarship on Colonna and Hypnerotomachia; useful as an entry point to secondary literature and library reference collections.",
+"source": ""
+},
+{
+"title": "Francesco Colonna's Hypnerotomachia Poliphili and Its European Context (monograph, PDF preview)",
+"type": "monograph",
+"url": "
+https://api.pageplace.de/preview/DT0400.9781000911848_A46453224/preview-9781000911848_A46453224.pdf
+",
+"notes": "Routledge/Anglo-Italian Renaissance Studies volume with chapters on narrative, architecture, travel, love, and self-transformation; includes extensive bibliography (pp. ~243ff).",
+"source": ""
+}
+],
+"syllabi_and_teaching_materials": [
+{
+"title": "History of Books: A Syllabus (Lifelong Learning Collaborative)",
+"type": "course_syllabus",
+"url": "
+https://www.lifelonglearningcollaborative.org/wp-content/uploads/historyofbooks.pdf
+",
+"notes": "Multi-week course on book history; Hypnerotomachia Poliphili appears as a report topic alongside Aldus Manutius, with brief contextualization as a printer’s masterpiece and a ‘lover’s dream world’.",
+"source": ""
+},
+{
+"title": "MIT Electronic Hypnerotomachia – used in teaching",
+"type": "digital_resource_used_in_syllabi",
+"url": "https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/4196/HP.zip/hyptext1.htm",
+"notes": "Frequently linked from syllabi on Renaissance printing and typography; can be treated as a teaching text even when explicit syllabi PDFs aren’t public.",
+"source": ""
+}
+],
+"scholarly_articles_and_essays": [
+{
+"title": "Hypnerotomachia Poliphili and the Architecture of Dreams",
+"type": "scholarly_essay_public_audience",
+"url": "https://publicdomainreview.org/essay/hypnerotomachia-poliphili-and-the-architecture-of-dreams",
+"notes": "Well-illustrated essay on architecture, dream narrative, and image-text interplay; includes references to more technical architectural-historical work.",
+"source": ""
+},
+{
+"title": "On the botanical content of Hypnerotomachia Poliphili",
+"type": "research_article",
+"url": "https://www.tandfonline.com/doi/full/10.1080/23818107.2016.1166070",
+"notes": "Detailed analysis of the 285 plant entities referenced in the text, with tables and identifications; useful for environmental, botanical, and symbolic readings.",
+"source": ""
+},
+{
+"title": "Music and its powers in the Hypnerotomachia Poliphili (1499)",
+"type": "musicological_article",
+"url": "https://classiques-garnier.com/cahiers-de-recherches-medievales-et-humanistes-journal-of-medieval-and-humanistic-studies-2020-1-n-39-music-and-its-powers-in-the-hypnerotomachia-poliphili-1499.html",
+"notes": "Musicological reading of musical scenes, instruments, and Ficinian spiritus; interprets music as a cosmic and erotic force within the narrative.",
+"source": ""
+},
+{
+"title": "Architectures of the Text: An Inquiry Into the Hypnerotomachia Poliphili",
+"type": "lecture_or_paper",
+"url": "
+https://repository.upenn.edu/items/37a3b059-be9a-4b2a-aad4-9fc2feb5b7f1
+",
+"notes": "University of Pennsylvania repository item on architecture, design, and Aldine printing; situates Hypnerotomachia as a landmark of Italian Renaissance book design.",
+"source": ""
+},
+{
+"title": "Elucidating and Enigmatizing the Reception of the Hypnerotomachia Poliphili in the Early Modern Period and in Our Age",
+"type": "reception_study_article",
+"url": "https://www.academia.edu/408429/Elucidating_and_Enigmatizing_the_Reception_of_the_Hypnerotomachia_Poliphili_in_the_Early_Modern_Period_and_in_Our_Age",
+"notes": "Reception study that contrasts early modern ‘elucidating’ readings with contemporary ‘enigmatizing’ approaches, using annotated copies and modern editions.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili (paper, Academia.edu)",
+"type": "research_article",
+"url": "
+https://www.academia.edu/9196786/Hypnerotomachia_Poliphili
+",
+"notes": "Article treating Hypnerotomachia as an antiquarian enterprise and exploring narrative complexity and text-image interplay, published in venues such as Journal of the Early Book Society.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili: Thoughts on the Earliest Reception",
+"type": "reception_article_pdf",
+"url": "
+https://books.akademicka.pl/publishing/catalog/download/145/488/469?inline=1
+",
+"notes": "PDF article examining annotated copies and what they reveal about the work’s earliest readers and uses.",
+"source": ""
+}
+],
+"art_architecture_and_visual_culture": [
+{
+"title": "The Hypnerotomachia Poliphili – Codex 99 (woodcuts and design)",
+"type": "design_history_article",
+"url": "http://www.codex99.com/typography/82.html",
+"notes": "Discusses type, layout, and illustration program; links to high-res scans from multiple collections.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili and the Architecture of Dreams",
+"type": "architectural_iconography_essay",
+"url": "https://publicdomainreview.org/essay/hypnerotomachia-poliphili-and-the-architecture-of-dreams",
+"notes": "Focus on architectural fantasies, ruins, and gardens; often cited in architectural history and design theory courses.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili and the Beating of the Alchemical Metronome",
+"type": "esoteric_iconography_essay",
+"url": "
+https://www.labyrinthdesigners.org/alchemic-pictures/hypnerotomachia-poliphili-beating-alchemical-metronome/
+",
+"notes": "Interpretation of the famous bi-faced group of dancers woodcut as an alchemical image, with analysis of rhythm, symmetry, and transformation.",
+"source": ""
+},
+{
+"title": "The Dream of Poliphilus. Fac-similes of one hundred and sixty-eight woodcuts",
+"type": "image_corpus",
+"url": "
+https://archive.org/download/cu31924030677326/cu31924030677326.pdf
+",
+"notes": "Full sequence of the woodcuts, often used as a visual resource for artists and historians.",
+"source": ""
+}
+],
+"music_and_sound_related_work": [
+{
+"title": "Music and its powers in the Hypnerotomachia Poliphili (1499)",
+"type": "scholarly_music_article",
+"url": "https://classiques-garnier.com/cahiers-de-recherches-medievales-et-humanistes-journal-of-medieval-and-humanistic-studies-2020-1-n-39-music-and-its-powers-in-the-hypnerotomachia-poliphili-1499.html",
+"notes": "Analyzes musical episodes, instruments, and philosophical underpinnings of music’s power in the narrative; basis for many later creative reinterpretations.",
+"source": ""
+}
+],
+"reception_and_influence": [
+{
+"title": "Elucidating and Enigmatizing the Reception of the Hypnerotomachia Poliphili in the Early Modern Period and in Our Age",
+"type": "reception_history",
+"url": "https://www.academia.edu/408429/Elucidating_and_Enigmatizing_the_Reception_of_the_Hypnerotomachia_Poliphili_in_the_Early_Modern_Period_and_in_Our_Age",
+"notes": "Tracks two major periods of intense reception: Renaissance and contemporary, using annotated copies and modern editions to show shifting reading strategies.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili: Thoughts on the Earliest Reception",
+"type": "early_reception_study",
+"url": "
+https://books.akademicka.pl/publishing/catalog/download/145/488/469?inline=1
+",
+"notes": "Focuses on earliest reception through marginalia and circulation, contributing to understanding of its original audience and uses.",
+"source": ""
+},
+{
+"title": "Hypnerotomachia Poliphili (paper, Academia.edu)",
+"type": "article_with_reception_elements",
+"url": "
+https://www.academia.edu/9196786/Hypnerotomachia_Poliphili
+",
+"notes": "Explores the work as antiquarian project and discusses its afterlife in antiquarianism and early book studies.",
+"source": ""
+}
+],
+"video_and_misc_media": [
+{
+"title": "Hypnerotomachia Poliphili – Francesco Colonna (YouTube)",
+"type": "video_review_discussion",
+"url": "https://www.youtube.com/watch?v=IC8YaZpQHcg",
+"notes": "Contemporary video discussion (Foolish Fish) connecting the book to esotericism, book design, and modern occult/artistic interests.",
+"source": ""
+}
+]
+}
+
+Follow-ups
+
+Why modern scholars remain divided on Hypnerotomachia Poliphili's authorship and cultural impact
+Deep research
+
+What is the plot summary of Hypnerotomachia Poliphili
+
+Who was Francesco Colonna and his background
+
+Describe the 168 woodcuts in Hypnerotomachia Poliphili
+
+Influence of Hypnerotomachia on modern design
+Describe the 168 woodcuts in Hypnerotomachia Poliphili
+
+
+
+
+
+
+The book’s 168 woodcuts form a continuous visual narrative that mirrors Poliphilo’s dream-journey through forests, ruins, gardens, rituals, and triumphal processions, with a strong emphasis on architecture and allegorical scenes. They are cut in a fine, linear style that integrates closely with the page layout and type, so that image and text read as one continuous design rather than as separate elements.
+
+Overall character
+The woodcuts “illustrate” almost every major episode: encounters with nymphs, monsters, ruins, temples, fountains, and processions, as well as emblematic objects covered in pseudo-inscriptions. Their line work is relatively spare and clear, avoiding heavy shading, which allows architectural detail and figure groupings to stand out against the white of the page.
+
+Subject matter types
+A triumphal car with a central figure on a bull in a procession, a woodcut from Hypnerotomachia Poliphili. 
+Roughly, the 168 images fall into a few recurring types:
+
+Landscapes and forests with Poliphilo wandering or meeting figures such as nymphs or monsters.
+
+Architectural plates showing elaborate temples, pyramids, obelisks, arches, sarcophagi, and fountains.
+
+Processional and ritual scenes, including triumphal cars, sacrificial ceremonies, and temple worship.
+
+Mythological episodes, such as the Rape of Europa, adapted into the dream framework.
+
+Intimate narrative moments between Poliphilo and Polia, including her kiss that revives him.
+
+Architecture and objects
+Many of the most famous cuts show impossible or fantastically composite buildings: stacked temple-pyramid-obelisk ensembles, richly ornamented doors, sculptural friezes, and fountains with hybrid creatures. Others isolate single objects—vases, sarcophagi, trophies, weathercocks, clipped trees, elaborate centerpieces—rendered almost like technical plates, with inscriptions or pseudo-hieroglyphs that invite decoding.
+
+Figures, processions, and eros
+A large subset depicts carefully staged groups: dancers, priestesses, triumphal cars pulled by animals, and crowds in ordered rows, all arranged to emphasize rhythm and symmetry. Erotic and affective moments are treated with the same formal restraint—embraces, kisses, and scenes of adoration are framed by classical interiors, checkerboard floors, and carefully balanced arches.
+
+Style and significance
+The cuts are often described as simultaneously “stark and ornate”: outlines are economical, but the compositions are packed with architectural and ornamental detail. They have been associated with the new classicizing style of late-fifteenth-century Venice and compared favorably to other incunable illustration cycles, becoming a key reference point for Renaissance book illustration and for later artists mining them for architectural and allegorical motifs.
+
+Follow-ups
+
+Who created the woodcuts for the 1499 edition
+
+What architectural structures are shown in the woodcuts
+
+How do the French 1546 edition woodcuts differ
+
+What erotic or fantastical scenes appear in the illustrations
+
+How did the woodcuts influence Renaissance book design
+Who created the woodcuts for the 1499 edition
+
+
+
+
+
+
+The woodcuts in the 1499 Aldine edition are anonymous; no single artist can be securely named. Contemporary and modern scholars have proposed various candidates based on style, but none is universally accepted.
+
+Attributions that have been proposed
+Benedetto Bordon (Benedetto Bordone) – the Metropolitan Museum catalogue notes that the design of the woodcuts is often attributed to him, based on stylistic parallels with his known work in Venice.
+​
+
+Andrea Mantegna – some art historians have seen affinities with his severe classicizing style and architectural sense.
+
+Gentile Bellini – also proposed due to Venetian connections and certain figure types.
+
+Other names (Carpaccio, even a young Raphael) have occasionally been floated, but without decisive evidence.
+
+Scholarly consensus
+Most specialists today treat the blocks as the work of an unknown but highly skilled Venetian artist or workshop closely engaged with Aldus Manutius’s circle. Museums and libraries usually phrase this as “anonymous artist” or “design attributed to Benedetto Bordon/Bordone,” to reflect that the attribution remains debated rather than proven.
+
+search for more music inspired by HP I know I found some on youtube
+Hypnerotomachia Poliphili. Vídeo muestra trailer
+Hypnerotomachia Poliphili. Vídeo muestra
+Dream of Love trailer
+Dream of Love
+(osu!taiko) aa...hisuichazuke... - steganography ... trailer
+(osu!taiko) aa...hisuichazuke... - steganography ...
+Here are specific pieces of music explicitly titled after or inspired by Hypnerotomachia Poliphili that are on YouTube or streaming:
+
+json
+{
+  "music_inspired_by_Hypnerotomachia_Poliphili": [
+    {
+      "title": "Dream of Love",
+      "artist": "Fear of Tigers",
+      "release_or_album": "Hypnerotomachia Poliphili (album/EP metadata)",
+      "year": 2016,
+      "platform": "YouTube (also on digital services)",
+      "url": "https://www.youtube.com/watch?v=NBreOa0-vkQ",
+      "notes": "Electronic track; YouTube metadata lists “Hypnerotomachia Poliphili” as the release title.",
+      "source": "web:36"
+    },
+    {
+      "title": "Hypnerotomachia Poliphili",
+      "artist": "Esmectatons",
+      "release_or_album": "Half‑Wit Futurism",
+      "year": 2008,
+      "platform": "YouTube / streaming",
+      "url": "https://www.youtube.com/watch?v=dOjJ3tAR1GU",
+      "notes": "Track named directly after the book; released via PISCES Entretenimento Ltda.",
+      "source": "web:41"
+    },
+    {
+      "title": "Wind (opera) – based on Hypnerotomachia Poliphili",
+      "artist": "Alexander Moosbrugger",
+      "release_or_album": "Opera “Wind”",
+      "year": 2021,
+      "platform": "contemporary opera / recordings and clips online",
+      "url": "https://en.wikipedia.org/wiki/Hypnerotomachia_Poliphili",
+      "notes": "German composer uses the German and English translations of Hypnerotomachia Poliphili as the textual basis for his opera *Wind*.",
+      "source": "web:9"
+    }
+  ],
+  "related_media_with_music": [
+    {
+      "title": "The SECRET BOOK of RENAISSANCE | Hypnerotomachia Poliphili",
+      "channel": "Italian YouTube essay channel",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/watch?v=banNEgGL9hU",
+      "notes": "Video essay about the book; uses background track \"Holiday Macabre\" by Myuu under Creative Commons, not thematically based on HP but part of the audiovisual ecosystem around it.",
+      "source": "web:38"
+    }
+  ]
+}
+Follow-ups
+
+albums inspired by Hypnerotomachia Poliphili
+
+modern classical pieces based on HP
+
+soundtracks referencing Poliphilo and Polia
+
+fear of tigers hypnerotomachia poliphili full album
+
+other youtube playlists for hp inspired music
+albums inspired by Hypnerotomachia Poliphili
+Here are the clearly documented albums/EPs directly inspired by Hypnerotomachia Poliphili:
+
+json
+{
+  "albums_inspired_by_Hypnerotomachia_Poliphili": [
+    {
+      "title": "Hypnerotomachia",
+      "artist": "Sagenhaft",
+      "year": 2021,
+      "format": "EP / mini‑album (dungeon synth)",
+      "label": "Moonlit Castle Records",
+      "tracks": [
+        "Sleepless night, magical forest",
+        "Dance of the Nymphs",
+        "Ethereal garden",
+        "A kiss to seal the dream"
+      ],
+      "inspiration_note": "Description states that all four tracks are inspired by the ‘Hypnerotomachia Poliphili (dream’s love battle), a mysterious 15th century novel’.",
+      "primary_listen_link": "https://www.youtube.com/watch?v=kaV76kL_VJA",
+      "label_page": "https://moonlitcastlerecords.bandcamp.com/album/hypnerotomachia"
+    },
+    {
+      "title": "Hypnerotomachia Poliphili",
+      "artist": "Fear of Tigers",
+      "year": 2016,
+      "format": "single within a digital release titled “Hypnerotomachia Poliphili”",
+      "tracks_example": [
+        "Dream of Love"
+      ],
+      "inspiration_note": "Electronic release whose metadata uses the book’s title; individual tracks (e.g., “Dream of Love”) circulate under that release name on streaming/video platforms.",
+      "example_link": "https://www.youtube.com/watch?v=NBreOa0-vkQ"
+    }
+  ],
+  "related_long_form_works": [
+    {
+      "title": "Wind (opera)",
+      "composer": "Alexander Moosbrugger",
+      "year": 2021,
+      "format": "opera",
+      "inspiration_note": "Libretto is drawn from the German and English translations of *Hypnerotomachia Poliphili*; not an ‘album’ in the strict sense but a full-scale musical work based on the book.",
+      "reference_link": "https://en.wikipedia.org/wiki/Hypnerotomachia_Poliphili"
+    }
+  ],
+  "notes": [
+    "These are releases where the connection to *Hypnerotomachia Poliphili* is explicit in the title/description, not just vague aesthetic similarity.",
+    "There may be additional self‑released Bandcamp/YouTube albums that reference the book in liner notes or tags but not in their main title; those are harder to systematically list."
+  ]
+}

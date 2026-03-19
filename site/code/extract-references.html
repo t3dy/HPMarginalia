@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract References - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Extract References</h2>
+            <div class="code-meta">extract_references.py &mdash; 176 lines</div>
+            <p style="margin-bottom:1rem">Uses PyMuPDF + regex to extract 282 folio/signature references from Russell&#x27;s PhD thesis PDF.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Extract folio/signature references from Russell&#x27;s PhD dissertation.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>import re
+<span class="line-num">5</span>from pathlib import Path
+<span class="line-num">6</span>
+<span class="line-num">7</span>try:
+<span class="line-num">8</span>    import fitz  # PyMuPDF
+<span class="line-num">9</span>except ImportError:
+<span class="line-num">10</span>    print(&quot;ERROR: PyMuPDF not installed. Run: pip install PyMuPDF&quot;)
+<span class="line-num">11</span>    raise
+<span class="line-num">12</span>
+<span class="line-num">13</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">14</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">15</span>THESIS_FILENAME = &quot;PhD_Thesis_ _James_Russell Hypnerotomachia Polyphili.pdf&quot;
+<span class="line-num">16</span>THESIS_PATH = BASE_DIR / THESIS_FILENAME
+<span class="line-num">17</span>
+<span class="line-num">18</span># Chapter page ranges (approximate, from TOC - 1-indexed PDF pages)
+<span class="line-num">19</span># These will be refined after first extraction pass
+<span class="line-num">20</span>CHAPTER_RANGES = {
+<span class="line-num">21</span>    1: (1, 40),      # The HP and its readership
+<span class="line-num">22</span>    2: (41, 60),     # Literature Review
+<span class="line-num">23</span>    3: (61, 80),     # Methodology
+<span class="line-num">24</span>    4: (81, 100),    # Modena - F.C. Panini Estate
+<span class="line-num">25</span>    5: (101, 122),   # Como - INCUN A.5.13
+<span class="line-num">26</span>    6: (123, 170),   # London - BL C.60.o.12
+<span class="line-num">27</span>    7: (171, 203),   # Buffalo
+<span class="line-num">28</span>    8: (204, 230),   # Vatican
+<span class="line-num">29</span>    9: (204, 250),   # Siena O.III.38 + Sydney
+<span class="line-num">30</span>    10: (251, 262),  # Conclusions
+<span class="line-num">31</span>}
+<span class="line-num">32</span>
+<span class="line-num">33</span># Manuscript shelfmark by chapter
+<span class="line-num">34</span>CHAPTER_MANUSCRIPTS = {
+<span class="line-num">35</span>    4: &#x27;Modena (Panini)&#x27;,
+<span class="line-num">36</span>    5: &#x27;INCUN A.5.13&#x27;,
+<span class="line-num">37</span>    6: &#x27;C.60.o.12&#x27;,
+<span class="line-num">38</span>    7: &#x27;Buffalo RBR&#x27;,
+<span class="line-num">39</span>    8: &#x27;Inc.Stam.Chig.II.610&#x27;,
+<span class="line-num">40</span>    9: &#x27;O.III.38&#x27;,
+<span class="line-num">41</span>}
+<span class="line-num">42</span>
+<span class="line-num">43</span># Regex patterns for signature references
+<span class="line-num">44</span># Matches: (a4r), (c7v), (p6v), a7r:, i6r, etc.
+<span class="line-num">45</span>SIG_PATTERN = re.compile(
+<span class="line-num">46</span>    r&#x27;(?:\(([a-zA-Z]{1,2}\d[rv])\))&#x27;  # parenthesized: (a4r)
+<span class="line-num">47</span>    r&#x27;|(?:\b([a-zA-Z]{1,2}\d[rv]):)&#x27;   # with colon: a4r:
+<span class="line-num">48</span>    r&#x27;|(?:\b([a-zA-Z]{1,2}\d[rv])\b)&#x27;  # bare: a4r (more false positives)
+<span class="line-num">49</span>)
+<span class="line-num">50</span>
+<span class="line-num">51</span># Pattern for quoted marginal text (text in single quotes near a signature ref)
+<span class="line-num">52</span>MARGINAL_QUOTE = re.compile(r&quot;[&#x27;\u2018]([^&#x27;\u2019]{3,200})[&#x27;\u2019]&quot;)
+<span class="line-num">53</span>
+<span class="line-num">54</span>
+<span class="line-num">55</span>def get_chapter(page_num):
+<span class="line-num">56</span>    &quot;&quot;&quot;Determine chapter number from PDF page number.&quot;&quot;&quot;
+<span class="line-num">57</span>    for ch, (start, end) in CHAPTER_RANGES.items():
+<span class="line-num">58</span>        if start &lt;= page_num &lt;= end:
+<span class="line-num">59</span>            return ch
+<span class="line-num">60</span>    return None
+<span class="line-num">61</span>
+<span class="line-num">62</span>
+<span class="line-num">63</span>def get_manuscript(chapter_num):
+<span class="line-num">64</span>    &quot;&quot;&quot;Get manuscript shelfmark from chapter number.&quot;&quot;&quot;
+<span class="line-num">65</span>    return CHAPTER_MANUSCRIPTS.get(chapter_num)
+<span class="line-num">66</span>
+<span class="line-num">67</span>
+<span class="line-num">68</span>def extract_context(text, match_start, match_end, window=500):
+<span class="line-num">69</span>    &quot;&quot;&quot;Extract surrounding paragraph context.&quot;&quot;&quot;
+<span class="line-num">70</span>    # Find paragraph boundaries (double newline or start/end of text)
+<span class="line-num">71</span>    para_start = text.rfind(&#x27;\n\n&#x27;, 0, match_start)
+<span class="line-num">72</span>    para_start = para_start + 2 if para_start &gt;= 0 else max(0, match_start - window)
+<span class="line-num">73</span>
+<span class="line-num">74</span>    para_end = text.find(&#x27;\n\n&#x27;, match_end)
+<span class="line-num">75</span>    para_end = para_end if para_end &gt;= 0 else min(len(text), match_end + window)
+<span class="line-num">76</span>
+<span class="line-num">77</span>    return text[para_start:para_end].strip()
+<span class="line-num">78</span>
+<span class="line-num">79</span>
+<span class="line-num">80</span>def extract_marginal_text(context, sig_pos):
+<span class="line-num">81</span>    &quot;&quot;&quot;Find quoted text near a signature reference.&quot;&quot;&quot;
+<span class="line-num">82</span>    quotes = list(MARGINAL_QUOTE.finditer(context))
+<span class="line-num">83</span>    if not quotes:
+<span class="line-num">84</span>        return None
+<span class="line-num">85</span>
+<span class="line-num">86</span>    # Find the quote closest to the signature reference
+<span class="line-num">87</span>    closest = min(quotes, key=lambda m: abs(m.start() - sig_pos))
+<span class="line-num">88</span>    return closest.group(1)
+<span class="line-num">89</span>
+<span class="line-num">90</span>
+<span class="line-num">91</span>def main():
+<span class="line-num">92</span>    if not THESIS_PATH.exists():
+<span class="line-num">93</span>        print(f&quot;ERROR: Thesis not found at {THESIS_PATH}&quot;)
+<span class="line-num">94</span>        return
+<span class="line-num">95</span>
+<span class="line-num">96</span>    print(f&quot;Opening {THESIS_FILENAME}...&quot;)
+<span class="line-num">97</span>    doc = fitz.open(str(THESIS_PATH))
+<span class="line-num">98</span>    total_pages = len(doc)
+<span class="line-num">99</span>    print(f&quot;  {total_pages} pages&quot;)
+<span class="line-num">100</span>
+<span class="line-num">101</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">102</span>    cur = conn.cursor()
+<span class="line-num">103</span>
+<span class="line-num">104</span>    # Clear existing refs
+<span class="line-num">105</span>    cur.execute(&quot;DELETE FROM dissertation_refs&quot;)
+<span class="line-num">106</span>
+<span class="line-num">107</span>    ref_count = 0
+<span class="line-num">108</span>    all_sigs = set()
+<span class="line-num">109</span>
+<span class="line-num">110</span>    for page_idx in range(total_pages):
+<span class="line-num">111</span>        page = doc[page_idx]
+<span class="line-num">112</span>        text = page.get_text()
+<span class="line-num">113</span>        page_num = page_idx + 1  # 1-indexed
+<span class="line-num">114</span>
+<span class="line-num">115</span>        for match in SIG_PATTERN.finditer(text):
+<span class="line-num">116</span>            # Get the matched signature from whichever group matched
+<span class="line-num">117</span>            sig = match.group(1) or match.group(2) or match.group(3)
+<span class="line-num">118</span>            if not sig:
+<span class="line-num">119</span>                continue
+<span class="line-num">120</span>
+<span class="line-num">121</span>            # Skip very short matches that are likely false positives
+<span class="line-num">122</span>            # (e.g., &quot;in&quot; + digit + r/v)
+<span class="line-num">123</span>            quire_part = re.match(r&#x27;([a-zA-Z]+)&#x27;, sig).group(1)
+<span class="line-num">124</span>            if quire_part.lower() in (&#x27;in&#x27;, &#x27;an&#x27;, &#x27;on&#x27;, &#x27;or&#x27;, &#x27;as&#x27;, &#x27;at&#x27;, &#x27;is&#x27;, &#x27;it&#x27;,
+<span class="line-num">125</span>                                       &#x27;no&#x27;, &#x27;so&#x27;, &#x27;to&#x27;, &#x27;do&#x27;, &#x27;go&#x27;, &#x27;he&#x27;, &#x27;me&#x27;, &#x27;we&#x27;,
+<span class="line-num">126</span>                                       &#x27;be&#x27;, &#x27;of&#x27;, &#x27;if&#x27;, &#x27;up&#x27;, &#x27;my&#x27;, &#x27;by&#x27;):
+<span class="line-num">127</span>                continue
+<span class="line-num">128</span>
+<span class="line-num">129</span>            all_sigs.add(sig)
+<span class="line-num">130</span>            chapter = get_chapter(page_num)
+<span class="line-num">131</span>            manuscript = get_manuscript(chapter)
+<span class="line-num">132</span>
+<span class="line-num">133</span>            context = extract_context(text, match.start(), match.end())
+<span class="line-num">134</span>            marginal = extract_marginal_text(context, match.start() - (text.rfind(&#x27;\n\n&#x27;, 0, match.start()) or 0))
+<span class="line-num">135</span>
+<span class="line-num">136</span>            cur.execute(
+<span class="line-num">137</span>                &quot;&quot;&quot;INSERT INTO dissertation_refs
+<span class="line-num">138</span>                   (thesis_page, signature_ref, manuscript_shelfmark,
+<span class="line-num">139</span>                    context_text, marginal_text, ref_type, chapter_num)
+<span class="line-num">140</span>                   VALUES (?, ?, ?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">141</span>                (page_num, sig, manuscript, context, marginal, &#x27;MARGINALIA&#x27;, chapter)
+<span class="line-num">142</span>            )
+<span class="line-num">143</span>            ref_count += 1
+<span class="line-num">144</span>
+<span class="line-num">145</span>    conn.commit()
+<span class="line-num">146</span>    doc.close()
+<span class="line-num">147</span>
+<span class="line-num">148</span>    print(f&quot;\nExtracted {ref_count} references&quot;)
+<span class="line-num">149</span>    print(f&quot;Unique signatures: {len(all_sigs)}&quot;)
+<span class="line-num">150</span>
+<span class="line-num">151</span>    # Show distribution by chapter
+<span class="line-num">152</span>    print(&quot;\nReferences by chapter:&quot;)
+<span class="line-num">153</span>    for ch in range(1, 11):
+<span class="line-num">154</span>        cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs WHERE chapter_num = ?&quot;, (ch,))
+<span class="line-num">155</span>        count = cur.fetchone()[0]
+<span class="line-num">156</span>        ms = CHAPTER_MANUSCRIPTS.get(ch, &#x27;&#x27;)
+<span class="line-num">157</span>        if count &gt; 0:
+<span class="line-num">158</span>            print(f&quot;  Ch {ch} ({ms}): {count} refs&quot;)
+<span class="line-num">159</span>
+<span class="line-num">160</span>    # Show sample references
+<span class="line-num">161</span>    print(&quot;\nSample references:&quot;)
+<span class="line-num">162</span>    cur.execute(&quot;&quot;&quot;SELECT thesis_page, signature_ref, manuscript_shelfmark,
+<span class="line-num">163</span>                   substr(context_text, 1, 100), marginal_text
+<span class="line-num">164</span>                   FROM dissertation_refs LIMIT 10&quot;&quot;&quot;)
+<span class="line-num">165</span>    for row in cur.fetchall():
+<span class="line-num">166</span>        page, sig, ms, ctx, marg = row
+<span class="line-num">167</span>        print(f&quot;  p.{page} {sig} [{ms}]: {ctx}...&quot;)
+<span class="line-num">168</span>        if marg:
+<span class="line-num">169</span>            print(f&quot;    Marginal text: &#x27;{marg[:80]}&#x27;&quot;)
+<span class="line-num">170</span>
+<span class="line-num">171</span>    conn.close()
+<span class="line-num">172</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">173</span>
+<span class="line-num">174</span>
+<span class="line-num">175</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">176</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

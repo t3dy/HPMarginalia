@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Markdown - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>PDF to Markdown</h2>
+            <div class="code-meta">pdf_to_markdown.py &mdash; 373 lines</div>
+            <p style="margin-bottom:1rem">Extracts all PDFs to markdown with YAML frontmatter, page markers, and metadata lookup.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Extract all PDFs to markdown files with YAML frontmatter.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import re
+<span class="line-num">4</span>import os
+<span class="line-num">5</span>from pathlib import Path
+<span class="line-num">6</span>
+<span class="line-num">7</span>try:
+<span class="line-num">8</span>    import fitz  # PyMuPDF
+<span class="line-num">9</span>except ImportError:
+<span class="line-num">10</span>    print(&quot;ERROR: PyMuPDF not installed. Run: pip install PyMuPDF&quot;)
+<span class="line-num">11</span>    raise
+<span class="line-num">12</span>
+<span class="line-num">13</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">14</span>MD_DIR = BASE_DIR / &quot;md&quot;
+<span class="line-num">15</span>MD_DIR.mkdir(exist_ok=True)
+<span class="line-num">16</span>
+<span class="line-num">17</span># Known metadata mappings for better frontmatter
+<span class="line-num">18</span>KNOWN_METADATA = {
+<span class="line-num">19</span>    &#x27;PhD_Thesis_ _James_Russell&#x27;: {
+<span class="line-num">20</span>        &#x27;title&#x27;: &#x27;Hypnerotomachia Poliphili: A Study of Marginal Annotations in Six Copies&#x27;,
+<span class="line-num">21</span>        &#x27;author&#x27;: &#x27;James Russell&#x27;,
+<span class="line-num">22</span>        &#x27;year&#x27;: 2024,
+<span class="line-num">23</span>        &#x27;doc_type&#x27;: &#x27;DISSERTATION&#x27;,
+<span class="line-num">24</span>    },
+<span class="line-num">25</span>    &#x27;E_Thesis_Durham_University_Self_Transfor Oneill&#x27;: {
+<span class="line-num">26</span>        &#x27;title&#x27;: &#x27;Self-transformation in the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">27</span>        &#x27;author&#x27;: &quot;James O&#x27;Neill&quot;,
+<span class="line-num">28</span>        &#x27;year&#x27;: 2025,
+<span class="line-num">29</span>        &#x27;journal&#x27;: &#x27;Durham University (E-Thesis)&#x27;,
+<span class="line-num">30</span>        &#x27;doc_type&#x27;: &#x27;DISSERTATION&#x27;,
+<span class="line-num">31</span>    },
+<span class="line-num">32</span>    &#x27;A_Narrative_in_Search_of_an_Author&#x27;: {
+<span class="line-num">33</span>        &#x27;title&#x27;: &#x27;A Narrative in Search of an Author: The Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">34</span>        &#x27;author&#x27;: &quot;James O&#x27;Neill&quot;,
+<span class="line-num">35</span>        &#x27;year&#x27;: 2025,
+<span class="line-num">36</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">37</span>    },
+<span class="line-num">38</span>    &#x27;Francesco Colonna Hypnerotomachia Poliphili Da Capo&#x27;: {
+<span class="line-num">39</span>        &#x27;title&#x27;: &#x27;Hypnerotomachia Poliphili (Da Capo Press edition)&#x27;,
+<span class="line-num">40</span>        &#x27;author&#x27;: &#x27;Francesco Colonna&#x27;,
+<span class="line-num">41</span>        &#x27;year&#x27;: 1499,
+<span class="line-num">42</span>        &#x27;doc_type&#x27;: &#x27;PRIMARY_TEXT&#x27;,
+<span class="line-num">43</span>    },
+<span class="line-num">44</span>    &#x27;Francesco Colonna Rino Avesani&#x27;: {
+<span class="line-num">45</span>        &#x27;title&#x27;: &#x27;Hypnerotomachia Poliphili, Vol. 1 (Antenore critical edition)&#x27;,
+<span class="line-num">46</span>        &#x27;author&#x27;: &#x27;Francesco Colonna (ed. Pozzi &amp; Ciapponi)&#x27;,
+<span class="line-num">47</span>        &#x27;year&#x27;: 1964,
+<span class="line-num">48</span>        &#x27;doc_type&#x27;: &#x27;PRIMARY_TEXT&#x27;,
+<span class="line-num">49</span>    },
+<span class="line-num">50</span>    &#x27;Hypnerotomachia by Francesco Colonna&#x27;: {
+<span class="line-num">51</span>        &#x27;title&#x27;: &#x27;Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">52</span>        &#x27;author&#x27;: &#x27;Francesco Colonna&#x27;,
+<span class="line-num">53</span>        &#x27;year&#x27;: 1499,
+<span class="line-num">54</span>        &#x27;doc_type&#x27;: &#x27;PRIMARY_TEXT&#x27;,
+<span class="line-num">55</span>    },
+<span class="line-num">56</span>    &#x27;The HP of Ben Jonson&#x27;: {
+<span class="line-num">57</span>        &#x27;title&#x27;: &#x27;The HP of Ben Jonson and Kenelm Digby&#x27;,
+<span class="line-num">58</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">59</span>        &#x27;year&#x27;: 2025,
+<span class="line-num">60</span>        &#x27;doc_type&#x27;: &#x27;PRESENTATION&#x27;,
+<span class="line-num">61</span>    },
+<span class="line-num">62</span>    &#x27;Crossing_the_text_image_boundary&#x27;: {
+<span class="line-num">63</span>        &#x27;title&#x27;: &#x27;Crossing the Text-Image Boundary: The French HP&#x27;,
+<span class="line-num">64</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">65</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">66</span>    },
+<span class="line-num">67</span>    &#x27;Dream_Narratives_and_Initiation_Processe&#x27;: {
+<span class="line-num">68</span>        &#x27;title&#x27;: &#x27;Dream Narratives and Initiation Processes&#x27;,
+<span class="line-num">69</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">70</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">71</span>    },
+<span class="line-num">72</span>    &#x27;Editions SR 25 James Gollnick&#x27;: {
+<span class="line-num">73</span>        &#x27;title&#x27;: &#x27;Religious Dreamworld of Apuleius Metamorphoses: Recovering a Forgotten Hermeneutic&#x27;,
+<span class="line-num">74</span>        &#x27;author&#x27;: &#x27;James Gollnick&#x27;,
+<span class="line-num">75</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">76</span>    },
+<span class="line-num">77</span>    &#x27;Elucidating_and_Enigmatizing_the_Recepti&#x27;: {
+<span class="line-num">78</span>        &#x27;title&#x27;: &#x27;Elucidating and Enigmatizing the Reception of the HP&#x27;,
+<span class="line-num">79</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">80</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">81</span>    },
+<span class="line-num">82</span>    &#x27;Eugenio Canone_ Leen Spruit&#x27;: {
+<span class="line-num">83</span>        &#x27;title&#x27;: &#x27;Emblematics in the Early Modern Age: Case Studies&#x27;,
+<span class="line-num">84</span>        &#x27;author&#x27;: &#x27;Eugenio Canone and Leen Spruit&#x27;,
+<span class="line-num">85</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">86</span>    },
+<span class="line-num">87</span>    &#x27;Georg Leidinger Albrecht D&#x27;: {
+<span class="line-num">88</span>        &#x27;title&#x27;: &#x27;Albrecht Durer und die Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">89</span>        &#x27;author&#x27;: &#x27;Georg Leidinger&#x27;,
+<span class="line-num">90</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">91</span>    },
+<span class="line-num">92</span>    &#x27;Italica 1947&#x27;: {
+<span class="line-num">93</span>        &#x27;title&#x27;: &#x27;Some Foreign Imitators of the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">94</span>        &#x27;author&#x27;: &#x27;Mario Praz&#x27;,
+<span class="line-num">95</span>        &#x27;year&#x27;: 1947,
+<span class="line-num">96</span>        &#x27;journal&#x27;: &#x27;Italica 24:1&#x27;,
+<span class="line-num">97</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">98</span>    },
+<span class="line-num">99</span>    &#x27;Journal of the Warburg Institute 1937&#x27;: {
+<span class="line-num">100</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili in 17th Century France&#x27;,
+<span class="line-num">101</span>        &#x27;author&#x27;: &#x27;Anthony Blunt&#x27;,
+<span class="line-num">102</span>        &#x27;year&#x27;: 1937,
+<span class="line-num">103</span>        &#x27;journal&#x27;: &#x27;Journal of the Warburg Institute 1:2&#x27;,
+<span class="line-num">104</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">105</span>    },
+<span class="line-num">106</span>    &#x27;Journal of the Warburg and Courtauld Institutes vol 47&#x27;: {
+<span class="line-num">107</span>        &#x27;title&#x27;: &#x27;Alberti and the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">108</span>        &#x27;author&#x27;: &#x27;D. R. Edward Wright&#x27;,
+<span class="line-num">109</span>        &#x27;year&#x27;: 1984,
+<span class="line-num">110</span>        &#x27;journal&#x27;: &#x27;Journal of the Warburg and Courtauld Institutes 47&#x27;,
+<span class="line-num">111</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">112</span>    },
+<span class="line-num">113</span>    &#x27;Liane Lefaivre&#x27;: {
+<span class="line-num">114</span>        &#x27;title&#x27;: &quot;Leon Battista Alberti&#x27;s Hypnerotomachia Poliphili: Re-Cognizing the Architectural Body&quot;,
+<span class="line-num">115</span>        &#x27;author&#x27;: &#x27;Liane Lefaivre&#x27;,
+<span class="line-num">116</span>        &#x27;year&#x27;: 1997,
+<span class="line-num">117</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">118</span>    },
+<span class="line-num">119</span>    &#x27;Notes and Queries 1952&#x27;: {
+<span class="line-num">120</span>        &#x27;title&#x27;: &#x27;Some Notes on the Vocabulary of the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">121</span>        &#x27;author&#x27;: &#x27;Peter Ure&#x27;,
+<span class="line-num">122</span>        &#x27;year&#x27;: 1952,
+<span class="line-num">123</span>        &#x27;journal&#x27;: &#x27;Notes and Queries 197:26&#x27;,
+<span class="line-num">124</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">125</span>    },
+<span class="line-num">126</span>    &#x27;Renaissance Quarterly vol 55&#x27;: {
+<span class="line-num">127</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili, Image, Text, and Vernacular Poetics&#x27;,
+<span class="line-num">128</span>        &#x27;author&#x27;: &#x27;Rosemary Trippe&#x27;,
+<span class="line-num">129</span>        &#x27;year&#x27;: 2002,
+<span class="line-num">130</span>        &#x27;journal&#x27;: &#x27;Renaissance Quarterly 55:4&#x27;,
+<span class="line-num">131</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">132</span>    },
+<span class="line-num">133</span>    &#x27;Renaissance Studies 1990&#x27;: {
+<span class="line-num">134</span>        &#x27;title&#x27;: &#x27;The Structural Problematic of the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">135</span>        &#x27;author&#x27;: &#x27;Mark Jarzombek&#x27;,
+<span class="line-num">136</span>        &#x27;year&#x27;: 1990,
+<span class="line-num">137</span>        &#x27;journal&#x27;: &#x27;Renaissance Studies 4:3&#x27;,
+<span class="line-num">138</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">139</span>    },
+<span class="line-num">140</span>    &#x27;Studies in Philology 2006&#x27;: {
+<span class="line-num">141</span>        &#x27;title&#x27;: &quot;Robert Dallington&#x27;s Hypnerotomachia and the Protestant Antiquity of Elizabethan England&quot;,
+<span class="line-num">142</span>        &#x27;author&#x27;: &#x27;L. E. Semler&#x27;,
+<span class="line-num">143</span>        &#x27;year&#x27;: 2006,
+<span class="line-num">144</span>        &#x27;journal&#x27;: &#x27;Studies in Philology 103:2&#x27;,
+<span class="line-num">145</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">146</span>    },
+<span class="line-num">147</span>    &#x27;Teaching_Eros&#x27;: {
+<span class="line-num">148</span>        &#x27;title&#x27;: &#x27;Teaching Eros: The Rhetoric of Love in the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">149</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">150</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">151</span>    },
+<span class="line-num">152</span>    &#x27;The Modern Language Review 1955&#x27;: {
+<span class="line-num">153</span>        &#x27;title&#x27;: &#x27;Francesco Colonna and Rabelais&#x27;,
+<span class="line-num">154</span>        &#x27;author&#x27;: &#x27;Marcel Francon&#x27;,
+<span class="line-num">155</span>        &#x27;year&#x27;: 1955,
+<span class="line-num">156</span>        &#x27;journal&#x27;: &#x27;The Modern Language Review 50:1&#x27;,
+<span class="line-num">157</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">158</span>    },
+<span class="line-num">159</span>    &#x27;The_Narrative_Function_of_Hieroglyphs&#x27;: {
+<span class="line-num">160</span>        &#x27;title&#x27;: &#x27;The Narrative Function of Hieroglyphs in the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">161</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">162</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">163</span>    },
+<span class="line-num">164</span>    &#x27;Untangling the knot&#x27;: {
+<span class="line-num">165</span>        &#x27;title&#x27;: &quot;Untangling the Knot: Garden Design in Francesco Colonna&#x27;s Hypnerotomachia Poliphili&quot;,
+<span class="line-num">166</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">167</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">168</span>    },
+<span class="line-num">169</span>    &#x27;Walking_in_the_Boboli&#x27;: {
+<span class="line-num">170</span>        &#x27;title&#x27;: &#x27;Walking in the Boboli Gardens in Florence&#x27;,
+<span class="line-num">171</span>        &#x27;author&#x27;: &#x27;Unknown&#x27;,
+<span class="line-num">172</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">173</span>    },
+<span class="line-num">174</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Bury John&#x27;: {
+<span class="line-num">175</span>        &#x27;title&#x27;: &#x27;Chapter III of the Hypnerotomachia Poliphili and the Antiquarian Culture of the Quattrocento&#x27;,
+<span class="line-num">176</span>        &#x27;author&#x27;: &#x27;John Bury&#x27;,
+<span class="line-num">177</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">178</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">179</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">180</span>    },
+<span class="line-num">181</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Curran Brian&#x27;: {
+<span class="line-num">182</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili and Renaissance Egyptology&#x27;,
+<span class="line-num">183</span>        &#x27;author&#x27;: &#x27;Brian A. Curran&#x27;,
+<span class="line-num">184</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">185</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">186</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">187</span>    },
+<span class="line-num">188</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Griggs Tamara&#x27;: {
+<span class="line-num">189</span>        &#x27;title&#x27;: &quot;Promoting the Past: The Hypnerotomachia Poliphili as Antiquarian Enterprise&quot;,
+<span class="line-num">190</span>        &#x27;author&#x27;: &#x27;Tamara Griggs&#x27;,
+<span class="line-num">191</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">192</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">193</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">194</span>    },
+<span class="line-num">195</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Hunt John Dixon&#x27;: {
+<span class="line-num">196</span>        &#x27;title&#x27;: &#x27;Experiencing Gardens in the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">197</span>        &#x27;author&#x27;: &#x27;John Dixon Hunt&#x27;,
+<span class="line-num">198</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">199</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">200</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">201</span>    },
+<span class="line-num">202</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Leslie Michael&#x27;: {
+<span class="line-num">203</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili and the Elizabethan Landscape Entertainment&#x27;,
+<span class="line-num">204</span>        &#x27;author&#x27;: &#x27;Michael Leslie&#x27;,
+<span class="line-num">205</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">206</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">207</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">208</span>    },
+<span class="line-num">209</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Stewering Roswitha&#x27;: {
+<span class="line-num">210</span>        &#x27;title&#x27;: &#x27;The Relationship between Text and Woodcuts in the Hypnerotomachia Poliphili&#x27;,
+<span class="line-num">211</span>        &#x27;author&#x27;: &#x27;Roswitha Stewering (trans. Lorna Maher)&#x27;,
+<span class="line-num">212</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">213</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">214</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">215</span>    },
+<span class="line-num">216</span>    &#x27;Word Image 1998 jan vol 14 iss 1 2 Temple N&#x27;: {
+<span class="line-num">217</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili as a Possible Model for Garden Design&#x27;,
+<span class="line-num">218</span>        &#x27;author&#x27;: &#x27;N. Temple&#x27;,
+<span class="line-num">219</span>        &#x27;year&#x27;: 1998,
+<span class="line-num">220</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 14:1-2&#x27;,
+<span class="line-num">221</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">222</span>    },
+<span class="line-num">223</span>    &#x27;Word Image 2015 apr 03 vol 31 iss 2 Fabiani Giannetto&#x27;: {
+<span class="line-num">224</span>        &#x27;title&#x27;: &quot;Not Before Either: The Hypnerotomachia Poliphili and the Villa d&#x27;Este at Tivoli&quot;,
+<span class="line-num">225</span>        &#x27;author&#x27;: &#x27;Raffaella Fabiani Giannetto&#x27;,
+<span class="line-num">226</span>        &#x27;year&#x27;: 2015,
+<span class="line-num">227</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 31:2&#x27;,
+<span class="line-num">228</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">229</span>    },
+<span class="line-num">230</span>    &#x27;Word Image 2015 apr 03 vol 31 iss 2 Farrington Lynne&#x27;: {
+<span class="line-num">231</span>        &#x27;title&#x27;: &quot;Though I Could Lead a Quiet Life: The Hypnerotomachia Poliphili in English Translation&quot;,
+<span class="line-num">232</span>        &#x27;author&#x27;: &#x27;Lynne Farrington&#x27;,
+<span class="line-num">233</span>        &#x27;year&#x27;: 2015,
+<span class="line-num">234</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 31:2&#x27;,
+<span class="line-num">235</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">236</span>    },
+<span class="line-num">237</span>    &#x27;Word Image 2015 apr 03 vol 31 iss 2 Keller William&#x27;: {
+<span class="line-num">238</span>        &#x27;title&#x27;: &#x27;Hypnerotomachia Joins the Party: Reading across Word and Image&#x27;,
+<span class="line-num">239</span>        &#x27;author&#x27;: &#x27;William B. Keller&#x27;,
+<span class="line-num">240</span>        &#x27;year&#x27;: 2015,
+<span class="line-num">241</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 31:2&#x27;,
+<span class="line-num">242</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">243</span>    },
+<span class="line-num">244</span>    &#x27;Word Image 2015 apr 03 vol 31 iss 2 Nygren Christopher&#x27;: {
+<span class="line-num">245</span>        &#x27;title&#x27;: &#x27;The Hypnerotomachia Poliphili and the Woodcut as Mirror&#x27;,
+<span class="line-num">246</span>        &#x27;author&#x27;: &#x27;Christopher J. Nygren&#x27;,
+<span class="line-num">247</span>        &#x27;year&#x27;: 2015,
+<span class="line-num">248</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 31:2&#x27;,
+<span class="line-num">249</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">250</span>    },
+<span class="line-num">251</span>    &#x27;Word Image 2015 apr 03 vol 31 iss 2 Pumroy Eric&#x27;: {
+<span class="line-num">252</span>        &#x27;title&#x27;: &quot;Bryn Mawr College&#x27;s 1499 Edition of the Hypnerotomachia Poliphili&quot;,
+<span class="line-num">253</span>        &#x27;author&#x27;: &#x27;Eric L. Pumroy&#x27;,
+<span class="line-num">254</span>        &#x27;year&#x27;: 2015,
+<span class="line-num">255</span>        &#x27;journal&#x27;: &#x27;Word &amp; Image 31:2&#x27;,
+<span class="line-num">256</span>        &#x27;doc_type&#x27;: &#x27;SCHOLARSHIP&#x27;,
+<span class="line-num">257</span>    },
+<span class="line-num">258</span>}
+<span class="line-num">259</span>
+<span class="line-num">260</span>
+<span class="line-num">261</span>def find_metadata(filename):
+<span class="line-num">262</span>    &quot;&quot;&quot;Match filename against known metadata.&quot;&quot;&quot;
+<span class="line-num">263</span>    for key, meta in KNOWN_METADATA.items():
+<span class="line-num">264</span>        if key in filename:
+<span class="line-num">265</span>            return dict(meta)
+<span class="line-num">266</span>    return {}
+<span class="line-num">267</span>
+<span class="line-num">268</span>
+<span class="line-num">269</span>def clean_filename(filename):
+<span class="line-num">270</span>    &quot;&quot;&quot;Create a clean slug from filename for the markdown file.&quot;&quot;&quot;
+<span class="line-num">271</span>    stem = Path(filename).stem
+<span class="line-num">272</span>    # Remove common junk
+<span class="line-num">273</span>    stem = re.sub(r&#x27;-20\d{5}T\d+Z.*&#x27;, &#x27;&#x27;, stem)
+<span class="line-num">274</span>    stem = re.sub(r&#x27;\s*\(\d+\)\s*&#x27;, &#x27;&#x27;, stem)
+<span class="line-num">275</span>    # Replace spaces and special chars
+<span class="line-num">276</span>    slug = re.sub(r&#x27;[^\w]+&#x27;, &#x27;_&#x27;, stem)
+<span class="line-num">277</span>    slug = re.sub(r&#x27;_+&#x27;, &#x27;_&#x27;, slug).strip(&#x27;_&#x27;)
+<span class="line-num">278</span>    # Truncate
+<span class="line-num">279</span>    if len(slug) &gt; 80:
+<span class="line-num">280</span>        slug = slug[:80].rstrip(&#x27;_&#x27;)
+<span class="line-num">281</span>    return slug
+<span class="line-num">282</span>
+<span class="line-num">283</span>
+<span class="line-num">284</span>def extract_pdf_text(pdf_path):
+<span class="line-num">285</span>    &quot;&quot;&quot;Extract text from PDF, return list of (page_num, text) tuples.&quot;&quot;&quot;
+<span class="line-num">286</span>    doc = fitz.open(str(pdf_path))
+<span class="line-num">287</span>    pages = []
+<span class="line-num">288</span>    for i, page in enumerate(doc):
+<span class="line-num">289</span>        text = page.get_text()
+<span class="line-num">290</span>        if text.strip():
+<span class="line-num">291</span>            pages.append((i + 1, text))
+<span class="line-num">292</span>    doc.close()
+<span class="line-num">293</span>    return pages
+<span class="line-num">294</span>
+<span class="line-num">295</span>
+<span class="line-num">296</span>def pages_to_markdown(pages):
+<span class="line-num">297</span>    &quot;&quot;&quot;Convert extracted pages to a single markdown string.&quot;&quot;&quot;
+<span class="line-num">298</span>    parts = []
+<span class="line-num">299</span>    for page_num, text in pages:
+<span class="line-num">300</span>        # Clean up common PDF extraction artifacts
+<span class="line-num">301</span>        text = re.sub(r&#x27;\n{3,}&#x27;, &#x27;\n\n&#x27;, text)
+<span class="line-num">302</span>        # Remove page headers/footers (single short lines at start/end)
+<span class="line-num">303</span>        lines = text.split(&#x27;\n&#x27;)
+<span class="line-num">304</span>        if lines and len(lines[0].strip()) &lt; 10:
+<span class="line-num">305</span>            lines = lines[1:]
+<span class="line-num">306</span>        text = &#x27;\n&#x27;.join(lines)
+<span class="line-num">307</span>        parts.append(f&quot;&lt;!-- Page {page_num} --&gt;\n\n{text}&quot;)
+<span class="line-num">308</span>    return &#x27;\n\n---\n\n&#x27;.join(parts)
+<span class="line-num">309</span>
+<span class="line-num">310</span>
+<span class="line-num">311</span>def write_markdown(output_path, metadata, content, page_count):
+<span class="line-num">312</span>    &quot;&quot;&quot;Write markdown file with YAML frontmatter.&quot;&quot;&quot;
+<span class="line-num">313</span>    frontmatter_lines = [&#x27;---&#x27;]
+<span class="line-num">314</span>    for key in [&#x27;title&#x27;, &#x27;author&#x27;, &#x27;year&#x27;, &#x27;journal&#x27;, &#x27;source&#x27;, &#x27;doc_type&#x27;]:
+<span class="line-num">315</span>        if key in metadata and metadata[key]:
+<span class="line-num">316</span>            val = metadata[key]
+<span class="line-num">317</span>            if isinstance(val, str) and &#x27;:&#x27; in val:
+<span class="line-num">318</span>                val = f&#x27;&quot;{val}&quot;&#x27;
+<span class="line-num">319</span>            elif isinstance(val, str):
+<span class="line-num">320</span>                val = f&#x27;&quot;{val}&quot;&#x27;
+<span class="line-num">321</span>            frontmatter_lines.append(f&#x27;{key}: {val}&#x27;)
+<span class="line-num">322</span>    frontmatter_lines.append(f&#x27;page_count: {page_count}&#x27;)
+<span class="line-num">323</span>    frontmatter_lines.append(&#x27;---&#x27;)
+<span class="line-num">324</span>    frontmatter = &#x27;\n&#x27;.join(frontmatter_lines)
+<span class="line-num">325</span>
+<span class="line-num">326</span>    title = metadata.get(&#x27;title&#x27;, &#x27;Untitled&#x27;)
+<span class="line-num">327</span>    header = f&quot;# {title}\n\n&quot;
+<span class="line-num">328</span>
+<span class="line-num">329</span>    with open(output_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">330</span>        f.write(f&quot;{frontmatter}\n\n{header}{content}&quot;)
+<span class="line-num">331</span>
+<span class="line-num">332</span>
+<span class="line-num">333</span>def main():
+<span class="line-num">334</span>    extensions = {&#x27;.pdf&#x27;}
+<span class="line-num">335</span>    pdf_files = sorted([f for f in BASE_DIR.iterdir()
+<span class="line-num">336</span>                       if f.suffix.lower() in extensions and f.is_file()])
+<span class="line-num">337</span>
+<span class="line-num">338</span>    print(f&quot;Found {len(pdf_files)} PDFs to convert&quot;)
+<span class="line-num">339</span>
+<span class="line-num">340</span>    success = 0
+<span class="line-num">341</span>    empty = 0
+<span class="line-num">342</span>    errors = 0
+<span class="line-num">343</span>
+<span class="line-num">344</span>    for pdf_path in pdf_files:
+<span class="line-num">345</span>        slug = clean_filename(pdf_path.name)
+<span class="line-num">346</span>        output_path = MD_DIR / f&quot;{slug}.md&quot;
+<span class="line-num">347</span>
+<span class="line-num">348</span>        try:
+<span class="line-num">349</span>            pages = extract_pdf_text(pdf_path)
+<span class="line-num">350</span>            if not pages:
+<span class="line-num">351</span>                print(f&quot;  EMPTY: {pdf_path.name}&quot;)
+<span class="line-num">352</span>                empty += 1
+<span class="line-num">353</span>                continue
+<span class="line-num">354</span>
+<span class="line-num">355</span>            metadata = find_metadata(pdf_path.name)
+<span class="line-num">356</span>            metadata[&#x27;source&#x27;] = pdf_path.name
+<span class="line-num">357</span>
+<span class="line-num">358</span>            content = pages_to_markdown(pages)
+<span class="line-num">359</span>            write_markdown(output_path, metadata, content, len(pages))
+<span class="line-num">360</span>
+<span class="line-num">361</span>            word_count = len(content.split())
+<span class="line-num">362</span>            print(f&quot;  OK: {slug}.md ({len(pages)} pages, {word_count} words)&quot;)
+<span class="line-num">363</span>            success += 1
+<span class="line-num">364</span>
+<span class="line-num">365</span>        except Exception as e:
+<span class="line-num">366</span>            print(f&quot;  ERROR: {pdf_path.name}: {e}&quot;)
+<span class="line-num">367</span>            errors += 1
+<span class="line-num">368</span>
+<span class="line-num">369</span>    print(f&quot;\nResults: {success} converted, {empty} empty, {errors} errors&quot;)
+<span class="line-num">370</span>
+<span class="line-num">371</span>
+<span class="line-num">372</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">373</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

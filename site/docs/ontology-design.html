@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontology Design - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Ontology Design</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPONTOLOGY.md &mdash; 1,511 words</p>
+            <h2>HP Ontology: Modeling the Hypnerotomachia Poliphili</h2>
+
+<h3>Why an Ontology?</h3>
+
+<p>The <em>Hypnerotomachia Poliphili</em> (HP) is not a single artifact — it is a constellation of objects, agents, and scholarly acts spread across five centuries. A page in a 1499 Venetian printing press became a leaf in a British Library codex, which became the subject of a photograph, which became evidence in James Russell&#x27;s dissertation, which became a row in our SQLite database. Each step transforms the thing. An ontology gives us a shared language for these transformations so that we can reliably query across them.</p>
+
+<p>Without an ontology, we end up with a bag of files and hope. &quot;Image 47&quot; means nothing until you know it depicts folio b7r of BL C.60.o.12, that the folio contains a marginal annotation in a sixteenth-century hand reading <em>&quot;obsidie&quot;</em> beside Colonna&#x27;s description of an obsidian elephant, and that Russell discusses this annotation on page 97 of his thesis in the context of lexical extraction practices. That chain — physical artifact to digital surrogate to scholarly interpretation — is what the ontology encodes.</p>
+
+<h3>Domain Analysis</h3>
+
+<h4>The Core Entities</h4>
+
+<p>After examining the corpus (38 documents, 674 images, 282 extracted references), we identified six fundamental entity types:</p>
+
+<p>#### 1. <strong>Work</strong> — The abstract intellectual creation</p>
+<p>The HP exists as an abstract work independent of any physical copy. It was composed (probably by Francesco Colonna) in the late fifteenth century, published by Aldus Manutius in Venice in 1499, and has been translated, excerpted, and reimagined ever since. The Work entity captures:</p>
+<ul>
+<li>Title (in its various forms: *Hypnerotomachia Poliphili*, *Strife of Love in a Dream*, etc.)</li>
+<li>Attributed author(s)</li>
+<li>Date of composition vs. date of publication</li>
+<li>Language (the original is a macaronic blend of Italian, Latin, Greek, Hebrew, Arabic, and Egyptian hieroglyphs)</li>
+<li>Structural divisions (the text is organized into signature-based quires, not numbered chapters)</li>
+</ul>
+
+<p>The 1499 Aldine edition&#x27;s collation — quires a through G, mostly quaternions of 8 leaves each, producing 224 folios and 448 pages — is itself a structural fact about the Work that governs how every physical copy is organized.</p>
+
+<p>#### 2. <strong>Copy</strong> — A specific physical exemplar</p>
+<p>Each surviving copy of the 1499 edition is a distinct historical object with its own provenance, binding, condition, and — crucially — its own marginalia. Russell&#x27;s thesis examines six copies:</p>
+
+<table class="doc-table">
+<tr><th>Shelfmark</th><th>Institution</th><th>City</th><th>Chapter</th></tr>
+<tr><td>F.C. Panini Estate</td><td>Private collection</td><td>Modena</td><td>4</td></tr>
+<tr><td>INCUN A.5.13</td><td>Biblioteca Pubblica</td><td>Como</td><td>5</td></tr>
+<tr><td>**C.60.o.12**</td><td>**British Library**</td><td>**London**</td><td>**6**</td></tr>
+<tr><td>RBR ALDUS 1499.C7</td><td>Buffalo &amp; Erie County Public Library</td><td>Buffalo</td><td>7</td></tr>
+<tr><td>Inc.Stam.Chig.II.610</td><td>Biblioteca Apostolica Vaticana</td><td>Vatican City</td><td>8</td></tr>
+<tr><td>**O.III.38**</td><td>**Biblioteca degli Intronati**</td><td>**Siena**</td><td>**9**</td></tr>
+</table>
+
+<p>Our database currently holds image sets for the two bolded copies. The ontology must support adding the remaining four copies (and any others discovered) without schema changes.</p>
+
+<p>#### 3. <strong>Folio</strong> — A leaf within a copy, identified by signature</p>
+<p>This is the critical bridging entity. A folio is identified by its signature (e.g., <em>a4r</em>, <em>c7v</em>, <em>p6v</em>) using the standard bibliographic notation: quire letter + leaf number + side (recto/verso). The <code>signature_map</code> table in our database maps each of the 448 signature positions to a sequential folio number, enabling cross-referencing between Russell&#x27;s textual citations and sequential image filenames.</p>
+
+<p>The mapping is deterministic for the standard collation. However, individual copies may have anomalies: missing leaves, inserted plates, rebound quires. The ontology must accommodate copy-specific deviations from the ideal collation.</p>
+
+<p>#### 4. <strong>Annotation</strong> — A mark left by a reader</p>
+<p>An annotation is a marginal note, underline, manicule, cross-reference, or other reader&#x27;s mark found on a specific folio of a specific copy. Russell&#x27;s research focuses on these. Key properties:</p>
+<ul>
+<li>**Location**: which copy, which folio, where on the page (margin, interlinear, endpaper)</li>
+<li>**Content**: the text of the annotation (often a Latin or Italian word or phrase)</li>
+<li>**Relationship to printed text**: what passage the annotator was responding to</li>
+<li>**Hand**: which annotator (copies may have multiple historical readers&#x27; marks)</li>
+<li>**Type**: lexical extraction, cross-reference, commentary, correction, drawing</li>
+<li>**Date estimate**: based on handwriting, ink, and contextual clues</li>
+</ul>
+
+<p>Russell identified 282 folio references across 124 unique signature positions. The densest annotation occurs in the opening folios (a1r through e1r), consistent with Russell&#x27;s observation that annotators&#x27; energy is strongest at the beginning.</p>
+
+<p>#### 5. <strong>Image</strong> — A digital surrogate</p>
+<p>An image is a photograph or scan of a physical folio. Our database holds 674 images:</p>
+<ul>
+<li>**BL C.60.o.12**: 189 sequential page scans (`C_60_o_12-001.jpg` through `C_60_o_12-189.jpg`) plus 7 detail photos of marginalia (`BL HP 12.jpg`, etc.)</li>
+<li>**Siena O.III.38**: 468 folio scans with explicit recto/verso marking (`O.III.38_0001r.jpg` through `O.III.38_0234v.jpg`) plus covers, guard leaves, and 2 marginalia details</li>
+</ul>
+
+<p>The critical design challenge was mapping between three incompatible numbering systems:</p>
+<ul>
+<li>Russell&#x27;s **signature notation**: `a4r`, `c7v` (bibliographic convention)</li>
+<li>BL&#x27;s **sequential numbering**: `001`, `002`, `003` (photographer&#x27;s convention)</li>
+<li>Siena&#x27;s **folio numbering**: `0001r`, `0001v`, `0002r` (archivist&#x27;s convention)</li>
+</ul>
+
+<p>The <code>signature_map</code> table resolves this: signature <code>a4r</code> maps to folio 4, which corresponds to BL image <code>C_60_o_12-004.jpg</code> and Siena image <code>O.III.38_0004r.jpg</code>. This three-way join is the core query pattern of the entire system.</p>
+
+<p>#### 6. <strong>ScholarlyWork</strong> — Secondary literature about the HP</p>
+<p>The 38 documents in our corpus represent five centuries of HP scholarship, classifiable as:</p>
+<ul>
+<li>**Primary texts** (3): the 1499 edition itself in various reproductions</li>
+<li>**Dissertations** (2): Russell&#x27;s thesis and O&#x27;Neill&#x27;s Durham thesis on self-transformation</li>
+<li>**Scholarship** (32): journal articles, monographs, and edited volumes</li>
+<li>**Presentations** (1): a PowerPoint on Ben Jonson and Kenelm Digby&#x27;s engagement with the HP</li>
+</ul>
+
+<p>These scholarly works reference specific folios, annotations, and copies. The ontology must support linking a scholarly claim to the evidence it cites.</p>
+
+<h4>The Relationships</h4>
+
+<p>The entities above are connected by a web of relationships:</p>
+
+<pre><code class="lang-">
+Work ──contains──&gt; Folio (via signature position)
+Copy ──instantiates──&gt; Work
+Copy ──has leaf──&gt; Folio (a specific physical leaf)
+Folio ──bears──&gt; Annotation
+Image ──depicts──&gt; Folio (of a specific Copy)
+ScholarlyWork ──references──&gt; Folio
+ScholarlyWork ──analyzes──&gt; Annotation
+ScholarlyWork ──discusses──&gt; Copy
+</code></pre>
+
+<h3>Current Implementation: SQLite Schema</h3>
+
+<p>Our current database implements a pragmatic subset of this ontology:</p>
+
+<pre><code class="lang-">
+documents       → ScholarlyWork (all 38 documents)
+manuscripts     → Copy (BL C.60.o.12 + Siena O.III.38)
+images          → Image (674 files, linked to manuscripts)
+signature_map   → Folio (448 signature-to-folio mappings)
+dissertation_refs → Annotation references (282 extracted from Russell)
+matches         → Image↔Annotation links (73 HIGH + 537 MEDIUM confidence)
+</code></pre>
+
+<h4>What&#x27;s Missing (Future Work)</h4>
+
+<p>1. <strong>Annotation entity</strong>: Currently annotations are embedded in <code>dissertation_refs</code> rather than being first-class entities. A dedicated <code>annotations</code> table would allow multiple scholars to reference the same physical annotation.</p>
+
+<p>2. <strong>Multi-copy support</strong>: The schema can hold any number of manuscripts but the signature-to-image mapping assumes standard collation. Copy-specific collation anomalies need a <code>copy_collation_overrides</code> table.</p>
+
+<p>3. <strong>Annotator identification</strong>: Russell identifies distinct hands in some copies. An <code>annotators</code> table linking to annotations would support handwriting analysis.</p>
+
+<p>4. <strong>Woodcut inventory</strong>: The HP contains 172 woodcuts. These are not yet cataloged but are referenced by scholars and visible in the images.</p>
+
+<p>5. <strong>Cross-copy comparison</strong>: The ability to view the same folio across all six copies side by side requires all copies to be imaged and registered.</p>
+
+<h3>Design Decisions and Their Rationale</h3>
+
+<p><strong>Why signature-based addressing instead of page numbers?</strong></p>
+<p>Early printed books don&#x27;t have page numbers. The HP uses signature marks (printed at the bottom of the first few leaves of each quire) as the native addressing system. Every scholar who writes about the HP uses signatures. Any system that imposed modern page numbers would create a translation burden for every user.</p>
+
+<p><strong>Why SQLite instead of a graph database?</strong></p>
+<p>The relationships in this domain are regular and predictable — they form a tree (Work &gt; Copy &gt; Folio &gt; Annotation) with cross-references (ScholarlyWork &gt; Folio). This is comfortably modeled in relational tables with foreign keys. A graph database would add operational complexity without meaningful querying advantage at this scale. If the project grows to encompass all ~300 known surviving copies, this decision should be revisited.</p>
+
+<p><strong>Why separate images from folios?</strong></p>
+<p>A single folio may have multiple images (a full-page scan plus a detail crop of a marginal note). The <code>page_type</code> field in the <code>images</code> table distinguishes PAGE, MARGINALIA_DETAIL, COVER, GUARD, and OTHER. This allows the showcase page to display the most appropriate image for each context.</p>
+
+<h3>Extending the Ontology</h3>
+
+<p>The ontology is designed to grow. Adding a new copy requires:</p>
+<p>1. One row in <code>manuscripts</code></p>
+<p>2. Image files in a new subdirectory</p>
+<p>3. Running <code>catalog_images.py</code> with a new parser function for that copy&#x27;s filename convention</p>
+<p>4. The <code>signature_map</code> already covers all 448 positions — it works for any standard copy</p>
+
+<p>Adding a new scholarly work requires:</p>
+<p>1. Dropping the PDF in the root directory</p>
+<p>2. Re-running <code>init_db.py</code> (it uses INSERT OR IGNORE, so existing records are preserved)</p>
+<p>3. Optionally running a reference extraction script tailored to that work&#x27;s citation style</p>
+
+<p>The ontology&#x27;s value compounds as more copies, more images, and more scholarship are ingested. Each new data source enriches every existing cross-reference.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

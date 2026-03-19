@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boundary Audit v1 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Boundary Audit v1</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPDECKARD.md &mdash; 1,259 words</p>
+            <h2>HPDECKARD: Boundary Map — Deterministic vs. Probabilistic Tasks</h2>
+
+<blockquote>Deckard distinguishes humans from androids. This audit distinguishes tasks that should be deterministic code from tasks that need LLM judgment.</blockquote>
+
+<h3>Current Pipeline: 11 Scripts, All Deterministic</h3>
+
+<p>Every script in the pipeline is currently <strong>purely deterministic</strong> — regex, SQL, filesystem parsing, hardcoded data. No LLM processing anywhere in the codebase. This is both a strength and a limitation.</p>
+
+<hr>
+
+<h3>DETERMINISTIC TASKS (correctly deterministic)</h3>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Script</th><th>Why Deterministic</th></tr>
+<tr><td>Schema creation</td><td>init_db.py</td><td>Fixed structure, no ambiguity</td></tr>
+<tr><td>Image filename parsing</td><td>catalog_images.py</td><td>Known naming conventions, regex sufficient</td></tr>
+<tr><td>Signature map generation</td><td>build_signature_map.py</td><td>Aldine collation formula is mathematical</td></tr>
+<tr><td>Folio-to-image matching</td><td>match_refs_to_images.py</td><td>SQL join on folio numbers, no interpretation</td></tr>
+<tr><td>JSON export for website</td><td>export_showcase_data.py</td><td>Data serialization, no judgment needed</td></tr>
+<tr><td>Markdown chunking</td><td>chunk_documents.py</td><td>Word count and heading splits, mechanical</td></tr>
+<tr><td>HTML page generation</td><td>build_scholar_profiles.py</td><td>Template filling from structured data</td></tr>
+<tr><td>Database writes</td><td>add_hands.py, add_bibliography.py</td><td>Inserting curated metadata</td></tr>
+</table>
+
+<p><strong>Verdict: CORRECT.</strong> These tasks are properly deterministic. No LLM needed.</p>
+
+<hr>
+
+<h3>PROBABILISTIC TASKS (currently done by human/LLM in conversation, not in code)</h3>
+
+<p>These tasks were performed during our conversation using Claude but are <strong>not captured in any script</strong>. They exist only in conversation context and their outputs were manually inserted into hardcoded data structures.</p>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Where It Happened</th><th>Why Probabilistic</th></tr>
+<tr><td>**Article summarization**</td><td>Conversation (batch agents)</td><td>Requires reading comprehension, topic identification, judgment about what matters</td></tr>
+<tr><td>**Topic cluster classification**</td><td>Conversation (agent output)</td><td>Fuzzy boundaries (is Stewering &quot;text_image&quot; or &quot;architecture_gardens&quot;?)</td></tr>
+<tr><td>**Hand attribution from dissertation text**</td><td>Conversation → add_hands.py HANDS dict</td><td>Required reading Russell&#x27;s prose and interpreting which signature refs belong to which annotator</td></tr>
+<tr><td>**Author/title extraction from filenames**</td><td>pdf_to_markdown.py (hardcoded dict)</td><td>Filenames are messy; correct metadata required judgment</td></tr>
+<tr><td>**Bibliography gap analysis**</td><td>Conversation (agent output)</td><td>Determining which cited works are &quot;HP-specific&quot; vs. &quot;tangential&quot; requires domain judgment</td></tr>
+<tr><td>**Scholar profile creation**</td><td>Conversation → add_bibliography.py SCHOLARS list</td><td>Birth/death years, nationality, specialization all required research and judgment</td></tr>
+<tr><td>**Mislabeled file identification**</td><td>Conversation (agents flagged Jarzombek, Canone/Spruit)</td><td>Content-metadata mismatch detection requires reading the actual text</td></tr>
+</table>
+
+<p><strong>Verdict: These are legitimately probabilistic tasks.</strong> The current approach — using Claude in conversation to perform them, then hardcoding the results — is pragmatically correct for a small corpus. But it doesn&#x27;t scale.</p>
+
+<hr>
+
+<h3>BOUNDARY VIOLATIONS</h3>
+
+<h4>WASTE: Tasks using LLM where deterministic code would suffice</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Current Method</th><th>Recommendation</th></tr>
+<tr><td>**Folio reference extraction**</td><td>extract_references.py uses regex (CORRECT), but the initial extraction of hand attribution rules was done manually by reading the dissertation</td><td>Write a more sophisticated regex/NLP pipeline that detects phrases like &quot;Hand B labels&quot; or &quot;this annotator writes&quot; near signature references, to semi-automate hand attribution</td></tr>
+<tr><td>**Chapter page ranges**</td><td>Hardcoded approximations in extract_references.py</td><td>Parse the PDF&#x27;s table of contents or detect chapter headings automatically</td></tr>
+<tr><td>**Author/title from filenames**</td><td>250-line hardcoded dictionary in pdf_to_markdown.py</td><td>Parse YAML frontmatter from already-generated markdown files, or extract from PDF metadata fields (many academic PDFs embed DOI, author, title)</td></tr>
+</table>
+
+<h4>RISK: Deterministic code doing something that needs judgment</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Current Method</th><th>Risk</th></tr>
+<tr><td>**Signature matching assumes BL photo number = folio number**</td><td>match_refs_to_images.py</td><td>The BL copy is the 1545 edition, not the 1499. The photos are Russell&#x27;s research photos, not a systematic facsimile. **Photo 014 may not be folio 14.** All BL matches should be LOW confidence until manually verified.</td></tr>
+<tr><td>**Single-hand attribution for entire chapters**</td><td>add_hands.py attributes all Modena refs to &quot;Primary&quot; hand</td><td>Russell documents that Modena has a second hand (possibly Paolo Giovio). The &quot;Primary&quot; blanket attribution hides this nuance.</td></tr>
+<tr><td>**Topic cluster assignment**</td><td>Hardcoded in add_bibliography.py</td><td>A work can belong to multiple clusters (Stewering is both architecture and text-image). The single-value schema loses information.</td></tr>
+<tr><td>**Signature regex false-positive filtering**</td><td>extract_references.py filters by stopword list</td><td>Some legitimate signatures could be filtered (e.g., if a quire were labeled &#x27;be&#x27; or &#x27;do&#x27;). The 1499 HP doesn&#x27;t use these quires, but a generalized tool would need smarter filtering.</td></tr>
+</table>
+
+<h4>DANGER: LLM output flowing into database without validation</h4>
+
+<table class="doc-table">
+<tr><th>Violation</th><th>Current Method</th><th>Danger</th></tr>
+<tr><td>**Article summaries**</td><td>Generated by Claude agents → saved to summaries.json → used by build_scholar_profiles.py</td><td>No human review step between LLM summarization and publication on the website. Summaries could contain hallucinated claims, misattributions, or copyright-infringing quotes.</td></tr>
+<tr><td>**Scholar metadata**</td><td>Generated by Claude from dissertation text → hardcoded in add_bibliography.py</td><td>Birth/death years, institutional affiliations, and nationality could be wrong. No cross-reference against authoritative sources (VIAF, ORCID, WorldCat).</td></tr>
+<tr><td>**Mislabeled file corrections**</td><td>Claude identified Jarzombek and Canone/Spruit as misfiled</td><td>Correct identifications, but the corrections were applied to summaries.json without verifying against the actual PDF content programmatically.</td></tr>
+</table>
+
+<hr>
+
+<h3>RECOMMENDATIONS</h3>
+
+<h4>Immediate (before deployment)</h4>
+
+<p>1. <strong>Downgrade all BL C.60.o.12 matches to LOW confidence</strong> until a human verifies that photo numbers correspond to folio numbers. The current MEDIUM is overconfident.</p>
+
+<p>2. <strong>Add a <code>reviewed</code> flag to summaries.json</strong> and display &quot;unreviewed&quot; badge on scholar pages that haven&#x27;t been human-checked.</p>
+
+<p>3. <strong>Add multi-value topic_cluster</strong> support (change to comma-separated or junction table) so works can belong to multiple clusters.</p>
+
+<h4>Medium-term (scaling the corpus)</h4>
+
+<p>4. <strong>Build an LLM-in-the-loop summarization pipeline</strong> with structured output validation:</p>
+<pre><code class="lang-">
+   PDF → extract text → LLM summarize with JSON schema →
+   validate (author exists in VIAF? year matches PDF metadata?) →
+   human review queue → database
+</code></pre>
+
+<p>5. <strong>Semi-automate hand attribution</strong> by searching dissertation text for patterns like <code>&quot;[Hh]and [A-E].*\b([a-z]\d[rv])\b&quot;</code> to associate hands with specific signature references.</p>
+
+<p>6. <strong>Extract bibliography programmatically</strong> from the markdown of all articles (look for &quot;References&quot;, &quot;Bibliography&quot;, &quot;Works Cited&quot; sections) to discover additional cited works we don&#x27;t have.</p>
+
+<h4>Long-term (website features)</h4>
+
+<p>7. <strong>Semantic search</strong> across article summaries and dissertation chunks — this is a legitimate LLM/embedding task that would add real value to the website.</p>
+
+<p>8. <strong>Automated timeline generation</strong> from dated events extracted from all articles — requires NLP for date/event extraction from prose.</p>
+
+<p>9. <strong>Cross-reference graph</strong> showing which scholars cite which other scholars — requires parsing bibliography sections, a mix of deterministic (regex for citation formats) and probabilistic (resolving ambiguous author names).</p>
+
+<hr>
+
+<h3>BOUNDARY MAP SUMMARY</h3>
+
+<pre><code class="lang-">
+DETERMINISTIC (11/11 scripts — CORRECT)
+├── Schema &amp; data loading     ✓ init_db, add_hands, add_bibliography
+├── File parsing              ✓ catalog_images, pdf_to_markdown
+├── Reference extraction      ✓ extract_references (regex)
+├── Matching                  ✓ match_refs_to_images, build_signature_map
+├── Export                    ✓ export_showcase_data, build_scholar_profiles
+└── Chunking                  ✓ chunk_documents
+
+PROBABILISTIC (done in conversation, not in code)
+├── Article summarization     ⚠ No validation pipeline
+├── Topic classification      ⚠ Single-value, loses nuance
+├── Hand attribution          ⚠ Hardcoded from conversation analysis
+├── Scholar metadata          ⚠ No authoritative cross-reference
+└── Mislabeled file detection ⚠ Correct but ad-hoc
+
+BOUNDARY VIOLATIONS
+├── WASTE: Hardcoded metadata that could be auto-extracted    (3 cases)
+├── RISK: Deterministic matching with unverified assumptions  (4 cases)
+└── DANGER: LLM output → database without validation gate    (3 cases)
+</code></pre>
+
+<p><strong>Overall assessment</strong>: The pipeline is architecturally sound — deterministic where it should be, with LLM judgment applied only where genuinely needed. The main weakness is the <strong>validation gap</strong> between LLM-generated content (summaries, metadata, attributions) and the database. Before deployment, add review flags and confidence scoring. Before scaling, build a structured validation pipeline for LLM outputs.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

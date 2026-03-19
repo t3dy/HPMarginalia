@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validate &amp; QA - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Validate &amp; QA</h2>
+            <div class="code-meta">validate.py &mdash; 264 lines</div>
+            <p style="margin-bottom:1rem">Checks data integrity (duplicate slugs, broken links, confidence distribution) and writes AUDIT_REPORT.md.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Validation and QA: check data integrity, flag issues, produce audit report.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>from pathlib import Path
+<span class="line-num">5</span>from datetime import datetime
+<span class="line-num">6</span>
+<span class="line-num">7</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">8</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">9</span>SITE_DIR = BASE_DIR / &quot;site&quot;
+<span class="line-num">10</span>
+<span class="line-num">11</span>
+<span class="line-num">12</span>def main():
+<span class="line-num">13</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">14</span>    cur = conn.cursor()
+<span class="line-num">15</span>
+<span class="line-num">16</span>    issues = []
+<span class="line-num">17</span>    warnings = []
+<span class="line-num">18</span>    stats = {}
+<span class="line-num">19</span>
+<span class="line-num">20</span>    print(&quot;=== Validation &amp; QA ===\n&quot;)
+<span class="line-num">21</span>
+<span class="line-num">22</span>    # 1. Duplicate slugs in dictionary
+<span class="line-num">23</span>    print(&quot;1. Checking for duplicate dictionary slugs...&quot;)
+<span class="line-num">24</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">25</span>        SELECT slug, COUNT(*) FROM dictionary_terms
+<span class="line-num">26</span>        GROUP BY slug HAVING COUNT(*) &gt; 1
+<span class="line-num">27</span>    &quot;&quot;&quot;)
+<span class="line-num">28</span>    dupes = cur.fetchall()
+<span class="line-num">29</span>    if dupes:
+<span class="line-num">30</span>        for d in dupes:
+<span class="line-num">31</span>            issues.append(f&quot;DUPLICATE SLUG: dictionary term &#x27;{d[0]}&#x27; appears {d[1]} times&quot;)
+<span class="line-num">32</span>    else:
+<span class="line-num">33</span>        print(&quot;   OK - no duplicates&quot;)
+<span class="line-num">34</span>
+<span class="line-num">35</span>    # 2. Terms without category
+<span class="line-num">36</span>    print(&quot;2. Checking terms without category...&quot;)
+<span class="line-num">37</span>    cur.execute(&quot;SELECT slug FROM dictionary_terms WHERE category IS NULL OR category = &#x27;&#x27;&quot;)
+<span class="line-num">38</span>    no_cat = cur.fetchall()
+<span class="line-num">39</span>    if no_cat:
+<span class="line-num">40</span>        for t in no_cat:
+<span class="line-num">41</span>            issues.append(f&quot;MISSING CATEGORY: term &#x27;{t[0]}&#x27; has no category&quot;)
+<span class="line-num">42</span>    else:
+<span class="line-num">43</span>        print(&quot;   OK - all terms have categories&quot;)
+<span class="line-num">44</span>
+<span class="line-num">45</span>    # 3. Scholar pages with no works
+<span class="line-num">46</span>    print(&quot;3. Checking scholars with no works...&quot;)
+<span class="line-num">47</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">48</span>        SELECT s.name FROM scholars s
+<span class="line-num">49</span>        LEFT JOIN scholar_works sw ON s.id = sw.scholar_id
+<span class="line-num">50</span>        WHERE sw.scholar_id IS NULL
+<span class="line-num">51</span>    &quot;&quot;&quot;)
+<span class="line-num">52</span>    no_works = cur.fetchall()
+<span class="line-num">53</span>    stats[&#x27;scholars_no_works&#x27;] = len(no_works)
+<span class="line-num">54</span>    if no_works:
+<span class="line-num">55</span>        for s in no_works:
+<span class="line-num">56</span>            warnings.append(f&quot;SCHOLAR NO WORKS: &#x27;{s[0]}&#x27; has no linked bibliography entries&quot;)
+<span class="line-num">57</span>    print(f&quot;   {len(no_works)} scholars without linked works (warning, not error)&quot;)
+<span class="line-num">58</span>
+<span class="line-num">59</span>    # 4. Folio refs that don&#x27;t resolve to images
+<span class="line-num">60</span>    print(&quot;4. Checking unresolved folio references...&quot;)
+<span class="line-num">61</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">62</span>        SELECT r.id, r.signature_ref, r.thesis_page
+<span class="line-num">63</span>        FROM dissertation_refs r
+<span class="line-num">64</span>        LEFT JOIN matches m ON m.ref_id = r.id
+<span class="line-num">65</span>        WHERE m.id IS NULL
+<span class="line-num">66</span>    &quot;&quot;&quot;)
+<span class="line-num">67</span>    unmatched = cur.fetchall()
+<span class="line-num">68</span>    stats[&#x27;unmatched_refs&#x27;] = len(unmatched)
+<span class="line-num">69</span>    if unmatched:
+<span class="line-num">70</span>        warnings.append(f&quot;UNMATCHED REFS: {len(unmatched)} dissertation references have no image match&quot;)
+<span class="line-num">71</span>    print(f&quot;   {len(unmatched)} unmatched references&quot;)
+<span class="line-num">72</span>
+<span class="line-num">73</span>    # 5. Missing linked records in dictionary_term_links
+<span class="line-num">74</span>    print(&quot;5. Checking dictionary link integrity...&quot;)
+<span class="line-num">75</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">76</span>        SELECT l.id, l.term_id, l.linked_term_id
+<span class="line-num">77</span>        FROM dictionary_term_links l
+<span class="line-num">78</span>        LEFT JOIN dictionary_terms t1 ON l.term_id = t1.id
+<span class="line-num">79</span>        LEFT JOIN dictionary_terms t2 ON l.linked_term_id = t2.id
+<span class="line-num">80</span>        WHERE t1.id IS NULL OR t2.id IS NULL
+<span class="line-num">81</span>    &quot;&quot;&quot;)
+<span class="line-num">82</span>    broken_links = cur.fetchall()
+<span class="line-num">83</span>    if broken_links:
+<span class="line-num">84</span>        issues.append(f&quot;BROKEN LINKS: {len(broken_links)} dictionary links point to missing terms&quot;)
+<span class="line-num">85</span>    else:
+<span class="line-num">86</span>        print(&quot;   OK - all links resolve&quot;)
+<span class="line-num">87</span>
+<span class="line-num">88</span>    # 6. BL confidence check
+<span class="line-num">89</span>    print(&quot;6. Verifying BL confidence downgrade...&quot;)
+<span class="line-num">90</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">91</span>        SELECT mat.confidence, COUNT(*)
+<span class="line-num">92</span>        FROM matches mat
+<span class="line-num">93</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">94</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">95</span>        WHERE m.shelfmark = &#x27;C.60.o.12&#x27;
+<span class="line-num">96</span>        GROUP BY mat.confidence
+<span class="line-num">97</span>    &quot;&quot;&quot;)
+<span class="line-num">98</span>    bl_conf = cur.fetchall()
+<span class="line-num">99</span>    for conf, count in bl_conf:
+<span class="line-num">100</span>        if conf in (&#x27;HIGH&#x27;, &#x27;MEDIUM&#x27;):
+<span class="line-num">101</span>            issues.append(f&quot;BL CONFIDENCE: {count} BL matches still at {conf} (should be LOW)&quot;)
+<span class="line-num">102</span>        else:
+<span class="line-num">103</span>            print(f&quot;   BL matches: {count} at {conf}&quot;)
+<span class="line-num">104</span>
+<span class="line-num">105</span>    # 7. Review status summary
+<span class="line-num">106</span>    print(&quot;7. Review status audit...&quot;)
+<span class="line-num">107</span>    review_tables = [
+<span class="line-num">108</span>        (&#x27;bibliography&#x27;, &#x27;needs_review&#x27;),
+<span class="line-num">109</span>        (&#x27;scholars&#x27;, &#x27;needs_review&#x27;),
+<span class="line-num">110</span>        (&#x27;dictionary_terms&#x27;, &#x27;needs_review&#x27;),
+<span class="line-num">111</span>        (&#x27;matches&#x27;, &#x27;needs_review&#x27;),
+<span class="line-num">112</span>    ]
+<span class="line-num">113</span>    for table, col in review_tables:
+<span class="line-num">114</span>        try:
+<span class="line-num">115</span>            cur.execute(f&quot;SELECT COUNT(*) FROM {table} WHERE {col} = 1&quot;)
+<span class="line-num">116</span>            needs = cur.fetchone()[0]
+<span class="line-num">117</span>            cur.execute(f&quot;SELECT COUNT(*) FROM {table}&quot;)
+<span class="line-num">118</span>            total = cur.fetchone()[0]
+<span class="line-num">119</span>            pct = (needs * 100 // total) if total &gt; 0 else 0
+<span class="line-num">120</span>            stats[f&#x27;{table}_needs_review&#x27;] = needs
+<span class="line-num">121</span>            print(f&quot;   {table}: {needs}/{total} need review ({pct}%)&quot;)
+<span class="line-num">122</span>        except:
+<span class="line-num">123</span>            pass
+<span class="line-num">124</span>
+<span class="line-num">125</span>    # 8. Site file counts
+<span class="line-num">126</span>    print(&quot;8. Checking generated site files...&quot;)
+<span class="line-num">127</span>    site_counts = {
+<span class="line-num">128</span>        &#x27;scholar pages&#x27;: len(list((SITE_DIR / &#x27;scholar&#x27;).glob(&#x27;*.html&#x27;))) if (SITE_DIR / &#x27;scholar&#x27;).exists() else 0,
+<span class="line-num">129</span>        &#x27;dictionary pages&#x27;: len(list((SITE_DIR / &#x27;dictionary&#x27;).glob(&#x27;*.html&#x27;))) if (SITE_DIR / &#x27;dictionary&#x27;).exists() else 0,
+<span class="line-num">130</span>        &#x27;marginalia pages&#x27;: len(list((SITE_DIR / &#x27;marginalia&#x27;).glob(&#x27;*.html&#x27;))) if (SITE_DIR / &#x27;marginalia&#x27;).exists() else 0,
+<span class="line-num">131</span>    }
+<span class="line-num">132</span>    for label, count in site_counts.items():
+<span class="line-num">133</span>        print(f&quot;   {label}: {count}&quot;)
+<span class="line-num">134</span>        stats[label] = count
+<span class="line-num">135</span>
+<span class="line-num">136</span>    # 9. Check for empty HTML files
+<span class="line-num">137</span>    print(&quot;9. Checking for empty HTML files...&quot;)
+<span class="line-num">138</span>    empty_count = 0
+<span class="line-num">139</span>    for html in SITE_DIR.rglob(&#x27;*.html&#x27;):
+<span class="line-num">140</span>        if html.stat().st_size &lt; 100:
+<span class="line-num">141</span>            issues.append(f&quot;EMPTY FILE: {html.relative_to(BASE_DIR)}&quot;)
+<span class="line-num">142</span>            empty_count += 1
+<span class="line-num">143</span>    if empty_count == 0:
+<span class="line-num">144</span>        print(&quot;   OK - no empty files&quot;)
+<span class="line-num">145</span>
+<span class="line-num">146</span>    # 10. Data.json integrity
+<span class="line-num">147</span>    print(&quot;10. Checking data.json...&quot;)
+<span class="line-num">148</span>    import json
+<span class="line-num">149</span>    data_path = SITE_DIR / &#x27;data.json&#x27;
+<span class="line-num">150</span>    if data_path.exists():
+<span class="line-num">151</span>        with open(data_path, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">152</span>            data = json.load(f)
+<span class="line-num">153</span>        n_entries = len(data.get(&#x27;entries&#x27;, []))
+<span class="line-num">154</span>        n_low = sum(1 for e in data[&#x27;entries&#x27;] if e.get(&#x27;confidence&#x27;) == &#x27;LOW&#x27;)
+<span class="line-num">155</span>        print(f&quot;   {n_entries} entries, {n_low} LOW confidence&quot;)
+<span class="line-num">156</span>        stats[&#x27;data_json_entries&#x27;] = n_entries
+<span class="line-num">157</span>        if &#x27;provenance&#x27; not in data:
+<span class="line-num">158</span>            warnings.append(&quot;DATA.JSON: missing provenance field&quot;)
+<span class="line-num">159</span>    else:
+<span class="line-num">160</span>        issues.append(&quot;DATA.JSON: file not found&quot;)
+<span class="line-num">161</span>
+<span class="line-num">162</span>    # === Produce Report ===
+<span class="line-num">163</span>    print(&quot;\n&quot; + &quot;=&quot; * 60)
+<span class="line-num">164</span>    print(&quot;VALIDATION RESULTS&quot;)
+<span class="line-num">165</span>    print(&quot;=&quot; * 60)
+<span class="line-num">166</span>
+<span class="line-num">167</span>    if issues:
+<span class="line-num">168</span>        print(f&quot;\n  ISSUES ({len(issues)}):&quot;)
+<span class="line-num">169</span>        for i in issues:
+<span class="line-num">170</span>            print(f&quot;    [!] {i}&quot;)
+<span class="line-num">171</span>    else:
+<span class="line-num">172</span>        print(&quot;\n  No critical issues found.&quot;)
+<span class="line-num">173</span>
+<span class="line-num">174</span>    if warnings:
+<span class="line-num">175</span>        print(f&quot;\n  WARNINGS ({len(warnings)}):&quot;)
+<span class="line-num">176</span>        for w in warnings:
+<span class="line-num">177</span>            print(f&quot;    [?] {w}&quot;)
+<span class="line-num">178</span>
+<span class="line-num">179</span>    # Write audit report
+<span class="line-num">180</span>    report_path = BASE_DIR / &quot;AUDIT_REPORT.md&quot;
+<span class="line-num">181</span>    with open(report_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">182</span>        f.write(f&quot;# Audit Report\n\n&quot;)
+<span class="line-num">183</span>        f.write(f&quot;Generated: {datetime.now().isoformat()}\n\n&quot;)
+<span class="line-num">184</span>
+<span class="line-num">185</span>        f.write(&quot;## What Changed (V2 Migration)\n\n&quot;)
+<span class="line-num">186</span>        f.write(&quot;### Schema\n&quot;)
+<span class="line-num">187</span>        f.write(&quot;- Added `annotations` table for first-class marginal note records\n&quot;)
+<span class="line-num">188</span>        f.write(&quot;- Added `annotators` table (normalized from `annotator_hands`)\n&quot;)
+<span class="line-num">189</span>        f.write(&quot;- Added `doc_folio_refs` table (generalized from `dissertation_refs`)\n&quot;)
+<span class="line-num">190</span>        f.write(&quot;- Added `dictionary_terms` and `dictionary_term_links` tables\n&quot;)
+<span class="line-num">191</span>        f.write(&quot;- Added `document_topics` junction table for multi-value topic clusters\n&quot;)
+<span class="line-num">192</span>        f.write(&quot;- Added `review_status`, `needs_review`, `reviewed`, `source_method`, &quot;)
+<span class="line-num">193</span>        f.write(&quot;`confidence`, and `notes` columns across existing tables\n&quot;)
+<span class="line-num">194</span>        f.write(&quot;- Downgraded all BL C.60.o.12 matches from MEDIUM to LOW confidence\n\n&quot;)
+<span class="line-num">195</span>
+<span class="line-num">196</span>        f.write(&quot;### Site\n&quot;)
+<span class="line-num">197</span>        f.write(f&quot;- {site_counts.get(&#x27;scholar pages&#x27;, 0)} scholar profile pages (DB-driven, with review badges)\n&quot;)
+<span class="line-num">198</span>        f.write(f&quot;- {site_counts.get(&#x27;dictionary pages&#x27;, 0)} dictionary term pages (37 terms, 6 categories, 76 links)\n&quot;)
+<span class="line-num">199</span>        f.write(f&quot;- {site_counts.get(&#x27;marginalia pages&#x27;, 0)} marginalia folio detail pages (with annotator hand info)\n&quot;)
+<span class="line-num">200</span>        f.write(&quot;- Site-wide navigation bar (Home, Marginalia, Scholars, Dictionary, About)\n&quot;)
+<span class="line-num">201</span>        f.write(&quot;- About page with database statistics and rebuild instructions\n&quot;)
+<span class="line-num">202</span>        f.write(&quot;- Confidence badges (HIGH/MEDIUM/LOW/PROVISIONAL) on all matches\n&quot;)
+<span class="line-num">203</span>        f.write(&quot;- Review badges (Unreviewed) on LLM-assisted content\n\n&quot;)
+<span class="line-num">204</span>
+<span class="line-num">205</span>        f.write(&quot;## What Remains Provisional\n\n&quot;)
+<span class="line-num">206</span>        f.write(&quot;| Data Category | Total | Needs Review | Source Method |\n&quot;)
+<span class="line-num">207</span>        f.write(&quot;|---|---|---|---|\n&quot;)
+<span class="line-num">208</span>        f.write(f&quot;| Bibliography entries | 88 | {stats.get(&#x27;bibliography_needs_review&#x27;, &#x27;?&#x27;)} | LLM-assisted |\n&quot;)
+<span class="line-num">209</span>        f.write(f&quot;| Scholar profiles | 52 | {stats.get(&#x27;scholars_needs_review&#x27;, &#x27;?&#x27;)} | LLM-assisted |\n&quot;)
+<span class="line-num">210</span>        f.write(f&quot;| Dictionary terms | 37 | {stats.get(&#x27;dictionary_terms_needs_review&#x27;, &#x27;?&#x27;)} | LLM-assisted |\n&quot;)
+<span class="line-num">211</span>        f.write(f&quot;| Image matches | 610 | {stats.get(&#x27;matches_needs_review&#x27;, &#x27;?&#x27;)} | Algorithmic (folio mapping) |\n&quot;)
+<span class="line-num">212</span>        f.write(f&quot;| BL matches specifically | 218 | 218 | LOW confidence (1545 edition offset) |\n\n&quot;)
+<span class="line-num">213</span>
+<span class="line-num">214</span>        f.write(&quot;## What Still Needs Human Review\n\n&quot;)
+<span class="line-num">215</span>        f.write(&quot;### Critical\n&quot;)
+<span class="line-num">216</span>        f.write(&quot;1. **BL C.60.o.12 photo-to-folio mapping**: Verify that sequential photo numbers\n&quot;)
+<span class="line-num">217</span>        f.write(&quot;   correspond to folio numbers. The BL copy is the 1545 edition; layout may differ\n&quot;)
+<span class="line-num">218</span>        f.write(&quot;   from the 1499 signature map by a few leaves.\n&quot;)
+<span class="line-num">219</span>        f.write(&quot;2. **Article summaries**: All 34 summaries were generated by Claude and have not\n&quot;)
+<span class="line-num">220</span>        f.write(&quot;   been checked for factual accuracy, misattribution, or hallucination.\n&quot;)
+<span class="line-num">221</span>        f.write(&quot;3. **Hand attributions**: Derived from reading Russell&#x27;s prose in conversation.\n&quot;)
+<span class="line-num">222</span>        f.write(&quot;   The signature-to-hand mapping rules are approximate.\n\n&quot;)
+<span class="line-num">223</span>
+<span class="line-num">224</span>        f.write(&quot;### Important\n&quot;)
+<span class="line-num">225</span>        f.write(&quot;4. **Scholar metadata**: Birth/death years, nationalities, and institutional\n&quot;)
+<span class="line-num">226</span>        f.write(&quot;   affiliations should be cross-referenced against VIAF/WorldCat.\n&quot;)
+<span class="line-num">227</span>        f.write(&quot;5. **Dictionary definitions**: Especially the alchemical and architectural terms\n&quot;)
+<span class="line-num">228</span>        f.write(&quot;   should be reviewed by a domain specialist.\n&quot;)
+<span class="line-num">229</span>        f.write(&quot;6. **Mislabeled files**: Jarzombek (De pictura, not HP) and Canone/Spruit\n&quot;)
+<span class="line-num">230</span>        f.write(&quot;   (Poncet on Botticelli, not emblematics) were identified by LLM and\n&quot;)
+<span class="line-num">231</span>        f.write(&quot;   should be confirmed.\n\n&quot;)
+<span class="line-num">232</span>
+<span class="line-num">233</span>        f.write(&quot;### Nice to Have\n&quot;)
+<span class="line-num">234</span>        f.write(&quot;7. **Timeline event dates**: Some date ranges are approximate.\n&quot;)
+<span class="line-num">235</span>        f.write(&quot;8. **Topic cluster assignments**: Some works could belong to multiple clusters.\n&quot;)
+<span class="line-num">236</span>        f.write(&quot;   The `document_topics` junction table supports this but most entries\n&quot;)
+<span class="line-num">237</span>        f.write(&quot;   have only one topic assigned.\n\n&quot;)
+<span class="line-num">238</span>
+<span class="line-num">239</span>        if issues:
+<span class="line-num">240</span>            f.write(&quot;## Validation Issues\n\n&quot;)
+<span class="line-num">241</span>            for i in issues:
+<span class="line-num">242</span>                f.write(f&quot;- **{i}**\n&quot;)
+<span class="line-num">243</span>            f.write(&quot;\n&quot;)
+<span class="line-num">244</span>
+<span class="line-num">245</span>        if warnings:
+<span class="line-num">246</span>            f.write(&quot;## Validation Warnings\n\n&quot;)
+<span class="line-num">247</span>            for w in warnings:
+<span class="line-num">248</span>                f.write(f&quot;- {w}\n&quot;)
+<span class="line-num">249</span>            f.write(&quot;\n&quot;)
+<span class="line-num">250</span>
+<span class="line-num">251</span>        f.write(&quot;## How to Rebuild\n\n&quot;)
+<span class="line-num">252</span>        f.write(&quot;```bash\n&quot;)
+<span class="line-num">253</span>        f.write(&quot;python scripts/migrate_v2.py        # Schema migration (idempotent)\n&quot;)
+<span class="line-num">254</span>        f.write(&quot;python scripts/seed_dictionary.py   # Dictionary terms (idempotent)\n&quot;)
+<span class="line-num">255</span>        f.write(&quot;python scripts/build_site.py        # Generate all HTML + JSON\n&quot;)
+<span class="line-num">256</span>        f.write(&quot;python scripts/validate.py          # Run this audit\n&quot;)
+<span class="line-num">257</span>        f.write(&quot;```\n&quot;)
+<span class="line-num">258</span>
+<span class="line-num">259</span>    print(f&quot;\nAudit report written to {report_path}&quot;)
+<span class="line-num">260</span>    conn.close()
+<span class="line-num">261</span>
+<span class="line-num">262</span>
+<span class="line-num">263</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">264</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

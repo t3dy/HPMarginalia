@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingest Perplexity Research - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Ingest Perplexity Research</h2>
+            <div class="code-meta">ingest_perplexity.py &mdash; 217 lines</div>
+            <p style="margin-bottom:1rem">Adds 9 bibliography entries and 3 timeline events from HPPERPLEXITY.txt web research.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Ingest new bibliography entries from HPPERPLEXITY.txt research into the database.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Adds entries that are genuinely new scholarship not already in our bibliography,
+<span class="line-num">4</span>with proper source_method tagging.
+<span class="line-num">5</span>&quot;&quot;&quot;
+<span class="line-num">6</span>
+<span class="line-num">7</span>import sqlite3
+<span class="line-num">8</span>from pathlib import Path
+<span class="line-num">9</span>
+<span class="line-num">10</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">11</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">12</span>
+<span class="line-num">13</span># New entries from HPPERPLEXITY.txt that are NOT already in our bibliography
+<span class="line-num">14</span>NEW_ENTRIES = [
+<span class="line-num">15</span>    # Scholarly articles discovered via Perplexity
+<span class="line-num">16</span>    {
+<span class="line-num">17</span>        &quot;author&quot;: &quot;Unknown (botanical study)&quot;,
+<span class="line-num">18</span>        &quot;title&quot;: &quot;On the Botanical Content of Hypnerotomachia Poliphili&quot;,
+<span class="line-num">19</span>        &quot;year&quot;: &quot;2016&quot;,
+<span class="line-num">20</span>        &quot;pub_type&quot;: &quot;article&quot;,
+<span class="line-num">21</span>        &quot;journal&quot;: &quot;Landscape Ecology / Taylor &amp; Francis (Botanical Journal of the Linnean Society?)&quot;,
+<span class="line-num">22</span>        &quot;hp_relevance&quot;: &quot;DIRECT&quot;,
+<span class="line-num">23</span>        &quot;topic_cluster&quot;: &quot;architecture_gardens&quot;,
+<span class="line-num">24</span>        &quot;url&quot;: &quot;https://www.tandfonline.com/doi/full/10.1080/23818107.2016.1166070&quot;,
+<span class="line-num">25</span>        &quot;notes&quot;: &quot;Catalogues 285 plant entities referenced in the HP text. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">26</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">27</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">28</span>    },
+<span class="line-num">29</span>    {
+<span class="line-num">30</span>        &quot;author&quot;: &quot;Unknown (musicological study)&quot;,
+<span class="line-num">31</span>        &quot;title&quot;: &quot;Music and Its Powers in the Hypnerotomachia Poliphili (1499)&quot;,
+<span class="line-num">32</span>        &quot;year&quot;: &quot;2020&quot;,
+<span class="line-num">33</span>        &quot;pub_type&quot;: &quot;article&quot;,
+<span class="line-num">34</span>        &quot;journal&quot;: &quot;Cahiers de recherches medievales et humanistes 39&quot;,
+<span class="line-num">35</span>        &quot;hp_relevance&quot;: &quot;DIRECT&quot;,
+<span class="line-num">36</span>        &quot;topic_cluster&quot;: &quot;text_image&quot;,
+<span class="line-num">37</span>        &quot;url&quot;: &quot;https://classiques-garnier.com/cahiers-de-recherches-medievales-et-humanistes-journal-of-medieval-and-humanistic-studies-2020-1-n-39-music-and-its-powers-in-the-hypnerotomachia-poliphili-1499.html&quot;,
+<span class="line-num">38</span>        &quot;notes&quot;: &quot;Musicological reading of musical scenes, instruments, and Ficinian spiritus. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">39</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">40</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">41</span>    },
+<span class="line-num">42</span>    {
+<span class="line-num">43</span>        &quot;author&quot;: &quot;Unknown (UPenn repository)&quot;,
+<span class="line-num">44</span>        &quot;title&quot;: &quot;Architectures of the Text: An Inquiry Into the Hypnerotomachia Poliphili&quot;,
+<span class="line-num">45</span>        &quot;year&quot;: None,
+<span class="line-num">46</span>        &quot;pub_type&quot;: &quot;article&quot;,
+<span class="line-num">47</span>        &quot;journal&quot;: &quot;University of Pennsylvania Repository&quot;,
+<span class="line-num">48</span>        &quot;hp_relevance&quot;: &quot;DIRECT&quot;,
+<span class="line-num">49</span>        &quot;topic_cluster&quot;: &quot;architecture_gardens&quot;,
+<span class="line-num">50</span>        &quot;url&quot;: &quot;https://repository.upenn.edu/items/37a3b059-be9a-4b2a-aad4-9fc2feb5b7f1&quot;,
+<span class="line-num">51</span>        &quot;notes&quot;: &quot;Architecture, design, and Aldine printing. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">52</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">53</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">54</span>    },
+<span class="line-num">55</span>    {
+<span class="line-num">56</span>        &quot;author&quot;: &quot;Unknown (Polish publisher)&quot;,
+<span class="line-num">57</span>        &quot;title&quot;: &quot;Hypnerotomachia Poliphili: Thoughts on the Earliest Reception&quot;,
+<span class="line-num">58</span>        &quot;year&quot;: None,
+<span class="line-num">59</span>        &quot;pub_type&quot;: &quot;article&quot;,
+<span class="line-num">60</span>        &quot;journal&quot;: &quot;Akademicka.pl (Polish academic press)&quot;,
+<span class="line-num">61</span>        &quot;hp_relevance&quot;: &quot;DIRECT&quot;,
+<span class="line-num">62</span>        &quot;topic_cluster&quot;: &quot;reception&quot;,
+<span class="line-num">63</span>        &quot;url&quot;: &quot;https://books.akademicka.pl/publishing/catalog/download/145/488/469?inline=1&quot;,
+<span class="line-num">64</span>        &quot;notes&quot;: &quot;Examines annotated copies and earliest readers. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">65</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">66</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">67</span>    },
+<span class="line-num">68</span>
+<span class="line-num">69</span>    # Digital editions and resources (not scholarship per se, but important references)
+<span class="line-num">70</span>    {
+<span class="line-num">71</span>        &quot;author&quot;: &quot;MIT Press&quot;,
+<span class="line-num">72</span>        &quot;title&quot;: &quot;The Electronic Hypnerotomachia&quot;,
+<span class="line-num">73</span>        &quot;year&quot;: &quot;1999&quot;,
+<span class="line-num">74</span>        &quot;pub_type&quot;: &quot;book&quot;,
+<span class="line-num">75</span>        &quot;journal&quot;: &quot;MIT Press (digital edition)&quot;,
+<span class="line-num">76</span>        &quot;hp_relevance&quot;: &quot;PRIMARY&quot;,
+<span class="line-num">77</span>        &quot;topic_cluster&quot;: &quot;text_image&quot;,
+<span class="line-num">78</span>        &quot;url&quot;: &quot;https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/4196/HP.zip/hyptext1.htm&quot;,
+<span class="line-num">79</span>        &quot;notes&quot;: &quot;Electronic text with typographic information. Companion to Lefaivre 1997.&quot;,
+<span class="line-num">80</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">81</span>        &quot;needs_verification&quot;: False,
+<span class="line-num">82</span>    },
+<span class="line-num">83</span>
+<span class="line-num">84</span>    # Routledge volume
+<span class="line-num">85</span>    {
+<span class="line-num">86</span>        &quot;author&quot;: &quot;Various (ed. unknown)&quot;,
+<span class="line-num">87</span>        &quot;title&quot;: &quot;Francesco Colonna&#x27;s Hypnerotomachia Poliphili and Its European Context&quot;,
+<span class="line-num">88</span>        &quot;year&quot;: &quot;2023&quot;,
+<span class="line-num">89</span>        &quot;pub_type&quot;: &quot;book&quot;,
+<span class="line-num">90</span>        &quot;journal&quot;: &quot;Routledge (Anglo-Italian Renaissance Studies)&quot;,
+<span class="line-num">91</span>        &quot;hp_relevance&quot;: &quot;DIRECT&quot;,
+<span class="line-num">92</span>        &quot;topic_cluster&quot;: &quot;reception&quot;,
+<span class="line-num">93</span>        &quot;url&quot;: &quot;https://api.pageplace.de/preview/DT0400.9781000911848_A46453224/preview-9781000911848_A46453224.pdf&quot;,
+<span class="line-num">94</span>        &quot;notes&quot;: &quot;Chapters on narrative, architecture, travel, love, self-transformation. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">95</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">96</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">97</span>    },
+<span class="line-num">98</span>
+<span class="line-num">99</span>    # Music / creative works inspired by HP
+<span class="line-num">100</span>    {
+<span class="line-num">101</span>        &quot;author&quot;: &quot;Alexander Moosbrugger&quot;,
+<span class="line-num">102</span>        &quot;title&quot;: &quot;Wind (opera based on Hypnerotomachia Poliphili)&quot;,
+<span class="line-num">103</span>        &quot;year&quot;: &quot;2021&quot;,
+<span class="line-num">104</span>        &quot;pub_type&quot;: &quot;book&quot;,
+<span class="line-num">105</span>        &quot;journal&quot;: &quot;Contemporary opera&quot;,
+<span class="line-num">106</span>        &quot;hp_relevance&quot;: &quot;INDIRECT&quot;,
+<span class="line-num">107</span>        &quot;topic_cluster&quot;: &quot;reception&quot;,
+<span class="line-num">108</span>        &quot;notes&quot;: &quot;Libretto drawn from German and English HP translations. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">109</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">110</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">111</span>    },
+<span class="line-num">112</span>    {
+<span class="line-num">113</span>        &quot;author&quot;: &quot;Sagenhaft&quot;,
+<span class="line-num">114</span>        &quot;title&quot;: &quot;Hypnerotomachia (dungeon synth EP)&quot;,
+<span class="line-num">115</span>        &quot;year&quot;: &quot;2021&quot;,
+<span class="line-num">116</span>        &quot;pub_type&quot;: &quot;book&quot;,
+<span class="line-num">117</span>        &quot;journal&quot;: &quot;Moonlit Castle Records&quot;,
+<span class="line-num">118</span>        &quot;hp_relevance&quot;: &quot;INDIRECT&quot;,
+<span class="line-num">119</span>        &quot;topic_cluster&quot;: &quot;reception&quot;,
+<span class="line-num">120</span>        &quot;notes&quot;: &quot;4-track EP inspired by the HP. Dungeon synth genre. Via HPPERPLEXITY.txt.&quot;,
+<span class="line-num">121</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">122</span>        &quot;needs_verification&quot;: True,
+<span class="line-num">123</span>    },
+<span class="line-num">124</span>
+<span class="line-num">125</span>    # The Codex 99 essay - important web resource
+<span class="line-num">126</span>    {
+<span class="line-num">127</span>        &quot;author&quot;: &quot;Codex 99&quot;,
+<span class="line-num">128</span>        &quot;title&quot;: &quot;The Hypnerotomachia Poliphili (typographic essay)&quot;,
+<span class="line-num">129</span>        &quot;year&quot;: None,
+<span class="line-num">130</span>        &quot;pub_type&quot;: &quot;article&quot;,
+<span class="line-num">131</span>        &quot;journal&quot;: &quot;Codex 99 (web)&quot;,
+<span class="line-num">132</span>        &quot;hp_relevance&quot;: &quot;INDIRECT&quot;,
+<span class="line-num">133</span>        &quot;topic_cluster&quot;: &quot;material_bibliographic&quot;,
+<span class="line-num">134</span>        &quot;url&quot;: &quot;http://www.codex99.com/typography/82.html&quot;,
+<span class="line-num">135</span>        &quot;notes&quot;: &quot;Substantial web essay on printing, typography, and images with links to digitized copies.&quot;,
+<span class="line-num">136</span>        &quot;source_method&quot;: &quot;WEB_SEARCH&quot;,
+<span class="line-num">137</span>        &quot;needs_verification&quot;: False,
+<span class="line-num">138</span>    },
+<span class="line-num">139</span>]
+<span class="line-num">140</span>
+<span class="line-num">141</span># Timeline events from Perplexity findings
+<span class="line-num">142</span>NEW_TIMELINE = [
+<span class="line-num">143</span>    (2021, None, &#x27;OTHER&#x27;, &quot;Moosbrugger&#x27;s opera Wind premieres&quot;,
+<span class="line-num">144</span>     &quot;German composer Alexander Moosbrugger uses HP translations as libretto for opera Wind.&quot;,
+<span class="line-num">145</span>     &#x27;reception&#x27;),
+<span class="line-num">146</span>    (2016, None, &#x27;PUBLICATION&#x27;, &#x27;Botanical content study published&#x27;,
+<span class="line-num">147</span>     &#x27;Study cataloguing 285 plant entities referenced in the HP text.&#x27;,
+<span class="line-num">148</span>     &#x27;architecture_gardens&#x27;),
+<span class="line-num">149</span>    (2020, None, &#x27;PUBLICATION&#x27;, &#x27;Music and its powers study published&#x27;,
+<span class="line-num">150</span>     &#x27;Musicological analysis of musical episodes and Ficinian spiritus in the HP.&#x27;,
+<span class="line-num">151</span>     &#x27;text_image&#x27;),
+<span class="line-num">152</span>]
+<span class="line-num">153</span>
+<span class="line-num">154</span>
+<span class="line-num">155</span>def main():
+<span class="line-num">156</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">157</span>    cur = conn.cursor()
+<span class="line-num">158</span>
+<span class="line-num">159</span>    print(&quot;Ingesting HPPERPLEXITY.txt entries...\n&quot;)
+<span class="line-num">160</span>
+<span class="line-num">161</span>    inserted = 0
+<span class="line-num">162</span>    skipped = 0
+<span class="line-num">163</span>    for e in NEW_ENTRIES:
+<span class="line-num">164</span>        # Check if already exists
+<span class="line-num">165</span>        cur.execute(
+<span class="line-num">166</span>            &quot;SELECT id FROM bibliography WHERE title = ?&quot;,
+<span class="line-num">167</span>            (e[&quot;title&quot;],)
+<span class="line-num">168</span>        )
+<span class="line-num">169</span>        if cur.fetchone():
+<span class="line-num">170</span>            skipped += 1
+<span class="line-num">171</span>            continue
+<span class="line-num">172</span>
+<span class="line-num">173</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">174</span>            INSERT INTO bibliography
+<span class="line-num">175</span>                (author, title, year, pub_type, journal_or_publisher,
+<span class="line-num">176</span>                 hp_relevance, topic_cluster, notes,
+<span class="line-num">177</span>                 in_collection, review_status, needs_review)
+<span class="line-num">178</span>            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, &#x27;UNREVIEWED&#x27;, 1)
+<span class="line-num">179</span>        &quot;&quot;&quot;, (e[&quot;author&quot;], e[&quot;title&quot;], e.get(&quot;year&quot;),
+<span class="line-num">180</span>              e[&quot;pub_type&quot;], e.get(&quot;journal&quot;, &quot;&quot;),
+<span class="line-num">181</span>              e[&quot;hp_relevance&quot;], e.get(&quot;topic_cluster&quot;, &quot;&quot;),
+<span class="line-num">182</span>              e.get(&quot;notes&quot;, &quot;&quot;)))
+<span class="line-num">183</span>        inserted += 1
+<span class="line-num">184</span>
+<span class="line-num">185</span>    conn.commit()
+<span class="line-num">186</span>    print(f&quot;  Inserted {inserted} new bibliography entries (skipped {skipped} duplicates)&quot;)
+<span class="line-num">187</span>
+<span class="line-num">188</span>    # Timeline events
+<span class="line-num">189</span>    print(&quot;\nInserting timeline events...&quot;)
+<span class="line-num">190</span>    tl_inserted = 0
+<span class="line-num">191</span>    for year, year_end, evt_type, title, desc, topic in NEW_TIMELINE:
+<span class="line-num">192</span>        cur.execute(
+<span class="line-num">193</span>            &quot;SELECT id FROM timeline_events WHERE title = ?&quot;, (title,)
+<span class="line-num">194</span>        )
+<span class="line-num">195</span>        if not cur.fetchone():
+<span class="line-num">196</span>            cur.execute(&quot;&quot;&quot;
+<span class="line-num">197</span>                INSERT INTO timeline_events
+<span class="line-num">198</span>                    (year, year_end, event_type, title, description, needs_review, source_method)
+<span class="line-num">199</span>                VALUES (?, ?, ?, ?, ?, 1, &#x27;WEB_SEARCH&#x27;)
+<span class="line-num">200</span>            &quot;&quot;&quot;, (year, year_end, evt_type, title, desc))
+<span class="line-num">201</span>            tl_inserted += 1
+<span class="line-num">202</span>    conn.commit()
+<span class="line-num">203</span>    print(f&quot;  Inserted {tl_inserted} timeline events&quot;)
+<span class="line-num">204</span>
+<span class="line-num">205</span>    # Summary
+<span class="line-num">206</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography&quot;)
+<span class="line-num">207</span>    total = cur.fetchone()[0]
+<span class="line-num">208</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography WHERE in_collection = 1&quot;)
+<span class="line-num">209</span>    have = cur.fetchone()[0]
+<span class="line-num">210</span>    print(f&quot;\nBibliography total: {total} entries ({have} in collection)&quot;)
+<span class="line-num">211</span>
+<span class="line-num">212</span>    conn.close()
+<span class="line-num">213</span>    print(&quot;Done.&quot;)
+<span class="line-num">214</span>
+<span class="line-num">215</span>
+<span class="line-num">216</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">217</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

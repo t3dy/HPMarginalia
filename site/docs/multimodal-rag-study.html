@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal RAG Study - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Multimodal RAG Study</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPMULTIMODAL.md &mdash; 2,157 words</p>
+            <h2>HPMULTIMODAL: Multimodal RAG Architecture for HP Image Collections</h2>
+
+<p>A study of how multimodal retrieval-augmented generation could enhance our work with the 674 manuscript images (BL C.60.o.12 and Siena O.III.38 scans) and the 172 woodcuts of the HP.</p>
+
+<hr>
+
+<h3>Current State: Text-Only Matching</h3>
+
+<p>Our entire image pipeline is currently text-based:</p>
+
+<pre><code class="lang-">
+Russell&#x27;s thesis (text) → regex extracts signature refs → signature map → folio numbers → image filenames
+</code></pre>
+
+<p>The images themselves are never &quot;read.&quot; We match by filename pattern, not by content. This means:</p>
+
+<p>1. <strong>We don&#x27;t know what&#x27;s actually on each page.</strong> Photo <code>C_60_o_12-014.jpg</code> is <em>assumed</em> to show folio b6v based on filename arithmetic. Nobody (human or machine) has verified this by looking at the image.</p>
+
+<p>2. <strong>We can&#x27;t search the marginalia.</strong> Russell transcribed selected annotations in his thesis. The thousands of other marks, underlines, symbols, and notes on the 196 BL photos are invisible to our system.</p>
+
+<p>3. <strong>We can&#x27;t identify woodcuts.</strong> We know from the text that folio b6v should contain the Elephant and Obelisk woodcut. But we haven&#x27;t confirmed this by examining the image.</p>
+
+<p>4. <strong>We can&#x27;t compare across copies.</strong> The Siena and BL copies show the same text but different marginalia. We can&#x27;t automatically identify corresponding pages or detect differences.</p>
+
+<hr>
+
+<h3>What Multimodal RAG Would Enable</h3>
+
+<h4>Tier 1: Image Understanding (Vision Models)</h4>
+
+<p>Use a vision-language model (Claude, GPT-4V, or open-source alternatives like LLaVA) to &quot;read&quot; each image and extract structured data.</p>
+
+<p><strong>Per-image extraction prompt:</strong></p>
+
+<pre><code class="lang-">
+This is a photograph of a page from a 15th-century printed book
+(Hypnerotomachia Poliphili, Venice, 1499).
+
+Analyze this image and report:
+1. SIGNATURE: Is there a printed signature mark visible at the bottom
+   of the page? If so, what does it read? (e.g., &quot;b6&quot;, &quot;e1&quot;)
+2. SIDE: Is this a recto (right-hand page, odd-numbered) or verso
+   (left-hand page, even-numbered)?
+3. WOODCUT: Is there a woodcut illustration? If yes, describe its
+   subject in one sentence.
+4. MARGINALIA: Are there handwritten annotations visible in the margins?
+   If yes:
+   a. How many distinct hands can you identify?
+   b. What language(s) are the annotations in?
+   c. Can you transcribe any legible text?
+   d. Are there any symbols or ideograms (alchemical, astronomical)?
+5. TEXT_CONDITION: Is the printed text legible? Any damage, staining,
+   or cropping?
+6. PAGE_ELEMENTS: List any special features: decorated initials,
+   Greek/Hebrew/Arabic passages, shaped text (technopaegnia),
+   tables, diagrams.
+
+Output as JSON.
+</code></pre>
+
+<p><strong>What this would produce:</strong></p>
+<ul>
+<li>**Verified signature matches**: Instead of assuming `C_60_o_12-014.jpg = folio b6v`, we&#x27;d read the actual signature mark from the image. This directly solves the BL confidence problem.</li>
+<li>**Woodcut catalog**: Automatic identification and description of all 172 woodcuts across both copies, enabling a browsable woodcut gallery with subject metadata.</li>
+<li>**Marginalia transcription**: Even partial transcriptions would be a massive scholarly contribution. Russell transcribed selected annotations; multimodal reading could attempt all visible marginalia.</li>
+<li>**Hand identification features**: Ink color, script style, and annotation density could be extracted as features for hand attribution.</li>
+</ul>
+
+<h4>Tier 2: Embedding and Retrieval (Multimodal RAG)</h4>
+
+<p>Once images are processed, embed both the image features and the extracted text into a shared vector space for retrieval.</p>
+
+<p><strong>Architecture:</strong></p>
+
+<pre><code class="lang-">
+┌──────────────────┐     ┌──────────────────┐
+│  Image Embeddings │     │  Text Embeddings  │
+│  (CLIP / SigLIP)  │     │  (text-embedding) │
+└────────┬─────────┘     └────────┬─────────┘
+         │                         │
+         └───────────┬─────────────┘
+                     │
+              ┌──────▼──────┐
+              │ Vector Store │
+              │  (ChromaDB)  │
+              └──────┬──────┘
+                     │
+              ┌──────▼──────┐
+              │  RAG Query   │
+              │  Interface   │
+              └─────────────┘
+</code></pre>
+
+<p><strong>What this enables:</strong></p>
+
+<p>1. <strong>&quot;Show me pages with alchemical symbols&quot;</strong> → retrieves images where the vision model detected ideograms, ranked by relevance.</p>
+
+<p>2. <strong>&quot;Find marginalia discussing mercury&quot;</strong> → searches both Russell&#x27;s transcribed annotations AND the vision model&#x27;s new transcriptions.</p>
+
+<p>3. <strong>&quot;Which pages have this woodcut?&quot;</strong> → given a description or a reference image, finds matching pages across both copies.</p>
+
+<p>4. <strong>&quot;Compare folio b6v across copies&quot;</strong> → retrieves the BL and Siena versions of the same folio, with differences highlighted.</p>
+
+<p>5. <strong>&quot;What did the alchemist annotator write on this page?&quot;</strong> → retrieves the specific annotations attributed to Hand B, cross-referenced with Russell&#x27;s analysis.</p>
+
+<h4>Tier 3: Cross-Copy Alignment</h4>
+
+<p>The most ambitious application: automatically aligning corresponding pages across the BL and Siena copies.</p>
+
+<p><strong>Challenge</strong>: The BL copy is the 1545 edition (recast woodcuts, slightly different layout). The Siena copy is the 1499 edition. Page-for-page correspondence isn&#x27;t guaranteed.</p>
+
+<p><strong>Approach</strong>:</p>
+<p>1. Extract printed text from each page via OCR (Tesseract or vision model)</p>
+<p>2. Use text overlap to identify corresponding pages</p>
+<p>3. Build a cross-copy concordance: <code>BL photo 014 ↔ Siena folio 0014r/v</code></p>
+<p>4. For aligned pairs, diff the marginalia: what annotations appear in one copy but not the other?</p>
+
+<p>This would directly validate (or correct) our current folio-to-image mapping, upgrading 218 BL matches from LOW to HIGH confidence.</p>
+
+<hr>
+
+<h3>Practical Architecture</h3>
+
+<h4>Option A: Batch Processing Pipeline (Recommended for Phase 1)</h4>
+
+<p>Process all 674 images through a vision model in batch, store results in SQLite.</p>
+
+<pre><code class="lang-python">
+# scripts/read_images.py
+
+import anthropic
+import base64
+import sqlite3
+import json
+from pathlib import Path
+
+client = anthropic.Anthropic()
+
+def analyze_image(image_path):
+    &quot;&quot;&quot;Send image to Claude for structured analysis.&quot;&quot;&quot;
+    with open(image_path, &#x27;rb&#x27;) as f:
+        image_data = base64.standard_b64encode(f.read()).decode()
+
+    response = client.messages.create(
+        model=&quot;claude-sonnet-4-6&quot;,  # Cost-effective for batch processing
+        max_tokens=1024,
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: [
+                {&quot;type&quot;: &quot;image&quot;, &quot;source&quot;: {
+                    &quot;type&quot;: &quot;base64&quot;,
+                    &quot;media_type&quot;: &quot;image/jpeg&quot;,
+                    &quot;data&quot;: image_data
+                }},
+                {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: EXTRACTION_PROMPT}
+            ]
+        }]
+    )
+    return json.loads(response.content[0].text)
+
+def process_all_images():
+    &quot;&quot;&quot;Batch process all manuscript images.&quot;&quot;&quot;
+    conn = sqlite3.connect(&#x27;db/hp.db&#x27;)
+    cur = conn.cursor()
+
+    cur.execute(&quot;&quot;&quot;
+        SELECT i.id, i.filename, i.relative_path, m.shelfmark
+        FROM images i
+        JOIN manuscripts m ON i.manuscript_id = m.id
+        WHERE i.page_type = &#x27;PAGE&#x27;
+    &quot;&quot;&quot;)
+
+    for img_id, filename, rel_path, shelfmark in cur.fetchall():
+        result = analyze_image(rel_path)
+
+        # Store vision analysis
+        cur.execute(&quot;&quot;&quot;
+            INSERT OR REPLACE INTO image_analysis
+                (image_id, detected_signature, detected_side,
+                 has_woodcut, woodcut_description,
+                 has_marginalia, marginalia_count, marginalia_languages,
+                 marginalia_transcription, has_symbols,
+                 text_condition, special_features,
+                 source_method, confidence)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, &#x27;VISION_MODEL&#x27;, &#x27;MEDIUM&#x27;)
+        &quot;&quot;&quot;, (img_id, result.get(&#x27;signature&#x27;), result.get(&#x27;side&#x27;),
+              result.get(&#x27;has_woodcut&#x27;), result.get(&#x27;woodcut_description&#x27;),
+              ...))
+
+    conn.commit()
+</code></pre>
+
+<p><strong>New table needed:</strong></p>
+
+<pre><code class="lang-sql">
+CREATE TABLE image_analysis (
+    id INTEGER PRIMARY KEY,
+    image_id INTEGER REFERENCES images(id) UNIQUE,
+    detected_signature TEXT,
+    detected_side TEXT,
+    has_woodcut BOOLEAN,
+    woodcut_description TEXT,
+    has_marginalia BOOLEAN,
+    marginalia_count INTEGER,
+    marginalia_languages TEXT,
+    marginalia_transcription TEXT,
+    has_symbols BOOLEAN,
+    symbol_types TEXT,
+    text_condition TEXT,
+    special_features TEXT,
+    source_method TEXT DEFAULT &#x27;VISION_MODEL&#x27;,
+    confidence TEXT DEFAULT &#x27;MEDIUM&#x27;,
+    needs_review BOOLEAN DEFAULT 1,
+    model_used TEXT,
+    processed_at TEXT DEFAULT (datetime(&#x27;now&#x27;))
+);
+</code></pre>
+
+<p><strong>Cost estimate</strong> (Claude Sonnet):</p>
+<ul>
+<li>674 images × ~1500 input tokens (image) × ~500 output tokens</li>
+<li>≈ 1M input tokens + 340K output tokens</li>
+<li>At Sonnet pricing: ~$5-8 total</li>
+<li>Runtime: ~30-45 minutes with rate limiting</li>
+</ul>
+
+<h4>Option B: Embedding Pipeline (Phase 2)</h4>
+
+<p>After batch processing, embed images and text for retrieval.</p>
+
+<pre><code class="lang-python">
+# scripts/embed_images.py
+
+import chromadb
+from chromadb.utils.embedding_functions import OpenCLIPEmbeddingFunction
+
+# Use CLIP embeddings for image-text alignment
+embedding_fn = OpenCLIPEmbeddingFunction()
+
+client = chromadb.PersistentClient(path=&quot;db/chroma&quot;)
+collection = client.get_or_create_collection(
+    name=&quot;hp_pages&quot;,
+    embedding_function=embedding_fn
+)
+
+# Add images with their extracted metadata
+for image in images:
+    collection.add(
+        ids=[str(image.id)],
+        images=[image.path],  # CLIP embeds the image directly
+        metadatas=[{
+            &quot;signature&quot;: image.detected_signature,
+            &quot;shelfmark&quot;: image.shelfmark,
+            &quot;has_marginalia&quot;: image.has_marginalia,
+            &quot;has_woodcut&quot;: image.has_woodcut,
+            &quot;woodcut_description&quot;: image.woodcut_description,
+        }],
+        documents=[image.marginalia_transcription]
+    )
+</code></pre>
+
+<p><strong>Query examples:</strong></p>
+
+<pre><code class="lang-python">
+# Text-to-image: find pages matching a description
+results = collection.query(
+    query_texts=[&quot;elephant carrying an obelisk&quot;],
+    n_results=5
+)
+
+# Image-to-image: find similar pages across copies
+results = collection.query(
+    query_images=[&quot;path/to/BL/C_60_o_12-014.jpg&quot;],
+    n_results=3,
+    where={&quot;shelfmark&quot;: &quot;O.III.38&quot;}  # Search only Siena copy
+)
+</code></pre>
+
+<h4>Option C: Interactive Multimodal Chat (Phase 3)</h4>
+
+<p>Build a chat interface where users can ask questions about specific pages:</p>
+
+<pre><code class="lang-">
+User: &quot;What does the alchemist write next to the elephant woodcut?&quot;
+
+System: [Retrieves folio b6v images from both copies]
+        [Sends to vision model with context from Russell Ch. 6]
+
+Response: &quot;In the BL copy (C.60.o.12), Hand B wrote alchemical ideograms
+around the elephant and obelisk woodcut on b6v. The annotation includes
+the symbols for mercury (☿) and gold (☉) with Latin inflections.
+Russell (2014, p. 157) transcribes: &#x27;[symbol]-ra scintillata&#x27; which
+may read &#x27;scintillata aurata&#x27; (shimmering gold). The Siena copy
+shows no marginalia on this folio.&quot;
+</code></pre>
+
+<p>This combines vision (reading the actual image), retrieval (finding the right images and Russell&#x27;s commentary), and generation (synthesizing an answer).</p>
+
+<hr>
+
+<h3>What Specifically Changes for Our Data</h3>
+
+<h4>BL Confidence Problem: Solved</h4>
+
+<p>The single biggest data quality issue is the 218 LOW confidence BL matches. Multimodal processing would:</p>
+
+<p>1. Read the signature mark from each BL photo</p>
+<p>2. Compare to our assumed folio number</p>
+<p>3. Confirm or correct each match</p>
+<p>4. Upgrade confirmed matches to HIGH confidence</p>
+
+<p><strong>Expected outcome</strong>: Most matches are probably correct (the assumption that photo number ≈ folio number is reasonable). But some may be off by 1-2 folios, and some photos may be detail shots or duplicates. The vision model would catch these.</p>
+
+<h4>Marginalia Discovery</h4>
+
+<p>Russell documented ~282 folio references. But the 196 BL photos contain marginalia on virtually every page. A multimodal pass would:</p>
+
+<p>1. Detect all pages with marginalia (not just those Russell discussed)</p>
+<p>2. Attempt transcription of visible annotations</p>
+<p>3. Classify annotations by type (marginal note, underline, symbol, drawing)</p>
+<p>4. Estimate the number of distinct hands per page</p>
+
+<p><strong>Expected outcome</strong>: Hundreds of new annotation records, mostly partial transcriptions. Quality would vary — some annotations are in clear hands, others are faded or cramped. Each transcription would carry <code>confidence = &#x27;MEDIUM&#x27;</code> and <code>source_method = &#x27;VISION_MODEL&#x27;</code>, clearly distinguished from Russell&#x27;s manual transcriptions.</p>
+
+<h4>Woodcut Identification</h4>
+
+<p>The 1499 HP has 172 woodcuts. The Siena facsimile has all of them. A multimodal pass would:</p>
+
+<p>1. Identify which folios contain woodcuts</p>
+<p>2. Describe each woodcut&#x27;s subject</p>
+<p>3. Match corresponding woodcuts across the Siena (1499) and BL (1545) copies</p>
+<p>4. Detect differences in the recast 1545 woodcuts</p>
+
+<p><strong>Expected outcome</strong>: A complete, searchable woodcut catalog — something that currently exists only in Huelsen&#x27;s 1910 study.</p>
+
+<h4>Alchemical Symbol Detection</h4>
+
+<p>The BL alchemist (Hand B) used ideograms that are difficult to transcribe as text. A vision model could:</p>
+
+<p>1. Detect non-alphabetic symbols on each page</p>
+<p>2. Classify them against known alchemical symbol vocabularies</p>
+<p>3. Create a visual index of all symbols used by Hand B</p>
+<p>4. Compare with Newton&#x27;s Keynes MSS vocabulary (if images available)</p>
+
+<p><strong>Expected outcome</strong>: A visual concordance of alchemical symbols — useful for the specialist but also visually striking for the website.</p>
+
+<hr>
+
+<h3>Risks and Mitigations</h3>
+
+<table class="doc-table">
+<tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr>
+<tr><td>Vision model misreads signatures</td><td>Medium</td><td>Cross-check against signature_map; flag discrepancies for human review</td></tr>
+<tr><td>Marginalia transcription errors</td><td>High</td><td>Mark all vision transcriptions as MEDIUM confidence; display alongside (not replacing) Russell&#x27;s verified transcriptions</td></tr>
+<tr><td>Cost overruns from large image batches</td><td>Low</td><td>Process in small batches; use Sonnet (cheaper) not Opus for routine extraction</td></tr>
+<tr><td>Hallucinated woodcut descriptions</td><td>Medium</td><td>Compare vision descriptions against known woodcut subjects from Huelsen</td></tr>
+<tr><td>15th-century handwriting defeats OCR</td><td>High for some pages</td><td>Accept partial transcriptions; flag low-confidence pages; don&#x27;t claim completeness</td></tr>
+<tr><td>CLIP embeddings don&#x27;t capture manuscript-specific features</td><td>Medium</td><td>Fine-tune or use specialized models (e.g., HTR models for historical handwriting)</td></tr>
+</table>
+
+<hr>
+
+<h3>Implementation Roadmap</h3>
+
+<table class="doc-table">
+<tr><th>Phase</th><th>What</th><th>Cost</th><th>Time</th><th>Dependencies</th></tr>
+<tr><td>0</td><td>Add `image_analysis` table to schema</td><td>Free</td><td>1 hour</td><td>None</td></tr>
+<tr><td>1</td><td>Batch-process 10 test images with vision model</td><td>~$0.10</td><td>1 hour</td><td>Anthropic API key</td></tr>
+<tr><td>2</td><td>Review Phase 1 results; refine extraction prompt</td><td>Free</td><td>2 hours</td><td>Phase 1 output</td></tr>
+<tr><td>3</td><td>Batch-process all 674 images</td><td>~$5-8</td><td>2 hours</td><td>Refined prompt</td></tr>
+<tr><td>4</td><td>Validate detected signatures against signature_map</td><td>Free</td><td>1 hour</td><td>Phase 3 output</td></tr>
+<tr><td>5</td><td>Upgrade confirmed BL matches to HIGH confidence</td><td>Free</td><td>Minutes</td><td>Phase 4</td></tr>
+<tr><td>6</td><td>Build woodcut catalog from extracted descriptions</td><td>Free</td><td>2 hours</td><td>Phase 3 output</td></tr>
+<tr><td>7</td><td>Set up ChromaDB with CLIP embeddings</td><td>Free</td><td>3 hours</td><td>Phase 3 output</td></tr>
+<tr><td>8</td><td>Build multimodal search interface</td><td>Free</td><td>4 hours</td><td>Phase 7</td></tr>
+<tr><td>9</td><td>Interactive chat with page-level context</td><td>~$2/month</td><td>4 hours</td><td>Phases 3, 7</td></tr>
+</table>
+
+<p><strong>Total Phase 1-5 cost: under $10.</strong></p>
+<p><strong>Total Phase 1-5 time: ~7 hours of work.</strong></p>
+
+<p>The ROI is clear: for under $10, we solve the BL confidence problem, catalog all woodcuts, and discover hundreds of marginalia records that currently don&#x27;t exist in our database. Phase 6+ adds search and interaction capabilities.</p>
+
+<hr>
+
+<h3>Recommendation</h3>
+
+<p><strong>Start with Phase 1-2 immediately.</strong> Process 10 representative images (5 BL, 5 Siena; mix of pages with/without marginalia, with/without woodcuts) to calibrate the extraction prompt and measure quality. If the vision model can reliably read signature marks and detect marginalia presence, proceed to full batch processing. If not, identify which subtasks work and which need specialized models.</p>
+
+<p>The multimodal pipeline is not speculative — it directly addresses our single biggest data quality gap (BL match confidence) while producing genuinely new scholarly data (marginalia transcriptions, woodcut catalog). It fits cleanly into our existing architecture: vision model outputs go into SQLite tables with the same <code>source_method</code> / <code>confidence</code> / <code>needs_review</code> pattern as everything else. No new infrastructure required.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Showcase Data (Legacy) - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Export Showcase Data (Legacy)</h2>
+            <div class="code-meta">export_showcase_data.py &mdash; 116 lines</div>
+            <p style="margin-bottom:1rem">Original data.json exporter for the gallery. Superseded by build_site.py.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Export matched references as JSON for the static showcase page.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>import json
+<span class="line-num">5</span>from pathlib import Path
+<span class="line-num">6</span>
+<span class="line-num">7</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">8</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">9</span>OUTPUT_PATH = BASE_DIR / &quot;site&quot; / &quot;data.json&quot;
+<span class="line-num">10</span>
+<span class="line-num">11</span>
+<span class="line-num">12</span>def main():
+<span class="line-num">13</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">14</span>    conn.row_factory = sqlite3.Row
+<span class="line-num">15</span>    cur = conn.cursor()
+<span class="line-num">16</span>
+<span class="line-num">17</span>    # Get all HIGH confidence matches (Ch6 BL + Ch9 Siena) plus all matches for showcase
+<span class="line-num">18</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">19</span>        SELECT
+<span class="line-num">20</span>            dr.id as ref_id,
+<span class="line-num">21</span>            dr.thesis_page,
+<span class="line-num">22</span>            dr.signature_ref,
+<span class="line-num">23</span>            dr.manuscript_shelfmark,
+<span class="line-num">24</span>            dr.context_text,
+<span class="line-num">25</span>            dr.marginal_text,
+<span class="line-num">26</span>            dr.chapter_num,
+<span class="line-num">27</span>            i.filename as image_filename,
+<span class="line-num">28</span>            i.folio_number,
+<span class="line-num">29</span>            i.side,
+<span class="line-num">30</span>            i.page_type,
+<span class="line-num">31</span>            i.relative_path,
+<span class="line-num">32</span>            m.confidence,
+<span class="line-num">33</span>            m.match_method,
+<span class="line-num">34</span>            ms.shelfmark,
+<span class="line-num">35</span>            ms.institution,
+<span class="line-num">36</span>            ms.city,
+<span class="line-num">37</span>            sm.quire,
+<span class="line-num">38</span>            sm.leaf_in_quire
+<span class="line-num">39</span>        FROM matches m
+<span class="line-num">40</span>        JOIN dissertation_refs dr ON m.ref_id = dr.id
+<span class="line-num">41</span>        JOIN images i ON m.image_id = i.id
+<span class="line-num">42</span>        JOIN manuscripts ms ON i.manuscript_id = ms.id
+<span class="line-num">43</span>        LEFT JOIN signature_map sm ON sm.signature = dr.signature_ref
+<span class="line-num">44</span>        WHERE m.confidence = &#x27;HIGH&#x27;
+<span class="line-num">45</span>        AND i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">46</span>        ORDER BY sm.folio_number, i.side, dr.thesis_page
+<span class="line-num">47</span>    &quot;&quot;&quot;)
+<span class="line-num">48</span>
+<span class="line-num">49</span>    entries = []
+<span class="line-num">50</span>    seen = set()  # Deduplicate by (signature, image)
+<span class="line-num">51</span>
+<span class="line-num">52</span>    for row in cur.fetchall():
+<span class="line-num">53</span>        key = (row[&#x27;signature_ref&#x27;], row[&#x27;image_filename&#x27;])
+<span class="line-num">54</span>        if key in seen:
+<span class="line-num">55</span>            continue
+<span class="line-num">56</span>        seen.add(key)
+<span class="line-num">57</span>
+<span class="line-num">58</span>        entries.append({
+<span class="line-num">59</span>            &#x27;ref_id&#x27;: row[&#x27;ref_id&#x27;],
+<span class="line-num">60</span>            &#x27;thesis_page&#x27;: row[&#x27;thesis_page&#x27;],
+<span class="line-num">61</span>            &#x27;signature&#x27;: row[&#x27;signature_ref&#x27;],
+<span class="line-num">62</span>            &#x27;manuscript&#x27;: row[&#x27;shelfmark&#x27;],
+<span class="line-num">63</span>            &#x27;institution&#x27;: row[&#x27;institution&#x27;],
+<span class="line-num">64</span>            &#x27;city&#x27;: row[&#x27;city&#x27;],
+<span class="line-num">65</span>            &#x27;context&#x27;: row[&#x27;context_text&#x27;],
+<span class="line-num">66</span>            &#x27;marginal_text&#x27;: row[&#x27;marginal_text&#x27;],
+<span class="line-num">67</span>            &#x27;chapter&#x27;: row[&#x27;chapter_num&#x27;],
+<span class="line-num">68</span>            &#x27;image_file&#x27;: row[&#x27;image_filename&#x27;],
+<span class="line-num">69</span>            &#x27;image_path&#x27;: row[&#x27;relative_path&#x27;],
+<span class="line-num">70</span>            &#x27;folio_number&#x27;: row[&#x27;folio_number&#x27;],
+<span class="line-num">71</span>            &#x27;side&#x27;: row[&#x27;side&#x27;],
+<span class="line-num">72</span>            &#x27;confidence&#x27;: row[&#x27;confidence&#x27;],
+<span class="line-num">73</span>            &#x27;quire&#x27;: row[&#x27;quire&#x27;],
+<span class="line-num">74</span>            &#x27;leaf_in_quire&#x27;: row[&#x27;leaf_in_quire&#x27;],
+<span class="line-num">75</span>        })
+<span class="line-num">76</span>
+<span class="line-num">77</span>    # Also get manuscript info for the page
+<span class="line-num">78</span>    cur.execute(&quot;SELECT shelfmark, institution, city, description, image_count FROM manuscripts&quot;)
+<span class="line-num">79</span>    manuscripts = [dict(row) for row in cur.fetchall()]
+<span class="line-num">80</span>
+<span class="line-num">81</span>    # Summary stats
+<span class="line-num">82</span>    cur.execute(&quot;SELECT COUNT(DISTINCT signature_ref) FROM dissertation_refs&quot;)
+<span class="line-num">83</span>    unique_sigs = cur.fetchone()[0]
+<span class="line-num">84</span>    cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs&quot;)
+<span class="line-num">85</span>    total_refs = cur.fetchone()[0]
+<span class="line-num">86</span>
+<span class="line-num">87</span>    data = {
+<span class="line-num">88</span>        &#x27;entries&#x27;: entries,
+<span class="line-num">89</span>        &#x27;manuscripts&#x27;: manuscripts,
+<span class="line-num">90</span>        &#x27;stats&#x27;: {
+<span class="line-num">91</span>            &#x27;total_references&#x27;: total_refs,
+<span class="line-num">92</span>            &#x27;unique_signatures&#x27;: unique_sigs,
+<span class="line-num">93</span>            &#x27;high_confidence_matches&#x27;: len(entries),
+<span class="line-num">94</span>        }
+<span class="line-num">95</span>    }
+<span class="line-num">96</span>
+<span class="line-num">97</span>    OUTPUT_PATH.parent.mkdir(exist_ok=True)
+<span class="line-num">98</span>    with open(OUTPUT_PATH, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">99</span>        json.dump(data, f, indent=2, ensure_ascii=False)
+<span class="line-num">100</span>
+<span class="line-num">101</span>    print(f&quot;Exported {len(entries)} showcase entries to {OUTPUT_PATH}&quot;)
+<span class="line-num">102</span>    print(f&quot;  BL C.60.o.12: {sum(1 for e in entries if e[&#x27;manuscript&#x27;] == &#x27;C.60.o.12&#x27;)}&quot;)
+<span class="line-num">103</span>    print(f&quot;  Siena O.III.38: {sum(1 for e in entries if e[&#x27;manuscript&#x27;] == &#x27;O.III.38&#x27;)}&quot;)
+<span class="line-num">104</span>
+<span class="line-num">105</span>    # Show a few entries
+<span class="line-num">106</span>    print(&quot;\nSample entries:&quot;)
+<span class="line-num">107</span>    for e in entries[:5]:
+<span class="line-num">108</span>        print(f&quot;  {e[&#x27;signature&#x27;]} [{e[&#x27;manuscript&#x27;]}] -&gt; {e[&#x27;image_file&#x27;]}&quot;)
+<span class="line-num">109</span>        if e[&#x27;marginal_text&#x27;]:
+<span class="line-num">110</span>            print(f&quot;    Marginal: &#x27;{e[&#x27;marginal_text&#x27;][:60]}&#x27;&quot;)
+<span class="line-num">111</span>
+<span class="line-num">112</span>    conn.close()
+<span class="line-num">113</span>
+<span class="line-num">114</span>
+<span class="line-num">115</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">116</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

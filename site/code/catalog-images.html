@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog Images - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Catalog Images</h2>
+            <div class="code-meta">catalog_images.py &mdash; 174 lines</div>
+            <p style="margin-bottom:1rem">Parses image filenames from BL and Siena collections into the images table with folio/side metadata.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Catalog all manuscript images into the database.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>import re
+<span class="line-num">5</span>from pathlib import Path
+<span class="line-num">6</span>
+<span class="line-num">7</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">8</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">9</span>
+<span class="line-num">10</span>
+<span class="line-num">11</span>def parse_bl_filename(filename):
+<span class="line-num">12</span>    &quot;&quot;&quot;Parse BL C.60.o.12 image filenames.
+<span class="line-num">13</span>
+<span class="line-num">14</span>    Patterns:
+<span class="line-num">15</span>      C_60_o_12-NNN.jpg  -&gt; sequential page scan
+<span class="line-num">16</span>      BL HP NN.jpg        -&gt; marginalia detail photo
+<span class="line-num">17</span>      BL 2.1.jpg, BL2.jpg -&gt; supplementary photos
+<span class="line-num">18</span>    &quot;&quot;&quot;
+<span class="line-num">19</span>    # Sequential page scans
+<span class="line-num">20</span>    m = re.match(r&#x27;C_60_o_12-(\d{3})\.jpg&#x27;, filename)
+<span class="line-num">21</span>    if m:
+<span class="line-num">22</span>        seq = int(m.group(1))
+<span class="line-num">23</span>        return {
+<span class="line-num">24</span>            &#x27;folio_number&#x27;: str(seq),
+<span class="line-num">25</span>            &#x27;side&#x27;: None,  # not encoded in filename
+<span class="line-num">26</span>            &#x27;page_type&#x27;: &#x27;PAGE&#x27;,
+<span class="line-num">27</span>            &#x27;sort_order&#x27;: seq,
+<span class="line-num">28</span>        }
+<span class="line-num">29</span>
+<span class="line-num">30</span>    # Marginalia detail photos
+<span class="line-num">31</span>    m = re.match(r&#x27;BL\s*HP\s*(\d+)\.jpg&#x27;, filename)
+<span class="line-num">32</span>    if m:
+<span class="line-num">33</span>        num = int(m.group(1))
+<span class="line-num">34</span>        return {
+<span class="line-num">35</span>            &#x27;folio_number&#x27;: None,
+<span class="line-num">36</span>            &#x27;side&#x27;: None,
+<span class="line-num">37</span>            &#x27;page_type&#x27;: &#x27;MARGINALIA_DETAIL&#x27;,
+<span class="line-num">38</span>            &#x27;sort_order&#x27;: 1000 + num,
+<span class="line-num">39</span>        }
+<span class="line-num">40</span>
+<span class="line-num">41</span>    # Other BL supplementary
+<span class="line-num">42</span>    m = re.match(r&#x27;BL\s*[\d.]+\.jpg&#x27;, filename)
+<span class="line-num">43</span>    if m:
+<span class="line-num">44</span>        return {
+<span class="line-num">45</span>            &#x27;folio_number&#x27;: None,
+<span class="line-num">46</span>            &#x27;side&#x27;: None,
+<span class="line-num">47</span>            &#x27;page_type&#x27;: &#x27;OTHER&#x27;,
+<span class="line-num">48</span>            &#x27;sort_order&#x27;: 2000,
+<span class="line-num">49</span>        }
+<span class="line-num">50</span>
+<span class="line-num">51</span>    return {
+<span class="line-num">52</span>        &#x27;folio_number&#x27;: None,
+<span class="line-num">53</span>        &#x27;side&#x27;: None,
+<span class="line-num">54</span>        &#x27;page_type&#x27;: &#x27;OTHER&#x27;,
+<span class="line-num">55</span>        &#x27;sort_order&#x27;: 9999,
+<span class="line-num">56</span>    }
+<span class="line-num">57</span>
+<span class="line-num">58</span>
+<span class="line-num">59</span>def parse_siena_filename(filename):
+<span class="line-num">60</span>    &quot;&quot;&quot;Parse Siena O.III.38 image filenames.
+<span class="line-num">61</span>
+<span class="line-num">62</span>    Patterns:
+<span class="line-num">63</span>      O.III.38_NNNNr.jpg / O.III.38_NNNNv.jpg  -&gt; folio recto/verso
+<span class="line-num">64</span>      O.III.38_000antcop.jpg                     -&gt; front cover
+<span class="line-num">65</span>      O.III.38_000fdg1r.jpg                      -&gt; guard leaf
+<span class="line-num">66</span>      O.III.38_postcop.jpg                       -&gt; back cover
+<span class="line-num">67</span>      Siena HP N.jpg / Siena Hp N.jpg            -&gt; marginalia detail
+<span class="line-num">68</span>    &quot;&quot;&quot;
+<span class="line-num">69</span>    # Standard folio pages
+<span class="line-num">70</span>    m = re.match(r&#x27;O\.III\.38_(\d{4})([rv])\.jpg&#x27;, filename)
+<span class="line-num">71</span>    if m:
+<span class="line-num">72</span>        folio = int(m.group(1))
+<span class="line-num">73</span>        side = m.group(2)
+<span class="line-num">74</span>        sort_order = folio * 2 + (0 if side == &#x27;r&#x27; else 1)
+<span class="line-num">75</span>        return {
+<span class="line-num">76</span>            &#x27;folio_number&#x27;: str(folio),
+<span class="line-num">77</span>            &#x27;side&#x27;: side,
+<span class="line-num">78</span>            &#x27;page_type&#x27;: &#x27;PAGE&#x27;,
+<span class="line-num">79</span>            &#x27;sort_order&#x27;: sort_order,
+<span class="line-num">80</span>        }
+<span class="line-num">81</span>
+<span class="line-num">82</span>    # Cover and guard pages
+<span class="line-num">83</span>    if &#x27;antcop&#x27; in filename or &#x27;postcop&#x27; in filename:
+<span class="line-num">84</span>        sort_order = -2 if &#x27;antcop&#x27; in filename else 99999
+<span class="line-num">85</span>        return {
+<span class="line-num">86</span>            &#x27;folio_number&#x27;: None,
+<span class="line-num">87</span>            &#x27;side&#x27;: None,
+<span class="line-num">88</span>            &#x27;page_type&#x27;: &#x27;COVER&#x27;,
+<span class="line-num">89</span>            &#x27;sort_order&#x27;: sort_order,
+<span class="line-num">90</span>        }
+<span class="line-num">91</span>
+<span class="line-num">92</span>    if &#x27;fdg&#x27; in filename or &#x27;risg&#x27; in filename:
+<span class="line-num">93</span>        sort_order = -1
+<span class="line-num">94</span>        return {
+<span class="line-num">95</span>            &#x27;folio_number&#x27;: None,
+<span class="line-num">96</span>            &#x27;side&#x27;: None,
+<span class="line-num">97</span>            &#x27;page_type&#x27;: &#x27;GUARD&#x27;,
+<span class="line-num">98</span>            &#x27;sort_order&#x27;: sort_order,
+<span class="line-num">99</span>        }
+<span class="line-num">100</span>
+<span class="line-num">101</span>    # Marginalia detail photos
+<span class="line-num">102</span>    m = re.match(r&#x27;Siena\s*[Hh][Pp]\s*(\d+)\.jpg&#x27;, filename, re.IGNORECASE)
+<span class="line-num">103</span>    if m:
+<span class="line-num">104</span>        num = int(m.group(1))
+<span class="line-num">105</span>        return {
+<span class="line-num">106</span>            &#x27;folio_number&#x27;: None,
+<span class="line-num">107</span>            &#x27;side&#x27;: None,
+<span class="line-num">108</span>            &#x27;page_type&#x27;: &#x27;MARGINALIA_DETAIL&#x27;,
+<span class="line-num">109</span>            &#x27;sort_order&#x27;: 100000 + num,
+<span class="line-num">110</span>        }
+<span class="line-num">111</span>
+<span class="line-num">112</span>    return {
+<span class="line-num">113</span>        &#x27;folio_number&#x27;: None,
+<span class="line-num">114</span>        &#x27;side&#x27;: None,
+<span class="line-num">115</span>        &#x27;page_type&#x27;: &#x27;OTHER&#x27;,
+<span class="line-num">116</span>        &#x27;sort_order&#x27;: 999999,
+<span class="line-num">117</span>    }
+<span class="line-num">118</span>
+<span class="line-num">119</span>
+<span class="line-num">120</span>def catalog_manuscript(conn, shelfmark, parser_fn):
+<span class="line-num">121</span>    &quot;&quot;&quot;Catalog all images for a manuscript.&quot;&quot;&quot;
+<span class="line-num">122</span>    cur = conn.cursor()
+<span class="line-num">123</span>    cur.execute(&quot;SELECT id, image_dir FROM manuscripts WHERE shelfmark = ?&quot;, (shelfmark,))
+<span class="line-num">124</span>    row = cur.fetchone()
+<span class="line-num">125</span>    if not row:
+<span class="line-num">126</span>        print(f&quot;  WARNING: Manuscript {shelfmark} not found in database&quot;)
+<span class="line-num">127</span>        return 0
+<span class="line-num">128</span>
+<span class="line-num">129</span>    ms_id, image_dir = row
+<span class="line-num">130</span>    img_path = BASE_DIR / image_dir
+<span class="line-num">131</span>    if not img_path.exists():
+<span class="line-num">132</span>        print(f&quot;  WARNING: Image directory not found: {img_path}&quot;)
+<span class="line-num">133</span>        return 0
+<span class="line-num">134</span>
+<span class="line-num">135</span>    count = 0
+<span class="line-num">136</span>    for f in sorted(img_path.glob(&#x27;*.jpg&#x27;)):
+<span class="line-num">137</span>        parsed = parser_fn(f.name)
+<span class="line-num">138</span>        relative = f&quot;{image_dir}/{f.name}&quot;
+<span class="line-num">139</span>        cur.execute(
+<span class="line-num">140</span>            &quot;&quot;&quot;INSERT OR IGNORE INTO images
+<span class="line-num">141</span>               (manuscript_id, filename, folio_number, side, page_type, sort_order, relative_path)
+<span class="line-num">142</span>               VALUES (?, ?, ?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">143</span>            (ms_id, f.name, parsed[&#x27;folio_number&#x27;], parsed[&#x27;side&#x27;],
+<span class="line-num">144</span>             parsed[&#x27;page_type&#x27;], parsed[&#x27;sort_order&#x27;], relative)
+<span class="line-num">145</span>        )
+<span class="line-num">146</span>        count += 1
+<span class="line-num">147</span>
+<span class="line-num">148</span>    conn.commit()
+<span class="line-num">149</span>    return count
+<span class="line-num">150</span>
+<span class="line-num">151</span>
+<span class="line-num">152</span>def main():
+<span class="line-num">153</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">154</span>
+<span class="line-num">155</span>    print(&quot;Cataloging BL C.60.o.12 images...&quot;)
+<span class="line-num">156</span>    bl_count = catalog_manuscript(conn, &#x27;C.60.o.12&#x27;, parse_bl_filename)
+<span class="line-num">157</span>    print(f&quot;  {bl_count} images cataloged&quot;)
+<span class="line-num">158</span>
+<span class="line-num">159</span>    print(&quot;Cataloging Siena O.III.38 images...&quot;)
+<span class="line-num">160</span>    siena_count = catalog_manuscript(conn, &#x27;O.III.38&#x27;, parse_siena_filename)
+<span class="line-num">161</span>    print(f&quot;  {siena_count} images cataloged&quot;)
+<span class="line-num">162</span>
+<span class="line-num">163</span>    # Summary stats
+<span class="line-num">164</span>    cur = conn.cursor()
+<span class="line-num">165</span>    for page_type in [&#x27;PAGE&#x27;, &#x27;MARGINALIA_DETAIL&#x27;, &#x27;COVER&#x27;, &#x27;GUARD&#x27;, &#x27;OTHER&#x27;]:
+<span class="line-num">166</span>        cur.execute(&quot;SELECT COUNT(*) FROM images WHERE page_type = ?&quot;, (page_type,))
+<span class="line-num">167</span>        print(f&quot;  {page_type}: {cur.fetchone()[0]}&quot;)
+<span class="line-num">168</span>
+<span class="line-num">169</span>    conn.close()
+<span class="line-num">170</span>    print(&quot;Done.&quot;)
+<span class="line-num">171</span>
+<span class="line-num">172</span>
+<span class="line-num">173</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">174</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

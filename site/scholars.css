@@ -1,0 +1,161 @@
+/* ===== Scholars Page Styles ===== */
+
+.scholars-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem 3rem;
+}
+
+.scholar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.scholar-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+}
+
+.scholar-card h3 a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.scholar-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.scholar-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    margin-bottom: 1rem;
+}
+
+.scholar-papers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+/* ===== Paper Cards (Index Cards) ===== */
+
+.paper-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    transition: box-shadow 0.2s;
+}
+
+.paper-card:hover {
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.paper-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+.paper-card h4 a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.paper-card h4 a:hover {
+    color: var(--accent);
+}
+
+.paper-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    margin-bottom: 0.5rem;
+}
+
+.paper-summary {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+/* ===== Topic Badges ===== */
+
+.topic-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: 0.25rem;
+}
+
+.topic-authorship { background: #f0e4d4; color: #7a5c34; }
+.topic-architecture_gardens { background: #d4e8d4; color: #2d5a2d; }
+.topic-text_image { background: #d4d8e8; color: #2d3a5a; }
+.topic-reception { background: #e8d4e8; color: #5a2d5a; }
+.topic-dream_religion { background: #e8e4d4; color: #5a5434; }
+.topic-material_bibliographic { background: #d4e4e8; color: #2d4a5a; }
+
+/* ===== Scholar Detail Page ===== */
+
+.scholar-detail {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.scholar-detail h2 {
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.paper-detail {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.paper-detail h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+}
+
+.paper-summary-full {
+    margin-top: 1rem;
+}
+
+.paper-summary-full p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 768px) {
+    .scholar-papers {
+        grid-template-columns: 1fr;
+    }
+
+    .scholar-card {
+        padding: 1rem;
+    }
+
+    .scholar-detail {
+        padding: 0 1rem;
+    }
+}

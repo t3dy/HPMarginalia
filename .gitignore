@@ -1,0 +1,26 @@
+# PDFs (copyrighted scholarship - not for distribution)
+*.pdf
+*.pptx
+
+# Large image collections (1GB+ total, too large for git)
+# Serve locally or via LFS/CDN for the gallery
+3 BL C.60.o.12 Photos*/
+Siena O.III.38 Digital Facsimile*/
+
+# Extracted text (can be regenerated from PDFs)
+md/
+chunks/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+.claude/
+
+# Temp
+*.tmp

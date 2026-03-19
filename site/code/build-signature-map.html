@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Signature Map - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Build Signature Map</h2>
+            <div class="code-meta">build_signature_map.py &mdash; 103 lines</div>
+            <p style="margin-bottom:1rem">Generates the 448-entry signature-to-folio concordance from the Aldine collation formula (a-z, A-G).</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Build the signature-to-folio mapping table for the 1499 Aldine HP.
+<span class="line-num">2</span>
+<span class="line-num">3</span>The 1499 Aldus Manutius edition uses the standard Aldine collation:
+<span class="line-num">4</span>  Quires a-z (skipping j, u, w) then A-G
+<span class="line-num">5</span>  Each quire has 8 leaves (quaternion format)
+<span class="line-num">6</span>  Each leaf has recto (r) and verso (v)
+<span class="line-num">7</span>
+<span class="line-num">8</span>Collation formula: a-y⁸ z⁴ A-F⁸ G⁴ = 234 leaves = 468 pages
+<span class="line-num">9</span>
+<span class="line-num">10</span>This produces a deterministic lookup: signature &quot;a1r&quot; = folio 1 recto,
+<span class="line-num">11</span>&quot;a1v&quot; = folio 1 verso, &quot;b1r&quot; = folio 9 recto, etc.
+<span class="line-num">12</span>&quot;&quot;&quot;
+<span class="line-num">13</span>
+<span class="line-num">14</span>import sqlite3
+<span class="line-num">15</span>from pathlib import Path
+<span class="line-num">16</span>
+<span class="line-num">17</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">18</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">19</span>
+<span class="line-num">20</span># Standard Aldine quire sequence for the 1499 HP
+<span class="line-num">21</span># Lowercase quires: a through y, skipping j, u, w
+<span class="line-num">22</span>LOWERCASE_QUIRES = [c for c in &#x27;abcdefghiklmnopqrstxyz&#x27;]
+<span class="line-num">23</span># Uppercase quires (for the second alphabet run): A through G
+<span class="line-num">24</span>UPPERCASE_QUIRES = list(&#x27;ABCDEFG&#x27;)
+<span class="line-num">25</span>
+<span class="line-num">26</span># Leaves per quire - most are 8 (quaternion), but z and G are 4
+<span class="line-num">27</span>QUIRE_SIZES = {}
+<span class="line-num">28</span>for q in LOWERCASE_QUIRES:
+<span class="line-num">29</span>    QUIRE_SIZES[q] = 4 if q == &#x27;z&#x27; else 8
+<span class="line-num">30</span>for q in UPPERCASE_QUIRES:
+<span class="line-num">31</span>    QUIRE_SIZES[q] = 4 if q == &#x27;G&#x27; else 8
+<span class="line-num">32</span>
+<span class="line-num">33</span>
+<span class="line-num">34</span>def generate_signatures():
+<span class="line-num">35</span>    &quot;&quot;&quot;Generate all signatures in order with their sequential folio numbers.&quot;&quot;&quot;
+<span class="line-num">36</span>    all_quires = LOWERCASE_QUIRES + UPPERCASE_QUIRES
+<span class="line-num">37</span>    folio_num = 1
+<span class="line-num">38</span>    entries = []
+<span class="line-num">39</span>
+<span class="line-num">40</span>    for quire in all_quires:
+<span class="line-num">41</span>        leaves = QUIRE_SIZES[quire]
+<span class="line-num">42</span>        for leaf in range(1, leaves + 1):
+<span class="line-num">43</span>            for side in (&#x27;r&#x27;, &#x27;v&#x27;):
+<span class="line-num">44</span>                sig = f&quot;{quire}{leaf}{side}&quot;
+<span class="line-num">45</span>                entries.append({
+<span class="line-num">46</span>                    &#x27;signature&#x27;: sig,
+<span class="line-num">47</span>                    &#x27;folio_number&#x27;: folio_num,
+<span class="line-num">48</span>                    &#x27;side&#x27;: side,
+<span class="line-num">49</span>                    &#x27;quire&#x27;: quire,
+<span class="line-num">50</span>                    &#x27;leaf_in_quire&#x27;: leaf,
+<span class="line-num">51</span>                })
+<span class="line-num">52</span>            folio_num += 1
+<span class="line-num">53</span>
+<span class="line-num">54</span>    return entries
+<span class="line-num">55</span>
+<span class="line-num">56</span>
+<span class="line-num">57</span>def main():
+<span class="line-num">58</span>    entries = generate_signatures()
+<span class="line-num">59</span>
+<span class="line-num">60</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">61</span>    cur = conn.cursor()
+<span class="line-num">62</span>
+<span class="line-num">63</span>    # Clear existing entries
+<span class="line-num">64</span>    cur.execute(&quot;DELETE FROM signature_map&quot;)
+<span class="line-num">65</span>
+<span class="line-num">66</span>    for e in entries:
+<span class="line-num">67</span>        cur.execute(
+<span class="line-num">68</span>            &quot;&quot;&quot;INSERT INTO signature_map
+<span class="line-num">69</span>               (signature, folio_number, side, quire, leaf_in_quire)
+<span class="line-num">70</span>               VALUES (?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">71</span>            (e[&#x27;signature&#x27;], e[&#x27;folio_number&#x27;], e[&#x27;side&#x27;], e[&#x27;quire&#x27;], e[&#x27;leaf_in_quire&#x27;])
+<span class="line-num">72</span>        )
+<span class="line-num">73</span>
+<span class="line-num">74</span>    conn.commit()
+<span class="line-num">75</span>
+<span class="line-num">76</span>    # Summary
+<span class="line-num">77</span>    total = len(entries)
+<span class="line-num">78</span>    quire_count = len(LOWERCASE_QUIRES) + len(UPPERCASE_QUIRES)
+<span class="line-num">79</span>    max_folio = entries[-1][&#x27;folio_number&#x27;]
+<span class="line-num">80</span>    print(f&quot;Built signature map: {total} entries, {quire_count} quires, {max_folio} folios&quot;)
+<span class="line-num">81</span>    print(f&quot;  First: {entries[0][&#x27;signature&#x27;]} = folio {entries[0][&#x27;folio_number&#x27;]}&quot;)
+<span class="line-num">82</span>    print(f&quot;  Last:  {entries[-1][&#x27;signature&#x27;]} = folio {entries[-1][&#x27;folio_number&#x27;]}&quot;)
+<span class="line-num">83</span>
+<span class="line-num">84</span>    # Spot checks
+<span class="line-num">85</span>    print(&quot;\nSpot checks:&quot;)
+<span class="line-num">86</span>    cur.execute(&quot;SELECT signature, folio_number FROM signature_map WHERE signature = &#x27;a1r&#x27;&quot;)
+<span class="line-num">87</span>    r = cur.fetchone()
+<span class="line-num">88</span>    print(f&quot;  a1r -&gt; folio {r[1]}&quot; if r else &quot;  a1r NOT FOUND&quot;)
+<span class="line-num">89</span>
+<span class="line-num">90</span>    cur.execute(&quot;SELECT signature, folio_number FROM signature_map WHERE signature = &#x27;b1r&#x27;&quot;)
+<span class="line-num">91</span>    r = cur.fetchone()
+<span class="line-num">92</span>    print(f&quot;  b1r -&gt; folio {r[1]}&quot; if r else &quot;  b1r NOT FOUND&quot;)
+<span class="line-num">93</span>
+<span class="line-num">94</span>    cur.execute(&quot;SELECT signature, folio_number FROM signature_map WHERE signature = &#x27;e1r&#x27;&quot;)
+<span class="line-num">95</span>    r = cur.fetchone()
+<span class="line-num">96</span>    print(f&quot;  e1r -&gt; folio {r[1]} (Russell&#x27;s methodology boundary)&quot; if r else &quot;  e1r NOT FOUND&quot;)
+<span class="line-num">97</span>
+<span class="line-num">98</span>    conn.close()
+<span class="line-num">99</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">100</span>
+<span class="line-num">101</span>
+<span class="line-num">102</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">103</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

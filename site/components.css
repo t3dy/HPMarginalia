@@ -1,0 +1,239 @@
+/* ===== Shared Component Styles =====
+   Extracted from inline <style> blocks across generated pages.
+   All page types should load this file instead of inline styles.
+*/
+
+/* ===== Dictionary ===== */
+.dictionary-index { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+.dict-category { margin-bottom: 2.5rem; }
+.dict-category h3 {
+    font-size: 1.2rem; color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem; margin-bottom: 1rem;
+}
+.dict-entry { margin-bottom: 1rem; }
+.dict-entry h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+.dict-entry h4 a { color: var(--text); text-decoration: none; }
+.dict-entry h4 a:hover { color: var(--accent); }
+.dict-entry p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+.dict-detail { max-width: 800px; margin: 2rem auto; padding: 0 2rem; }
+.dict-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
+.dict-detail .category-label {
+    font-size: 0.85rem; color: var(--text-muted);
+    font-family: var(--font-sans); margin-bottom: 1.5rem;
+}
+.dict-detail .definition-short {
+    font-size: 1.1rem; font-style: italic; margin-bottom: 1.5rem;
+    padding: 1rem; background: var(--bg-card); border-left: 3px solid var(--accent);
+}
+.dict-detail .definition-long { line-height: 1.8; margin-bottom: 1.5rem; }
+.dict-detail .source-basis {
+    font-size: 0.85rem; color: var(--text-muted);
+    font-family: var(--font-sans); margin-top: 1rem;
+    padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.related-terms { margin-top: 1.5rem; }
+.related-terms h4 { font-size: 0.95rem; color: var(--accent); margin-bottom: 0.5rem; }
+.related-terms a {
+    display: inline-block; margin: 0.2rem 0.3rem 0.2rem 0;
+    padding: 0.2rem 0.6rem; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 3px;
+    font-size: 0.85rem; color: var(--text); text-decoration: none;
+}
+.related-terms a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== Marginalia ===== */
+.marg-detail { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+.marg-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
+.marg-images {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem; margin: 1.5rem 0;
+}
+.marg-image-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 4px; overflow: hidden;
+}
+.marg-image-card img { width: 100%; display: block; }
+.marg-image-card .caption {
+    padding: 0.75rem 1rem; font-size: 0.85rem;
+    font-family: var(--font-sans);
+}
+.marg-annotation {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1.5rem; margin-bottom: 1rem;
+}
+.marg-annotation .marginal-text {
+    font-style: italic; font-size: 1.05rem; padding: 0.75rem;
+    border-left: 3px solid var(--accent-light); margin: 0.75rem 0;
+}
+.marg-annotation .context {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;
+    max-height: 200px; overflow-y: auto;
+}
+.marg-annotation .hand-info {
+    font-size: 0.85rem; font-family: var(--font-sans);
+    color: var(--text-muted); margin-top: 0.5rem;
+}
+.alchemist-tag {
+    display: inline-block; padding: 0.1rem 0.5rem;
+    background: #e8d4d0; color: #6b3028;
+    border-radius: 2px; font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase;
+}
+.marg-index { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+.marg-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+.marg-grid a {
+    display: block; padding: 0.75rem 1rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 3px; text-decoration: none; color: var(--text);
+    transition: all 0.2s;
+}
+.marg-grid a:hover {
+    border-color: var(--accent); color: var(--accent);
+    transform: translateY(-1px);
+}
+.marg-grid .sig-label { font-weight: 600; font-size: 1.1rem; color: var(--accent); }
+.marg-grid .sig-meta { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); }
+
+/* ===== Bibliography ===== */
+.bib-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+.bib-section { margin-bottom: 2.5rem; }
+.bib-section h3 {
+    font-size: 1.1rem; color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem; margin-bottom: 1rem;
+}
+.bib-entry {
+    margin-bottom: 1rem; padding: 0.75rem 1rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 3px;
+}
+.bib-entry .bib-author { font-weight: 600; }
+.bib-entry .bib-title { font-style: italic; }
+.bib-entry .bib-details {
+    font-size: 0.85rem; color: var(--text-muted);
+    font-family: var(--font-sans); margin-top: 0.25rem;
+}
+.bib-entry .bib-badges { margin-top: 0.3rem; }
+.bib-badge-collection {
+    display: inline-block; padding: 0.1rem 0.4rem;
+    background: #dce8d4; color: #3d5a2d;
+    border-radius: 2px; font-size: 0.65rem; font-weight: 600;
+    font-family: var(--font-sans); text-transform: uppercase;
+}
+.bib-badge-missing {
+    display: inline-block; padding: 0.1rem 0.4rem;
+    background: #e8d4d0; color: #6b3028;
+    border-radius: 2px; font-size: 0.65rem; font-weight: 600;
+    font-family: var(--font-sans); text-transform: uppercase;
+}
+.bib-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.bib-stat {
+    text-align: center; padding: 1rem; background: var(--bg-card);
+    border: 1px solid var(--border); border-radius: 4px;
+    flex: 1; min-width: 120px;
+}
+.bib-stat .num { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; }
+.bib-stat .lbl { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); }
+
+/* ===== Documents ===== */
+.docs-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+.docs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.docs-table th, .docs-table td {
+    padding: 0.75rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.docs-table th {
+    font-family: var(--font-sans); font-size: 0.85rem;
+    color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.docs-table td a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.docs-table td a:hover { text-decoration: underline; }
+.docs-table .doc-summary { font-size: 0.85rem; color: var(--text-muted); }
+
+.doc-content { max-width: 800px; margin: 2rem auto; padding: 0 2rem; }
+.doc-content h2 { color: var(--accent); margin: 2rem 0 0.5rem; }
+.doc-content h3 { color: var(--text); margin: 1.5rem 0 0.5rem; }
+.doc-content h4 { color: var(--text-muted); margin: 1rem 0 0.5rem; }
+.doc-content p { margin-bottom: 0.75rem; line-height: 1.7; }
+.doc-content pre {
+    background: var(--bg); padding: 1rem; border-radius: 4px;
+    overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+}
+.doc-content code {
+    font-size: 0.9em; background: var(--bg);
+    padding: 0.1rem 0.3rem; border-radius: 2px;
+}
+.doc-content pre code { background: none; padding: 0; }
+.doc-content blockquote {
+    border-left: 3px solid var(--accent-light); padding-left: 1rem;
+    color: var(--text-muted); font-style: italic; margin: 1rem 0;
+}
+.doc-content ul { margin: 0.5rem 0 1rem 1.5rem; }
+.doc-content li { margin-bottom: 0.3rem; line-height: 1.6; }
+.doc-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+.doc-content table.doc-table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem;
+}
+.doc-content table.doc-table th, .doc-content table.doc-table td {
+    padding: 0.5rem 0.75rem; border: 1px solid var(--border);
+}
+.doc-content table.doc-table th { background: var(--bg); font-weight: 600; }
+
+/* ===== Code ===== */
+.code-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+.code-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.code-table th, .code-table td {
+    padding: 0.75rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.code-table th {
+    font-family: var(--font-sans); font-size: 0.85rem;
+    color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.code-table td a {
+    color: var(--accent); text-decoration: none;
+    font-weight: 600; font-family: monospace;
+}
+.code-table td a:hover { text-decoration: underline; }
+.code-table .code-summary { font-size: 0.85rem; color: var(--text-muted); }
+
+.code-content { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+.code-content h2 { color: var(--accent); margin-bottom: 0.5rem; }
+.code-content pre {
+    background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 4px;
+    overflow-x: auto; font-size: 0.82rem; line-height: 1.5;
+    max-height: 80vh; overflow-y: auto;
+}
+.code-content .line-num {
+    color: #858585; user-select: none;
+    display: inline-block; width: 3.5em;
+    text-align: right; margin-right: 1em;
+}
+.code-meta {
+    font-family: var(--font-sans); font-size: 0.85rem;
+    color: var(--text-muted); margin-bottom: 1.5rem;
+}
+
+/* ===== Shared: Provenance Notice ===== */
+.provenance-notice {
+    background: #e8dcc8; border: 1px solid var(--border);
+    border-radius: 4px; padding: 0.75rem 1rem; margin-bottom: 1.5rem;
+    font-size: 0.85rem; font-family: var(--font-sans);
+    color: #6b5420;
+}
+
+/* ===== Responsive additions ===== */
+@media (max-width: 768px) {
+    .marg-images { grid-template-columns: 1fr; }
+    .marg-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .bib-stats { flex-direction: column; }
+    .docs-table, .code-table { font-size: 0.85rem; }
+    .docs-table td, .code-table td { padding: 0.5rem; }
+}

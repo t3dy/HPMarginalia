@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Bibliography - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Add Bibliography</h2>
+            <div class="code-meta">add_bibliography.py &mdash; 327 lines</div>
+            <p style="margin-bottom:1rem">Populates bibliography (58 entries), scholars (29), timeline (39 events) from hardcoded research data.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Add bibliography table and populate with works cited in Russell&#x27;s dissertation.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Tracks which works we have vs. which are cited but missing from our collection.
+<span class="line-num">4</span>Enables gap analysis for scholarship expansion.
+<span class="line-num">5</span>&quot;&quot;&quot;
+<span class="line-num">6</span>
+<span class="line-num">7</span>import sqlite3
+<span class="line-num">8</span>from pathlib import Path
+<span class="line-num">9</span>
+<span class="line-num">10</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">11</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">12</span>
+<span class="line-num">13</span>SCHEMA = &quot;&quot;&quot;
+<span class="line-num">14</span>CREATE TABLE IF NOT EXISTS bibliography (
+<span class="line-num">15</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">16</span>    author TEXT NOT NULL,
+<span class="line-num">17</span>    title TEXT NOT NULL,
+<span class="line-num">18</span>    year TEXT,
+<span class="line-num">19</span>    pub_type TEXT CHECK(pub_type IN (&#x27;article&#x27;,&#x27;book&#x27;,&#x27;chapter&#x27;,&#x27;thesis&#x27;,&#x27;manuscript&#x27;)),
+<span class="line-num">20</span>    journal_or_publisher TEXT,
+<span class="line-num">21</span>    cited_in TEXT DEFAULT &#x27;Russell 2014&#x27;,
+<span class="line-num">22</span>    in_collection BOOLEAN DEFAULT 0,
+<span class="line-num">23</span>    collection_filename TEXT,
+<span class="line-num">24</span>    hp_relevance TEXT CHECK(hp_relevance IN (&#x27;PRIMARY&#x27;,&#x27;DIRECT&#x27;,&#x27;INDIRECT&#x27;,&#x27;TANGENTIAL&#x27;)),
+<span class="line-num">25</span>    topic_cluster TEXT,
+<span class="line-num">26</span>    notes TEXT,
+<span class="line-num">27</span>    UNIQUE(author, title)
+<span class="line-num">28</span>);
+<span class="line-num">29</span>
+<span class="line-num">30</span>CREATE TABLE IF NOT EXISTS scholars (
+<span class="line-num">31</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">32</span>    name TEXT NOT NULL UNIQUE,
+<span class="line-num">33</span>    birth_year INTEGER,
+<span class="line-num">34</span>    death_year INTEGER,
+<span class="line-num">35</span>    nationality TEXT,
+<span class="line-num">36</span>    institution TEXT,
+<span class="line-num">37</span>    specialization TEXT,
+<span class="line-num">38</span>    hp_focus TEXT,
+<span class="line-num">39</span>    bio_notes TEXT,
+<span class="line-num">40</span>    work_count INTEGER DEFAULT 0
+<span class="line-num">41</span>);
+<span class="line-num">42</span>
+<span class="line-num">43</span>CREATE TABLE IF NOT EXISTS scholar_works (
+<span class="line-num">44</span>    scholar_id INTEGER REFERENCES scholars(id),
+<span class="line-num">45</span>    bib_id INTEGER REFERENCES bibliography(id),
+<span class="line-num">46</span>    PRIMARY KEY (scholar_id, bib_id)
+<span class="line-num">47</span>);
+<span class="line-num">48</span>
+<span class="line-num">49</span>CREATE TABLE IF NOT EXISTS timeline_events (
+<span class="line-num">50</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">51</span>    year INTEGER NOT NULL,
+<span class="line-num">52</span>    year_end INTEGER,
+<span class="line-num">53</span>    event_type TEXT CHECK(event_type IN (
+<span class="line-num">54</span>        &#x27;PUBLICATION&#x27;,&#x27;EDITION&#x27;,&#x27;TRANSLATION&#x27;,&#x27;DISCOVERY&#x27;,
+<span class="line-num">55</span>        &#x27;ATTRIBUTION&#x27;,&#x27;ACQUISITION&#x27;,&#x27;EXHIBITION&#x27;,&#x27;OTHER&#x27;
+<span class="line-num">56</span>    )),
+<span class="line-num">57</span>    title TEXT NOT NULL,
+<span class="line-num">58</span>    description TEXT,
+<span class="line-num">59</span>    scholar_id INTEGER REFERENCES scholars(id),
+<span class="line-num">60</span>    bib_id INTEGER REFERENCES bibliography(id),
+<span class="line-num">61</span>    manuscript_shelfmark TEXT
+<span class="line-num">62</span>);
+<span class="line-num">63</span>&quot;&quot;&quot;
+<span class="line-num">64</span>
+<span class="line-num">65</span># High-priority HP-specific works from Russell&#x27;s bibliography
+<span class="line-num">66</span># that we do NOT have in our collection
+<span class="line-num">67</span>HP_BIBLIOGRAPHY = [
+<span class="line-num">68</span>    # --- Works we HAVE ---
+<span class="line-num">69</span>    (&#x27;James Russell&#x27;, &#x27;Many Other Things Worthy of Knowledge and Memory: The Hypnerotomachia Poliphili and its Annotators, 1499-1700&#x27;, &#x27;2014&#x27;, &#x27;thesis&#x27;, &#x27;Durham University&#x27;, True, &#x27;PhD_Thesis_ _James_Russell Hypnerotomachia Polyphili.pdf&#x27;, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">70</span>    (&#x27;Anthony Blunt&#x27;, &#x27;The Hypnerotomachia Poliphili in 17th Century France&#x27;, &#x27;1937&#x27;, &#x27;article&#x27;, &#x27;Journal of the Warburg Institute 1:2&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">71</span>    (&#x27;Mario Praz&#x27;, &#x27;Some Foreign Imitators of the Hypnerotomachia Poliphili&#x27;, &#x27;1947&#x27;, &#x27;article&#x27;, &#x27;Italica 24:1&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">72</span>    (&#x27;Liane Lefaivre&#x27;, &quot;Leon Battista Alberti&#x27;s Hypnerotomachia Poliphili&quot;, &#x27;1997&#x27;, &#x27;book&#x27;, &#x27;MIT Press&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">73</span>    (&#x27;Rosemary Trippe&#x27;, &#x27;The Hypnerotomachia Poliphili: Image, Text, and Vernacular Poetics&#x27;, &#x27;2002&#x27;, &#x27;article&#x27;, &#x27;Renaissance Quarterly 55:4&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">74</span>    (&#x27;L.E. Semler&#x27;, &quot;Robert Dallington&#x27;s Hypnerotomachia and the Protestant Antiquity of Elizabethan England&quot;, &#x27;2006&#x27;, &#x27;article&#x27;, &#x27;Studies in Philology 103:2&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">75</span>    (&#x27;John Dixon Hunt&#x27;, &#x27;Experiencing Gardens in the Hypnerotomachia Poliphili&#x27;, &#x27;1998&#x27;, &#x27;article&#x27;, &#x27;Word &amp; Image 14:1-2&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">76</span>    (&#x27;Roswitha Stewering&#x27;, &#x27;Architectural Representations in the Hypnerotomachia Poliphili&#x27;, &#x27;2000&#x27;, &#x27;article&#x27;, &#x27;Journal of the SAH 59:1&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">77</span>    (&#x27;Efthymia Priki&#x27;, &#x27;Elucidating and Enigmatizing: the Reception of the HP&#x27;, &#x27;2009&#x27;, &#x27;article&#x27;, &#x27;eSharp 14&#x27;, True, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">78</span>
+<span class="line-num">79</span>    # --- HIGH PRIORITY GAPS: foundational HP scholarship ---
+<span class="line-num">80</span>    (&#x27;Maria Teresa Casella &amp; Giovanni Pozzi&#x27;, &#x27;Francesco Colonna. Biografia e opere&#x27;, &#x27;1959&#x27;, &#x27;book&#x27;, &#x27;Antenore, Padua&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">81</span>    (&#x27;Maurizio Calvesi&#x27;, &quot;La pugna d&#x27;amore in sogno di Francesco Colonna Romano&quot;, &#x27;1996&#x27;, &#x27;book&#x27;, &#x27;Lithos Editrice, Rome&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">82</span>    (&#x27;Myriam Billanovich &amp; Emilio Menegazzo&#x27;, &#x27;Francesco Colonna tra Padova e Venezia&#x27;, &#x27;1966&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 9&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">83</span>    (&#x27;Myriam Billanovich&#x27;, &#x27;Francesco Colonna, il Poliphilo e la famiglia Lelli&#x27;, &#x27;1968&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 19&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">84</span>    (&#x27;Myriam Billanovich&#x27;, &#x27;Francesco Colonna e la famiglia Lelli&#x27;, &#x27;1976&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 19&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">85</span>    (&#x27;Domenico Gnoli&#x27;, &#x27;Il Sogno di Polifilo&#x27;, &#x27;1899&#x27;, &#x27;article&#x27;, &#x27;La Bibliofilia 1&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">86</span>    (&#x27;Christian Huelsen&#x27;, &#x27;Le illustrazioni della Hypnerotomachia Poliphili&#x27;, &#x27;1910&#x27;, &#x27;article&#x27;, &#x27;La Bibliofilia 12&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">87</span>    (&#x27;E.H. Gombrich&#x27;, &#x27;Hypnerotomachiana&#x27;, &#x27;1972&#x27;, &#x27;chapter&#x27;, &#x27;in Symbolic Images, Phaidon&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">88</span>    (&#x27;Giorgio Agamben&#x27;, &#x27;Il Sogno della lingua. Per una lettura del Polifilo&#x27;, &#x27;1984&#x27;, &#x27;chapter&#x27;, &#x27;in I linguaggi del sogno, Olschki&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">89</span>    (&#x27;George D. Painter&#x27;, &#x27;The Hypnerotomachia Poliphilo of 1499&#x27;, &#x27;1963&#x27;, &#x27;book&#x27;, &#x27;Eugrammia Press, London&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">90</span>    (&#x27;Giovanni Pozzi&#x27;, &#x27;Il Polifilo nella storia del libro illustrato veneziano&#x27;, &#x27;1981&#x27;, &#x27;chapter&#x27;, &#x27;in Giorgione e l\&#x27;Umanesimo veneziano&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">91</span>    (&#x27;Linda Fierz-David&#x27;, &#x27;The Dream of Poliphilo&#x27;, &#x27;1987&#x27;, &#x27;book&#x27;, &#x27;Spring Publications, Dallas&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">92</span>    (&#x27;A. Khomentovskaia&#x27;, &quot;Felice Feliciano da Verona comme l&#x27;auteur de l&#x27;HP&quot;, &#x27;1935&#x27;, &#x27;article&#x27;, &#x27;La Bibliofilia 37-38&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">93</span>    (&#x27;Emanuela Kretzulesco-Quaranta&#x27;, &#x27;Les Jardins du Songe&#x27;, &#x27;1976&#x27;, &#x27;book&#x27;, &#x27;Les Belles Lettres&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">94</span>    (&#x27;Charles Nodier&#x27;, &#x27;Franciscus Columna&#x27;, &#x27;1844&#x27;, &#x27;book&#x27;, &#x27;Galerie des Beaux-Arts, Paris&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">95</span>    (&#x27;Peter Dronke&#x27;, &#x27;Introduction [to HP]&#x27;, &#x27;1981&#x27;, &#x27;chapter&#x27;, &#x27;Las Ediciones del Portico, Madrid&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">96</span>    (&#x27;Edoardo Fumagalli&#x27;, &quot;Francesco Colonna lettore di Apuleio&quot;, &#x27;1984&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 27&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">97</span>    (&#x27;Edoardo Fumagalli&#x27;, &quot;Due esemplari dell&#x27;Hypnerotomachia Poliphili&quot;, &#x27;1992&#x27;, &#x27;article&#x27;, &#x27;Aevum 66&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">98</span>    (&#x27;Dorothea Stichel&#x27;, &#x27;Reading the HP in the Cinquecento&#x27;, &#x27;1994&#x27;, &#x27;chapter&#x27;, &#x27;in Aldus Manutius and Renaissance Culture&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">99</span>    (&#x27;William H. Sherman&#x27;, &#x27;Used Books&#x27;, &#x27;2007&#x27;, &#x27;book&#x27;, &#x27;University of Pennsylvania Press&#x27;, False, None, &#x27;INDIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">100</span>    (&#x27;Carlo Caruso&#x27;, &quot;Un geroglifico dell&#x27;Hypnerotomachia Poliphili&quot;, &#x27;2004&#x27;, &#x27;article&#x27;, &#x27;Filologia italiana 1&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">101</span>    (&#x27;Alfredo Perifano&#x27;, &#x27;Nazari et Colonna: La Reecriture Alchimique&#x27;, &#x27;2004&#x27;, &#x27;article&#x27;, &quot;Bibliotheque d&#x27;Humanisme et Renaissance 66:2&quot;, False, None, &#x27;DIRECT&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">102</span>    (&#x27;N. Harris&#x27;, &#x27;Rising quadrats in the woodcuts of the Aldine HP&#x27;, &#x27;2002&#x27;, &#x27;article&#x27;, &#x27;Gutenberg Jahrbuch 77&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">103</span>    (&#x27;Kent Hieatt &amp; Anne Lake Prescott&#x27;, &#x27;Contemporizing Antiquity&#x27;, &#x27;1992&#x27;, &#x27;article&#x27;, &#x27;Word and Image 8&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">104</span>    (&#x27;Philip Hofer&#x27;, &#x27;Variant Copies of the 1499 Poliphilus&#x27;, &#x27;1932&#x27;, &#x27;article&#x27;, &#x27;Bulletin of the NYPL 36&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">105</span>    (&#x27;Helena Szepe&#x27;, &#x27;Artistic Identity in the Poliphilo&#x27;, &#x27;1997&#x27;, &#x27;article&#x27;, &#x27;Papers of the BSC 35:1&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">106</span>    (&#x27;Benedetto Croce&#x27;, &#x27;La Hypnerotomachia Polyphili&#x27;, &#x27;1950&#x27;, &#x27;article&#x27;, &#x27;Quaderni della Critica 4&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">107</span>    (&#x27;Fritz Saxl&#x27;, &#x27;A Scene from the HP in a Painting by Garofalo&#x27;, &#x27;1937&#x27;, &#x27;article&#x27;, &#x27;Journal of the Warburg Institute 1&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">108</span>    (&#x27;Lamberto Donati&#x27;, &#x27;Diciamo qualcosa del Polifilo!&#x27;, &#x27;1938&#x27;, &#x27;article&#x27;, &#x27;Maso Finiguerra 3&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">109</span>    (&#x27;Lamberto Donati&#x27;, &#x27;Studio esegetico sul Polifilo&#x27;, &#x27;1950&#x27;, &#x27;article&#x27;, &#x27;La Bibliofilia 52&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">110</span>    (&#x27;William S. Heckscher&#x27;, &quot;Bernini&#x27;s Elephant and Obelisk&quot;, &#x27;1947&#x27;, &#x27;article&#x27;, &#x27;Art Bulletin 29&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">111</span>    (&#x27;William M. Ivins Jr.&#x27;, &#x27;The Aldine Hypnerotomachia Poliphili of 1499&#x27;, &#x27;1923&#x27;, &#x27;article&#x27;, &#x27;Metropolitan Museum of Art Bulletin 18:12&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">112</span>    (&#x27;Sophie Huper&#x27;, &#x27;The Architectural Monuments of the HP&#x27;, &#x27;1956&#x27;, &#x27;thesis&#x27;, &#x27;State University of Iowa&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">113</span>    (&#x27;Silvia Fogliati &amp; David Dutto&#x27;, &#x27;Il Giardino di Polifilo&#x27;, &#x27;2002&#x27;, &#x27;book&#x27;, &#x27;Franco Maria Ricci, Milan&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">114</span>    (&#x27;A. Perez-Gomez&#x27;, &#x27;Polyphilo, or The Dark Forest Revisited&#x27;, &#x27;1994&#x27;, &#x27;book&#x27;, &#x27;MIT Press&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">115</span>    (&#x27;Anthony Colantuono&#x27;, &#x27;Titian, Colonna, and the Renaissance Science of Procreation&#x27;, &#x27;2010&#x27;, &#x27;book&#x27;, &#x27;Ashgate&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">116</span>    (&#x27;Esteban Alejandro Cruz&#x27;, &#x27;Re-Discovering Antiquity through the Dreams of Poliphilus&#x27;, &#x27;2006&#x27;, &#x27;book&#x27;, &#x27;Trafford, Oxford&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">117</span>    (&#x27;Helen Barolini&#x27;, &#x27;Aldus and his Dream Book&#x27;, &#x27;1992&#x27;, &#x27;book&#x27;, &#x27;Italica Press, New York&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">118</span>    (&#x27;A. Serena&#x27;, &quot;Gli elementi trevigiani dell&#x27;HP&quot;, &#x27;1926&#x27;, &#x27;article&#x27;, &#x27;Atti del Reale Istituto Veneto 86:2&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">119</span>    (&#x27;Giuseppe Biadego&#x27;, &#x27;Intorno al sogno di Polifilo&#x27;, &#x27;1900&#x27;, &#x27;article&#x27;, &#x27;Atti del Reale Istituto Veneto 60:2&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">120</span>    (&#x27;Emilio Menegazzo&#x27;, &#x27;Per la biografia di Francesco Colonna&#x27;, &#x27;1962&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 5&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">121</span>    (&#x27;Emilio Menegazzo&#x27;, &#x27;Francesco Colonna baccelliere nello Studio&#x27;, &#x27;1966&#x27;, &#x27;article&#x27;, &#x27;Italia medioevale e umanistica 11&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">122</span>    (&#x27;Yasamin Bahadorzadeh&#x27;, &#x27;Silent Theatre&#x27;, &#x27;2008&#x27;, &#x27;book&#x27;, &#x27;VDM Verlag Dr. Muller&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">123</span>    (&#x27;Marcel Francon&#x27;, &quot;Francesco Colonna&#x27;s Poliphili Hypnerotomachia and Pantagruel&quot;, &#x27;1954&#x27;, &#x27;article&#x27;, &#x27;Italica 31:3&#x27;, False, None, &#x27;DIRECT&#x27;, &#x27;reception&#x27;),
+<span class="line-num">124</span>
+<span class="line-num">125</span>    # --- TIMELINE ANCHORS: editions and translations ---
+<span class="line-num">126</span>    (&#x27;Francesco Colonna&#x27;, &#x27;Hypnerotomachia Poliphili&#x27;, &#x27;1499&#x27;, &#x27;book&#x27;, &#x27;Aldus Manutius, Venice&#x27;, False, None, &#x27;PRIMARY&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">127</span>    (&#x27;Francesco Colonna&#x27;, &#x27;La Hypnerotomachia di Poliphilo (2nd edition)&#x27;, &#x27;1545&#x27;, &#x27;book&#x27;, &#x27;Figlioli di Aldo, Venice&#x27;, False, None, &#x27;PRIMARY&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">128</span>    (&#x27;Jean Martin (trans.)&#x27;, &#x27;Discours du Songe de Poliphile&#x27;, &#x27;1546&#x27;, &#x27;book&#x27;, &#x27;Jacques Kerver, Paris&#x27;, False, None, &#x27;PRIMARY&#x27;, &#x27;reception&#x27;),
+<span class="line-num">129</span>    (&#x27;R.D. (trans.)&#x27;, &#x27;The Strife of Love in a Dreame&#x27;, &#x27;1592&#x27;, &#x27;book&#x27;, &#x27;Simon Waterston, London&#x27;, False, None, &#x27;PRIMARY&#x27;, &#x27;reception&#x27;),
+<span class="line-num">130</span>    (&#x27;Beroalde de Verville&#x27;, &#x27;Le Tableau des riches Inventions...dans le songe de Poliphile&#x27;, &#x27;1600&#x27;, &#x27;book&#x27;, &#x27;Guillemot, Paris&#x27;, False, None, &#x27;PRIMARY&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">131</span>]
+<span class="line-num">132</span>
+<span class="line-num">133</span># Key scholars for profile pages
+<span class="line-num">134</span>SCHOLARS = [
+<span class="line-num">135</span>    (&#x27;Francesco Colonna&#x27;, None, 1527, &#x27;Italian&#x27;, &#x27;SS. Giovanni e Paolo, Venice&#x27;, &#x27;Dominican friar, presumed author&#x27;, &#x27;authorship (acrostic attribution)&#x27;),
+<span class="line-num">136</span>    (&#x27;Aldus Manutius&#x27;, 1449, 1515, &#x27;Italian&#x27;, &#x27;Aldine Press, Venice&#x27;, &#x27;printer, publisher, humanist&#x27;, &#x27;published 1499 and 1545 editions&#x27;),
+<span class="line-num">137</span>    (&#x27;Benedetto Giovio&#x27;, 1471, 1545, &#x27;Italian&#x27;, &#x27;Como&#x27;, &#x27;humanist, Plinian scholar&#x27;, &#x27;annotator of Modena and Como copies&#x27;),
+<span class="line-num">138</span>    (&#x27;Paolo Giovio&#x27;, 1483, 1552, &#x27;Italian&#x27;, &#x27;Como / Rome&#x27;, &#x27;historian, biographer&#x27;, &#x27;brother of Benedetto; possible co-annotator&#x27;),
+<span class="line-num">139</span>    (&#x27;Ben Jonson&#x27;, 1572, 1637, &#x27;English&#x27;, &#x27;London&#x27;, &#x27;playwright, poet&#x27;, &#x27;annotator of BL C.60.o.12 (1545 edition)&#x27;),
+<span class="line-num">140</span>    (&#x27;Fabio Chigi (Pope Alexander VII)&#x27;, 1599, 1667, &#x27;Italian&#x27;, &#x27;Rome / Vatican&#x27;, &#x27;pope, patron, bibliophile&#x27;, &#x27;annotator of Vatican Chig.II.610&#x27;),
+<span class="line-num">141</span>    (&#x27;Jean Martin&#x27;, None, 1553, &#x27;French&#x27;, &#x27;Paris&#x27;, &#x27;translator&#x27;, &#x27;1546 French translation&#x27;),
+<span class="line-num">142</span>    (&#x27;Beroalde de Verville&#x27;, 1556, 1626, &#x27;French&#x27;, &#x27;Tours&#x27;, &#x27;writer, alchemist&#x27;, &#x27;1600 alchemical edition&#x27;),
+<span class="line-num">143</span>    (&quot;Jean d&#x27;Espagnet&quot;, 1564, 1637, &#x27;French&#x27;, None, &#x27;alchemist, natural philosopher&#x27;, &quot;BL Hand B&#x27;s alchemical framework&quot;),
+<span class="line-num">144</span>    (&#x27;Robert Dallington&#x27;, 1561, 1637, &#x27;English&#x27;, None, &#x27;diplomat, writer&#x27;, &#x27;1592 English translation (R.D.)&#x27;),
+<span class="line-num">145</span>    (&#x27;Giovanni Pozzi&#x27;, 1923, 2002, &#x27;Swiss-Italian&#x27;, &#x27;University of Fribourg&#x27;, &#x27;philologist&#x27;, &#x27;critical edition (1964, with Ciapponi)&#x27;),
+<span class="line-num">146</span>    (&#x27;Liane Lefaivre&#x27;, None, None, &#x27;Canadian&#x27;, &#x27;TU Delft&#x27;, &#x27;architectural historian&#x27;, &#x27;Alberti attribution thesis (1997)&#x27;),
+<span class="line-num">147</span>    (&#x27;Maurizio Calvesi&#x27;, 1927, 2020, &#x27;Italian&#x27;, &#x27;Sapienza, Rome&#x27;, &#x27;art historian&#x27;, &#x27;Roman Colonna attribution (1996)&#x27;),
+<span class="line-num">148</span>    (&#x27;Maria Teresa Casella&#x27;, None, None, &#x27;Italian&#x27;, None, &#x27;philologist&#x27;, &#x27;biography and works (1959, with Pozzi)&#x27;),
+<span class="line-num">149</span>    (&#x27;Dorothea Stichel&#x27;, None, None, &#x27;German&#x27;, None, &#x27;book historian&#x27;, &#x27;first study of Modena marginalia (1994)&#x27;),
+<span class="line-num">150</span>    (&#x27;James Russell&#x27;, None, None, &#x27;British&#x27;, &#x27;Durham University&#x27;, &#x27;book historian, marginalia scholar&#x27;, &#x27;world census of annotated copies (2014)&#x27;),
+<span class="line-num">151</span>    (&#x27;Efthymia Priki&#x27;, None, None, &#x27;Greek&#x27;, None, &#x27;literary scholar&#x27;, &#x27;hieroglyphs, narrative, text-image, reception&#x27;),
+<span class="line-num">152</span>    (&#x27;James O\&#x27;Neill&#x27;, None, None, &#x27;British&#x27;, &#x27;Durham University&#x27;, &#x27;narratologist&#x27;, &#x27;self-transformation, authorship, walking methodology&#x27;),
+<span class="line-num">153</span>    (&#x27;Myriam Billanovich&#x27;, None, None, &#x27;Italian&#x27;, None, &#x27;philologist&#x27;, &#x27;Francesco Colonna biography, Lelli family&#x27;),
+<span class="line-num">154</span>    (&#x27;Emilio Menegazzo&#x27;, None, None, &#x27;Italian&#x27;, None, &#x27;philologist&#x27;, &#x27;Francesco Colonna biography&#x27;),
+<span class="line-num">155</span>    (&#x27;Christian Huelsen&#x27;, 1858, 1935, &#x27;German&#x27;, &#x27;DAI Rome&#x27;, &#x27;archaeologist, topographer&#x27;, &#x27;HP woodcut illustrations (1910)&#x27;),
+<span class="line-num">156</span>    (&#x27;E.H. Gombrich&#x27;, 1909, 2001, &#x27;Austrian-British&#x27;, &#x27;Warburg Institute&#x27;, &#x27;art historian&#x27;, &#x27;Hypnerotomachiana (1972)&#x27;),
+<span class="line-num">157</span>    (&#x27;Anthony Blunt&#x27;, 1907, 1983, &#x27;British&#x27;, &#x27;Courtauld Institute&#x27;, &#x27;art historian&#x27;, &#x27;HP in 17th-century France (1937)&#x27;),
+<span class="line-num">158</span>    (&#x27;Fritz Saxl&#x27;, 1890, 1948, &#x27;Austrian-British&#x27;, &#x27;Warburg Institute&#x27;, &#x27;art historian&#x27;, &#x27;HP scene in Garofalo painting (1937)&#x27;),
+<span class="line-num">159</span>    (&#x27;Domenico Gnoli&#x27;, 1838, 1915, &#x27;Italian&#x27;, &#x27;Rome&#x27;, &#x27;literary historian&#x27;, &#x27;Il Sogno di Polifilo (1899)&#x27;),
+<span class="line-num">160</span>    (&#x27;Charles Nodier&#x27;, 1780, 1844, &#x27;French&#x27;, &#x27;Bibliothèque de l\&#x27;Arsenal&#x27;, &#x27;librarian, writer&#x27;, &#x27;Franciscus Columna (1844)&#x27;),
+<span class="line-num">161</span>    (&#x27;Georg Leidinger&#x27;, 1870, 1945, &#x27;German&#x27;, &#x27;Bayerische Staatsbibliothek&#x27;, &#x27;librarian, paleographer&#x27;, &quot;Dürer&#x27;s ownership of HP (1929)&quot;),
+<span class="line-num">162</span>    (&#x27;Linda Fierz-David&#x27;, None, None, &#x27;Swiss&#x27;, None, &#x27;Jungian analyst&#x27;, &#x27;Dream of Poliphilo (1950/1987)&#x27;),
+<span class="line-num">163</span>    (&#x27;Mario Praz&#x27;, 1896, 1982, &#x27;Italian&#x27;, &#x27;Sapienza, Rome&#x27;, &#x27;literary historian, anglicist&#x27;, &#x27;Foreign imitators of HP (1947)&#x27;),
+<span class="line-num">164</span>]
+<span class="line-num">165</span>
+<span class="line-num">166</span># Timeline events
+<span class="line-num">167</span>TIMELINE = [
+<span class="line-num">168</span>    (1499, None, &#x27;PUBLICATION&#x27;, &#x27;Hypnerotomachia Poliphili published&#x27;, &#x27;Aldus Manutius publishes the HP in Venice. 172 woodcuts. Author identified by acrostic as POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT.&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">169</span>    (1500, 1545, &#x27;OTHER&#x27;, &#x27;Giovio brothers annotate Modena and Como copies&#x27;, &#x27;Benedetto Giovio applies Plinian encyclopedic reading to two copies.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">170</span>    (1545, None, &#x27;EDITION&#x27;, &#x27;Second Aldine edition published&#x27;, &quot;Aldus&#x27; sons reprint the HP with recast woodcuts.&quot;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">171</span>    (1546, None, &#x27;TRANSLATION&#x27;, &#x27;French translation by Jean Martin&#x27;, &#x27;Published by Jacques Kerver in Paris with modified and additional woodcuts.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">172</span>    (1554, None, &#x27;EDITION&#x27;, &#x27;Second French edition&#x27;, &#x27;Kerver reprints Martin translation.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">173</span>    (1561, None, &#x27;EDITION&#x27;, &#x27;Third French edition with Gohorry notice&#x27;, &#x27;Jacques Gohorry adds prefatory notice.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">174</span>    (1592, None, &#x27;TRANSLATION&#x27;, &#x27;English translation: The Strife of Love in a Dreame&#x27;, &#x27;R.D. (Robert Dallington) publishes partial English translation for Simon Waterston.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">175</span>    (1600, None, &#x27;EDITION&#x27;, &quot;Beroalde de Verville&#x27;s alchemical edition&quot;, &#x27;Le Tableau des riches Inventions includes tableau steganographique of alchemical symbols.&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">176</span>    (1600, 1637, &#x27;OTHER&#x27;, &#x27;Ben Jonson annotates BL copy&#x27;, &#x27;Jonson mines the 1545 HP for stage design imagery and linguistic material.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">177</span>    (1641, None, &#x27;ACQUISITION&#x27;, &#x27;Thomas Bourne purchases BL copy&#x27;, &#x27;Recorded purchase date of May 6, 1641. Anonymous alchemist (Hand B) annotates after this date.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">178</span>    (1641, 1700, &#x27;OTHER&#x27;, &quot;Anonymous alchemist annotates BL copy (d&#x27;Espagnet school)&quot;, &quot;Hand B applies alchemical reading centering on &#x27;Master Mercury&#x27; following d&#x27;Espagnet&#x27;s framework.&quot;, &#x27;dream_religion&#x27;),
+<span class="line-num">179</span>    (1650, 1700, &#x27;OTHER&#x27;, &#x27;Anonymous alchemist annotates Buffalo copy (pseudo-Geber school)&#x27;, &#x27;Hand E applies Geberian alchemical reading emphasizing Sol/Luna and sulphur.&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">180</span>    (1655, 1667, &#x27;OTHER&#x27;, &#x27;Pope Alexander VII annotates Vatican copy&#x27;, &#x27;Fabio Chigi combs text for acutezze (verbal wit) and architectural parallels with Rome.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">181</span>    (1804, None, &#x27;EDITION&#x27;, &#x27;Legrand edition (Paris)&#x27;, &#x27;J.G. Legrand publishes new French edition.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">182</span>    (1844, None, &#x27;PUBLICATION&#x27;, &quot;Nodier&#x27;s Franciscus Columna&quot;, &#x27;Charles Nodier publishes romanticized biography of Colonna.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">183</span>    (1883, None, &#x27;EDITION&#x27;, &#x27;Popelin French translation&#x27;, &#x27;Claudius Popelin publishes new French translation.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">184</span>    (1899, None, &#x27;PUBLICATION&#x27;, &quot;Gnoli&#x27;s Il Sogno di Polifilo&quot;, &#x27;Domenico Gnoli publishes foundational study.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">185</span>    (1904, None, &#x27;EDITION&#x27;, &#x27;Methuen facsimile edition&#x27;, &#x27;London facsimile of 1499 edition.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">186</span>    (1910, None, &#x27;PUBLICATION&#x27;, &quot;Huelsen&#x27;s study of HP woodcut illustrations&quot;, &#x27;Christian Huelsen publishes analysis of woodcuts and their architectural sources.&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">187</span>    (1929, None, &#x27;DISCOVERY&#x27;, &quot;Leidinger discovers Dürer&#x27;s ownership inscription&quot;, &quot;Georg Leidinger finds proof that Albrecht Dürer owned a copy of the HP, purchased by Erasmus Hock in 1555.&quot;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">188</span>    (1935, None, &#x27;ATTRIBUTION&#x27;, &#x27;Khomentovskaia proposes Felice Feliciano as author&#x27;, &#x27;Alternative attribution beyond Francesco Colonna.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">189</span>    (1937, None, &#x27;PUBLICATION&#x27;, &quot;Blunt&#x27;s HP in 17th Century France&quot;, &#x27;Anthony Blunt traces French reception. Saxl publishes on Garofalo painting.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">190</span>    (1947, None, &#x27;PUBLICATION&#x27;, &quot;Praz&#x27;s Foreign Imitators + Heckscher on Bernini&#x27;s Elephant&quot;, &quot;Praz traces HP influence on Swinburne, Beardsley, de Mandiargues. Heckscher publishes on Bernini&#x27;s elephant and obelisk.&quot;, &#x27;reception&#x27;),
+<span class="line-num">191</span>    (1950, None, &#x27;PUBLICATION&#x27;, &quot;Croce&#x27;s La Hypnerotomachia; Fierz-David&#x27;s Jungian reading&quot;, &#x27;Croce publishes study. Fierz-David publishes Jungian interpretation (expanded 1987).&#x27;, &#x27;dream_religion&#x27;),
+<span class="line-num">192</span>    (1959, None, &#x27;PUBLICATION&#x27;, &#x27;Casella &amp; Pozzi: Francesco Colonna. Biografia e opere&#x27;, &#x27;Foundational biographical study establishing the Venetian Dominican attribution.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">193</span>    (1964, None, &#x27;EDITION&#x27;, &#x27;Pozzi &amp; Ciapponi critical edition&#x27;, &#x27;Giovanni Pozzi and Lucia Ciapponi publish critical edition with Antenore.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">194</span>    (1966, None, &#x27;PUBLICATION&#x27;, &#x27;Billanovich &amp; Menegazzo: archival discoveries&#x27;, &#x27;Major archival work on Francesco Colonna and the Lelli family in Padua and Venice.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">195</span>    (1972, None, &#x27;PUBLICATION&#x27;, &quot;Gombrich&#x27;s Hypnerotomachiana&quot;, &#x27;E.H. Gombrich publishes study in Symbolic Images.&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">196</span>    (1976, None, &#x27;PUBLICATION&#x27;, &quot;Kretzulesco-Quaranta&#x27;s Les Jardins du Songe&quot;, &#x27;Major study of HP garden symbolism.&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">197</span>    (1994, None, &#x27;PUBLICATION&#x27;, &quot;Stichel&#x27;s study of Modena marginalia; Perez-Gomez&#x27;s Dark Forest&quot;, &#x27;First study of an annotated copy. Perez-Gomez publishes architectural reading.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">198</span>    (1996, None, &#x27;PUBLICATION&#x27;, &quot;Calvesi&#x27;s La pugna d&#x27;amore in sogno&quot;, &#x27;Major study arguing for a Roman Francesco Colonna rather than the Venetian Dominican.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">199</span>    (1997, None, &#x27;PUBLICATION&#x27;, &quot;Lefaivre&#x27;s Alberti attribution&quot;, &#x27;Liane Lefaivre proposes Leon Battista Alberti as author.&#x27;, &#x27;authorship&#x27;),
+<span class="line-num">200</span>    (1998, None, &#x27;PUBLICATION&#x27;, &#x27;Word &amp; Image special issue on HP&#x27;, &#x27;Major scholarly collection: Hunt, Leslie, Bury, Curran, Griggs, Segre, Stewering, Temple.&#x27;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">201</span>    (1999, None, &#x27;EDITION&#x27;, &quot;Godwin&#x27;s English translation; Ariani &amp; Gabriele critical edition&quot;, &#x27;Joscelyn Godwin publishes full English translation (Thames &amp; Hudson). Adelphi publishes Italian critical edition.&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">202</span>    (2002, None, &#x27;PUBLICATION&#x27;, &quot;Trippe&#x27;s Image, Text, and Vernacular Poetics&quot;, &#x27;Rosemary Trippe recovers HP as vernacular literature.&#x27;, &#x27;text_image&#x27;),
+<span class="line-num">203</span>    (2006, None, &#x27;PUBLICATION&#x27;, &quot;Semler on Dallington&#x27;s English HP&quot;, &#x27;L.E. Semler rehabilitates 1592 English adaptation.&#x27;, &#x27;reception&#x27;),
+<span class="line-num">204</span>    (2014, None, &#x27;PUBLICATION&#x27;, &quot;Russell&#x27;s world census of annotated copies&quot;, &quot;James Russell&#x27;s PhD thesis documents marginalia across six copies.&quot;, &#x27;reception&#x27;),
+<span class="line-num">205</span>    (2015, None, &#x27;PUBLICATION&#x27;, &#x27;Word &amp; Image special issue (2015)&#x27;, &#x27;Second major scholarly collection: Farrington, Nygren, Fabiani Giannetto, Pumroy, Keller.&#x27;, &#x27;material_bibliographic&#x27;),
+<span class="line-num">206</span>    (2020, None, &#x27;PUBLICATION&#x27;, &quot;O&#x27;Neill&#x27;s Self-Transformation thesis&quot;, &quot;James O&#x27;Neill&#x27;s PhD thesis on Poliphilo&#x27;s inner transformation.&quot;, &#x27;architecture_gardens&#x27;),
+<span class="line-num">207</span>]
+<span class="line-num">208</span>
+<span class="line-num">209</span>
+<span class="line-num">210</span>def main():
+<span class="line-num">211</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">212</span>    cur = conn.cursor()
+<span class="line-num">213</span>
+<span class="line-num">214</span>    print(&quot;Creating bibliography and scholars tables...&quot;)
+<span class="line-num">215</span>    cur.executescript(SCHEMA)
+<span class="line-num">216</span>    conn.commit()
+<span class="line-num">217</span>
+<span class="line-num">218</span>    # Insert bibliography
+<span class="line-num">219</span>    print(&quot;Inserting bibliography entries...&quot;)
+<span class="line-num">220</span>    bib_count = 0
+<span class="line-num">221</span>    for entry in HP_BIBLIOGRAPHY:
+<span class="line-num">222</span>        author, title, year, pub_type, journal, in_coll, filename, relevance, topic = entry
+<span class="line-num">223</span>        cur.execute(
+<span class="line-num">224</span>            &quot;&quot;&quot;INSERT OR IGNORE INTO bibliography
+<span class="line-num">225</span>               (author, title, year, pub_type, journal_or_publisher,
+<span class="line-num">226</span>                in_collection, collection_filename, hp_relevance, topic_cluster)
+<span class="line-num">227</span>               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">228</span>            (author, title, year, pub_type, journal, in_coll, filename, relevance, topic)
+<span class="line-num">229</span>        )
+<span class="line-num">230</span>        bib_count += cur.rowcount
+<span class="line-num">231</span>    conn.commit()
+<span class="line-num">232</span>    print(f&quot;  Inserted {bib_count} bibliography entries&quot;)
+<span class="line-num">233</span>
+<span class="line-num">234</span>    # Insert scholars
+<span class="line-num">235</span>    print(&quot;Inserting scholar profiles...&quot;)
+<span class="line-num">236</span>    scholar_count = 0
+<span class="line-num">237</span>    for s in SCHOLARS:
+<span class="line-num">238</span>        name, birth, death, nat, inst, spec, hp_focus = s
+<span class="line-num">239</span>        cur.execute(
+<span class="line-num">240</span>            &quot;&quot;&quot;INSERT OR IGNORE INTO scholars
+<span class="line-num">241</span>               (name, birth_year, death_year, nationality, institution,
+<span class="line-num">242</span>                specialization, hp_focus)
+<span class="line-num">243</span>               VALUES (?, ?, ?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">244</span>            (name, birth, death, nat, inst, spec, hp_focus)
+<span class="line-num">245</span>        )
+<span class="line-num">246</span>        scholar_count += cur.rowcount
+<span class="line-num">247</span>    conn.commit()
+<span class="line-num">248</span>    print(f&quot;  Inserted {scholar_count} scholar profiles&quot;)
+<span class="line-num">249</span>
+<span class="line-num">250</span>    # Link scholars to bibliography
+<span class="line-num">251</span>    print(&quot;Linking scholars to works...&quot;)
+<span class="line-num">252</span>    link_count = 0
+<span class="line-num">253</span>    for entry in HP_BIBLIOGRAPHY:
+<span class="line-num">254</span>        author = entry[0]
+<span class="line-num">255</span>        title = entry[1]
+<span class="line-num">256</span>        # Find scholar by name match (first author)
+<span class="line-num">257</span>        first_author = author.split(&#x27; &amp; &#x27;)[0].split(&#x27; (&#x27;)[0].strip()
+<span class="line-num">258</span>        # Try last name match
+<span class="line-num">259</span>        last_name = first_author.split()[-1] if first_author else None
+<span class="line-num">260</span>        if not last_name:
+<span class="line-num">261</span>            continue
+<span class="line-num">262</span>        cur.execute(&quot;SELECT id FROM scholars WHERE name LIKE ?&quot;, (f&#x27;%{last_name}%&#x27;,))
+<span class="line-num">263</span>        scholar_row = cur.fetchone()
+<span class="line-num">264</span>        if not scholar_row:
+<span class="line-num">265</span>            continue
+<span class="line-num">266</span>        cur.execute(&quot;SELECT id FROM bibliography WHERE author=? AND title=?&quot;, (author, title))
+<span class="line-num">267</span>        bib_row = cur.fetchone()
+<span class="line-num">268</span>        if not bib_row:
+<span class="line-num">269</span>            continue
+<span class="line-num">270</span>        cur.execute(
+<span class="line-num">271</span>            &quot;INSERT OR IGNORE INTO scholar_works (scholar_id, bib_id) VALUES (?, ?)&quot;,
+<span class="line-num">272</span>            (scholar_row[0], bib_row[0])
+<span class="line-num">273</span>        )
+<span class="line-num">274</span>        link_count += cur.rowcount
+<span class="line-num">275</span>    conn.commit()
+<span class="line-num">276</span>    print(f&quot;  Created {link_count} scholar-work links&quot;)
+<span class="line-num">277</span>
+<span class="line-num">278</span>    # Update work counts
+<span class="line-num">279</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">280</span>        UPDATE scholars SET work_count = (
+<span class="line-num">281</span>            SELECT COUNT(*) FROM scholar_works WHERE scholar_id = scholars.id
+<span class="line-num">282</span>        )
+<span class="line-num">283</span>    &quot;&quot;&quot;)
+<span class="line-num">284</span>    conn.commit()
+<span class="line-num">285</span>
+<span class="line-num">286</span>    # Insert timeline events
+<span class="line-num">287</span>    print(&quot;Inserting timeline events...&quot;)
+<span class="line-num">288</span>    timeline_count = 0
+<span class="line-num">289</span>    for evt in TIMELINE:
+<span class="line-num">290</span>        year, year_end, evt_type, title, desc, topic = evt
+<span class="line-num">291</span>        cur.execute(
+<span class="line-num">292</span>            &quot;&quot;&quot;INSERT OR IGNORE INTO timeline_events
+<span class="line-num">293</span>               (year, year_end, event_type, title, description)
+<span class="line-num">294</span>               VALUES (?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">295</span>            (year, year_end, evt_type, title, desc)
+<span class="line-num">296</span>        )
+<span class="line-num">297</span>        timeline_count += cur.rowcount
+<span class="line-num">298</span>    conn.commit()
+<span class="line-num">299</span>    print(f&quot;  Inserted {timeline_count} timeline events&quot;)
+<span class="line-num">300</span>
+<span class="line-num">301</span>    # Summary stats
+<span class="line-num">302</span>    print(&quot;\n=== Database Summary ===&quot;)
+<span class="line-num">303</span>    for table in [&#x27;bibliography&#x27;, &#x27;scholars&#x27;, &#x27;scholar_works&#x27;, &#x27;timeline_events&#x27;,
+<span class="line-num">304</span>                  &#x27;annotator_hands&#x27;, &#x27;dissertation_refs&#x27;, &#x27;matches&#x27;, &#x27;images&#x27;, &#x27;manuscripts&#x27;]:
+<span class="line-num">305</span>        cur.execute(f&quot;SELECT COUNT(*) FROM {table}&quot;)
+<span class="line-num">306</span>        print(f&quot;  {table}: {cur.fetchone()[0]} rows&quot;)
+<span class="line-num">307</span>
+<span class="line-num">308</span>    print(&quot;\nBibliography gap analysis:&quot;)
+<span class="line-num">309</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography WHERE in_collection = 1&quot;)
+<span class="line-num">310</span>    have = cur.fetchone()[0]
+<span class="line-num">311</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography WHERE in_collection = 0&quot;)
+<span class="line-num">312</span>    missing = cur.fetchone()[0]
+<span class="line-num">313</span>    print(f&quot;  In collection: {have}&quot;)
+<span class="line-num">314</span>    print(f&quot;  Missing (cited by Russell): {missing}&quot;)
+<span class="line-num">315</span>    print(f&quot;  Coverage: {have}/{have+missing} ({100*have//(have+missing)}%)&quot;)
+<span class="line-num">316</span>
+<span class="line-num">317</span>    print(&quot;\nScholar profiles by nationality:&quot;)
+<span class="line-num">318</span>    cur.execute(&quot;SELECT nationality, COUNT(*) FROM scholars GROUP BY nationality ORDER BY COUNT(*) DESC&quot;)
+<span class="line-num">319</span>    for row in cur.fetchall():
+<span class="line-num">320</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">321</span>
+<span class="line-num">322</span>    conn.close()
+<span class="line-num">323</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">324</span>
+<span class="line-num">325</span>
+<span class="line-num">326</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">327</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

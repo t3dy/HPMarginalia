@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initialize Database - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Initialize Database</h2>
+            <div class="code-meta">init_db.py &mdash; 191 lines</div>
+            <p style="margin-bottom:1rem">Creates SQLite schema (7 core tables) and catalogs PDFs/documents from the filesystem.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Initialize the Hypnerotomachia Poliphili SQLite database.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>import os
+<span class="line-num">5</span>import re
+<span class="line-num">6</span>from pathlib import Path
+<span class="line-num">7</span>
+<span class="line-num">8</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">9</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">10</span>
+<span class="line-num">11</span>SCHEMA = &quot;&quot;&quot;
+<span class="line-num">12</span>CREATE TABLE IF NOT EXISTS documents (
+<span class="line-num">13</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">14</span>    filename TEXT NOT NULL,
+<span class="line-num">15</span>    title TEXT,
+<span class="line-num">16</span>    author TEXT,
+<span class="line-num">17</span>    year INTEGER,
+<span class="line-num">18</span>    doc_type TEXT CHECK(doc_type IN (&#x27;PRIMARY_TEXT&#x27;,&#x27;DISSERTATION&#x27;,&#x27;SCHOLARSHIP&#x27;,&#x27;PRESENTATION&#x27;)),
+<span class="line-num">19</span>    page_count INTEGER,
+<span class="line-num">20</span>    file_size_bytes INTEGER,
+<span class="line-num">21</span>    has_selectable_text BOOLEAN
+<span class="line-num">22</span>);
+<span class="line-num">23</span>
+<span class="line-num">24</span>CREATE TABLE IF NOT EXISTS manuscripts (
+<span class="line-num">25</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">26</span>    shelfmark TEXT NOT NULL UNIQUE,
+<span class="line-num">27</span>    institution TEXT,
+<span class="line-num">28</span>    city TEXT,
+<span class="line-num">29</span>    description TEXT,
+<span class="line-num">30</span>    image_count INTEGER,
+<span class="line-num">31</span>    image_dir TEXT
+<span class="line-num">32</span>);
+<span class="line-num">33</span>
+<span class="line-num">34</span>CREATE TABLE IF NOT EXISTS images (
+<span class="line-num">35</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">36</span>    manuscript_id INTEGER REFERENCES manuscripts(id),
+<span class="line-num">37</span>    filename TEXT NOT NULL,
+<span class="line-num">38</span>    folio_number TEXT,
+<span class="line-num">39</span>    side TEXT CHECK(side IN (&#x27;r&#x27;,&#x27;v&#x27;,NULL)),
+<span class="line-num">40</span>    page_type TEXT CHECK(page_type IN (&#x27;PAGE&#x27;,&#x27;MARGINALIA_DETAIL&#x27;,&#x27;COVER&#x27;,&#x27;GUARD&#x27;,&#x27;OTHER&#x27;)),
+<span class="line-num">41</span>    sort_order INTEGER,
+<span class="line-num">42</span>    relative_path TEXT NOT NULL
+<span class="line-num">43</span>);
+<span class="line-num">44</span>
+<span class="line-num">45</span>CREATE TABLE IF NOT EXISTS signature_map (
+<span class="line-num">46</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">47</span>    signature TEXT NOT NULL UNIQUE,
+<span class="line-num">48</span>    folio_number INTEGER,
+<span class="line-num">49</span>    side TEXT CHECK(side IN (&#x27;r&#x27;,&#x27;v&#x27;)),
+<span class="line-num">50</span>    quire TEXT,
+<span class="line-num">51</span>    leaf_in_quire INTEGER
+<span class="line-num">52</span>);
+<span class="line-num">53</span>
+<span class="line-num">54</span>CREATE TABLE IF NOT EXISTS dissertation_refs (
+<span class="line-num">55</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">56</span>    thesis_page INTEGER,
+<span class="line-num">57</span>    signature_ref TEXT,
+<span class="line-num">58</span>    manuscript_shelfmark TEXT,
+<span class="line-num">59</span>    context_text TEXT,
+<span class="line-num">60</span>    marginal_text TEXT,
+<span class="line-num">61</span>    source_text TEXT,
+<span class="line-num">62</span>    ref_type TEXT CHECK(ref_type IN (&#x27;MARGINALIA&#x27;,&#x27;ILLUSTRATION&#x27;,&#x27;TEXT&#x27;,&#x27;BINDING&#x27;,&#x27;PROVENANCE&#x27;)),
+<span class="line-num">63</span>    chapter_num INTEGER
+<span class="line-num">64</span>);
+<span class="line-num">65</span>
+<span class="line-num">66</span>CREATE TABLE IF NOT EXISTS matches (
+<span class="line-num">67</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">68</span>    ref_id INTEGER REFERENCES dissertation_refs(id),
+<span class="line-num">69</span>    image_id INTEGER REFERENCES images(id),
+<span class="line-num">70</span>    match_method TEXT CHECK(match_method IN (&#x27;SIGNATURE_EXACT&#x27;,&#x27;FOLIO_EXACT&#x27;,&#x27;MANUAL&#x27;)),
+<span class="line-num">71</span>    confidence TEXT CHECK(confidence IN (&#x27;HIGH&#x27;,&#x27;MEDIUM&#x27;,&#x27;LOW&#x27;)),
+<span class="line-num">72</span>    needs_review BOOLEAN DEFAULT 1
+<span class="line-num">73</span>);
+<span class="line-num">74</span>
+<span class="line-num">75</span>CREATE TABLE IF NOT EXISTS schema_version (
+<span class="line-num">76</span>    version INTEGER PRIMARY KEY,
+<span class="line-num">77</span>    created_at TEXT DEFAULT (datetime(&#x27;now&#x27;))
+<span class="line-num">78</span>);
+<span class="line-num">79</span>&quot;&quot;&quot;
+<span class="line-num">80</span>
+<span class="line-num">81</span># Known document metadata extracted from filenames
+<span class="line-num">82</span>DOC_CLASSIFICATIONS = {
+<span class="line-num">83</span>    &#x27;PRIMARY_TEXT&#x27;: [
+<span class="line-num">84</span>        &#x27;Francesco Colonna Hypnerotomachia Poliphili Da Capo&#x27;,
+<span class="line-num">85</span>        &#x27;Francesco Colonna Rino Avesani&#x27;,
+<span class="line-num">86</span>        &#x27;Hypnerotomachia by Francesco Colonna&#x27;,
+<span class="line-num">87</span>    ],
+<span class="line-num">88</span>    &#x27;DISSERTATION&#x27;: [
+<span class="line-num">89</span>        &#x27;PhD_Thesis&#x27;,
+<span class="line-num">90</span>        &#x27;E_Thesis_Durham&#x27;,
+<span class="line-num">91</span>    ],
+<span class="line-num">92</span>    &#x27;PRESENTATION&#x27;: [&#x27;.pptx&#x27;],
+<span class="line-num">93</span>}
+<span class="line-num">94</span>
+<span class="line-num">95</span>
+<span class="line-num">96</span>def classify_doc(filename):
+<span class="line-num">97</span>    for doc_type, patterns in DOC_CLASSIFICATIONS.items():
+<span class="line-num">98</span>        for pat in patterns:
+<span class="line-num">99</span>            if pat in filename:
+<span class="line-num">100</span>                return doc_type
+<span class="line-num">101</span>    return &#x27;SCHOLARSHIP&#x27;
+<span class="line-num">102</span>
+<span class="line-num">103</span>
+<span class="line-num">104</span>def extract_author_title(filename):
+<span class="line-num">105</span>    &quot;&quot;&quot;Best-effort extraction of author and title from filename.&quot;&quot;&quot;
+<span class="line-num">106</span>    name = Path(filename).stem
+<span class="line-num">107</span>    # Remove common suffixes
+<span class="line-num">108</span>    name = re.sub(r&#x27;\s*\(\d+\)\s*$&#x27;, &#x27;&#x27;, name)
+<span class="line-num">109</span>    # Try splitting on known patterns
+<span class="line-num">110</span>    parts = name.split(&#x27; - &#x27;)
+<span class="line-num">111</span>    if len(parts) == 2:
+<span class="line-num">112</span>        return parts[0].strip(), parts[1].strip()
+<span class="line-num">113</span>    # For space-separated names, take first few words as author guess
+<span class="line-num">114</span>    return None, name
+<span class="line-num">115</span>
+<span class="line-num">116</span>
+<span class="line-num">117</span>def populate_documents(conn):
+<span class="line-num">118</span>    &quot;&quot;&quot;Scan root dir for PDFs and PPTX files.&quot;&quot;&quot;
+<span class="line-num">119</span>    cur = conn.cursor()
+<span class="line-num">120</span>    extensions = {&#x27;.pdf&#x27;, &#x27;.pptx&#x27;}
+<span class="line-num">121</span>    count = 0
+<span class="line-num">122</span>    for f in sorted(BASE_DIR.iterdir()):
+<span class="line-num">123</span>        if f.suffix.lower() in extensions and f.is_file():
+<span class="line-num">124</span>            author, title = extract_author_title(f.name)
+<span class="line-num">125</span>            doc_type = classify_doc(f.name)
+<span class="line-num">126</span>            size = f.stat().st_size
+<span class="line-num">127</span>            cur.execute(
+<span class="line-num">128</span>                &quot;&quot;&quot;INSERT OR IGNORE INTO documents
+<span class="line-num">129</span>                   (filename, title, author, doc_type, file_size_bytes)
+<span class="line-num">130</span>                   VALUES (?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">131</span>                (f.name, title, author, doc_type, size)
+<span class="line-num">132</span>            )
+<span class="line-num">133</span>            count += 1
+<span class="line-num">134</span>    conn.commit()
+<span class="line-num">135</span>    print(f&quot;  Cataloged {count} documents&quot;)
+<span class="line-num">136</span>
+<span class="line-num">137</span>
+<span class="line-num">138</span>def populate_manuscripts(conn):
+<span class="line-num">139</span>    &quot;&quot;&quot;Insert the two known manuscript records.&quot;&quot;&quot;
+<span class="line-num">140</span>    cur = conn.cursor()
+<span class="line-num">141</span>    manuscripts = [
+<span class="line-num">142</span>        (
+<span class="line-num">143</span>            &#x27;C.60.o.12&#x27;,
+<span class="line-num">144</span>            &#x27;British Library&#x27;,
+<span class="line-num">145</span>            &#x27;London&#x27;,
+<span class="line-num">146</span>            &#x27;British Library copy of the 1499 Aldine Hypnerotomachia Poliphili with extensive marginalia&#x27;,
+<span class="line-num">147</span>            &#x27;3 BL C.60.o.12 Photos-20260319T001113Z-3-001/3 BL C.60.o.12 Photos&#x27;
+<span class="line-num">148</span>        ),
+<span class="line-num">149</span>        (
+<span class="line-num">150</span>            &#x27;O.III.38&#x27;,
+<span class="line-num">151</span>            &#x27;Biblioteca degli Intronati&#x27;,
+<span class="line-num">152</span>            &#x27;Siena&#x27;,
+<span class="line-num">153</span>            &#x27;Siena copy of the 1499 Aldine Hypnerotomachia Poliphili, digital facsimile&#x27;,
+<span class="line-num">154</span>            &#x27;Siena O.III.38 Digital Facsimile-20260319T001110Z-3-001/Siena O.III.38 Digital Facsimile&#x27;
+<span class="line-num">155</span>        ),
+<span class="line-num">156</span>    ]
+<span class="line-num">157</span>    for shelfmark, institution, city, desc, image_dir in manuscripts:
+<span class="line-num">158</span>        # Count images
+<span class="line-num">159</span>        img_path = BASE_DIR / image_dir
+<span class="line-num">160</span>        img_count = len(list(img_path.glob(&#x27;*.jpg&#x27;))) if img_path.exists() else 0
+<span class="line-num">161</span>        cur.execute(
+<span class="line-num">162</span>            &quot;&quot;&quot;INSERT OR IGNORE INTO manuscripts
+<span class="line-num">163</span>               (shelfmark, institution, city, description, image_count, image_dir)
+<span class="line-num">164</span>               VALUES (?, ?, ?, ?, ?, ?)&quot;&quot;&quot;,
+<span class="line-num">165</span>            (shelfmark, institution, city, desc, img_count, image_dir)
+<span class="line-num">166</span>        )
+<span class="line-num">167</span>    conn.commit()
+<span class="line-num">168</span>    print(&quot;  Cataloged 2 manuscripts&quot;)
+<span class="line-num">169</span>
+<span class="line-num">170</span>
+<span class="line-num">171</span>def main():
+<span class="line-num">172</span>    print(f&quot;Initializing database at {DB_PATH}&quot;)
+<span class="line-num">173</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">174</span>
+<span class="line-num">175</span>    print(&quot;Creating schema...&quot;)
+<span class="line-num">176</span>    conn.executescript(SCHEMA)
+<span class="line-num">177</span>    conn.execute(&quot;INSERT OR IGNORE INTO schema_version (version) VALUES (1)&quot;)
+<span class="line-num">178</span>    conn.commit()
+<span class="line-num">179</span>
+<span class="line-num">180</span>    print(&quot;Populating documents...&quot;)
+<span class="line-num">181</span>    populate_documents(conn)
+<span class="line-num">182</span>
+<span class="line-num">183</span>    print(&quot;Populating manuscripts...&quot;)
+<span class="line-num">184</span>    populate_manuscripts(conn)
+<span class="line-num">185</span>
+<span class="line-num">186</span>    conn.close()
+<span class="line-num">187</span>    print(&quot;Done.&quot;)
+<span class="line-num">188</span>
+<span class="line-num">189</span>
+<span class="line-num">190</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">191</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

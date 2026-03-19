@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="docs-page">
+            <div class="intro">
+                <h2>Project Documents</h2>
+                <p>14 documents covering methodology, architecture, analysis, and lessons learned.</p>
+            </div>
+            <table class="docs-table">
+                <thead><tr><th>Document</th><th>Description</th><th>Words</th></tr></thead>
+                <tbody>
+            <tr>
+                <td><a href="audit-report.html">Audit Report</a></td>
+                <td class="doc-summary">Validation results: what changed in V2 migration, what remains provisional, what still needs human review.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">508</td>
+            </tr>
+            <tr>
+                <td><a href="agent-usage-analysis.html">Agent Usage Analysis</a></td>
+                <td class="doc-summary">Why and how Claude agents were used: what worked (foreground batches), what failed (background web tasks).</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">807</td>
+            </tr>
+            <tr>
+                <td><a href="concordance-methodology.html">Concordance Methodology</a></td>
+                <td class="doc-summary">How we built the 6-step folio-to-image concordance from Russell&#x27;s thesis to manuscript photographs.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,027</td>
+            </tr>
+            <tr>
+                <td><a href="boundary-audit-v1.html">Boundary Audit v1</a></td>
+                <td class="doc-summary">Deckard boundary map distinguishing deterministic tasks from probabilistic (LLM) tasks across 11 scripts.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,259</td>
+            </tr>
+            <tr>
+                <td><a href="boundary-audit-v2.html">Boundary Audit v2</a></td>
+                <td class="doc-summary">Second Deckard audit covering bibliography expansion, web research ingestion, and the hybrid verification pipeline.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,596</td>
+            </tr>
+            <tr>
+                <td><a href="empty-output-files-post-mortem.html">Empty Output Files Post-Mortem</a></td>
+                <td class="doc-summary">Root cause analysis of 0-byte agent output files and lessons for background agent reliability.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">763</td>
+            </tr>
+            <tr>
+                <td><a href="mit-site-analysis.html">MIT Site Analysis</a></td>
+                <td class="doc-summary">Reverse-engineering of the MIT Electronic Hypnerotomachia (1997): strengths, weaknesses, and lessons for our digital edition.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">3,228</td>
+            </tr>
+            <tr>
+                <td><a href="multimodal-rag-study.html">Multimodal RAG Study</a></td>
+                <td class="doc-summary">How vision models and multimodal retrieval could read our 674 manuscript images to solve the BL confidence problem.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2,157</td>
+            </tr>
+            <tr>
+                <td><a href="ontology-design.html">Ontology Design</a></td>
+                <td class="doc-summary">Data model and entity relationships for the HP knowledge base: manuscripts, folios, hands, scholars, terms.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,511</td>
+            </tr>
+            <tr>
+                <td><a href="scholars-analysis.html">Scholars Analysis</a></td>
+                <td class="doc-summary">Strategy for building scholar profiles and article summaries from our PDF corpus.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,470</td>
+            </tr>
+            <tr>
+                <td><a href="web-architecture.html">Web Architecture</a></td>
+                <td class="doc-summary">Design decisions for the static site: why no framework, how SQLite drives page generation, URL structure.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,584</td>
+            </tr>
+            <tr>
+                <td><a href="content-quality-proposals.html">Content Quality Proposals</a></td>
+                <td class="doc-summary">Six proposals for improving dictionary, bibliography, scholar, and summary pages through templating and LLM reading.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2,158</td>
+            </tr>
+            <tr>
+                <td><a href="mistakes-to-avoid.html">Mistakes to Avoid</a></td>
+                <td class="doc-summary">Twelve hard-won lessons from this project: provenance tagging, confidence scoring, name matching, and more.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,627</td>
+            </tr>
+            <tr>
+                <td><a href="readme.html">README</a></td>
+                <td class="doc-summary">Project overview, architecture, rebuild instructions, and data provenance table.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">576</td>
+            </tr></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

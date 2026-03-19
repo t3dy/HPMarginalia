@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Site - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Build Site</h2>
+            <div class="code-meta">build_site.py &mdash; 1337 lines</div>
+            <p style="margin-bottom:1rem">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Unified site builder: generates all static pages from SQLite.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Replaces build_scholar_profiles.py and export_showcase_data.py.
+<span class="line-num">4</span>Generates:
+<span class="line-num">5</span>  - site/index.html           (marginalia gallery, updated nav)
+<span class="line-num">6</span>  - site/data.json             (gallery data with confidence flags)
+<span class="line-num">7</span>  - site/scholars.html         (scholars overview, DB-driven)
+<span class="line-num">8</span>  - site/scholar/*.html        (individual scholar pages)
+<span class="line-num">9</span>  - site/dictionary/index.html (dictionary landing)
+<span class="line-num">10</span>  - site/dictionary/*.html     (individual term pages)
+<span class="line-num">11</span>  - site/marginalia/*.html     (individual folio detail pages)
+<span class="line-num">12</span>  - site/about.html            (about page)
+<span class="line-num">13</span>&quot;&quot;&quot;
+<span class="line-num">14</span>
+<span class="line-num">15</span>import sqlite3
+<span class="line-num">16</span>import json
+<span class="line-num">17</span>import re
+<span class="line-num">18</span>import os
+<span class="line-num">19</span>from pathlib import Path
+<span class="line-num">20</span>from html import escape
+<span class="line-num">21</span>
+<span class="line-num">22</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">23</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">24</span>SITE_DIR = BASE_DIR / &quot;site&quot;
+<span class="line-num">25</span>SUMMARIES_PATH = BASE_DIR / &quot;scholars&quot; / &quot;summaries.json&quot;
+<span class="line-num">26</span>
+<span class="line-num">27</span># ============================================================
+<span class="line-num">28</span># Shared HTML templates
+<span class="line-num">29</span># ============================================================
+<span class="line-num">30</span>
+<span class="line-num">31</span>def slugify(text):
+<span class="line-num">32</span>    s = text.lower().strip()
+<span class="line-num">33</span>    s = re.sub(r&#x27;[^\w\s-]&#x27;, &#x27;&#x27;, s)
+<span class="line-num">34</span>    s = re.sub(r&#x27;[\s_]+&#x27;, &#x27;-&#x27;, s)
+<span class="line-num">35</span>    s = re.sub(r&#x27;-+&#x27;, &#x27;-&#x27;, s)
+<span class="line-num">36</span>    return s.strip(&#x27;-&#x27;)
+<span class="line-num">37</span>
+<span class="line-num">38</span>
+<span class="line-num">39</span>def nav_html(active=&#x27;&#x27;, prefix=&#x27;&#x27;):
+<span class="line-num">40</span>    &quot;&quot;&quot;Generate navigation bar. prefix is &#x27;&#x27; for root, &#x27;../&#x27; for subdirectories.&quot;&quot;&quot;
+<span class="line-num">41</span>    links = [
+<span class="line-num">42</span>        (f&#x27;{prefix}index.html&#x27;, &#x27;Home&#x27;, &#x27;home&#x27;),
+<span class="line-num">43</span>        (f&#x27;{prefix}marginalia/index.html&#x27;, &#x27;Marginalia&#x27;, &#x27;marginalia&#x27;),
+<span class="line-num">44</span>        (f&#x27;{prefix}scholars.html&#x27;, &#x27;Scholars&#x27;, &#x27;scholars&#x27;),
+<span class="line-num">45</span>        (f&#x27;{prefix}bibliography.html&#x27;, &#x27;Bibliography&#x27;, &#x27;bibliography&#x27;),
+<span class="line-num">46</span>        (f&#x27;{prefix}dictionary/index.html&#x27;, &#x27;Dictionary&#x27;, &#x27;dictionary&#x27;),
+<span class="line-num">47</span>        (f&#x27;{prefix}docs/index.html&#x27;, &#x27;Docs&#x27;, &#x27;docs&#x27;),
+<span class="line-num">48</span>        (f&#x27;{prefix}code/index.html&#x27;, &#x27;Code&#x27;, &#x27;code&#x27;),
+<span class="line-num">49</span>        (f&#x27;{prefix}about.html&#x27;, &#x27;About&#x27;, &#x27;about&#x27;),
+<span class="line-num">50</span>    ]
+<span class="line-num">51</span>    items = []
+<span class="line-num">52</span>    for href, label, key in links:
+<span class="line-num">53</span>        cls = &#x27; class=&quot;active&quot;&#x27; if key == active else &#x27;&#x27;
+<span class="line-num">54</span>        items.append(f&#x27;&lt;a href=&quot;{href}&quot;{cls}&gt;{label}&lt;/a&gt;&#x27;)
+<span class="line-num">55</span>    return f&#x27;&lt;nav class=&quot;site-nav&quot;&gt;{&quot;&quot;.join(items)}&lt;/nav&gt;&#x27;
+<span class="line-num">56</span>
+<span class="line-num">57</span>
+<span class="line-num">58</span>def review_badge_html(needs_review, source_method=None):
+<span class="line-num">59</span>    if not needs_review:
+<span class="line-num">60</span>        return &#x27;&#x27;
+<span class="line-num">61</span>    method = f&#x27; ({source_method})&#x27; if source_method else &#x27;&#x27;
+<span class="line-num">62</span>    return f&#x27;&lt;span class=&quot;review-badge&quot;&gt;Unreviewed{method}&lt;/span&gt;&#x27;
+<span class="line-num">63</span>
+<span class="line-num">64</span>
+<span class="line-num">65</span>def confidence_badge_html(confidence):
+<span class="line-num">66</span>    if not confidence:
+<span class="line-num">67</span>        return &#x27;&#x27;
+<span class="line-num">68</span>    cls = f&#x27;confidence-{confidence.lower()}&#x27;
+<span class="line-num">69</span>    return f&#x27;&lt;span class=&quot;confidence-badge {cls}&quot;&gt;{confidence}&lt;/span&gt;&#x27;
+<span class="line-num">70</span>
+<span class="line-num">71</span>
+<span class="line-num">72</span>def page_shell(title, body, active_nav=&#x27;&#x27;, extra_css=&#x27;&#x27;, extra_js=&#x27;&#x27;, depth=0):
+<span class="line-num">73</span>    &quot;&quot;&quot;Generate full HTML page. depth=0 for site root, depth=1 for subdirectories.&quot;&quot;&quot;
+<span class="line-num">74</span>    prefix = &#x27;../&#x27; * depth if depth &gt; 0 else &#x27;&#x27;
+<span class="line-num">75</span>    return f&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
+<span class="line-num">76</span>&lt;html lang=&quot;en&quot;&gt;
+<span class="line-num">77</span>&lt;head&gt;
+<span class="line-num">78</span>    &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="line-num">79</span>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="line-num">80</span>    &lt;title&gt;{escape(title)} - Hypnerotomachia Poliphili&lt;/title&gt;
+<span class="line-num">81</span>    &lt;meta name=&quot;description&quot; content=&quot;Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)&quot;&gt;
+<span class="line-num">82</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;{prefix}style.css&quot;&gt;
+<span class="line-num">83</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;{prefix}scholars.css&quot;&gt;
+<span class="line-num">84</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;{prefix}components.css&quot;&gt;
+<span class="line-num">85</span>    {extra_css}
+<span class="line-num">86</span>&lt;/head&gt;
+<span class="line-num">87</span>&lt;body&gt;
+<span class="line-num">88</span>    &lt;header&gt;
+<span class="line-num">89</span>        &lt;div class=&quot;header-content&quot;&gt;
+<span class="line-num">90</span>            &lt;h1&gt;&lt;a href=&quot;{prefix}index.html&quot; style=&quot;color:inherit;text-decoration:none&quot;&gt;&lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;&lt;/a&gt;&lt;/h1&gt;
+<span class="line-num">91</span>            &lt;p class=&quot;subtitle&quot;&gt;Digital Scholarship &amp;amp; Marginalia&lt;/p&gt;
+<span class="line-num">92</span>            {nav_html(active_nav, prefix)}
+<span class="line-num">93</span>        &lt;/div&gt;
+<span class="line-num">94</span>    &lt;/header&gt;
+<span class="line-num">95</span>    &lt;main&gt;
+<span class="line-num">96</span>{body}
+<span class="line-num">97</span>    &lt;/main&gt;
+<span class="line-num">98</span>    &lt;footer&gt;
+<span class="line-num">99</span>        &lt;div class=&quot;footer-content&quot;&gt;
+<span class="line-num">100</span>            &lt;div class=&quot;footer-section&quot;&gt;
+<span class="line-num">101</span>                &lt;h4&gt;About This Project&lt;/h4&gt;
+<span class="line-num">102</span>                &lt;p&gt;A digital humanities project documenting the readership
+<span class="line-num">103</span>                and marginalia of the 1499 Aldine &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;,
+<span class="line-num">104</span>                based on James Russell&#x27;s PhD thesis (Durham, 2014).&lt;/p&gt;
+<span class="line-num">105</span>            &lt;/div&gt;
+<span class="line-num">106</span>            &lt;div class=&quot;footer-section&quot;&gt;
+<span class="line-num">107</span>                &lt;h4&gt;Data Provenance&lt;/h4&gt;
+<span class="line-num">108</span>                &lt;p&gt;Content marked with &lt;span class=&quot;review-badge&quot; style=&quot;font-size:0.7rem&quot;&gt;Unreviewed&lt;/span&gt;
+<span class="line-num">109</span>                has been generated with LLM assistance and has not been
+<span class="line-num">110</span>                verified by a human expert.&lt;/p&gt;
+<span class="line-num">111</span>            &lt;/div&gt;
+<span class="line-num">112</span>        &lt;/div&gt;
+<span class="line-num">113</span>    &lt;/footer&gt;
+<span class="line-num">114</span>    {extra_js}
+<span class="line-num">115</span>&lt;/body&gt;
+<span class="line-num">116</span>&lt;/html&gt;&quot;&quot;&quot;
+<span class="line-num">117</span>
+<span class="line-num">118</span>
+<span class="line-num">119</span># ============================================================
+<span class="line-num">120</span># Topic badge helpers
+<span class="line-num">121</span># ============================================================
+<span class="line-num">122</span>
+<span class="line-num">123</span>TOPIC_LABELS = {
+<span class="line-num">124</span>    &#x27;authorship&#x27;: &#x27;Authorship&#x27;,
+<span class="line-num">125</span>    &#x27;architecture_gardens&#x27;: &#x27;Architecture &amp; Gardens&#x27;,
+<span class="line-num">126</span>    &#x27;text_image&#x27;: &#x27;Text &amp; Image&#x27;,
+<span class="line-num">127</span>    &#x27;reception&#x27;: &#x27;Reception&#x27;,
+<span class="line-num">128</span>    &#x27;dream_religion&#x27;: &#x27;Dream &amp; Religion&#x27;,
+<span class="line-num">129</span>    &#x27;material_bibliographic&#x27;: &#x27;Material &amp; Bibliographic&#x27;,
+<span class="line-num">130</span>}
+<span class="line-num">131</span>
+<span class="line-num">132</span>
+<span class="line-num">133</span>def topic_badges_html(topics_str):
+<span class="line-num">134</span>    if not topics_str:
+<span class="line-num">135</span>        return &#x27;&#x27;
+<span class="line-num">136</span>    badges = []
+<span class="line-num">137</span>    for t in topics_str.split(&#x27;,&#x27;):
+<span class="line-num">138</span>        t = t.strip()
+<span class="line-num">139</span>        label = TOPIC_LABELS.get(t, t.replace(&#x27;_&#x27;, &#x27; &#x27;).title())
+<span class="line-num">140</span>        badges.append(f&#x27;&lt;span class=&quot;topic-badge topic-{t}&quot;&gt;{label}&lt;/span&gt;&#x27;)
+<span class="line-num">141</span>    return &#x27; &#x27;.join(badges)
+<span class="line-num">142</span>
+<span class="line-num">143</span>
+<span class="line-num">144</span># ============================================================
+<span class="line-num">145</span># Data export: data.json
+<span class="line-num">146</span># ============================================================
+<span class="line-num">147</span>
+<span class="line-num">148</span>def export_data_json(conn):
+<span class="line-num">149</span>    &quot;&quot;&quot;Export marginalia gallery data with confidence flags.&quot;&quot;&quot;
+<span class="line-num">150</span>    cur = conn.cursor()
+<span class="line-num">151</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">152</span>        SELECT
+<span class="line-num">153</span>            r.id, r.thesis_page, r.signature_ref, m.shelfmark,
+<span class="line-num">154</span>            m.institution, m.city, r.context_text, r.marginal_text,
+<span class="line-num">155</span>            r.chapter_num, i.filename, i.relative_path,
+<span class="line-num">156</span>            i.folio_number, i.side, mat.confidence,
+<span class="line-num">157</span>            sm.quire, sm.leaf_in_quire,
+<span class="line-num">158</span>            mat.needs_review as match_needs_review,
+<span class="line-num">159</span>            h.hand_label, h.attribution, h.is_alchemist
+<span class="line-num">160</span>        FROM matches mat
+<span class="line-num">161</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
+<span class="line-num">162</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">163</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">164</span>        LEFT JOIN signature_map sm ON LOWER(r.signature_ref) = LOWER(sm.signature)
+<span class="line-num">165</span>        LEFT JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">166</span>        WHERE i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">167</span>        GROUP BY r.signature_ref, i.filename
+<span class="line-num">168</span>        ORDER BY COALESCE(sm.folio_number, 999), r.thesis_page
+<span class="line-num">169</span>    &quot;&quot;&quot;)
+<span class="line-num">170</span>
+<span class="line-num">171</span>    entries = []
+<span class="line-num">172</span>    sigs = set()
+<span class="line-num">173</span>    for row in cur.fetchall():
+<span class="line-num">174</span>        entry = {
+<span class="line-num">175</span>            &#x27;ref_id&#x27;: row[0], &#x27;thesis_page&#x27;: row[1],
+<span class="line-num">176</span>            &#x27;signature&#x27;: row[2], &#x27;manuscript&#x27;: row[3],
+<span class="line-num">177</span>            &#x27;institution&#x27;: row[4], &#x27;city&#x27;: row[5],
+<span class="line-num">178</span>            &#x27;context&#x27;: (row[6] or &#x27;&#x27;)[:600],
+<span class="line-num">179</span>            &#x27;marginal_text&#x27;: row[7], &#x27;chapter&#x27;: row[8],
+<span class="line-num">180</span>            &#x27;image_file&#x27;: row[9],
+<span class="line-num">181</span>            &#x27;image_path&#x27;: row[10],
+<span class="line-num">182</span>            &#x27;folio_number&#x27;: row[11], &#x27;side&#x27;: row[12],
+<span class="line-num">183</span>            &#x27;confidence&#x27;: row[13] or &#x27;PROVISIONAL&#x27;,
+<span class="line-num">184</span>            &#x27;quire&#x27;: row[14], &#x27;leaf_in_quire&#x27;: row[15],
+<span class="line-num">185</span>            &#x27;needs_review&#x27;: bool(row[16]),
+<span class="line-num">186</span>            &#x27;hand_label&#x27;: row[17], &#x27;hand_attribution&#x27;: row[18],
+<span class="line-num">187</span>            &#x27;is_alchemist&#x27;: bool(row[19]) if row[19] is not None else False,
+<span class="line-num">188</span>        }
+<span class="line-num">189</span>        entries.append(entry)
+<span class="line-num">190</span>        sigs.add(row[2])
+<span class="line-num">191</span>
+<span class="line-num">192</span>    data = {
+<span class="line-num">193</span>        &#x27;entries&#x27;: entries,
+<span class="line-num">194</span>        &#x27;stats&#x27;: {
+<span class="line-num">195</span>            &#x27;total_references&#x27;: len(entries),
+<span class="line-num">196</span>            &#x27;unique_signatures&#x27;: len(sigs),
+<span class="line-num">197</span>            &#x27;high_confidence_matches&#x27;: sum(1 for e in entries if e[&#x27;confidence&#x27;] == &#x27;HIGH&#x27;),
+<span class="line-num">198</span>            &#x27;low_confidence_matches&#x27;: sum(1 for e in entries if e[&#x27;confidence&#x27;] == &#x27;LOW&#x27;),
+<span class="line-num">199</span>            &#x27;needs_review&#x27;: sum(1 for e in entries if e[&#x27;needs_review&#x27;]),
+<span class="line-num">200</span>        },
+<span class="line-num">201</span>        &#x27;provenance&#x27;: {
+<span class="line-num">202</span>            &#x27;source&#x27;: &#x27;hp.db v2&#x27;,
+<span class="line-num">203</span>            &#x27;note&#x27;: &#x27;BL C.60.o.12 matches are LOW confidence (1545 edition, unverified photo-folio mapping)&#x27;,
+<span class="line-num">204</span>        },
+<span class="line-num">205</span>    }
+<span class="line-num">206</span>
+<span class="line-num">207</span>    out = SITE_DIR / &#x27;data.json&#x27;
+<span class="line-num">208</span>    with open(out, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">209</span>        json.dump(data, f, indent=2, ensure_ascii=False)
+<span class="line-num">210</span>    print(f&quot;  data.json: {len(entries)} entries&quot;)
+<span class="line-num">211</span>
+<span class="line-num">212</span>
+<span class="line-num">213</span># ============================================================
+<span class="line-num">214</span># Scholars pages (DB-driven)
+<span class="line-num">215</span># ============================================================
+<span class="line-num">216</span>
+<span class="line-num">217</span>def build_scholars_pages(conn):
+<span class="line-num">218</span>    &quot;&quot;&quot;Generate scholars.html and scholar/*.html from DB + summaries.json.&quot;&quot;&quot;
+<span class="line-num">219</span>    # Load summaries for detailed content
+<span class="line-num">220</span>    summaries = []
+<span class="line-num">221</span>    if SUMMARIES_PATH.exists():
+<span class="line-num">222</span>        with open(SUMMARIES_PATH, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">223</span>            summaries = json.load(f)
+<span class="line-num">224</span>
+<span class="line-num">225</span>    # Group by author
+<span class="line-num">226</span>    by_author = {}
+<span class="line-num">227</span>    for s in summaries:
+<span class="line-num">228</span>        author = s.get(&#x27;author&#x27;, &#x27;Unknown&#x27;)
+<span class="line-num">229</span>        by_author.setdefault(author, []).append(s)
+<span class="line-num">230</span>
+<span class="line-num">231</span>    cur = conn.cursor()
+<span class="line-num">232</span>    # Get review status from DB
+<span class="line-num">233</span>    cur.execute(&quot;SELECT name, needs_review, source_method FROM scholars&quot;)
+<span class="line-num">234</span>    scholar_review = {}
+<span class="line-num">235</span>    for row in cur.fetchall():
+<span class="line-num">236</span>        scholar_review[row[0]] = {&#x27;needs_review&#x27;: row[1], &#x27;source_method&#x27;: row[2]}
+<span class="line-num">237</span>
+<span class="line-num">238</span>    # Build scholars index
+<span class="line-num">239</span>    scholar_cards = []
+<span class="line-num">240</span>    scholar_dir = SITE_DIR / &#x27;scholar&#x27;
+<span class="line-num">241</span>    scholar_dir.mkdir(exist_ok=True)
+<span class="line-num">242</span>
+<span class="line-num">243</span>    for author in sorted(by_author.keys()):
+<span class="line-num">244</span>        papers = by_author[author]
+<span class="line-num">245</span>        slug = slugify(author)
+<span class="line-num">246</span>        review = scholar_review.get(author, {&#x27;needs_review&#x27;: True, &#x27;source_method&#x27;: &#x27;LLM_ASSISTED&#x27;})
+<span class="line-num">247</span>
+<span class="line-num">248</span>        # Collect all topics
+<span class="line-num">249</span>        topics = set()
+<span class="line-num">250</span>        for p in papers:
+<span class="line-num">251</span>            tc = p.get(&#x27;topic_cluster&#x27;, &#x27;&#x27;)
+<span class="line-num">252</span>            if tc:
+<span class="line-num">253</span>                for t in tc.split(&#x27;,&#x27;):
+<span class="line-num">254</span>                    topics.add(t.strip())
+<span class="line-num">255</span>
+<span class="line-num">256</span>        badges = topic_badges_html(&#x27;,&#x27;.join(topics))
+<span class="line-num">257</span>        review_html = review_badge_html(review.get(&#x27;needs_review&#x27;), review.get(&#x27;source_method&#x27;))
+<span class="line-num">258</span>
+<span class="line-num">259</span>        # Paper cards for index
+<span class="line-num">260</span>        paper_cards_html = &#x27;&#x27;
+<span class="line-num">261</span>        for p in papers:
+<span class="line-num">262</span>            paper_slug = slugify(p.get(&#x27;title&#x27;, &#x27;&#x27;))
+<span class="line-num">263</span>            summary_preview = (p.get(&#x27;summary&#x27;, &#x27;&#x27;) or &#x27;&#x27;)[:250]
+<span class="line-num">264</span>            if len(p.get(&#x27;summary&#x27;, &#x27;&#x27;)) &gt; 250:
+<span class="line-num">265</span>                summary_preview += &#x27;...&#x27;
+<span class="line-num">266</span>            paper_cards_html += f&quot;&quot;&quot;
+<span class="line-num">267</span>                &lt;div class=&quot;paper-card&quot;&gt;
+<span class="line-num">268</span>                    &lt;h4&gt;&lt;a href=&quot;{slug}.html&quot;&gt;{escape(p.get(&#x27;title&#x27;, &#x27;&#x27;))}&lt;/a&gt;&lt;/h4&gt;
+<span class="line-num">269</span>                    &lt;div class=&quot;paper-meta&quot;&gt;{escape(p.get(&#x27;journal&#x27;, &#x27;&#x27;))} ({p.get(&#x27;year&#x27;, &#x27;?&#x27;)})&lt;/div&gt;
+<span class="line-num">270</span>                    &lt;div class=&quot;paper-summary&quot;&gt;{escape(summary_preview)}&lt;/div&gt;
+<span class="line-num">271</span>                &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">272</span>
+<span class="line-num">273</span>        scholar_cards.append(f&quot;&quot;&quot;
+<span class="line-num">274</span>        &lt;div class=&quot;scholar-card&quot;&gt;
+<span class="line-num">275</span>            &lt;h3&gt;&lt;a href=&quot;{slug}.html&quot;&gt;{escape(author)}&lt;/a&gt; {review_html}&lt;/h3&gt;
+<span class="line-num">276</span>            &lt;div class=&quot;scholar-meta&quot;&gt;{len(papers)} paper{&#x27;s&#x27; if len(papers) != 1 else &#x27;&#x27;} {badges}&lt;/div&gt;
+<span class="line-num">277</span>            &lt;div class=&quot;scholar-papers&quot;&gt;{paper_cards_html}&lt;/div&gt;
+<span class="line-num">278</span>        &lt;/div&gt;&quot;&quot;&quot;)
+<span class="line-num">279</span>
+<span class="line-num">280</span>        # Build individual scholar page
+<span class="line-num">281</span>        papers_detail = &#x27;&#x27;
+<span class="line-num">282</span>        for p in papers:
+<span class="line-num">283</span>            tc = p.get(&#x27;topic_cluster&#x27;, &#x27;&#x27;)
+<span class="line-num">284</span>            papers_detail += f&quot;&quot;&quot;
+<span class="line-num">285</span>            &lt;div class=&quot;paper-detail&quot;&gt;
+<span class="line-num">286</span>                &lt;h3&gt;{escape(p.get(&#x27;title&#x27;, &#x27;&#x27;))}&lt;/h3&gt;
+<span class="line-num">287</span>                &lt;div class=&quot;paper-meta&quot;&gt;{escape(p.get(&#x27;journal&#x27;, &#x27;&#x27;))} ({p.get(&#x27;year&#x27;, &#x27;?&#x27;)})
+<span class="line-num">288</span>                    {topic_badges_html(tc)}&lt;/div&gt;
+<span class="line-num">289</span>                &lt;div class=&quot;paper-summary-full&quot;&gt;&lt;p&gt;{escape(p.get(&#x27;summary&#x27;, &#x27;&#x27;))}&lt;/p&gt;&lt;/div&gt;
+<span class="line-num">290</span>            &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">291</span>
+<span class="line-num">292</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">293</span>        &lt;div class=&quot;scholar-detail&quot;&gt;
+<span class="line-num">294</span>            &lt;h2&gt;{escape(author)} {review_html}&lt;/h2&gt;
+<span class="line-num">295</span>            &lt;p&gt;&lt;a href=&quot;../scholars.html&quot;&gt;&amp;larr; All Scholars&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">296</span>            {papers_detail}
+<span class="line-num">297</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">298</span>
+<span class="line-num">299</span>        detail_page = page_shell(author, detail_body, active_nav=&#x27;scholars&#x27;, depth=1)
+<span class="line-num">300</span>        (scholar_dir / f&#x27;{slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">301</span>
+<span class="line-num">302</span>    # Build index page
+<span class="line-num">303</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">304</span>        &lt;div class=&quot;scholars-grid&quot;&gt;
+<span class="line-num">305</span>            &lt;div class=&quot;intro&quot; style=&quot;margin-bottom:2rem&quot;&gt;
+<span class="line-num">306</span>                &lt;p&gt;{len(by_author)} scholars, {len(summaries)} works documented.
+<span class="line-num">307</span>                Data sourced from SQLite database with provenance tracking.&lt;/p&gt;
+<span class="line-num">308</span>            &lt;/div&gt;
+<span class="line-num">309</span>            {&#x27;&#x27;.join(scholar_cards)}
+<span class="line-num">310</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">311</span>
+<span class="line-num">312</span>    index_page = page_shell(&#x27;Scholars&#x27;, index_body, active_nav=&#x27;scholars&#x27;)
+<span class="line-num">313</span>    (SITE_DIR / &#x27;scholars.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">314</span>    print(f&quot;  scholars.html + {len(by_author)} scholar pages&quot;)
+<span class="line-num">315</span>
+<span class="line-num">316</span>
+<span class="line-num">317</span># ============================================================
+<span class="line-num">318</span># Dictionary pages
+<span class="line-num">319</span># ============================================================
+<span class="line-num">320</span>
+<span class="line-num">321</span>def build_dictionary_pages(conn):
+<span class="line-num">322</span>    &quot;&quot;&quot;Generate dictionary/index.html and dictionary/*.html from DB.&quot;&quot;&quot;
+<span class="line-num">323</span>    cur = conn.cursor()
+<span class="line-num">324</span>    dict_dir = SITE_DIR / &#x27;dictionary&#x27;
+<span class="line-num">325</span>    dict_dir.mkdir(exist_ok=True)
+<span class="line-num">326</span>
+<span class="line-num">327</span>    # Get all terms
+<span class="line-num">328</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">329</span>        SELECT id, slug, label, category, definition_short, definition_long,
+<span class="line-num">330</span>               source_basis, review_status, needs_review
+<span class="line-num">331</span>        FROM dictionary_terms ORDER BY label
+<span class="line-num">332</span>    &quot;&quot;&quot;)
+<span class="line-num">333</span>    terms = cur.fetchall()
+<span class="line-num">334</span>
+<span class="line-num">335</span>    # Build per-term link map
+<span class="line-num">336</span>    term_links = {}
+<span class="line-num">337</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">338</span>        SELECT t1.slug, t2.slug, t2.label, l.link_type
+<span class="line-num">339</span>        FROM dictionary_term_links l
+<span class="line-num">340</span>        JOIN dictionary_terms t1 ON l.term_id = t1.id
+<span class="line-num">341</span>        JOIN dictionary_terms t2 ON l.linked_term_id = t2.id
+<span class="line-num">342</span>    &quot;&quot;&quot;)
+<span class="line-num">343</span>    for row in cur.fetchall():
+<span class="line-num">344</span>        term_links.setdefault(row[0], []).append({
+<span class="line-num">345</span>            &#x27;slug&#x27;: row[1], &#x27;label&#x27;: row[2], &#x27;type&#x27;: row[3]
+<span class="line-num">346</span>        })
+<span class="line-num">347</span>
+<span class="line-num">348</span>    # Group by category for index
+<span class="line-num">349</span>    by_category = {}
+<span class="line-num">350</span>    for t in terms:
+<span class="line-num">351</span>        by_category.setdefault(t[3], []).append(t)
+<span class="line-num">352</span>
+<span class="line-num">353</span>    # Build index page
+<span class="line-num">354</span>    cat_sections = &#x27;&#x27;
+<span class="line-num">355</span>    for cat in sorted(by_category.keys()):
+<span class="line-num">356</span>        cat_terms = by_category[cat]
+<span class="line-num">357</span>        items = &#x27;&#x27;
+<span class="line-num">358</span>        for t in sorted(cat_terms, key=lambda x: x[2]):
+<span class="line-num">359</span>            review = &#x27; &lt;span class=&quot;review-badge&quot;&gt;Draft&lt;/span&gt;&#x27; if t[8] else &#x27;&#x27;
+<span class="line-num">360</span>            items += f&quot;&quot;&quot;
+<span class="line-num">361</span>                &lt;div class=&quot;dict-entry&quot;&gt;
+<span class="line-num">362</span>                    &lt;h4&gt;&lt;a href=&quot;{t[1]}.html&quot;&gt;{escape(t[2])}&lt;/a&gt;{review}&lt;/h4&gt;
+<span class="line-num">363</span>                    &lt;p&gt;{escape(t[4])}&lt;/p&gt;
+<span class="line-num">364</span>                &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">365</span>        cat_sections += f&quot;&quot;&quot;
+<span class="line-num">366</span>            &lt;section class=&quot;dict-category&quot;&gt;
+<span class="line-num">367</span>                &lt;h3&gt;{escape(cat)}&lt;/h3&gt;
+<span class="line-num">368</span>                {items}
+<span class="line-num">369</span>            &lt;/section&gt;&quot;&quot;&quot;
+<span class="line-num">370</span>
+<span class="line-num">371</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">372</span>        &lt;div class=&quot;dictionary-index&quot;&gt;
+<span class="line-num">373</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">374</span>                &lt;h2&gt;Dictionary of the &lt;em&gt;Hypnerotomachia&lt;/em&gt;&lt;/h2&gt;
+<span class="line-num">375</span>                &lt;p&gt;{len(terms)} terms across {len(by_category)} categories.
+<span class="line-num">376</span>                A glossary of concepts essential for understanding the book,
+<span class="line-num">377</span>                its readers, and five centuries of scholarship.&lt;/p&gt;
+<span class="line-num">378</span>            &lt;/div&gt;
+<span class="line-num">379</span>            {cat_sections}
+<span class="line-num">380</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">381</span>
+<span class="line-num">382</span>    dict_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">383</span>        .dictionary-index { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">384</span>        .dict-category { margin-bottom: 2.5rem; }
+<span class="line-num">385</span>        .dict-category h3 {
+<span class="line-num">386</span>            font-size: 1.2rem; color: var(--accent);
+<span class="line-num">387</span>            border-bottom: 1px solid var(--border);
+<span class="line-num">388</span>            padding-bottom: 0.3rem; margin-bottom: 1rem;
+<span class="line-num">389</span>        }
+<span class="line-num">390</span>        .dict-entry { margin-bottom: 1rem; }
+<span class="line-num">391</span>        .dict-entry h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+<span class="line-num">392</span>        .dict-entry h4 a { color: var(--text); text-decoration: none; }
+<span class="line-num">393</span>        .dict-entry h4 a:hover { color: var(--accent); }
+<span class="line-num">394</span>        .dict-entry p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+<span class="line-num">395</span>        .dict-detail { max-width: 800px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">396</span>        .dict-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
+<span class="line-num">397</span>        .dict-detail .category-label {
+<span class="line-num">398</span>            font-size: 0.85rem; color: var(--text-muted);
+<span class="line-num">399</span>            font-family: var(--font-sans); margin-bottom: 1.5rem;
+<span class="line-num">400</span>        }
+<span class="line-num">401</span>        .dict-detail .definition-short {
+<span class="line-num">402</span>            font-size: 1.1rem; font-style: italic; margin-bottom: 1.5rem;
+<span class="line-num">403</span>            padding: 1rem; background: var(--bg-card); border-left: 3px solid var(--accent);
+<span class="line-num">404</span>        }
+<span class="line-num">405</span>        .dict-detail .definition-long { line-height: 1.8; margin-bottom: 1.5rem; }
+<span class="line-num">406</span>        .dict-detail .source-basis {
+<span class="line-num">407</span>            font-size: 0.85rem; color: var(--text-muted);
+<span class="line-num">408</span>            font-family: var(--font-sans); margin-top: 1rem;
+<span class="line-num">409</span>            padding-top: 1rem; border-top: 1px solid var(--border);
+<span class="line-num">410</span>        }
+<span class="line-num">411</span>        .related-terms { margin-top: 1.5rem; }
+<span class="line-num">412</span>        .related-terms h4 { font-size: 0.95rem; color: var(--accent); margin-bottom: 0.5rem; }
+<span class="line-num">413</span>        .related-terms a {
+<span class="line-num">414</span>            display: inline-block; margin: 0.2rem 0.3rem 0.2rem 0;
+<span class="line-num">415</span>            padding: 0.2rem 0.6rem; background: var(--bg);
+<span class="line-num">416</span>            border: 1px solid var(--border); border-radius: 3px;
+<span class="line-num">417</span>            font-size: 0.85rem; color: var(--text); text-decoration: none;
+<span class="line-num">418</span>        }
+<span class="line-num">419</span>        .related-terms a:hover { border-color: var(--accent); color: var(--accent); }
+<span class="line-num">420</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">421</span>
+<span class="line-num">422</span>    index_page = page_shell(&#x27;Dictionary&#x27;, index_body, active_nav=&#x27;dictionary&#x27;, depth=1)
+<span class="line-num">423</span>    (dict_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">424</span>
+<span class="line-num">425</span>    # Build individual term pages
+<span class="line-num">426</span>    for t in terms:
+<span class="line-num">427</span>        tid, slug, label, category, def_short, def_long, source, status, needs_rev = t
+<span class="line-num">428</span>        links = term_links.get(slug, [])
+<span class="line-num">429</span>
+<span class="line-num">430</span>        related_html = &#x27;&#x27;
+<span class="line-num">431</span>        see_also_html = &#x27;&#x27;
+<span class="line-num">432</span>        for lk in links:
+<span class="line-num">433</span>            link_el = f&#x27;&lt;a href=&quot;{lk[&quot;slug&quot;]}.html&quot;&gt;{escape(lk[&quot;label&quot;])}&lt;/a&gt;&#x27;
+<span class="line-num">434</span>            if lk[&#x27;type&#x27;] == &#x27;SEE_ALSO&#x27;:
+<span class="line-num">435</span>                see_also_html += link_el
+<span class="line-num">436</span>            else:
+<span class="line-num">437</span>                related_html += link_el
+<span class="line-num">438</span>
+<span class="line-num">439</span>        links_section = &#x27;&#x27;
+<span class="line-num">440</span>        if related_html:
+<span class="line-num">441</span>            links_section += f&#x27;&lt;div class=&quot;related-terms&quot;&gt;&lt;h4&gt;Related Terms&lt;/h4&gt;{related_html}&lt;/div&gt;&#x27;
+<span class="line-num">442</span>        if see_also_html:
+<span class="line-num">443</span>            links_section += f&#x27;&lt;div class=&quot;related-terms&quot;&gt;&lt;h4&gt;See Also&lt;/h4&gt;{see_also_html}&lt;/div&gt;&#x27;
+<span class="line-num">444</span>
+<span class="line-num">445</span>        review_html = review_badge_html(needs_rev)
+<span class="line-num">446</span>        source_html = f&#x27;&lt;div class=&quot;source-basis&quot;&gt;&lt;strong&gt;Sources:&lt;/strong&gt; {escape(source or &quot;&quot;)}&lt;/div&gt;&#x27; if source else &#x27;&#x27;
+<span class="line-num">447</span>
+<span class="line-num">448</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">449</span>        &lt;div class=&quot;dict-detail&quot;&gt;
+<span class="line-num">450</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Dictionary&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">451</span>            &lt;h2&gt;{escape(label)} {review_html}&lt;/h2&gt;
+<span class="line-num">452</span>            &lt;div class=&quot;category-label&quot;&gt;{escape(category)}&lt;/div&gt;
+<span class="line-num">453</span>            &lt;div class=&quot;definition-short&quot;&gt;{escape(def_short)}&lt;/div&gt;
+<span class="line-num">454</span>            &lt;div class=&quot;definition-long&quot;&gt;{escape(def_long or &#x27;&#x27;)}&lt;/div&gt;
+<span class="line-num">455</span>            {source_html}
+<span class="line-num">456</span>            {links_section}
+<span class="line-num">457</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">458</span>
+<span class="line-num">459</span>        term_page = page_shell(label, detail_body, active_nav=&#x27;dictionary&#x27;, depth=1)
+<span class="line-num">460</span>        (dict_dir / f&#x27;{slug}.html&#x27;).write_text(term_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">461</span>
+<span class="line-num">462</span>    print(f&quot;  dictionary/index.html + {len(terms)} term pages&quot;)
+<span class="line-num">463</span>
+<span class="line-num">464</span>
+<span class="line-num">465</span># ============================================================
+<span class="line-num">466</span># Marginalia folio detail pages
+<span class="line-num">467</span># ============================================================
+<span class="line-num">468</span>
+<span class="line-num">469</span>def build_marginalia_pages(conn):
+<span class="line-num">470</span>    &quot;&quot;&quot;Generate marginalia/index.html and marginalia/[signature].html.&quot;&quot;&quot;
+<span class="line-num">471</span>    cur = conn.cursor()
+<span class="line-num">472</span>    marg_dir = SITE_DIR / &#x27;marginalia&#x27;
+<span class="line-num">473</span>    marg_dir.mkdir(exist_ok=True)
+<span class="line-num">474</span>
+<span class="line-num">475</span>    # Get all matched signatures with their images and annotations
+<span class="line-num">476</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">477</span>        SELECT
+<span class="line-num">478</span>            r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
+<span class="line-num">479</span>            r.chapter_num, m.shelfmark, m.institution, m.city,
+<span class="line-num">480</span>            i.filename, i.relative_path, i.folio_number, i.side,
+<span class="line-num">481</span>            mat.confidence, mat.needs_review,
+<span class="line-num">482</span>            h.hand_label, h.attribution, h.is_alchemist, h.school,
+<span class="line-num">483</span>            sm.quire, sm.leaf_in_quire
+<span class="line-num">484</span>        FROM matches mat
+<span class="line-num">485</span>        JOIN dissertation_refs r ON mat.ref_id = r.id
+<span class="line-num">486</span>        JOIN images i ON mat.image_id = i.id
+<span class="line-num">487</span>        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">488</span>        LEFT JOIN signature_map sm ON LOWER(r.signature_ref) = LOWER(sm.signature)
+<span class="line-num">489</span>        LEFT JOIN annotator_hands h ON r.hand_id = h.id
+<span class="line-num">490</span>        WHERE i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">491</span>        ORDER BY COALESCE(sm.folio_number, 999), m.shelfmark
+<span class="line-num">492</span>    &quot;&quot;&quot;)
+<span class="line-num">493</span>
+<span class="line-num">494</span>    # Group by signature
+<span class="line-num">495</span>    by_sig = {}
+<span class="line-num">496</span>    for row in cur.fetchall():
+<span class="line-num">497</span>        sig = row[0]
+<span class="line-num">498</span>        by_sig.setdefault(sig, []).append(row)
+<span class="line-num">499</span>
+<span class="line-num">500</span>    marg_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">501</span>        .marg-detail { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">502</span>        .marg-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
+<span class="line-num">503</span>        .marg-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+<span class="line-num">504</span>        .marg-image-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+<span class="line-num">505</span>        .marg-image-card img { width: 100%; display: block; }
+<span class="line-num">506</span>        .marg-image-card .caption { padding: 0.75rem 1rem; font-size: 0.85rem; font-family: var(--font-sans); }
+<span class="line-num">507</span>        .marg-annotation { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1rem; }
+<span class="line-num">508</span>        .marg-annotation .marginal-text { font-style: italic; font-size: 1.05rem; padding: 0.75rem; border-left: 3px solid var(--accent-light); margin: 0.75rem 0; }
+<span class="line-num">509</span>        .marg-annotation .context { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; max-height: 200px; overflow-y: auto; }
+<span class="line-num">510</span>        .marg-annotation .hand-info { font-size: 0.85rem; font-family: var(--font-sans); color: var(--text-muted); margin-top: 0.5rem; }
+<span class="line-num">511</span>        .alchemist-tag { display: inline-block; padding: 0.1rem 0.5rem; background: #e8d4d4; color: #6b2323; border-radius: 2px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+<span class="line-num">512</span>        .marg-index { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">513</span>        .marg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+<span class="line-num">514</span>        .marg-grid a { display: block; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; text-decoration: none; color: var(--text); transition: all 0.2s; }
+<span class="line-num">515</span>        .marg-grid a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+<span class="line-num">516</span>        .marg-grid .sig-label { font-weight: 600; font-size: 1.1rem; color: var(--accent); }
+<span class="line-num">517</span>        .marg-grid .sig-meta { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); }
+<span class="line-num">518</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">519</span>
+<span class="line-num">520</span>    # Build individual folio pages
+<span class="line-num">521</span>    for sig, rows in by_sig.items():
+<span class="line-num">522</span>        sig_slug = sig.lower().replace(&#x27; &#x27;, &#x27;&#x27;)
+<span class="line-num">523</span>
+<span class="line-num">524</span>        images_html = &#x27;&#x27;
+<span class="line-num">525</span>        annotations_html = &#x27;&#x27;
+<span class="line-num">526</span>        seen_images = set()
+<span class="line-num">527</span>
+<span class="line-num">528</span>        for row in rows:
+<span class="line-num">529</span>            (sig_ref, thesis_page, context, marginal, chapter,
+<span class="line-num">530</span>             shelfmark, institution, city, img_file, img_path,
+<span class="line-num">531</span>             folio_num, side, confidence, needs_rev,
+<span class="line-num">532</span>             hand_label, attribution, is_alchemist, school,
+<span class="line-num">533</span>             quire, leaf) = row
+<span class="line-num">534</span>
+<span class="line-num">535</span>            # Image card (deduplicate)
+<span class="line-num">536</span>            if img_file not in seen_images:
+<span class="line-num">537</span>                seen_images.add(img_file)
+<span class="line-num">538</span>                conf_badge = confidence_badge_html(confidence)
+<span class="line-num">539</span>                rev_badge = &#x27;&lt;span class=&quot;review-badge&quot;&gt;Unverified&lt;/span&gt;&#x27; if needs_rev else &#x27;&#x27;
+<span class="line-num">540</span>                images_html += f&quot;&quot;&quot;
+<span class="line-num">541</span>                    &lt;div class=&quot;marg-image-card&quot;&gt;
+<span class="line-num">542</span>                        &lt;img src=&quot;../{img_path}&quot; alt=&quot;Folio {sig}&quot; loading=&quot;lazy&quot;&gt;
+<span class="line-num">543</span>                        &lt;div class=&quot;caption&quot;&gt;
+<span class="line-num">544</span>                            {escape(institution)}, {escape(city)} &amp;mdash; {escape(shelfmark)}
+<span class="line-num">545</span>                            {conf_badge} {rev_badge}
+<span class="line-num">546</span>                        &lt;/div&gt;
+<span class="line-num">547</span>                    &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">548</span>
+<span class="line-num">549</span>            # Annotation card
+<span class="line-num">550</span>            hand_html = &#x27;&#x27;
+<span class="line-num">551</span>            if hand_label:
+<span class="line-num">552</span>                alch_tag = &#x27; &lt;span class=&quot;alchemist-tag&quot;&gt;Alchemist&lt;/span&gt;&#x27; if is_alchemist else &#x27;&#x27;
+<span class="line-num">553</span>                school_info = f&#x27; ({escape(school)})&#x27; if school else &#x27;&#x27;
+<span class="line-num">554</span>                hand_html = f&#x27;&lt;div class=&quot;hand-info&quot;&gt;Hand {escape(hand_label)}: {escape(attribution or &quot;Anonymous&quot;)}{school_info}{alch_tag}&lt;/div&gt;&#x27;
+<span class="line-num">555</span>
+<span class="line-num">556</span>            marginal_html = &#x27;&#x27;
+<span class="line-num">557</span>            if marginal:
+<span class="line-num">558</span>                marginal_html = f&#x27;&lt;div class=&quot;marginal-text&quot;&gt;&amp;ldquo;{escape(marginal)}&amp;rdquo;&lt;/div&gt;&#x27;
+<span class="line-num">559</span>
+<span class="line-num">560</span>            context_html = &#x27;&#x27;
+<span class="line-num">561</span>            if context:
+<span class="line-num">562</span>                ctx = context[:500] + (&#x27;...&#x27; if len(context) &gt; 500 else &#x27;&#x27;)
+<span class="line-num">563</span>                context_html = f&#x27;&lt;div class=&quot;context&quot;&gt;{escape(ctx)}&lt;/div&gt;&#x27;
+<span class="line-num">564</span>
+<span class="line-num">565</span>            annotations_html += f&quot;&quot;&quot;
+<span class="line-num">566</span>                &lt;div class=&quot;marg-annotation&quot;&gt;
+<span class="line-num">567</span>                    {hand_html}
+<span class="line-num">568</span>                    {marginal_html}
+<span class="line-num">569</span>                    {context_html}
+<span class="line-num">570</span>                    &lt;div class=&quot;hand-info&quot;&gt;Russell, PhD Thesis, p. {thesis_page} (Ch. {chapter})&lt;/div&gt;
+<span class="line-num">571</span>                &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">572</span>
+<span class="line-num">573</span>        folio_info = f&#x27;Folio {rows[0][10] or &quot;?&quot;}{rows[0][11] or &quot;&quot;}&#x27;
+<span class="line-num">574</span>        quire_info = f&#x27;, Quire {rows[0][18]}&#x27; if rows[0][18] else &#x27;&#x27;
+<span class="line-num">575</span>
+<span class="line-num">576</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">577</span>        &lt;div class=&quot;marg-detail&quot;&gt;
+<span class="line-num">578</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; All Folios&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">579</span>            &lt;h2&gt;Signature {escape(sig)}&lt;/h2&gt;
+<span class="line-num">580</span>            &lt;p style=&quot;color:var(--text-muted); font-family:var(--font-sans); margin-bottom:1.5rem&quot;&gt;
+<span class="line-num">581</span>                {folio_info}{quire_info}&lt;/p&gt;
+<span class="line-num">582</span>            &lt;div class=&quot;marg-images&quot;&gt;{images_html}&lt;/div&gt;
+<span class="line-num">583</span>            &lt;h3 style=&quot;margin:1.5rem 0 1rem&quot;&gt;Annotations&lt;/h3&gt;
+<span class="line-num">584</span>            {annotations_html}
+<span class="line-num">585</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">586</span>
+<span class="line-num">587</span>        detail_page = page_shell(f&#x27;Folio {sig}&#x27;, detail_body, active_nav=&#x27;marginalia&#x27;, depth=1)
+<span class="line-num">588</span>        (marg_dir / f&#x27;{sig_slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">589</span>
+<span class="line-num">590</span>    # Build marginalia index
+<span class="line-num">591</span>    grid_items = &#x27;&#x27;
+<span class="line-num">592</span>    for sig in sorted(by_sig.keys(), key=lambda s: (
+<span class="line-num">593</span>        # Sort by quire then leaf
+<span class="line-num">594</span>        by_sig[s][0][18] or &#x27;zzz&#x27;,
+<span class="line-num">595</span>        by_sig[s][0][10] or 999
+<span class="line-num">596</span>    )):
+<span class="line-num">597</span>        rows = by_sig[sig]
+<span class="line-num">598</span>        sig_slug = sig.lower().replace(&#x27; &#x27;, &#x27;&#x27;)
+<span class="line-num">599</span>        n_images = len(set(r[8] for r in rows))
+<span class="line-num">600</span>        n_annotations = len(rows)
+<span class="line-num">601</span>        has_alchemist = any(r[16] for r in rows)
+<span class="line-num">602</span>        alch = &#x27; &lt;span class=&quot;alchemist-tag&quot;&gt;Alch.&lt;/span&gt;&#x27; if has_alchemist else &#x27;&#x27;
+<span class="line-num">603</span>
+<span class="line-num">604</span>        grid_items += f&quot;&quot;&quot;
+<span class="line-num">605</span>            &lt;a href=&quot;{sig_slug}.html&quot;&gt;
+<span class="line-num">606</span>                &lt;div class=&quot;sig-label&quot;&gt;{escape(sig)}{alch}&lt;/div&gt;
+<span class="line-num">607</span>                &lt;div class=&quot;sig-meta&quot;&gt;{n_images} image{&#x27;s&#x27; if n_images != 1 else &#x27;&#x27;}, {n_annotations} ref{&#x27;s&#x27; if n_annotations != 1 else &#x27;&#x27;}&lt;/div&gt;
+<span class="line-num">608</span>            &lt;/a&gt;&quot;&quot;&quot;
+<span class="line-num">609</span>
+<span class="line-num">610</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">611</span>        &lt;div class=&quot;marg-index&quot;&gt;
+<span class="line-num">612</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">613</span>                &lt;h2&gt;Marginalia by Folio&lt;/h2&gt;
+<span class="line-num">614</span>                &lt;p&gt;{len(by_sig)} annotated folios documented from Russell&#x27;s thesis.
+<span class="line-num">615</span>                Click any signature to see images and annotations.&lt;/p&gt;
+<span class="line-num">616</span>            &lt;/div&gt;
+<span class="line-num">617</span>            &lt;div class=&quot;marg-grid&quot;&gt;{grid_items}&lt;/div&gt;
+<span class="line-num">618</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">619</span>
+<span class="line-num">620</span>    index_page = page_shell(&#x27;Marginalia&#x27;, index_body, active_nav=&#x27;marginalia&#x27;, depth=1)
+<span class="line-num">621</span>    (marg_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">622</span>    print(f&quot;  marginalia/index.html + {len(by_sig)} folio pages&quot;)
+<span class="line-num">623</span>
+<span class="line-num">624</span>
+<span class="line-num">625</span># ============================================================
+<span class="line-num">626</span># Bibliography page
+<span class="line-num">627</span># ============================================================
+<span class="line-num">628</span>
+<span class="line-num">629</span>def build_bibliography_page(conn):
+<span class="line-num">630</span>    &quot;&quot;&quot;Generate bibliography.html with full HP bibliography from DB.&quot;&quot;&quot;
+<span class="line-num">631</span>    cur = conn.cursor()
+<span class="line-num">632</span>
+<span class="line-num">633</span>    # Get all bibliography entries
+<span class="line-num">634</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">635</span>        SELECT id, author, title, year, pub_type, journal_or_publisher,
+<span class="line-num">636</span>               hp_relevance, topic_cluster, in_collection, notes,
+<span class="line-num">637</span>               review_status, needs_review
+<span class="line-num">638</span>        FROM bibliography
+<span class="line-num">639</span>        ORDER BY
+<span class="line-num">640</span>            CASE WHEN year IS NULL THEN 9999 ELSE CAST(year AS INTEGER) END,
+<span class="line-num">641</span>            author
+<span class="line-num">642</span>    &quot;&quot;&quot;)
+<span class="line-num">643</span>    entries = cur.fetchall()
+<span class="line-num">644</span>
+<span class="line-num">645</span>    # Group by relevance
+<span class="line-num">646</span>    by_relevance = {}
+<span class="line-num">647</span>    for e in entries:
+<span class="line-num">648</span>        rel = e[6] or &#x27;TANGENTIAL&#x27;
+<span class="line-num">649</span>        by_relevance.setdefault(rel, []).append(e)
+<span class="line-num">650</span>
+<span class="line-num">651</span>    relevance_order = [&#x27;PRIMARY&#x27;, &#x27;DIRECT&#x27;, &#x27;INDIRECT&#x27;, &#x27;TANGENTIAL&#x27;]
+<span class="line-num">652</span>    relevance_labels = {
+<span class="line-num">653</span>        &#x27;PRIMARY&#x27;: &#x27;Primary Sources &amp; Editions&#x27;,
+<span class="line-num">654</span>        &#x27;DIRECT&#x27;: &#x27;HP Scholarship (Direct)&#x27;,
+<span class="line-num">655</span>        &#x27;INDIRECT&#x27;: &#x27;Related Studies&#x27;,
+<span class="line-num">656</span>        &#x27;TANGENTIAL&#x27;: &#x27;General References&#x27;,
+<span class="line-num">657</span>    }
+<span class="line-num">658</span>
+<span class="line-num">659</span>    bib_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">660</span>        .bib-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">661</span>        .bib-section { margin-bottom: 2.5rem; }
+<span class="line-num">662</span>        .bib-section h3 {
+<span class="line-num">663</span>            font-size: 1.1rem; color: var(--accent);
+<span class="line-num">664</span>            border-bottom: 1px solid var(--border);
+<span class="line-num">665</span>            padding-bottom: 0.3rem; margin-bottom: 1rem;
+<span class="line-num">666</span>        }
+<span class="line-num">667</span>        .bib-entry { margin-bottom: 1rem; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; }
+<span class="line-num">668</span>        .bib-entry .bib-author { font-weight: 600; }
+<span class="line-num">669</span>        .bib-entry .bib-title { font-style: italic; }
+<span class="line-num">670</span>        .bib-entry .bib-details { font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-sans); margin-top: 0.25rem; }
+<span class="line-num">671</span>        .bib-entry .bib-badges { margin-top: 0.3rem; }
+<span class="line-num">672</span>        .bib-badge-collection { display: inline-block; padding: 0.1rem 0.4rem; background: #d4edda; color: #155724; border-radius: 2px; font-size: 0.65rem; font-weight: 600; font-family: var(--font-sans); text-transform: uppercase; }
+<span class="line-num">673</span>        .bib-badge-missing { display: inline-block; padding: 0.1rem 0.4rem; background: #f8d7da; color: #721c24; border-radius: 2px; font-size: 0.65rem; font-weight: 600; font-family: var(--font-sans); text-transform: uppercase; }
+<span class="line-num">674</span>        .bib-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+<span class="line-num">675</span>        .bib-stat { text-align: center; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; flex: 1; min-width: 120px; }
+<span class="line-num">676</span>        .bib-stat .num { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; }
+<span class="line-num">677</span>        .bib-stat .lbl { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); }
+<span class="line-num">678</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">679</span>
+<span class="line-num">680</span>    # Stats
+<span class="line-num">681</span>    total = len(entries)
+<span class="line-num">682</span>    in_coll = sum(1 for e in entries if e[8])
+<span class="line-num">683</span>    primary = len(by_relevance.get(&#x27;PRIMARY&#x27;, []))
+<span class="line-num">684</span>    direct = len(by_relevance.get(&#x27;DIRECT&#x27;, []))
+<span class="line-num">685</span>    needs_rev = sum(1 for e in entries if e[11])
+<span class="line-num">686</span>
+<span class="line-num">687</span>    stats_html = f&quot;&quot;&quot;
+<span class="line-num">688</span>        &lt;div class=&quot;bib-stats&quot;&gt;
+<span class="line-num">689</span>            &lt;div class=&quot;bib-stat&quot;&gt;&lt;span class=&quot;num&quot;&gt;{total}&lt;/span&gt;&lt;span class=&quot;lbl&quot;&gt;Total Works&lt;/span&gt;&lt;/div&gt;
+<span class="line-num">690</span>            &lt;div class=&quot;bib-stat&quot;&gt;&lt;span class=&quot;num&quot;&gt;{in_coll}&lt;/span&gt;&lt;span class=&quot;lbl&quot;&gt;In Collection&lt;/span&gt;&lt;/div&gt;
+<span class="line-num">691</span>            &lt;div class=&quot;bib-stat&quot;&gt;&lt;span class=&quot;num&quot;&gt;{primary}&lt;/span&gt;&lt;span class=&quot;lbl&quot;&gt;Primary Sources&lt;/span&gt;&lt;/div&gt;
+<span class="line-num">692</span>            &lt;div class=&quot;bib-stat&quot;&gt;&lt;span class=&quot;num&quot;&gt;{direct}&lt;/span&gt;&lt;span class=&quot;lbl&quot;&gt;Direct Scholarship&lt;/span&gt;&lt;/div&gt;
+<span class="line-num">693</span>            &lt;div class=&quot;bib-stat&quot;&gt;&lt;span class=&quot;num&quot;&gt;{needs_rev}&lt;/span&gt;&lt;span class=&quot;lbl&quot;&gt;Need Review&lt;/span&gt;&lt;/div&gt;
+<span class="line-num">694</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">695</span>
+<span class="line-num">696</span>    # Build sections
+<span class="line-num">697</span>    sections_html = &#x27;&#x27;
+<span class="line-num">698</span>    for rel in relevance_order:
+<span class="line-num">699</span>        items = by_relevance.get(rel, [])
+<span class="line-num">700</span>        if not items:
+<span class="line-num">701</span>            continue
+<span class="line-num">702</span>
+<span class="line-num">703</span>        entries_html = &#x27;&#x27;
+<span class="line-num">704</span>        for e in items:
+<span class="line-num">705</span>            (eid, author, title, year, pub_type, journal,
+<span class="line-num">706</span>             relevance, topic, in_coll_flag, notes,
+<span class="line-num">707</span>             rev_status, needs_rev_flag) = e
+<span class="line-num">708</span>
+<span class="line-num">709</span>            year_str = f&#x27; ({year})&#x27; if year else &#x27;&#x27;
+<span class="line-num">710</span>            journal_str = f&#x27;. {escape(journal)}&#x27; if journal else &#x27;&#x27;
+<span class="line-num">711</span>            type_str = f&#x27; [{pub_type}]&#x27; if pub_type else &#x27;&#x27;
+<span class="line-num">712</span>
+<span class="line-num">713</span>            collection_badge = &#x27;&lt;span class=&quot;bib-badge-collection&quot;&gt;In Collection&lt;/span&gt;&#x27; if in_coll_flag else &#x27;&lt;span class=&quot;bib-badge-missing&quot;&gt;Not in Collection&lt;/span&gt;&#x27;
+<span class="line-num">714</span>            review_badge = review_badge_html(needs_rev_flag) if needs_rev_flag else &#x27;&#x27;
+<span class="line-num">715</span>            topic_html = topic_badges_html(topic) if topic else &#x27;&#x27;
+<span class="line-num">716</span>
+<span class="line-num">717</span>            entries_html += f&quot;&quot;&quot;
+<span class="line-num">718</span>                &lt;div class=&quot;bib-entry&quot;&gt;
+<span class="line-num">719</span>                    &lt;div&gt;&lt;span class=&quot;bib-author&quot;&gt;{escape(author or &quot;&quot;)}&lt;/span&gt;{year_str}.
+<span class="line-num">720</span>                    &lt;span class=&quot;bib-title&quot;&gt;{escape(title)}&lt;/span&gt;{journal_str}{type_str}.&lt;/div&gt;
+<span class="line-num">721</span>                    &lt;div class=&quot;bib-badges&quot;&gt;{collection_badge} {topic_html} {review_badge}&lt;/div&gt;
+<span class="line-num">722</span>                &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">723</span>
+<span class="line-num">724</span>        label = relevance_labels.get(rel, rel)
+<span class="line-num">725</span>        sections_html += f&quot;&quot;&quot;
+<span class="line-num">726</span>            &lt;section class=&quot;bib-section&quot;&gt;
+<span class="line-num">727</span>                &lt;h3&gt;{label} ({len(items)})&lt;/h3&gt;
+<span class="line-num">728</span>                {entries_html}
+<span class="line-num">729</span>            &lt;/section&gt;&quot;&quot;&quot;
+<span class="line-num">730</span>
+<span class="line-num">731</span>    body = f&quot;&quot;&quot;
+<span class="line-num">732</span>        &lt;div class=&quot;bib-page&quot;&gt;
+<span class="line-num">733</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">734</span>                &lt;h2&gt;Bibliography of the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;&lt;/h2&gt;
+<span class="line-num">735</span>                &lt;p&gt;A comprehensive bibliography of editions, translations, and scholarship on
+<span class="line-num">736</span>                the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;, compiled from Russell (2014), the
+<span class="line-num">737</span>                &lt;em&gt;Word &amp;amp; Image&lt;/em&gt; special issues (1998, 2015), and ongoing research.&lt;/p&gt;
+<span class="line-num">738</span>            &lt;/div&gt;
+<span class="line-num">739</span>            {stats_html}
+<span class="line-num">740</span>            {sections_html}
+<span class="line-num">741</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">742</span>
+<span class="line-num">743</span>    page = page_shell(&#x27;Bibliography&#x27;, body, active_nav=&#x27;bibliography&#x27;)
+<span class="line-num">744</span>    (SITE_DIR / &#x27;bibliography.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">745</span>
+<span class="line-num">746</span>    print(f&quot;  bibliography.html: {total} entries&quot;)
+<span class="line-num">747</span>
+<span class="line-num">748</span>
+<span class="line-num">749</span># ============================================================
+<span class="line-num">750</span># About page
+<span class="line-num">751</span># ============================================================
+<span class="line-num">752</span>
+<span class="line-num">753</span>def build_about_page(conn):
+<span class="line-num">754</span>    cur = conn.cursor()
+<span class="line-num">755</span>
+<span class="line-num">756</span>    # Get stats
+<span class="line-num">757</span>    stats = {}
+<span class="line-num">758</span>    for table in [&#x27;documents&#x27;, &#x27;images&#x27;, &#x27;dissertation_refs&#x27;, &#x27;matches&#x27;,
+<span class="line-num">759</span>                   &#x27;annotators&#x27;, &#x27;bibliography&#x27;, &#x27;scholars&#x27;, &#x27;dictionary_terms&#x27;,
+<span class="line-num">760</span>                   &#x27;timeline_events&#x27;]:
+<span class="line-num">761</span>        try:
+<span class="line-num">762</span>            cur.execute(f&quot;SELECT COUNT(*) FROM {table}&quot;)
+<span class="line-num">763</span>            stats[table] = cur.fetchone()[0]
+<span class="line-num">764</span>        except:
+<span class="line-num">765</span>            stats[table] = 0
+<span class="line-num">766</span>
+<span class="line-num">767</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches WHERE confidence=&#x27;HIGH&#x27;&quot;)
+<span class="line-num">768</span>    stats[&#x27;high_conf&#x27;] = cur.fetchone()[0]
+<span class="line-num">769</span>    cur.execute(&quot;SELECT COUNT(*) FROM matches WHERE confidence=&#x27;LOW&#x27;&quot;)
+<span class="line-num">770</span>    stats[&#x27;low_conf&#x27;] = cur.fetchone()[0]
+<span class="line-num">771</span>    cur.execute(&quot;SELECT COUNT(*) FROM bibliography WHERE in_collection=1&quot;)
+<span class="line-num">772</span>    stats[&#x27;in_collection&#x27;] = cur.fetchone()[0]
+<span class="line-num">773</span>
+<span class="line-num">774</span>    body = f&quot;&quot;&quot;
+<span class="line-num">775</span>        &lt;div class=&quot;scholar-detail&quot;&gt;
+<span class="line-num">776</span>            &lt;h2&gt;About This Project&lt;/h2&gt;
+<span class="line-num">777</span>
+<span class="line-num">778</span>            &lt;div class=&quot;paper-detail&quot;&gt;
+<span class="line-num">779</span>                &lt;h3&gt;What Is This?&lt;/h3&gt;
+<span class="line-num">780</span>                &lt;div class=&quot;paper-summary-full&quot;&gt;&lt;p&gt;
+<span class="line-num">781</span>                This is a digital humanities project documenting the readership and
+<span class="line-num">782</span>                marginalia of the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt; (Venice: Aldus Manutius, 1499),
+<span class="line-num">783</span>                based on James Russell&#x27;s PhD thesis
+<span class="line-num">784</span>                &lt;em&gt;Many Other Things Worthy of Knowledge and Memory&lt;/em&gt; (Durham University, 2014).
+<span class="line-num">785</span>                &lt;/p&gt;&lt;p&gt;
+<span class="line-num">786</span>                Russell conducted a world census of annotated copies of the HP, documenting
+<span class="line-num">787</span>                marginalia by readers including Ben Jonson, Pope Alexander VII, Benedetto Giovio,
+<span class="line-num">788</span>                and anonymous alchemists. This site presents his findings alongside photographs
+<span class="line-num">789</span>                of two annotated copies, a dictionary of HP terminology, and an index of
+<span class="line-num">790</span>                scholarship spanning five centuries.
+<span class="line-num">791</span>                &lt;/p&gt;&lt;/div&gt;
+<span class="line-num">792</span>            &lt;/div&gt;
+<span class="line-num">793</span>
+<span class="line-num">794</span>            &lt;div class=&quot;paper-detail&quot;&gt;
+<span class="line-num">795</span>                &lt;h3&gt;Database Statistics&lt;/h3&gt;
+<span class="line-num">796</span>                &lt;div class=&quot;paper-summary-full&quot;&gt;
+<span class="line-num">797</span>                &lt;ul style=&quot;list-style:none; padding:0;&quot;&gt;
+<span class="line-num">798</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;images&#x27;]}&lt;/strong&gt; manuscript images catalogued&lt;/li&gt;
+<span class="line-num">799</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;dissertation_refs&#x27;]}&lt;/strong&gt; folio references extracted from Russell&#x27;s thesis&lt;/li&gt;
+<span class="line-num">800</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;matches&#x27;]}&lt;/strong&gt; image-reference matches
+<span class="line-num">801</span>                        ({stats[&#x27;high_conf&#x27;]} high confidence, {stats[&#x27;low_conf&#x27;]} low/provisional)&lt;/li&gt;
+<span class="line-num">802</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;annotators&#x27;]}&lt;/strong&gt; annotator hands identified&lt;/li&gt;
+<span class="line-num">803</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;bibliography&#x27;]}&lt;/strong&gt; works in bibliography
+<span class="line-num">804</span>                        ({stats[&#x27;in_collection&#x27;]} in our collection)&lt;/li&gt;
+<span class="line-num">805</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;scholars&#x27;]}&lt;/strong&gt; scholar profiles&lt;/li&gt;
+<span class="line-num">806</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;dictionary_terms&#x27;]}&lt;/strong&gt; dictionary terms&lt;/li&gt;
+<span class="line-num">807</span>                    &lt;li&gt;&lt;strong&gt;{stats[&#x27;timeline_events&#x27;]}&lt;/strong&gt; timeline events&lt;/li&gt;
+<span class="line-num">808</span>                &lt;/ul&gt;
+<span class="line-num">809</span>                &lt;/div&gt;
+<span class="line-num">810</span>            &lt;/div&gt;
+<span class="line-num">811</span>
+<span class="line-num">812</span>            &lt;div class=&quot;paper-detail&quot;&gt;
+<span class="line-num">813</span>                &lt;h3&gt;Data Provenance&lt;/h3&gt;
+<span class="line-num">814</span>                &lt;div class=&quot;paper-summary-full&quot;&gt;&lt;p&gt;
+<span class="line-num">815</span>                Content on this site has varying levels of verification:
+<span class="line-num">816</span>                &lt;/p&gt;
+<span class="line-num">817</span>                &lt;ul&gt;
+<span class="line-num">818</span>                    &lt;li&gt;&lt;strong&gt;Verified&lt;/strong&gt;: Signature maps, collation formulae, and image
+<span class="line-num">819</span>                    cataloging are deterministic and correct.&lt;/li&gt;
+<span class="line-num">820</span>                    &lt;li&gt;&lt;strong&gt;High confidence&lt;/strong&gt;: Siena O.III.38 image matches use explicit
+<span class="line-num">821</span>                    recto/verso naming.&lt;/li&gt;
+<span class="line-num">822</span>                    &lt;li&gt;&lt;strong&gt;Low confidence&lt;/strong&gt;: BL C.60.o.12 matches assume sequential photo
+<span class="line-num">823</span>                    numbers equal folio numbers. The BL copy is the 1545 edition; the signature map
+<span class="line-num">824</span>                    is based on the 1499. Manual verification needed.&lt;/li&gt;
+<span class="line-num">825</span>                    &lt;li&gt;&lt;strong&gt;Unreviewed&lt;/strong&gt;: Scholar summaries, dictionary definitions, and
+<span class="line-num">826</span>                    hand attributions were generated with LLM assistance and have not been verified
+<span class="line-num">827</span>                    by a domain expert. These are marked with
+<span class="line-num">828</span>                    &lt;span class=&quot;review-badge&quot; style=&quot;font-size:0.7rem&quot;&gt;Unreviewed&lt;/span&gt; badges.&lt;/li&gt;
+<span class="line-num">829</span>                &lt;/ul&gt;
+<span class="line-num">830</span>                &lt;/div&gt;
+<span class="line-num">831</span>            &lt;/div&gt;
+<span class="line-num">832</span>
+<span class="line-num">833</span>            &lt;div class=&quot;paper-detail&quot;&gt;
+<span class="line-num">834</span>                &lt;h3&gt;How to Rebuild&lt;/h3&gt;
+<span class="line-num">835</span>                &lt;div class=&quot;paper-summary-full&quot;&gt;&lt;p&gt;
+<span class="line-num">836</span>                The site is generated from a SQLite database (&lt;code&gt;db/hp.db&lt;/code&gt;).
+<span class="line-num">837</span>                To rebuild all pages:
+<span class="line-num">838</span>                &lt;/p&gt;
+<span class="line-num">839</span>                &lt;pre style=&quot;background:var(--bg); padding:1rem; border-radius:4px; overflow-x:auto; font-size:0.85rem&quot;&gt;
+<span class="line-num">840</span>python scripts/migrate_v2.py        # Schema migration (idempotent)
+<span class="line-num">841</span>python scripts/seed_dictionary.py   # Dictionary terms (idempotent)
+<span class="line-num">842</span>python scripts/build_site.py        # Generate all HTML + JSON
+<span class="line-num">843</span>                &lt;/pre&gt;
+<span class="line-num">844</span>                &lt;p&gt;Individual pipeline steps:&lt;/p&gt;
+<span class="line-num">845</span>                &lt;pre style=&quot;background:var(--bg); padding:1rem; border-radius:4px; overflow-x:auto; font-size:0.85rem&quot;&gt;
+<span class="line-num">846</span>python scripts/init_db.py           # Initialize DB schema
+<span class="line-num">847</span>python scripts/catalog_images.py    # Catalog manuscript images
+<span class="line-num">848</span>python scripts/build_signature_map.py  # Build signature map
+<span class="line-num">849</span>python scripts/extract_references.py   # Extract refs from thesis PDF
+<span class="line-num">850</span>python scripts/match_refs_to_images.py # Match refs to images
+<span class="line-num">851</span>python scripts/add_hands.py         # Add annotator hand profiles
+<span class="line-num">852</span>python scripts/add_bibliography.py  # Add bibliography and timeline
+<span class="line-num">853</span>                &lt;/pre&gt;
+<span class="line-num">854</span>                &lt;/div&gt;
+<span class="line-num">855</span>            &lt;/div&gt;
+<span class="line-num">856</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">857</span>
+<span class="line-num">858</span>    page = page_shell(&#x27;About&#x27;, body, active_nav=&#x27;about&#x27;)
+<span class="line-num">859</span>    (SITE_DIR / &#x27;about.html&#x27;).write_text(page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">860</span>    print(&quot;  about.html&quot;)
+<span class="line-num">861</span>
+<span class="line-num">862</span>
+<span class="line-num">863</span># ============================================================
+<span class="line-num">864</span># Documents tab
+<span class="line-num">865</span># ============================================================
+<span class="line-num">866</span>
+<span class="line-num">867</span># Document metadata: (filename, title, one-line summary)
+<span class="line-num">868</span>DOC_METADATA = {
+<span class="line-num">869</span>    &#x27;README.md&#x27;: (&#x27;README&#x27;, &#x27;Project overview, architecture, rebuild instructions, and data provenance table.&#x27;),
+<span class="line-num">870</span>    &#x27;HPCONCORD.md&#x27;: (&#x27;Concordance Methodology&#x27;, &#x27;How we built the 6-step folio-to-image concordance from Russell\&#x27;s thesis to manuscript photographs.&#x27;),
+<span class="line-num">871</span>    &#x27;HPDECKARD.md&#x27;: (&#x27;Boundary Audit v1&#x27;, &#x27;Deckard boundary map distinguishing deterministic tasks from probabilistic (LLM) tasks across 11 scripts.&#x27;),
+<span class="line-num">872</span>    &#x27;HPDECKARD2.md&#x27;: (&#x27;Boundary Audit v2&#x27;, &#x27;Second Deckard audit covering bibliography expansion, web research ingestion, and the hybrid verification pipeline.&#x27;),
+<span class="line-num">873</span>    &#x27;HPMIT.md&#x27;: (&#x27;MIT Site Analysis&#x27;, &#x27;Reverse-engineering of the MIT Electronic Hypnerotomachia (1997): strengths, weaknesses, and lessons for our digital edition.&#x27;),
+<span class="line-num">874</span>    &#x27;HPMULTIMODAL.md&#x27;: (&#x27;Multimodal RAG Study&#x27;, &#x27;How vision models and multimodal retrieval could read our 674 manuscript images to solve the BL confidence problem.&#x27;),
+<span class="line-num">875</span>    &#x27;HPproposals.md&#x27;: (&#x27;Content Quality Proposals&#x27;, &#x27;Six proposals for improving dictionary, bibliography, scholar, and summary pages through templating and LLM reading.&#x27;),
+<span class="line-num">876</span>    &#x27;HPAGENTS.md&#x27;: (&#x27;Agent Usage Analysis&#x27;, &#x27;Why and how Claude agents were used: what worked (foreground batches), what failed (background web tasks).&#x27;),
+<span class="line-num">877</span>    &#x27;HPEMPTYOUTPUTFILES.md&#x27;: (&#x27;Empty Output Files Post-Mortem&#x27;, &#x27;Root cause analysis of 0-byte agent output files and lessons for background agent reliability.&#x27;),
+<span class="line-num">878</span>    &#x27;MISTAKESTOAVOID.md&#x27;: (&#x27;Mistakes to Avoid&#x27;, &#x27;Twelve hard-won lessons from this project: provenance tagging, confidence scoring, name matching, and more.&#x27;),
+<span class="line-num">879</span>    &#x27;AUDIT_REPORT.md&#x27;: (&#x27;Audit Report&#x27;, &#x27;Validation results: what changed in V2 migration, what remains provisional, what still needs human review.&#x27;),
+<span class="line-num">880</span>    &#x27;HPONTOLOGY.md&#x27;: (&#x27;Ontology Design&#x27;, &#x27;Data model and entity relationships for the HP knowledge base: manuscripts, folios, hands, scholars, terms.&#x27;),
+<span class="line-num">881</span>    &#x27;HPSCHOLARS.md&#x27;: (&#x27;Scholars Analysis&#x27;, &#x27;Strategy for building scholar profiles and article summaries from our PDF corpus.&#x27;),
+<span class="line-num">882</span>    &#x27;HPWEB.md&#x27;: (&#x27;Web Architecture&#x27;, &#x27;Design decisions for the static site: why no framework, how SQLite drives page generation, URL structure.&#x27;),
+<span class="line-num">883</span>}
+<span class="line-num">884</span>
+<span class="line-num">885</span># Script metadata: (filename, title, one-line summary)
+<span class="line-num">886</span>SCRIPT_METADATA = {
+<span class="line-num">887</span>    &#x27;init_db.py&#x27;: (&#x27;Initialize Database&#x27;, &#x27;Creates SQLite schema (7 core tables) and catalogs PDFs/documents from the filesystem.&#x27;),
+<span class="line-num">888</span>    &#x27;catalog_images.py&#x27;: (&#x27;Catalog Images&#x27;, &#x27;Parses image filenames from BL and Siena collections into the images table with folio/side metadata.&#x27;),
+<span class="line-num">889</span>    &#x27;build_signature_map.py&#x27;: (&#x27;Build Signature Map&#x27;, &#x27;Generates the 448-entry signature-to-folio concordance from the Aldine collation formula (a-z, A-G).&#x27;),
+<span class="line-num">890</span>    &#x27;extract_references.py&#x27;: (&#x27;Extract References&#x27;, &#x27;Uses PyMuPDF + regex to extract 282 folio/signature references from Russell\&#x27;s PhD thesis PDF.&#x27;),
+<span class="line-num">891</span>    &#x27;match_refs_to_images.py&#x27;: (&#x27;Match Refs to Images&#x27;, &#x27;SQL join pipeline matching dissertation references to manuscript images via the signature map.&#x27;),
+<span class="line-num">892</span>    &#x27;add_hands.py&#x27;: (&#x27;Add Annotator Hands&#x27;, &#x27;Creates 11 annotator hand profiles and attributes dissertation references to specific hands.&#x27;),
+<span class="line-num">893</span>    &#x27;add_bibliography.py&#x27;: (&#x27;Add Bibliography&#x27;, &#x27;Populates bibliography (58 entries), scholars (29), timeline (39 events) from hardcoded research data.&#x27;),
+<span class="line-num">894</span>    &#x27;migrate_v2.py&#x27;: (&#x27;Schema Migration V2&#x27;, &#x27;Adds annotations, annotators, doc_folio_refs, dictionary tables, review/provenance columns. Downgrades BL confidence.&#x27;),
+<span class="line-num">895</span>    &#x27;seed_dictionary.py&#x27;: (&#x27;Seed Dictionary&#x27;, &#x27;Inserts 37 dictionary terms across 6 categories with 76 bidirectional cross-reference links.&#x27;),
+<span class="line-num">896</span>    &#x27;build_site.py&#x27;: (&#x27;Build Site&#x27;, &#x27;Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).&#x27;),
+<span class="line-num">897</span>    &#x27;build_scholar_profiles.py&#x27;: (&#x27;Build Scholar Profiles (Legacy)&#x27;, &#x27;Original scholar page generator from summaries.json. Superseded by build_site.py.&#x27;),
+<span class="line-num">898</span>    &#x27;export_showcase_data.py&#x27;: (&#x27;Export Showcase Data (Legacy)&#x27;, &#x27;Original data.json exporter for the gallery. Superseded by build_site.py.&#x27;),
+<span class="line-num">899</span>    &#x27;validate.py&#x27;: (&#x27;Validate &amp; QA&#x27;, &#x27;Checks data integrity (duplicate slugs, broken links, confidence distribution) and writes AUDIT_REPORT.md.&#x27;),
+<span class="line-num">900</span>    &#x27;ingest_perplexity.py&#x27;: (&#x27;Ingest Perplexity Research&#x27;, &#x27;Adds 9 bibliography entries and 3 timeline events from HPPERPLEXITY.txt web research.&#x27;),
+<span class="line-num">901</span>    &#x27;pdf_to_markdown.py&#x27;: (&#x27;PDF to Markdown&#x27;, &#x27;Extracts all PDFs to markdown with YAML frontmatter, page markers, and metadata lookup.&#x27;),
+<span class="line-num">902</span>    &#x27;chunk_documents.py&#x27;: (&#x27;Chunk Documents&#x27;, &#x27;Splits markdown files into ~1500-word semantic chunks for RAG/retrieval systems.&#x27;),
+<span class="line-num">903</span>}
+<span class="line-num">904</span>
+<span class="line-num">905</span>
+<span class="line-num">906</span>def markdown_to_html(md_text):
+<span class="line-num">907</span>    &quot;&quot;&quot;Minimal markdown-to-HTML conversion for document display.&quot;&quot;&quot;
+<span class="line-num">908</span>    import re
+<span class="line-num">909</span>    lines = md_text.split(&#x27;\n&#x27;)
+<span class="line-num">910</span>    html_lines = []
+<span class="line-num">911</span>    in_code = False
+<span class="line-num">912</span>    in_list = False
+<span class="line-num">913</span>    in_table = False
+<span class="line-num">914</span>    table_header_done = False
+<span class="line-num">915</span>
+<span class="line-num">916</span>    for line in lines:
+<span class="line-num">917</span>        # Code blocks
+<span class="line-num">918</span>        if line.strip().startswith(&#x27;```&#x27;):
+<span class="line-num">919</span>            if in_code:
+<span class="line-num">920</span>                html_lines.append(&#x27;&lt;/code&gt;&lt;/pre&gt;&#x27;)
+<span class="line-num">921</span>                in_code = False
+<span class="line-num">922</span>            else:
+<span class="line-num">923</span>                lang = line.strip()[3:]
+<span class="line-num">924</span>                html_lines.append(f&#x27;&lt;pre&gt;&lt;code class=&quot;lang-{lang}&quot;&gt;&#x27;)
+<span class="line-num">925</span>                in_code = True
+<span class="line-num">926</span>            continue
+<span class="line-num">927</span>        if in_code:
+<span class="line-num">928</span>            html_lines.append(escape(line))
+<span class="line-num">929</span>            continue
+<span class="line-num">930</span>
+<span class="line-num">931</span>        # Close list if needed
+<span class="line-num">932</span>        if in_list and not line.strip().startswith((&#x27;-&#x27;, &#x27;*&#x27;, &#x27;1.&#x27;, &#x27;2.&#x27;, &#x27;3.&#x27;, &#x27;4.&#x27;, &#x27;5.&#x27;, &#x27;6.&#x27;, &#x27;7.&#x27;, &#x27;8.&#x27;, &#x27;9.&#x27;)):
+<span class="line-num">933</span>            html_lines.append(&#x27;&lt;/ul&gt;&#x27;)
+<span class="line-num">934</span>            in_list = False
+<span class="line-num">935</span>
+<span class="line-num">936</span>        # Tables
+<span class="line-num">937</span>        if &#x27;|&#x27; in line and line.strip().startswith(&#x27;|&#x27;):
+<span class="line-num">938</span>            cells = [c.strip() for c in line.strip().split(&#x27;|&#x27;)[1:-1]]
+<span class="line-num">939</span>            if all(set(c) &lt;= set(&#x27;- :&#x27;) for c in cells):
+<span class="line-num">940</span>                table_header_done = True
+<span class="line-num">941</span>                continue
+<span class="line-num">942</span>            if not in_table:
+<span class="line-num">943</span>                html_lines.append(&#x27;&lt;table class=&quot;doc-table&quot;&gt;&#x27;)
+<span class="line-num">944</span>                in_table = True
+<span class="line-num">945</span>            tag = &#x27;th&#x27; if not table_header_done else &#x27;td&#x27;
+<span class="line-num">946</span>            row = &#x27;&#x27;.join(f&#x27;&lt;{tag}&gt;{escape(c)}&lt;/{tag}&gt;&#x27; for c in cells)
+<span class="line-num">947</span>            html_lines.append(f&#x27;&lt;tr&gt;{row}&lt;/tr&gt;&#x27;)
+<span class="line-num">948</span>            continue
+<span class="line-num">949</span>        elif in_table:
+<span class="line-num">950</span>            html_lines.append(&#x27;&lt;/table&gt;&#x27;)
+<span class="line-num">951</span>            in_table = False
+<span class="line-num">952</span>            table_header_done = False
+<span class="line-num">953</span>
+<span class="line-num">954</span>        stripped = line.strip()
+<span class="line-num">955</span>
+<span class="line-num">956</span>        # Headings
+<span class="line-num">957</span>        if stripped.startswith(&#x27;### &#x27;):
+<span class="line-num">958</span>            html_lines.append(f&#x27;&lt;h4&gt;{escape(stripped[4:])}&lt;/h4&gt;&#x27;)
+<span class="line-num">959</span>        elif stripped.startswith(&#x27;## &#x27;):
+<span class="line-num">960</span>            html_lines.append(f&#x27;&lt;h3&gt;{escape(stripped[3:])}&lt;/h3&gt;&#x27;)
+<span class="line-num">961</span>        elif stripped.startswith(&#x27;# &#x27;):
+<span class="line-num">962</span>            html_lines.append(f&#x27;&lt;h2&gt;{escape(stripped[2:])}&lt;/h2&gt;&#x27;)
+<span class="line-num">963</span>        elif stripped.startswith(&#x27;---&#x27;):
+<span class="line-num">964</span>            html_lines.append(&#x27;&lt;hr&gt;&#x27;)
+<span class="line-num">965</span>        elif stripped.startswith((&#x27;- &#x27;, &#x27;* &#x27;)):
+<span class="line-num">966</span>            if not in_list:
+<span class="line-num">967</span>                html_lines.append(&#x27;&lt;ul&gt;&#x27;)
+<span class="line-num">968</span>                in_list = True
+<span class="line-num">969</span>            html_lines.append(f&#x27;&lt;li&gt;{escape(stripped[2:])}&lt;/li&gt;&#x27;)
+<span class="line-num">970</span>        elif stripped.startswith(&#x27;&gt;&#x27;):
+<span class="line-num">971</span>            html_lines.append(f&#x27;&lt;blockquote&gt;{escape(stripped[1:].strip())}&lt;/blockquote&gt;&#x27;)
+<span class="line-num">972</span>        elif stripped == &#x27;&#x27;:
+<span class="line-num">973</span>            html_lines.append(&#x27;&#x27;)
+<span class="line-num">974</span>        else:
+<span class="line-num">975</span>            # Apply inline formatting
+<span class="line-num">976</span>            text = escape(stripped)
+<span class="line-num">977</span>            # Bold
+<span class="line-num">978</span>            text = re.sub(r&#x27;\*\*(.+?)\*\*&#x27;, r&#x27;&lt;strong&gt;\1&lt;/strong&gt;&#x27;, text)
+<span class="line-num">979</span>            # Italic
+<span class="line-num">980</span>            text = re.sub(r&#x27;\*(.+?)\*&#x27;, r&#x27;&lt;em&gt;\1&lt;/em&gt;&#x27;, text)
+<span class="line-num">981</span>            # Inline code
+<span class="line-num">982</span>            text = re.sub(r&#x27;`(.+?)`&#x27;, r&#x27;&lt;code&gt;\1&lt;/code&gt;&#x27;, text)
+<span class="line-num">983</span>            html_lines.append(f&#x27;&lt;p&gt;{text}&lt;/p&gt;&#x27;)
+<span class="line-num">984</span>
+<span class="line-num">985</span>    if in_list:
+<span class="line-num">986</span>        html_lines.append(&#x27;&lt;/ul&gt;&#x27;)
+<span class="line-num">987</span>    if in_table:
+<span class="line-num">988</span>        html_lines.append(&#x27;&lt;/table&gt;&#x27;)
+<span class="line-num">989</span>    if in_code:
+<span class="line-num">990</span>        html_lines.append(&#x27;&lt;/code&gt;&lt;/pre&gt;&#x27;)
+<span class="line-num">991</span>
+<span class="line-num">992</span>    return &#x27;\n&#x27;.join(html_lines)
+<span class="line-num">993</span>
+<span class="line-num">994</span>
+<span class="line-num">995</span>def build_docs_pages():
+<span class="line-num">996</span>    &quot;&quot;&quot;Generate docs/index.html and docs/*.html from project markdown files.&quot;&quot;&quot;
+<span class="line-num">997</span>    docs_dir = SITE_DIR / &#x27;docs&#x27;
+<span class="line-num">998</span>    docs_dir.mkdir(exist_ok=True)
+<span class="line-num">999</span>
+<span class="line-num">1000</span>    doc_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1001</span>        .docs-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1002</span>        .docs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+<span class="line-num">1003</span>        .docs-table th, .docs-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+<span class="line-num">1004</span>        .docs-table th { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+<span class="line-num">1005</span>        .docs-table td a { color: var(--accent); text-decoration: none; font-weight: 600; }
+<span class="line-num">1006</span>        .docs-table td a:hover { text-decoration: underline; }
+<span class="line-num">1007</span>        .docs-table .doc-summary { font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1008</span>        .doc-content { max-width: 800px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1009</span>        .doc-content h2 { color: var(--accent); margin: 2rem 0 0.5rem; }
+<span class="line-num">1010</span>        .doc-content h3 { color: var(--text); margin: 1.5rem 0 0.5rem; }
+<span class="line-num">1011</span>        .doc-content h4 { color: var(--text-muted); margin: 1rem 0 0.5rem; }
+<span class="line-num">1012</span>        .doc-content p { margin-bottom: 0.75rem; line-height: 1.7; }
+<span class="line-num">1013</span>        .doc-content pre { background: var(--bg); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; margin: 1rem 0; }
+<span class="line-num">1014</span>        .doc-content code { font-size: 0.9em; background: var(--bg); padding: 0.1rem 0.3rem; border-radius: 2px; }
+<span class="line-num">1015</span>        .doc-content pre code { background: none; padding: 0; }
+<span class="line-num">1016</span>        .doc-content blockquote { border-left: 3px solid var(--accent-light); padding-left: 1rem; color: var(--text-muted); font-style: italic; margin: 1rem 0; }
+<span class="line-num">1017</span>        .doc-content ul { margin: 0.5rem 0 1rem 1.5rem; }
+<span class="line-num">1018</span>        .doc-content li { margin-bottom: 0.3rem; line-height: 1.6; }
+<span class="line-num">1019</span>        .doc-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+<span class="line-num">1020</span>        .doc-content table.doc-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+<span class="line-num">1021</span>        .doc-content table.doc-table th, .doc-content table.doc-table td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); }
+<span class="line-num">1022</span>        .doc-content table.doc-table th { background: var(--bg); font-weight: 600; }
+<span class="line-num">1023</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1024</span>
+<span class="line-num">1025</span>    # Read all docs and build pages
+<span class="line-num">1026</span>    docs = []
+<span class="line-num">1027</span>    for filename, (title, summary) in sorted(DOC_METADATA.items()):
+<span class="line-num">1028</span>        filepath = BASE_DIR / filename
+<span class="line-num">1029</span>        if not filepath.exists():
+<span class="line-num">1030</span>            continue
+<span class="line-num">1031</span>
+<span class="line-num">1032</span>        slug = slugify(title)
+<span class="line-num">1033</span>        content = filepath.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1034</span>        word_count = len(content.split())
+<span class="line-num">1035</span>
+<span class="line-num">1036</span>        docs.append({
+<span class="line-num">1037</span>            &#x27;filename&#x27;: filename,
+<span class="line-num">1038</span>            &#x27;title&#x27;: title,
+<span class="line-num">1039</span>            &#x27;summary&#x27;: summary,
+<span class="line-num">1040</span>            &#x27;slug&#x27;: slug,
+<span class="line-num">1041</span>            &#x27;word_count&#x27;: word_count,
+<span class="line-num">1042</span>        })
+<span class="line-num">1043</span>
+<span class="line-num">1044</span>        # Build detail page
+<span class="line-num">1045</span>        content_html = markdown_to_html(content)
+<span class="line-num">1046</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">1047</span>        &lt;div class=&quot;doc-content&quot;&gt;
+<span class="line-num">1048</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; All Documents&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1049</span>            &lt;h2&gt;{escape(title)}&lt;/h2&gt;
+<span class="line-num">1050</span>            &lt;p style=&quot;color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem&quot;&gt;
+<span class="line-num">1051</span>                {escape(filename)} &amp;mdash; {word_count:,} words&lt;/p&gt;
+<span class="line-num">1052</span>            {content_html}
+<span class="line-num">1053</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1054</span>
+<span class="line-num">1055</span>        detail_page = page_shell(title, detail_body, active_nav=&#x27;docs&#x27;, depth=1)
+<span class="line-num">1056</span>        (docs_dir / f&#x27;{slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1057</span>
+<span class="line-num">1058</span>    # Build index page
+<span class="line-num">1059</span>    rows_html = &#x27;&#x27;
+<span class="line-num">1060</span>    for d in docs:
+<span class="line-num">1061</span>        rows_html += f&quot;&quot;&quot;
+<span class="line-num">1062</span>            &lt;tr&gt;
+<span class="line-num">1063</span>                &lt;td&gt;&lt;a href=&quot;{d[&#x27;slug&#x27;]}.html&quot;&gt;{escape(d[&#x27;title&#x27;])}&lt;/a&gt;&lt;/td&gt;
+<span class="line-num">1064</span>                &lt;td class=&quot;doc-summary&quot;&gt;{escape(d[&#x27;summary&#x27;])}&lt;/td&gt;
+<span class="line-num">1065</span>                &lt;td style=&quot;font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap&quot;&gt;{d[&#x27;word_count&#x27;]:,}&lt;/td&gt;
+<span class="line-num">1066</span>            &lt;/tr&gt;&quot;&quot;&quot;
+<span class="line-num">1067</span>
+<span class="line-num">1068</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">1069</span>        &lt;div class=&quot;docs-page&quot;&gt;
+<span class="line-num">1070</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">1071</span>                &lt;h2&gt;Project Documents&lt;/h2&gt;
+<span class="line-num">1072</span>                &lt;p&gt;{len(docs)} documents covering methodology, architecture, analysis, and lessons learned.&lt;/p&gt;
+<span class="line-num">1073</span>            &lt;/div&gt;
+<span class="line-num">1074</span>            &lt;table class=&quot;docs-table&quot;&gt;
+<span class="line-num">1075</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Document&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Words&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1076</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
+<span class="line-num">1077</span>            &lt;/table&gt;
+<span class="line-num">1078</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1079</span>
+<span class="line-num">1080</span>    index_page = page_shell(&#x27;Documents&#x27;, index_body, active_nav=&#x27;docs&#x27;, depth=1)
+<span class="line-num">1081</span>    (docs_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1082</span>    print(f&quot;  docs/index.html + {len(docs)} document pages&quot;)
+<span class="line-num">1083</span>
+<span class="line-num">1084</span>
+<span class="line-num">1085</span>def build_code_pages():
+<span class="line-num">1086</span>    &quot;&quot;&quot;Generate code/index.html and code/*.html from Python scripts.&quot;&quot;&quot;
+<span class="line-num">1087</span>    code_dir = SITE_DIR / &#x27;code&#x27;
+<span class="line-num">1088</span>    code_dir.mkdir(exist_ok=True)
+<span class="line-num">1089</span>
+<span class="line-num">1090</span>    code_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">1091</span>        .code-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1092</span>        .code-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+<span class="line-num">1093</span>        .code-table th, .code-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+<span class="line-num">1094</span>        .code-table th { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+<span class="line-num">1095</span>        .code-table td a { color: var(--accent); text-decoration: none; font-weight: 600; font-family: monospace; }
+<span class="line-num">1096</span>        .code-table td a:hover { text-decoration: underline; }
+<span class="line-num">1097</span>        .code-table .code-summary { font-size: 0.85rem; color: var(--text-muted); }
+<span class="line-num">1098</span>        .code-content { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">1099</span>        .code-content h2 { color: var(--accent); margin-bottom: 0.5rem; }
+<span class="line-num">1100</span>        .code-content pre {
+<span class="line-num">1101</span>            background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 4px;
+<span class="line-num">1102</span>            overflow-x: auto; font-size: 0.82rem; line-height: 1.5;
+<span class="line-num">1103</span>            max-height: 80vh; overflow-y: auto;
+<span class="line-num">1104</span>        }
+<span class="line-num">1105</span>        .code-content .line-num { color: #858585; user-select: none; display: inline-block; width: 3.5em; text-align: right; margin-right: 1em; }
+<span class="line-num">1106</span>        .code-meta { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+<span class="line-num">1107</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">1108</span>
+<span class="line-num">1109</span>    scripts = []
+<span class="line-num">1110</span>    scripts_dir = BASE_DIR / &#x27;scripts&#x27;
+<span class="line-num">1111</span>
+<span class="line-num">1112</span>    for filename, (title, summary) in sorted(SCRIPT_METADATA.items()):
+<span class="line-num">1113</span>        filepath = scripts_dir / filename
+<span class="line-num">1114</span>        if not filepath.exists():
+<span class="line-num">1115</span>            continue
+<span class="line-num">1116</span>
+<span class="line-num">1117</span>        slug = slugify(filename.replace(&#x27;.py&#x27;, &#x27;&#x27;))
+<span class="line-num">1118</span>        content = filepath.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1119</span>        line_count = len(content.splitlines())
+<span class="line-num">1120</span>
+<span class="line-num">1121</span>        scripts.append({
+<span class="line-num">1122</span>            &#x27;filename&#x27;: filename,
+<span class="line-num">1123</span>            &#x27;title&#x27;: title,
+<span class="line-num">1124</span>            &#x27;summary&#x27;: summary,
+<span class="line-num">1125</span>            &#x27;slug&#x27;: slug,
+<span class="line-num">1126</span>            &#x27;line_count&#x27;: line_count,
+<span class="line-num">1127</span>        })
+<span class="line-num">1128</span>
+<span class="line-num">1129</span>        # Build detail page with syntax-highlighted code
+<span class="line-num">1130</span>        lines = content.splitlines()
+<span class="line-num">1131</span>        code_lines = []
+<span class="line-num">1132</span>        for i, line in enumerate(lines, 1):
+<span class="line-num">1133</span>            num = f&#x27;&lt;span class=&quot;line-num&quot;&gt;{i}&lt;/span&gt;&#x27;
+<span class="line-num">1134</span>            code_lines.append(f&#x27;{num}{escape(line)}&#x27;)
+<span class="line-num">1135</span>        code_html = &#x27;\n&#x27;.join(code_lines)
+<span class="line-num">1136</span>
+<span class="line-num">1137</span>        detail_body = f&quot;&quot;&quot;
+<span class="line-num">1138</span>        &lt;div class=&quot;code-content&quot;&gt;
+<span class="line-num">1139</span>            &lt;p&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; All Scripts&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">1140</span>            &lt;h2&gt;{escape(title)}&lt;/h2&gt;
+<span class="line-num">1141</span>            &lt;div class=&quot;code-meta&quot;&gt;{escape(filename)} &amp;mdash; {line_count} lines&lt;/div&gt;
+<span class="line-num">1142</span>            &lt;p style=&quot;margin-bottom:1rem&quot;&gt;{escape(summary)}&lt;/p&gt;
+<span class="line-num">1143</span>            &lt;pre&gt;{code_html}&lt;/pre&gt;
+<span class="line-num">1144</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1145</span>
+<span class="line-num">1146</span>        detail_page = page_shell(title, detail_body, active_nav=&#x27;code&#x27;, depth=1)
+<span class="line-num">1147</span>        (code_dir / f&#x27;{slug}.html&#x27;).write_text(detail_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1148</span>
+<span class="line-num">1149</span>    # Build index page
+<span class="line-num">1150</span>    rows_html = &#x27;&#x27;
+<span class="line-num">1151</span>    for s in scripts:
+<span class="line-num">1152</span>        rows_html += f&quot;&quot;&quot;
+<span class="line-num">1153</span>            &lt;tr&gt;
+<span class="line-num">1154</span>                &lt;td&gt;&lt;a href=&quot;{s[&#x27;slug&#x27;]}.html&quot;&gt;{escape(s[&#x27;filename&#x27;])}&lt;/a&gt;&lt;/td&gt;
+<span class="line-num">1155</span>                &lt;td&gt;{escape(s[&#x27;title&#x27;])}&lt;/td&gt;
+<span class="line-num">1156</span>                &lt;td class=&quot;code-summary&quot;&gt;{escape(s[&#x27;summary&#x27;])}&lt;/td&gt;
+<span class="line-num">1157</span>                &lt;td style=&quot;font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap&quot;&gt;{s[&#x27;line_count&#x27;]}&lt;/td&gt;
+<span class="line-num">1158</span>            &lt;/tr&gt;&quot;&quot;&quot;
+<span class="line-num">1159</span>
+<span class="line-num">1160</span>    index_body = f&quot;&quot;&quot;
+<span class="line-num">1161</span>        &lt;div class=&quot;code-page&quot;&gt;
+<span class="line-num">1162</span>            &lt;div class=&quot;intro&quot;&gt;
+<span class="line-num">1163</span>                &lt;h2&gt;Pipeline Scripts&lt;/h2&gt;
+<span class="line-num">1164</span>                &lt;p&gt;{len(scripts)} Python scripts that build the database, generate the site, and validate the data.
+<span class="line-num">1165</span>                SQLite is the source of truth; these scripts are the processing pipeline.&lt;/p&gt;
+<span class="line-num">1166</span>            &lt;/div&gt;
+<span class="line-num">1167</span>            &lt;table class=&quot;code-table&quot;&gt;
+<span class="line-num">1168</span>                &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Script&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th&gt;Lines&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+<span class="line-num">1169</span>                &lt;tbody&gt;{rows_html}&lt;/tbody&gt;
+<span class="line-num">1170</span>            &lt;/table&gt;
+<span class="line-num">1171</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">1172</span>
+<span class="line-num">1173</span>    index_page = page_shell(&#x27;Code&#x27;, index_body, active_nav=&#x27;code&#x27;, depth=1)
+<span class="line-num">1174</span>    (code_dir / &#x27;index.html&#x27;).write_text(index_page, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1175</span>    print(f&quot;  code/index.html + {len(scripts)} script pages&quot;)
+<span class="line-num">1176</span>
+<span class="line-num">1177</span>
+<span class="line-num">1178</span># ============================================================
+<span class="line-num">1179</span># Update main index.html with nav
+<span class="line-num">1180</span># ============================================================
+<span class="line-num">1181</span>
+<span class="line-num">1182</span>def update_index_nav():
+<span class="line-num">1183</span>    &quot;&quot;&quot;Replace nav bar in index.html with current version, fix CSS links.&quot;&quot;&quot;
+<span class="line-num">1184</span>    index_path = SITE_DIR / &#x27;index.html&#x27;
+<span class="line-num">1185</span>    if not index_path.exists():
+<span class="line-num">1186</span>        return
+<span class="line-num">1187</span>
+<span class="line-num">1188</span>    content = index_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1189</span>    updated = False
+<span class="line-num">1190</span>
+<span class="line-num">1191</span>    # Replace any existing nav with current 8-link version
+<span class="line-num">1192</span>    import re
+<span class="line-num">1193</span>    nav = nav_html(&#x27;home&#x27;)
+<span class="line-num">1194</span>    old_nav_pattern = r&#x27;&lt;nav class=&quot;site-nav&quot;&gt;.*?&lt;/nav&gt;&#x27;
+<span class="line-num">1195</span>    if re.search(old_nav_pattern, content):
+<span class="line-num">1196</span>        content = re.sub(old_nav_pattern, nav, content)
+<span class="line-num">1197</span>        updated = True
+<span class="line-num">1198</span>    elif &#x27;site-nav&#x27; not in content:
+<span class="line-num">1199</span>        content = content.replace(
+<span class="line-num">1200</span>            &#x27;&lt;/div&gt;\n    &lt;/header&gt;&#x27;,
+<span class="line-num">1201</span>            f&#x27;    {nav}\n        &lt;/div&gt;\n    &lt;/header&gt;&#x27;,
+<span class="line-num">1202</span>            1
+<span class="line-num">1203</span>        )
+<span class="line-num">1204</span>        updated = True
+<span class="line-num">1205</span>
+<span class="line-num">1206</span>    # Fix CSS links: add scholars.css and components.css if missing
+<span class="line-num">1207</span>    if &#x27;scholars.css&#x27; not in content:
+<span class="line-num">1208</span>        content = content.replace(
+<span class="line-num">1209</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;&#x27;,
+<span class="line-num">1210</span>            &#x27;&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;scholars.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;components.css&quot;&gt;&#x27;
+<span class="line-num">1211</span>        )
+<span class="line-num">1212</span>        updated = True
+<span class="line-num">1213</span>
+<span class="line-num">1214</span>    # Add meta description if missing
+<span class="line-num">1215</span>    if &#x27;meta name=&quot;description&quot;&#x27; not in content:
+<span class="line-num">1216</span>        content = content.replace(
+<span class="line-num">1217</span>            &#x27;&lt;meta name=&quot;viewport&quot;&#x27;,
+<span class="line-num">1218</span>            &#x27;&lt;meta name=&quot;description&quot; content=&quot;Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)&quot;&gt;\n    &lt;meta name=&quot;viewport&quot;&#x27;
+<span class="line-num">1219</span>        )
+<span class="line-num">1220</span>        updated = True
+<span class="line-num">1221</span>
+<span class="line-num">1222</span>    if updated:
+<span class="line-num">1223</span>        index_path.write_text(content, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1224</span>        print(&quot;  index.html: nav + CSS updated&quot;)
+<span class="line-num">1225</span>
+<span class="line-num">1226</span>
+<span class="line-num">1227</span># ============================================================
+<span class="line-num">1228</span># Update CSS for new components
+<span class="line-num">1229</span># ============================================================
+<span class="line-num">1230</span>
+<span class="line-num">1231</span>def update_styles():
+<span class="line-num">1232</span>    &quot;&quot;&quot;Append new styles to style.css for nav, badges, etc.&quot;&quot;&quot;
+<span class="line-num">1233</span>    css_path = SITE_DIR / &#x27;style.css&#x27;
+<span class="line-num">1234</span>    content = css_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1235</span>
+<span class="line-num">1236</span>    if &#x27;site-nav&#x27; in content:
+<span class="line-num">1237</span>        return  # Already updated
+<span class="line-num">1238</span>
+<span class="line-num">1239</span>    additions = &quot;&quot;&quot;
+<span class="line-num">1240</span>
+<span class="line-num">1241</span>/* ===== Site Navigation ===== */
+<span class="line-num">1242</span>.site-nav {
+<span class="line-num">1243</span>    margin-top: 1.5rem;
+<span class="line-num">1244</span>    display: flex;
+<span class="line-num">1245</span>    justify-content: center;
+<span class="line-num">1246</span>    gap: 0.25rem;
+<span class="line-num">1247</span>    flex-wrap: wrap;
+<span class="line-num">1248</span>}
+<span class="line-num">1249</span>
+<span class="line-num">1250</span>.site-nav a {
+<span class="line-num">1251</span>    color: #9a8c7a;
+<span class="line-num">1252</span>    text-decoration: none;
+<span class="line-num">1253</span>    font-family: var(--font-sans);
+<span class="line-num">1254</span>    font-size: 0.9rem;
+<span class="line-num">1255</span>    padding: 0.4rem 1rem;
+<span class="line-num">1256</span>    border-radius: 3px;
+<span class="line-num">1257</span>    transition: all 0.2s;
+<span class="line-num">1258</span>}
+<span class="line-num">1259</span>
+<span class="line-num">1260</span>.site-nav a:hover {
+<span class="line-num">1261</span>    color: var(--accent-light);
+<span class="line-num">1262</span>    background: rgba(255,255,255,0.05);
+<span class="line-num">1263</span>}
+<span class="line-num">1264</span>
+<span class="line-num">1265</span>.site-nav a.active {
+<span class="line-num">1266</span>    color: var(--header-text);
+<span class="line-num">1267</span>    background: rgba(255,255,255,0.1);
+<span class="line-num">1268</span>}
+<span class="line-num">1269</span>
+<span class="line-num">1270</span>/* ===== Review &amp; Confidence Badges ===== */
+<span class="line-num">1271</span>.review-badge {
+<span class="line-num">1272</span>    display: inline-block;
+<span class="line-num">1273</span>    padding: 0.1rem 0.4rem;
+<span class="line-num">1274</span>    background: #fff3cd;
+<span class="line-num">1275</span>    color: #856404;
+<span class="line-num">1276</span>    border-radius: 2px;
+<span class="line-num">1277</span>    font-size: 0.65rem;
+<span class="line-num">1278</span>    font-weight: 600;
+<span class="line-num">1279</span>    font-family: var(--font-sans);
+<span class="line-num">1280</span>    text-transform: uppercase;
+<span class="line-num">1281</span>    letter-spacing: 0.03em;
+<span class="line-num">1282</span>    vertical-align: middle;
+<span class="line-num">1283</span>    margin-left: 0.3rem;
+<span class="line-num">1284</span>}
+<span class="line-num">1285</span>
+<span class="line-num">1286</span>.confidence-badge {
+<span class="line-num">1287</span>    display: inline-block;
+<span class="line-num">1288</span>    padding: 0.1rem 0.4rem;
+<span class="line-num">1289</span>    border-radius: 2px;
+<span class="line-num">1290</span>    font-size: 0.65rem;
+<span class="line-num">1291</span>    font-weight: 600;
+<span class="line-num">1292</span>    font-family: var(--font-sans);
+<span class="line-num">1293</span>    text-transform: uppercase;
+<span class="line-num">1294</span>    letter-spacing: 0.03em;
+<span class="line-num">1295</span>    vertical-align: middle;
+<span class="line-num">1296</span>    margin-left: 0.3rem;
+<span class="line-num">1297</span>}
+<span class="line-num">1298</span>
+<span class="line-num">1299</span>.confidence-high { background: #d4edda; color: #155724; }
+<span class="line-num">1300</span>.confidence-medium { background: #fff3cd; color: #856404; }
+<span class="line-num">1301</span>.confidence-low { background: #f8d7da; color: #721c24; }
+<span class="line-num">1302</span>.confidence-provisional { background: #e2e3e5; color: #383d41; }
+<span class="line-num">1303</span>&quot;&quot;&quot;
+<span class="line-num">1304</span>
+<span class="line-num">1305</span>    css_path.write_text(content + additions, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">1306</span>    print(&quot;  style.css: nav + badge styles added&quot;)
+<span class="line-num">1307</span>
+<span class="line-num">1308</span>
+<span class="line-num">1309</span># ============================================================
+<span class="line-num">1310</span># Main
+<span class="line-num">1311</span># ============================================================
+<span class="line-num">1312</span>
+<span class="line-num">1313</span>def main():
+<span class="line-num">1314</span>    print(&quot;=== Building Site ===\n&quot;)
+<span class="line-num">1315</span>
+<span class="line-num">1316</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">1317</span>
+<span class="line-num">1318</span>    print(&quot;Exporting data...&quot;)
+<span class="line-num">1319</span>    export_data_json(conn)
+<span class="line-num">1320</span>
+<span class="line-num">1321</span>    print(&quot;\nBuilding pages...&quot;)
+<span class="line-num">1322</span>    update_styles()
+<span class="line-num">1323</span>    update_index_nav()
+<span class="line-num">1324</span>    build_scholars_pages(conn)
+<span class="line-num">1325</span>    build_dictionary_pages(conn)
+<span class="line-num">1326</span>    build_marginalia_pages(conn)
+<span class="line-num">1327</span>    build_bibliography_page(conn)
+<span class="line-num">1328</span>    build_docs_pages()
+<span class="line-num">1329</span>    build_code_pages()
+<span class="line-num">1330</span>    build_about_page(conn)
+<span class="line-num">1331</span>
+<span class="line-num">1332</span>    conn.close()
+<span class="line-num">1333</span>    print(&quot;\n=== Build Complete ===&quot;)
+<span class="line-num">1334</span>
+<span class="line-num">1335</span>
+<span class="line-num">1336</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">1337</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

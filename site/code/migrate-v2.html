@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema Migration V2 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Schema Migration V2</h2>
+            <div class="code-meta">migrate_v2.py &mdash; 389 lines</div>
+            <p style="margin-bottom:1rem">Adds annotations, annotators, doc_folio_refs, dictionary tables, review/provenance columns. Downgrades BL confidence.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Schema migration v2: Harden data model with review/provenance fields,
+<span class="line-num">2</span>normalize tables, add dictionary and annotations support.
+<span class="line-num">3</span>
+<span class="line-num">4</span>Idempotent — safe to run multiple times.
+<span class="line-num">5</span>&quot;&quot;&quot;
+<span class="line-num">6</span>
+<span class="line-num">7</span>import sqlite3
+<span class="line-num">8</span>import json
+<span class="line-num">9</span>from pathlib import Path
+<span class="line-num">10</span>
+<span class="line-num">11</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">12</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">13</span>
+<span class="line-num">14</span>MIGRATION_SQL = &quot;&quot;&quot;
+<span class="line-num">15</span>-- ============================================================
+<span class="line-num">16</span>-- V2 MIGRATION: Hardened schema with review/provenance fields
+<span class="line-num">17</span>-- ============================================================
+<span class="line-num">18</span>
+<span class="line-num">19</span>-- 1. Annotations table: first-class representation of marginal notes
+<span class="line-num">20</span>CREATE TABLE IF NOT EXISTS annotations (
+<span class="line-num">21</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">22</span>    manuscript_id INTEGER REFERENCES manuscripts(id),
+<span class="line-num">23</span>    hand_id INTEGER REFERENCES annotator_hands(id),
+<span class="line-num">24</span>    signature_ref TEXT,
+<span class="line-num">25</span>    folio_number INTEGER,
+<span class="line-num">26</span>    side TEXT CHECK(side IN (&#x27;r&#x27;,&#x27;v&#x27;,NULL)),
+<span class="line-num">27</span>    annotation_text TEXT,
+<span class="line-num">28</span>    annotation_type TEXT CHECK(annotation_type IN (
+<span class="line-num">29</span>        &#x27;MARGINAL_NOTE&#x27;,&#x27;LABEL&#x27;,&#x27;SYMBOL&#x27;,&#x27;UNDERLINE&#x27;,&#x27;DRAWING&#x27;,
+<span class="line-num">30</span>        &#x27;CROSS_REFERENCE&#x27;,&#x27;INDEX_ENTRY&#x27;,&#x27;PROVENANCE&#x27;,&#x27;EMENDATION&#x27;,&#x27;OTHER&#x27;
+<span class="line-num">31</span>    )),
+<span class="line-num">32</span>    language TEXT,
+<span class="line-num">33</span>    thesis_page INTEGER,
+<span class="line-num">34</span>    thesis_chapter INTEGER,
+<span class="line-num">35</span>    confidence TEXT CHECK(confidence IN (&#x27;HIGH&#x27;,&#x27;MEDIUM&#x27;,&#x27;LOW&#x27;,&#x27;PROVISIONAL&#x27;)) DEFAULT &#x27;PROVISIONAL&#x27;,
+<span class="line-num">36</span>    needs_review BOOLEAN DEFAULT 1,
+<span class="line-num">37</span>    reviewed BOOLEAN DEFAULT 0,
+<span class="line-num">38</span>    reviewed_by TEXT,
+<span class="line-num">39</span>    reviewed_at TEXT,
+<span class="line-num">40</span>    source_method TEXT CHECK(source_method IN (
+<span class="line-num">41</span>        &#x27;MANUAL_TRANSCRIPTION&#x27;,&#x27;PDF_EXTRACTION&#x27;,&#x27;LLM_ASSISTED&#x27;,&#x27;INFERRED&#x27;
+<span class="line-num">42</span>    )) DEFAULT &#x27;INFERRED&#x27;,
+<span class="line-num">43</span>    notes TEXT
+<span class="line-num">44</span>);
+<span class="line-num">45</span>
+<span class="line-num">46</span>-- 2. Rename/normalize annotator_hands → annotators (keep old table, add view)
+<span class="line-num">47</span>CREATE TABLE IF NOT EXISTS annotators (
+<span class="line-num">48</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">49</span>    hand_label TEXT NOT NULL,
+<span class="line-num">50</span>    manuscript_id INTEGER REFERENCES manuscripts(id),
+<span class="line-num">51</span>    manuscript_shelfmark TEXT NOT NULL,
+<span class="line-num">52</span>    attribution TEXT,
+<span class="line-num">53</span>    attribution_confidence TEXT CHECK(attribution_confidence IN (&#x27;CERTAIN&#x27;,&#x27;PROBABLE&#x27;,&#x27;POSSIBLE&#x27;,&#x27;UNKNOWN&#x27;)) DEFAULT &#x27;POSSIBLE&#x27;,
+<span class="line-num">54</span>    language TEXT,
+<span class="line-num">55</span>    ink_color TEXT,
+<span class="line-num">56</span>    date_range TEXT,
+<span class="line-num">57</span>    school TEXT,
+<span class="line-num">58</span>    interests TEXT,
+<span class="line-num">59</span>    description TEXT,
+<span class="line-num">60</span>    is_alchemist BOOLEAN DEFAULT 0,
+<span class="line-num">61</span>    chapter_num INTEGER,
+<span class="line-num">62</span>    source_method TEXT DEFAULT &#x27;LLM_ASSISTED&#x27;,
+<span class="line-num">63</span>    needs_review BOOLEAN DEFAULT 1,
+<span class="line-num">64</span>    reviewed BOOLEAN DEFAULT 0,
+<span class="line-num">65</span>    notes TEXT,
+<span class="line-num">66</span>    UNIQUE(hand_label, manuscript_shelfmark)
+<span class="line-num">67</span>);
+<span class="line-num">68</span>
+<span class="line-num">69</span>-- 3. doc_folio_refs: references from any document to specific folios
+<span class="line-num">70</span>CREATE TABLE IF NOT EXISTS doc_folio_refs (
+<span class="line-num">71</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">72</span>    document_id INTEGER REFERENCES documents(id),
+<span class="line-num">73</span>    signature_ref TEXT,
+<span class="line-num">74</span>    folio_number INTEGER,
+<span class="line-num">75</span>    side TEXT CHECK(side IN (&#x27;r&#x27;,&#x27;v&#x27;,NULL)),
+<span class="line-num">76</span>    manuscript_shelfmark TEXT,
+<span class="line-num">77</span>    page_in_document INTEGER,
+<span class="line-num">78</span>    context_text TEXT,
+<span class="line-num">79</span>    marginal_text TEXT,
+<span class="line-num">80</span>    ref_type TEXT CHECK(ref_type IN (
+<span class="line-num">81</span>        &#x27;MARGINALIA&#x27;,&#x27;ILLUSTRATION&#x27;,&#x27;TEXT&#x27;,&#x27;BINDING&#x27;,&#x27;PROVENANCE&#x27;,&#x27;CROSS_REF&#x27;
+<span class="line-num">82</span>    )),
+<span class="line-num">83</span>    chapter_num INTEGER,
+<span class="line-num">84</span>    hand_id INTEGER REFERENCES annotators(id),
+<span class="line-num">85</span>    confidence TEXT CHECK(confidence IN (&#x27;HIGH&#x27;,&#x27;MEDIUM&#x27;,&#x27;LOW&#x27;,&#x27;PROVISIONAL&#x27;)) DEFAULT &#x27;PROVISIONAL&#x27;,
+<span class="line-num">86</span>    needs_review BOOLEAN DEFAULT 1,
+<span class="line-num">87</span>    reviewed BOOLEAN DEFAULT 0,
+<span class="line-num">88</span>    source_method TEXT DEFAULT &#x27;PDF_EXTRACTION&#x27;,
+<span class="line-num">89</span>    notes TEXT
+<span class="line-num">90</span>);
+<span class="line-num">91</span>
+<span class="line-num">92</span>-- 4. Dictionary tables
+<span class="line-num">93</span>CREATE TABLE IF NOT EXISTS dictionary_terms (
+<span class="line-num">94</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">95</span>    slug TEXT NOT NULL UNIQUE,
+<span class="line-num">96</span>    label TEXT NOT NULL,
+<span class="line-num">97</span>    category TEXT NOT NULL,
+<span class="line-num">98</span>    definition_short TEXT NOT NULL,
+<span class="line-num">99</span>    definition_long TEXT,
+<span class="line-num">100</span>    source_basis TEXT,
+<span class="line-num">101</span>    review_status TEXT CHECK(review_status IN (&#x27;DRAFT&#x27;,&#x27;REVIEWED&#x27;,&#x27;VERIFIED&#x27;)) DEFAULT &#x27;DRAFT&#x27;,
+<span class="line-num">102</span>    needs_review BOOLEAN DEFAULT 1,
+<span class="line-num">103</span>    reviewed BOOLEAN DEFAULT 0,
+<span class="line-num">104</span>    created_at TEXT DEFAULT (datetime(&#x27;now&#x27;)),
+<span class="line-num">105</span>    updated_at TEXT DEFAULT (datetime(&#x27;now&#x27;))
+<span class="line-num">106</span>);
+<span class="line-num">107</span>
+<span class="line-num">108</span>CREATE TABLE IF NOT EXISTS dictionary_term_links (
+<span class="line-num">109</span>    id INTEGER PRIMARY KEY,
+<span class="line-num">110</span>    term_id INTEGER REFERENCES dictionary_terms(id),
+<span class="line-num">111</span>    linked_term_id INTEGER REFERENCES dictionary_terms(id),
+<span class="line-num">112</span>    link_type TEXT CHECK(link_type IN (&#x27;RELATED&#x27;,&#x27;SEE_ALSO&#x27;,&#x27;OPPOSITE&#x27;,&#x27;PARENT&#x27;,&#x27;CHILD&#x27;)) DEFAULT &#x27;RELATED&#x27;,
+<span class="line-num">113</span>    UNIQUE(term_id, linked_term_id, link_type)
+<span class="line-num">114</span>);
+<span class="line-num">115</span>
+<span class="line-num">116</span>-- 5. Topic cluster junction table (multi-value support)
+<span class="line-num">117</span>CREATE TABLE IF NOT EXISTS document_topics (
+<span class="line-num">118</span>    document_id INTEGER,
+<span class="line-num">119</span>    topic TEXT NOT NULL,
+<span class="line-num">120</span>    source_table TEXT NOT NULL CHECK(source_table IN (&#x27;bibliography&#x27;,&#x27;documents&#x27;,&#x27;summaries&#x27;)),
+<span class="line-num">121</span>    source_id INTEGER NOT NULL,
+<span class="line-num">122</span>    PRIMARY KEY (source_table, source_id, topic)
+<span class="line-num">123</span>);
+<span class="line-num">124</span>
+<span class="line-num">125</span>-- 6. Add review/provenance columns to existing tables where missing
+<span class="line-num">126</span>-- (ALTER TABLE IF NOT EXISTS not supported in SQLite, so we use try/except in Python)
+<span class="line-num">127</span>
+<span class="line-num">128</span>-- 7. Update matches confidence constraint to include PROVISIONAL
+<span class="line-num">129</span>-- (SQLite can&#x27;t alter constraints, so we handle this in the matching logic)
+<span class="line-num">130</span>
+<span class="line-num">131</span>-- 8. Update schema version
+<span class="line-num">132</span>INSERT OR REPLACE INTO schema_version (version, created_at) VALUES (2, datetime(&#x27;now&#x27;));
+<span class="line-num">133</span>&quot;&quot;&quot;
+<span class="line-num">134</span>
+<span class="line-num">135</span># Columns to add to existing tables (table, column, type, default)
+<span class="line-num">136</span>ALTER_COLUMNS = [
+<span class="line-num">137</span>    (&#x27;matches&#x27;, &#x27;source_method&#x27;, &quot;TEXT DEFAULT &#x27;FOLIO_EXACT&#x27;&quot;, None),
+<span class="line-num">138</span>    (&#x27;matches&#x27;, &#x27;reviewed&#x27;, &#x27;BOOLEAN DEFAULT 0&#x27;, None),
+<span class="line-num">139</span>    (&#x27;matches&#x27;, &#x27;reviewed_by&#x27;, &#x27;TEXT&#x27;, None),
+<span class="line-num">140</span>    (&#x27;matches&#x27;, &#x27;notes&#x27;, &#x27;TEXT&#x27;, None),
+<span class="line-num">141</span>    (&#x27;documents&#x27;, &#x27;review_status&#x27;, &quot;TEXT DEFAULT &#x27;UNREVIEWED&#x27;&quot;, None),
+<span class="line-num">142</span>    (&#x27;documents&#x27;, &#x27;source_method&#x27;, &quot;TEXT DEFAULT &#x27;FILESYSTEM_SCAN&#x27;&quot;, None),
+<span class="line-num">143</span>    (&#x27;bibliography&#x27;, &#x27;review_status&#x27;, &quot;TEXT DEFAULT &#x27;UNREVIEWED&#x27;&quot;, None),
+<span class="line-num">144</span>    (&#x27;bibliography&#x27;, &#x27;needs_review&#x27;, &#x27;BOOLEAN DEFAULT 1&#x27;, None),
+<span class="line-num">145</span>    (&#x27;bibliography&#x27;, &#x27;reviewed&#x27;, &#x27;BOOLEAN DEFAULT 0&#x27;, None),
+<span class="line-num">146</span>    (&#x27;scholars&#x27;, &#x27;review_status&#x27;, &quot;TEXT DEFAULT &#x27;UNREVIEWED&#x27;&quot;, None),
+<span class="line-num">147</span>    (&#x27;scholars&#x27;, &#x27;needs_review&#x27;, &#x27;BOOLEAN DEFAULT 1&#x27;, None),
+<span class="line-num">148</span>    (&#x27;scholars&#x27;, &#x27;reviewed&#x27;, &#x27;BOOLEAN DEFAULT 0&#x27;, None),
+<span class="line-num">149</span>    (&#x27;scholars&#x27;, &#x27;source_method&#x27;, &quot;TEXT DEFAULT &#x27;LLM_ASSISTED&#x27;&quot;, None),
+<span class="line-num">150</span>    (&#x27;images&#x27;, &#x27;confidence&#x27;, &quot;TEXT DEFAULT &#x27;PROVISIONAL&#x27;&quot;, None),
+<span class="line-num">151</span>    (&#x27;images&#x27;, &#x27;needs_review&#x27;, &#x27;BOOLEAN DEFAULT 1&#x27;, None),
+<span class="line-num">152</span>    (&#x27;timeline_events&#x27;, &#x27;needs_review&#x27;, &#x27;BOOLEAN DEFAULT 1&#x27;, None),
+<span class="line-num">153</span>    (&#x27;timeline_events&#x27;, &#x27;source_method&#x27;, &quot;TEXT DEFAULT &#x27;LLM_ASSISTED&#x27;&quot;, None),
+<span class="line-num">154</span>]
+<span class="line-num">155</span>
+<span class="line-num">156</span>
+<span class="line-num">157</span>def add_column_if_missing(cur, table, column, col_type, default):
+<span class="line-num">158</span>    &quot;&quot;&quot;Add a column to a table if it doesn&#x27;t already exist.&quot;&quot;&quot;
+<span class="line-num">159</span>    cur.execute(f&quot;PRAGMA table_info({table})&quot;)
+<span class="line-num">160</span>    existing = {row[1] for row in cur.fetchall()}
+<span class="line-num">161</span>    if column not in existing:
+<span class="line-num">162</span>        sql = f&quot;ALTER TABLE {table} ADD COLUMN {column} {col_type}&quot;
+<span class="line-num">163</span>        cur.execute(sql)
+<span class="line-num">164</span>        return True
+<span class="line-num">165</span>    return False
+<span class="line-num">166</span>
+<span class="line-num">167</span>
+<span class="line-num">168</span>def migrate_annotator_hands(conn):
+<span class="line-num">169</span>    &quot;&quot;&quot;Copy annotator_hands data into the new annotators table.&quot;&quot;&quot;
+<span class="line-num">170</span>    cur = conn.cursor()
+<span class="line-num">171</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotator_hands&quot;)
+<span class="line-num">172</span>    old_count = cur.fetchone()[0]
+<span class="line-num">173</span>    if old_count == 0:
+<span class="line-num">174</span>        return 0
+<span class="line-num">175</span>
+<span class="line-num">176</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotators&quot;)
+<span class="line-num">177</span>    new_count = cur.fetchone()[0]
+<span class="line-num">178</span>    if new_count &gt; 0:
+<span class="line-num">179</span>        return new_count  # Already migrated
+<span class="line-num">180</span>
+<span class="line-num">181</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">182</span>        INSERT OR IGNORE INTO annotators
+<span class="line-num">183</span>            (hand_label, manuscript_shelfmark, attribution, language,
+<span class="line-num">184</span>             ink_color, date_range, school, interests, description,
+<span class="line-num">185</span>             is_alchemist, chapter_num, source_method, needs_review)
+<span class="line-num">186</span>        SELECT
+<span class="line-num">187</span>            hand_label, manuscript_shelfmark, attribution, language,
+<span class="line-num">188</span>            ink_color, date_range, school, interests, description,
+<span class="line-num">189</span>            is_alchemist, chapter_num, &#x27;LLM_ASSISTED&#x27;, 1
+<span class="line-num">190</span>        FROM annotator_hands
+<span class="line-num">191</span>    &quot;&quot;&quot;)
+<span class="line-num">192</span>    conn.commit()
+<span class="line-num">193</span>    cur.execute(&quot;SELECT COUNT(*) FROM annotators&quot;)
+<span class="line-num">194</span>    return cur.fetchone()[0]
+<span class="line-num">195</span>
+<span class="line-num">196</span>
+<span class="line-num">197</span>def migrate_dissertation_refs(conn):
+<span class="line-num">198</span>    &quot;&quot;&quot;Copy dissertation_refs into doc_folio_refs with proper provenance.&quot;&quot;&quot;
+<span class="line-num">199</span>    cur = conn.cursor()
+<span class="line-num">200</span>
+<span class="line-num">201</span>    cur.execute(&quot;SELECT COUNT(*) FROM doc_folio_refs&quot;)
+<span class="line-num">202</span>    if cur.fetchone()[0] &gt; 0:
+<span class="line-num">203</span>        return  # Already migrated
+<span class="line-num">204</span>
+<span class="line-num">205</span>    # Find the Russell thesis document ID
+<span class="line-num">206</span>    cur.execute(&quot;SELECT id FROM documents WHERE filename LIKE &#x27;%Russell%&#x27; LIMIT 1&quot;)
+<span class="line-num">207</span>    row = cur.fetchone()
+<span class="line-num">208</span>    doc_id = row[0] if row else None
+<span class="line-num">209</span>
+<span class="line-num">210</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">211</span>        INSERT INTO doc_folio_refs
+<span class="line-num">212</span>            (document_id, signature_ref, manuscript_shelfmark,
+<span class="line-num">213</span>             page_in_document, context_text, marginal_text,
+<span class="line-num">214</span>             ref_type, chapter_num, hand_id, confidence, source_method)
+<span class="line-num">215</span>        SELECT
+<span class="line-num">216</span>            ?, signature_ref, manuscript_shelfmark,
+<span class="line-num">217</span>            thesis_page, context_text, marginal_text,
+<span class="line-num">218</span>            ref_type, chapter_num, hand_id, &#x27;PROVISIONAL&#x27;, &#x27;PDF_EXTRACTION&#x27;
+<span class="line-num">219</span>        FROM dissertation_refs
+<span class="line-num">220</span>    &quot;&quot;&quot;, (doc_id,))
+<span class="line-num">221</span>    conn.commit()
+<span class="line-num">222</span>
+<span class="line-num">223</span>
+<span class="line-num">224</span>def downgrade_bl_confidence(conn):
+<span class="line-num">225</span>    &quot;&quot;&quot;Downgrade all BL C.60.o.12 matches to LOW confidence.
+<span class="line-num">226</span>
+<span class="line-num">227</span>    Rationale: BL copy is 1545 edition; our signature map is based on 1499.
+<span class="line-num">228</span>    Photo numbers assumed to equal folio numbers without manual verification.
+<span class="line-num">229</span>    &quot;&quot;&quot;
+<span class="line-num">230</span>    cur = conn.cursor()
+<span class="line-num">231</span>
+<span class="line-num">232</span>    # Downgrade matches involving BL images
+<span class="line-num">233</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">234</span>        UPDATE matches SET confidence = &#x27;LOW&#x27;, needs_review = 1
+<span class="line-num">235</span>        WHERE image_id IN (
+<span class="line-num">236</span>            SELECT i.id FROM images i
+<span class="line-num">237</span>            JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">238</span>            WHERE m.shelfmark = &#x27;C.60.o.12&#x27;
+<span class="line-num">239</span>        ) AND confidence != &#x27;LOW&#x27;
+<span class="line-num">240</span>    &quot;&quot;&quot;)
+<span class="line-num">241</span>    bl_downgraded = cur.rowcount
+<span class="line-num">242</span>
+<span class="line-num">243</span>    # Also update doc_folio_refs for BL
+<span class="line-num">244</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">245</span>        UPDATE doc_folio_refs SET confidence = &#x27;PROVISIONAL&#x27;
+<span class="line-num">246</span>        WHERE manuscript_shelfmark = &#x27;C.60.o.12&#x27;
+<span class="line-num">247</span>    &quot;&quot;&quot;)
+<span class="line-num">248</span>
+<span class="line-num">249</span>    conn.commit()
+<span class="line-num">250</span>    return bl_downgraded
+<span class="line-num">251</span>
+<span class="line-num">252</span>
+<span class="line-num">253</span>def import_summaries_to_db(conn):
+<span class="line-num">254</span>    &quot;&quot;&quot;Import scholars/summaries.json into bibliography and scholars tables
+<span class="line-num">255</span>    with proper provenance tracking.&quot;&quot;&quot;
+<span class="line-num">256</span>    summaries_path = BASE_DIR / &quot;scholars&quot; / &quot;summaries.json&quot;
+<span class="line-num">257</span>    if not summaries_path.exists():
+<span class="line-num">258</span>        print(&quot;  No summaries.json found, skipping&quot;)
+<span class="line-num">259</span>        return
+<span class="line-num">260</span>
+<span class="line-num">261</span>    with open(summaries_path, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">262</span>        summaries = json.load(f)
+<span class="line-num">263</span>
+<span class="line-num">264</span>    cur = conn.cursor()
+<span class="line-num">265</span>
+<span class="line-num">266</span>    for s in summaries:
+<span class="line-num">267</span>        author = s.get(&#x27;author&#x27;, &#x27;Unknown&#x27;)
+<span class="line-num">268</span>        title = s.get(&#x27;title&#x27;, &#x27;&#x27;)
+<span class="line-num">269</span>        year = s.get(&#x27;year&#x27;)
+<span class="line-num">270</span>        journal = s.get(&#x27;journal&#x27;, &#x27;&#x27;)
+<span class="line-num">271</span>        summary = s.get(&#x27;summary&#x27;, &#x27;&#x27;)
+<span class="line-num">272</span>        topic = s.get(&#x27;topic_cluster&#x27;, &#x27;&#x27;)
+<span class="line-num">273</span>        filename = s.get(&#x27;filename&#x27;, &#x27;&#x27;)
+<span class="line-num">274</span>
+<span class="line-num">275</span>        # Determine pub_type
+<span class="line-num">276</span>        if &#x27;PhD&#x27; in journal or &#x27;Thesis&#x27; in journal or &#x27;E-Thesis&#x27; in journal:
+<span class="line-num">277</span>            pub_type = &#x27;thesis&#x27;
+<span class="line-num">278</span>        elif &#x27;Press&#x27; in journal or &#x27;(&#x27; not in journal:
+<span class="line-num">279</span>            pub_type = &#x27;book&#x27;
+<span class="line-num">280</span>        else:
+<span class="line-num">281</span>            pub_type = &#x27;article&#x27;
+<span class="line-num">282</span>
+<span class="line-num">283</span>        # Upsert into bibliography
+<span class="line-num">284</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">285</span>            INSERT OR IGNORE INTO bibliography
+<span class="line-num">286</span>                (author, title, year, pub_type, journal_or_publisher,
+<span class="line-num">287</span>                 in_collection, collection_filename, hp_relevance,
+<span class="line-num">288</span>                 topic_cluster, notes, review_status, needs_review)
+<span class="line-num">289</span>            VALUES (?, ?, ?, ?, ?, 1, ?, &#x27;DIRECT&#x27;, ?, ?, &#x27;UNREVIEWED&#x27;, 1)
+<span class="line-num">290</span>        &quot;&quot;&quot;, (author, title, str(year) if year else None, pub_type, journal,
+<span class="line-num">291</span>              filename, topic, f&#x27;LLM-generated summary: {summary[:200]}...&#x27;))
+<span class="line-num">292</span>
+<span class="line-num">293</span>        # Upsert into scholars
+<span class="line-num">294</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">295</span>            INSERT OR IGNORE INTO scholars
+<span class="line-num">296</span>                (name, source_method, needs_review, review_status)
+<span class="line-num">297</span>            VALUES (?, &#x27;LLM_ASSISTED&#x27;, 1, &#x27;UNREVIEWED&#x27;)
+<span class="line-num">298</span>        &quot;&quot;&quot;, (author,))
+<span class="line-num">299</span>
+<span class="line-num">300</span>        # Add topic to junction table
+<span class="line-num">301</span>        if topic:
+<span class="line-num">302</span>            cur.execute(&quot;SELECT id FROM bibliography WHERE author=? AND title=?&quot;, (author, title))
+<span class="line-num">303</span>            bib_row = cur.fetchone()
+<span class="line-num">304</span>            if bib_row:
+<span class="line-num">305</span>                for t in topic.split(&#x27;,&#x27;):
+<span class="line-num">306</span>                    t = t.strip()
+<span class="line-num">307</span>                    if t:
+<span class="line-num">308</span>                        cur.execute(&quot;&quot;&quot;
+<span class="line-num">309</span>                            INSERT OR IGNORE INTO document_topics
+<span class="line-num">310</span>                                (source_table, source_id, topic)
+<span class="line-num">311</span>                            VALUES (&#x27;bibliography&#x27;, ?, ?)
+<span class="line-num">312</span>                        &quot;&quot;&quot;, (bib_row[0], t))
+<span class="line-num">313</span>
+<span class="line-num">314</span>    conn.commit()
+<span class="line-num">315</span>    print(f&quot;  Imported {len(summaries)} summaries into bibliography/scholars&quot;)
+<span class="line-num">316</span>
+<span class="line-num">317</span>
+<span class="line-num">318</span>def main():
+<span class="line-num">319</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">320</span>    cur = conn.cursor()
+<span class="line-num">321</span>
+<span class="line-num">322</span>    print(&quot;=== Schema Migration V2 ===\n&quot;)
+<span class="line-num">323</span>
+<span class="line-num">324</span>    # Step 1: Create new tables
+<span class="line-num">325</span>    print(&quot;1. Creating new tables...&quot;)
+<span class="line-num">326</span>    cur.executescript(MIGRATION_SQL)
+<span class="line-num">327</span>    conn.commit()
+<span class="line-num">328</span>    print(&quot;   Done (annotations, annotators, doc_folio_refs, dictionary_terms,&quot;)
+<span class="line-num">329</span>    print(&quot;         dictionary_term_links, document_topics)&quot;)
+<span class="line-num">330</span>
+<span class="line-num">331</span>    # Step 2: Add columns to existing tables
+<span class="line-num">332</span>    print(&quot;\n2. Adding review/provenance columns to existing tables...&quot;)
+<span class="line-num">333</span>    added = 0
+<span class="line-num">334</span>    for table, column, col_type, default in ALTER_COLUMNS:
+<span class="line-num">335</span>        if add_column_if_missing(cur, table, column, col_type, default):
+<span class="line-num">336</span>            print(f&quot;   + {table}.{column}&quot;)
+<span class="line-num">337</span>            added += 1
+<span class="line-num">338</span>    conn.commit()
+<span class="line-num">339</span>    print(f&quot;   Added {added} new columns&quot;)
+<span class="line-num">340</span>
+<span class="line-num">341</span>    # Step 3: Migrate annotator_hands → annotators
+<span class="line-num">342</span>    print(&quot;\n3. Migrating annotator_hands -&gt; annotators...&quot;)
+<span class="line-num">343</span>    n = migrate_annotator_hands(conn)
+<span class="line-num">344</span>    print(f&quot;   {n} annotators in normalized table&quot;)
+<span class="line-num">345</span>
+<span class="line-num">346</span>    # Step 4: Migrate dissertation_refs → doc_folio_refs
+<span class="line-num">347</span>    print(&quot;\n4. Migrating dissertation_refs -&gt; doc_folio_refs...&quot;)
+<span class="line-num">348</span>    migrate_dissertation_refs(conn)
+<span class="line-num">349</span>    cur.execute(&quot;SELECT COUNT(*) FROM doc_folio_refs&quot;)
+<span class="line-num">350</span>    print(f&quot;   {cur.fetchone()[0]} folio references migrated&quot;)
+<span class="line-num">351</span>
+<span class="line-num">352</span>    # Step 5: Downgrade BL confidence
+<span class="line-num">353</span>    print(&quot;\n5. Downgrading BL C.60.o.12 matches to LOW confidence...&quot;)
+<span class="line-num">354</span>    n = downgrade_bl_confidence(conn)
+<span class="line-num">355</span>    print(f&quot;   {n} matches downgraded&quot;)
+<span class="line-num">356</span>
+<span class="line-num">357</span>    # Step 6: Import summaries.json with provenance
+<span class="line-num">358</span>    print(&quot;\n6. Importing summaries.json into DB with provenance tracking...&quot;)
+<span class="line-num">359</span>    import_summaries_to_db(conn)
+<span class="line-num">360</span>
+<span class="line-num">361</span>    # Step 7: Summary
+<span class="line-num">362</span>    print(&quot;\n=== Migration Summary ===&quot;)
+<span class="line-num">363</span>    tables = [
+<span class="line-num">364</span>        &#x27;documents&#x27;, &#x27;manuscripts&#x27;, &#x27;images&#x27;, &#x27;signature_map&#x27;,
+<span class="line-num">365</span>        &#x27;dissertation_refs&#x27;, &#x27;doc_folio_refs&#x27;, &#x27;matches&#x27;,
+<span class="line-num">366</span>        &#x27;annotator_hands&#x27;, &#x27;annotators&#x27;, &#x27;annotations&#x27;,
+<span class="line-num">367</span>        &#x27;bibliography&#x27;, &#x27;scholars&#x27;, &#x27;scholar_works&#x27;,
+<span class="line-num">368</span>        &#x27;timeline_events&#x27;, &#x27;dictionary_terms&#x27;, &#x27;dictionary_term_links&#x27;,
+<span class="line-num">369</span>        &#x27;document_topics&#x27;, &#x27;schema_version&#x27;
+<span class="line-num">370</span>    ]
+<span class="line-num">371</span>    for t in tables:
+<span class="line-num">372</span>        try:
+<span class="line-num">373</span>            cur.execute(f&quot;SELECT COUNT(*) FROM {t}&quot;)
+<span class="line-num">374</span>            print(f&quot;  {t}: {cur.fetchone()[0]} rows&quot;)
+<span class="line-num">375</span>        except sqlite3.OperationalError:
+<span class="line-num">376</span>            print(f&quot;  {t}: (not found)&quot;)
+<span class="line-num">377</span>
+<span class="line-num">378</span>    # Confidence distribution
+<span class="line-num">379</span>    print(&quot;\nMatch confidence distribution:&quot;)
+<span class="line-num">380</span>    cur.execute(&quot;SELECT confidence, COUNT(*) FROM matches GROUP BY confidence ORDER BY confidence&quot;)
+<span class="line-num">381</span>    for row in cur.fetchall():
+<span class="line-num">382</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">383</span>
+<span class="line-num">384</span>    conn.close()
+<span class="line-num">385</span>    print(&quot;\nMigration complete.&quot;)
+<span class="line-num">386</span>
+<span class="line-num">387</span>
+<span class="line-num">388</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">389</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

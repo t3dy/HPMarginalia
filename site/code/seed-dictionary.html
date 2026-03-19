@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Dictionary - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Seed Dictionary</h2>
+            <div class="code-meta">seed_dictionary.py &mdash; 429 lines</div>
+            <p style="margin-bottom:1rem">Inserts 37 dictionary terms across 6 categories with 76 bidirectional cross-reference links.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Seed the dictionary_terms table with 35+ core HP terminology entries.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>from pathlib import Path
+<span class="line-num">5</span>
+<span class="line-num">6</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">7</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">8</span>
+<span class="line-num">9</span># Category constants
+<span class="line-num">10</span>BOOK = &quot;Book History &amp; Bibliography&quot;
+<span class="line-num">11</span>TEXT = &quot;Textual &amp; Visual Motifs&quot;
+<span class="line-num">12</span>ANNOT = &quot;Annotation Studies&quot;
+<span class="line-num">13</span>ALCHEM = &quot;Alchemical Interpretation&quot;
+<span class="line-num">14</span>ARCH = &quot;Architecture &amp; Gardens&quot;
+<span class="line-num">15</span>DEBATE = &quot;Scholarly Debates&quot;
+<span class="line-num">16</span>
+<span class="line-num">17</span>TERMS = [
+<span class="line-num">18</span>    # === Book History &amp; Bibliography ===
+<span class="line-num">19</span>    {
+<span class="line-num">20</span>        &quot;slug&quot;: &quot;signature&quot;,
+<span class="line-num">21</span>        &quot;label&quot;: &quot;Signature&quot;,
+<span class="line-num">22</span>        &quot;category&quot;: BOOK,
+<span class="line-num">23</span>        &quot;definition_short&quot;: &quot;A letter-number code printed at the foot of certain pages to guide the binder in assembling the book.&quot;,
+<span class="line-num">24</span>        &quot;definition_long&quot;: &quot;In early printed books, signatures are marks (usually a lowercase letter followed by a numeral) placed at the bottom of the first recto of each leaf in a gathering. The 1499 HP uses signatures a-z (omitting j, u, w) then A-G, each gathering consisting of eight leaves. Russell&#x27;s thesis references folios by signature (e.g., b6v) rather than by page number, since no page numbers were printed in the original.&quot;,
+<span class="line-num">25</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology; Russell 2014 passim&quot;,
+<span class="line-num">26</span>    },
+<span class="line-num">27</span>    {
+<span class="line-num">28</span>        &quot;slug&quot;: &quot;quire&quot;,
+<span class="line-num">29</span>        &quot;label&quot;: &quot;Quire&quot;,
+<span class="line-num">30</span>        &quot;category&quot;: BOOK,
+<span class="line-num">31</span>        &quot;definition_short&quot;: &quot;A section of a book made from sheets folded together, also called a gathering.&quot;,
+<span class="line-num">32</span>        &quot;definition_long&quot;: &quot;A quire (or gathering) is the basic structural unit of a bound book. In the HP, each quire consists of a single large sheet folded to produce eight leaves (sixteen pages). The quire is identified by its signature letter: quire &#x27;a&#x27; contains leaves a1-a8, quire &#x27;b&#x27; contains b1-b8, and so on. The collation formula of the 1499 HP describes this structure systematically.&quot;,
+<span class="line-num">33</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology&quot;,
+<span class="line-num">34</span>    },
+<span class="line-num">35</span>    {
+<span class="line-num">36</span>        &quot;slug&quot;: &quot;folio&quot;,
+<span class="line-num">37</span>        &quot;label&quot;: &quot;Folio&quot;,
+<span class="line-num">38</span>        &quot;category&quot;: BOOK,
+<span class="line-num">39</span>        &quot;definition_short&quot;: &quot;A single leaf of a book, having two sides: recto (front) and verso (back).&quot;,
+<span class="line-num">40</span>        &quot;definition_long&quot;: &quot;In bibliographic usage, &#x27;folio&#x27; refers to a leaf rather than a page. Each folio has two sides. In the HP, folio references combine a signature with a side designation: &#x27;b6v&#x27; means the verso (back) of the sixth leaf in quire b. The Siena digital facsimile photographs are labeled by folio number with recto/verso suffixes (e.g., O.III.38_0014r.jpg).&quot;,
+<span class="line-num">41</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology&quot;,
+<span class="line-num">42</span>    },
+<span class="line-num">43</span>    {
+<span class="line-num">44</span>        &quot;slug&quot;: &quot;recto&quot;,
+<span class="line-num">45</span>        &quot;label&quot;: &quot;Recto&quot;,
+<span class="line-num">46</span>        &quot;category&quot;: BOOK,
+<span class="line-num">47</span>        &quot;definition_short&quot;: &quot;The front side of a leaf, conventionally the right-hand page when the book lies open.&quot;,
+<span class="line-num">48</span>        &quot;definition_long&quot;: &quot;Abbreviated &#x27;r&#x27; in signature references (e.g., a1r). In the HP&#x27;s original layout, most woodcuts appear on the recto. The recto is the side that would have been printed first in the press.&quot;,
+<span class="line-num">49</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology&quot;,
+<span class="line-num">50</span>    },
+<span class="line-num">51</span>    {
+<span class="line-num">52</span>        &quot;slug&quot;: &quot;verso&quot;,
+<span class="line-num">53</span>        &quot;label&quot;: &quot;Verso&quot;,
+<span class="line-num">54</span>        &quot;category&quot;: BOOK,
+<span class="line-num">55</span>        &quot;definition_short&quot;: &quot;The back side of a leaf, conventionally the left-hand page when the book lies open.&quot;,
+<span class="line-num">56</span>        &quot;definition_long&quot;: &quot;Abbreviated &#x27;v&#x27; in signature references (e.g., b6v). Some of the most important marginal annotations in the BL copy appear on versos facing significant woodcuts on the following recto.&quot;,
+<span class="line-num">57</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology&quot;,
+<span class="line-num">58</span>    },
+<span class="line-num">59</span>    {
+<span class="line-num">60</span>        &quot;slug&quot;: &quot;gathering&quot;,
+<span class="line-num">61</span>        &quot;label&quot;: &quot;Gathering&quot;,
+<span class="line-num">62</span>        &quot;category&quot;: BOOK,
+<span class="line-num">63</span>        &quot;definition_short&quot;: &quot;A group of leaves folded together to form a section of a book; synonym for quire.&quot;,
+<span class="line-num">64</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s gatherings are quaternions (four sheets folded to make eight leaves). The 1499 edition consists of approximately 29 gatherings (a-z then A-G, with some irregular final gatherings). The regularity of this structure is what makes the signature map a reliable concordance tool.&quot;,
+<span class="line-num">65</span>        &quot;source_basis&quot;: &quot;Standard bibliographic terminology; build_signature_map.py&quot;,
+<span class="line-num">66</span>    },
+<span class="line-num">67</span>    {
+<span class="line-num">68</span>        &quot;slug&quot;: &quot;collation&quot;,
+<span class="line-num">69</span>        &quot;label&quot;: &quot;Collation&quot;,
+<span class="line-num">70</span>        &quot;category&quot;: BOOK,
+<span class="line-num">71</span>        &quot;definition_short&quot;: &quot;A formula describing the physical structure of a printed book: how many gatherings, how many leaves per gathering.&quot;,
+<span class="line-num">72</span>        &quot;definition_long&quot;: &quot;The collation formula for the 1499 HP is: a-z8 A-F8 G6 (with j, u, w omitted from the lowercase alphabet). This means 26 gatherings of 8 leaves each, plus 7 uppercase gatherings. The formula allows bibliographers to detect missing or inserted leaves. Harris (2002) used collation analysis to identify typographical anomalies in the HP&#x27;s woodcuts.&quot;,
+<span class="line-num">73</span>        &quot;source_basis&quot;: &quot;Harris 2002; standard bibliographic terminology&quot;,
+<span class="line-num">74</span>    },
+<span class="line-num">75</span>    {
+<span class="line-num">76</span>        &quot;slug&quot;: &quot;incunabulum&quot;,
+<span class="line-num">77</span>        &quot;label&quot;: &quot;Incunabulum&quot;,
+<span class="line-num">78</span>        &quot;category&quot;: BOOK,
+<span class="line-num">79</span>        &quot;definition_short&quot;: &quot;A book printed before 1501, during the infancy of European printing.&quot;,
+<span class="line-num">80</span>        &quot;definition_long&quot;: &quot;The 1499 HP is an incunabulum (plural: incunabula), produced in the last year of the fifteenth century. It is catalogued in the Incunabula Short Title Catalogue (ISTC) maintained by the British Library. Russell&#x27;s world census was conducted primarily through ISTC records. The HP is widely regarded as the most elaborately illustrated incunabulum ever produced.&quot;,
+<span class="line-num">81</span>        &quot;source_basis&quot;: &quot;Russell 2014, p. 16; Painter 1963&quot;,
+<span class="line-num">82</span>    },
+<span class="line-num">83</span>    {
+<span class="line-num">84</span>        &quot;slug&quot;: &quot;woodcut&quot;,
+<span class="line-num">85</span>        &quot;label&quot;: &quot;Woodcut&quot;,
+<span class="line-num">86</span>        &quot;category&quot;: TEXT,
+<span class="line-num">87</span>        &quot;definition_short&quot;: &quot;An illustration printed from a carved wooden block, integral to the HP&#x27;s text-image program.&quot;,
+<span class="line-num">88</span>        &quot;definition_long&quot;: &quot;The 1499 HP contains 172 woodcut illustrations, attributed to an unidentified artist sometimes called the &#x27;Master of the Poliphilo.&#x27; The woodcuts are integrated into the text in a manner unprecedented for the period, with images appearing mid-page within the flow of prose. The 1545 edition recast the woodcuts using new blocks. Huelsen (1910) provided the first systematic study of their architectural sources. Priki (2012) analyzed how the text-image relationship shifts across editions.&quot;,
+<span class="line-num">89</span>        &quot;source_basis&quot;: &quot;Huelsen 1910; Priki 2012; Painter 1963&quot;,
+<span class="line-num">90</span>    },
+<span class="line-num">91</span>
+<span class="line-num">92</span>    # === Annotation Studies ===
+<span class="line-num">93</span>    {
+<span class="line-num">94</span>        &quot;slug&quot;: &quot;marginalia&quot;,
+<span class="line-num">95</span>        &quot;label&quot;: &quot;Marginalia&quot;,
+<span class="line-num">96</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">97</span>        &quot;definition_short&quot;: &quot;Handwritten notes in the margins of a printed book, recording a reader&#x27;s responses to the text.&quot;,
+<span class="line-num">98</span>        &quot;definition_long&quot;: &quot;Russell&#x27;s thesis documents marginalia in six copies of the HP, showing that the book was actively read and annotated by diverse readers including humanists, playwrights, a pope, and alchemists. The marginalia range from simple underlines and source identifications to elaborate alchemical decipherments and cross-references to other works. Russell frames the annotated HP as a &#x27;humanistic activity book&#x27; in which readers cultivated their ingegno through playful engagement.&quot;,
+<span class="line-num">99</span>        &quot;source_basis&quot;: &quot;Russell 2014 passim; Sherman 2007&quot;,
+<span class="line-num">100</span>    },
+<span class="line-num">101</span>    {
+<span class="line-num">102</span>        &quot;slug&quot;: &quot;annotator-hand&quot;,
+<span class="line-num">103</span>        &quot;label&quot;: &quot;Annotator Hand&quot;,
+<span class="line-num">104</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">105</span>        &quot;definition_short&quot;: &quot;A distinct handwriting identified in a manuscript or printed book, attributed to a specific reader.&quot;,
+<span class="line-num">106</span>        &quot;definition_long&quot;: &quot;Russell identified 11 distinct annotator hands across 6 copies of the HP. Distinguishing hands involves analyzing ink color, language, ductus (letter formation), content focus, and stratigraphic relationships (which hand overwrites which). The BL copy bears two hands: Ben Jonson (Hand A) and an anonymous alchemist (Hand B). The Buffalo copy has five interleaved hands (A-E).&quot;,
+<span class="line-num">107</span>        &quot;source_basis&quot;: &quot;Russell 2014, Ch. 6-9&quot;,
+<span class="line-num">108</span>    },
+<span class="line-num">109</span>    {
+<span class="line-num">110</span>        &quot;slug&quot;: &quot;acrostic&quot;,
+<span class="line-num">111</span>        &quot;label&quot;: &quot;Acrostic&quot;,
+<span class="line-num">112</span>        &quot;category&quot;: TEXT,
+<span class="line-num">113</span>        &quot;definition_short&quot;: &quot;A text in which the initial letters of each section spell out a hidden message.&quot;,
+<span class="line-num">114</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s chapter initials spell POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT (&#x27;Brother Francesco Colonna loved Polia greatly&#x27;). This acrostic is the primary evidence for attributing authorship to a Dominican friar named Francesco Colonna. However, the acrostic has been contested: Lefaivre (1997) argued it could have been inserted by someone other than the author, and proposed Leon Battista Alberti as the true author. The acrostic does not resolve which Francesco Colonna is meant, leading to the long-running authorship debate.&quot;,
+<span class="line-num">115</span>        &quot;source_basis&quot;: &quot;Casella &amp; Pozzi 1959; Lefaivre 1997; Russell 2014, p. 8&quot;,
+<span class="line-num">116</span>    },
+<span class="line-num">117</span>    {
+<span class="line-num">118</span>        &quot;slug&quot;: &quot;hieroglyph&quot;,
+<span class="line-num">119</span>        &quot;label&quot;: &quot;Hieroglyph&quot;,
+<span class="line-num">120</span>        &quot;category&quot;: TEXT,
+<span class="line-num">121</span>        &quot;definition_short&quot;: &quot;A picture-writing system; in the HP, pseudo-Egyptian symbolic inscriptions that Poliphilo encounters and interprets.&quot;,
+<span class="line-num">122</span>        &quot;definition_long&quot;: &quot;The HP contains numerous pseudo-hieroglyphic inscriptions that Poliphilo deciphers during his journey. These are not authentic Egyptian hieroglyphs but Renaissance inventions inspired by the rediscovery of Horapollo&#x27;s Hieroglyphica. Curran (1998) situates them within fifteenth-century humanist Egyptology. Priki analyzes their narrative function, arguing they serve as structural devices within the dream journey rather than mere antiquarian decoration. The hieroglyphs influenced the later emblem tradition.&quot;,
+<span class="line-num">123</span>        &quot;source_basis&quot;: &quot;Curran 1998; Priki (undated); Gombrich 1972&quot;,
+<span class="line-num">124</span>    },
+<span class="line-num">125</span>    {
+<span class="line-num">126</span>        &quot;slug&quot;: &quot;emblem&quot;,
+<span class="line-num">127</span>        &quot;label&quot;: &quot;Emblem&quot;,
+<span class="line-num">128</span>        &quot;category&quot;: TEXT,
+<span class="line-num">129</span>        &quot;definition_short&quot;: &quot;A combination of image, motto, and explanatory text; a genre that the HP helped to inaugurate.&quot;,
+<span class="line-num">130</span>        &quot;definition_long&quot;: &quot;The emblem tradition, formalized by Andrea Alciato in 1531, combined a motto (inscriptio), an image (pictura), and an explanatory verse (subscriptio). The HP&#x27;s hieroglyphic woodcuts, which pair symbolic images with interpretive text, are widely considered proto-emblematic. The book&#x27;s influence on Alciato and subsequent emblem books has been documented by Gombrich and others.&quot;,
+<span class="line-num">131</span>        &quot;source_basis&quot;: &quot;Gombrich 1972; Caruso 2004&quot;,
+<span class="line-num">132</span>    },
+<span class="line-num">133</span>    {
+<span class="line-num">134</span>        &quot;slug&quot;: &quot;ekphrasis&quot;,
+<span class="line-num">135</span>        &quot;label&quot;: &quot;Ekphrasis&quot;,
+<span class="line-num">136</span>        &quot;category&quot;: TEXT,
+<span class="line-num">137</span>        &quot;definition_short&quot;: &quot;A vivid verbal description of a visual work of art, used extensively throughout the HP.&quot;,
+<span class="line-num">138</span>        &quot;definition_long&quot;: &quot;Much of the HP consists of elaborate ekphrastic descriptions: Poliphilo encounters buildings, sculptures, fountains, gardens, and processions, each described in painstaking visual detail. These descriptions serve multiple functions: they display the author&#x27;s antiquarian learning, provide material for the woodcut illustrations, and create the immersive dream-atmosphere. Trippe (2002) argues these ekphrases adapt Petrarchan conventions of lyric poetry into a visual register.&quot;,
+<span class="line-num">139</span>        &quot;source_basis&quot;: &quot;Trippe 2002; Stewering 2000&quot;,
+<span class="line-num">140</span>    },
+<span class="line-num">141</span>
+<span class="line-num">142</span>    # === Alchemical Interpretation ===
+<span class="line-num">143</span>    {
+<span class="line-num">144</span>        &quot;slug&quot;: &quot;alchemical-allegory&quot;,
+<span class="line-num">145</span>        &quot;label&quot;: &quot;Alchemical Allegory&quot;,
+<span class="line-num">146</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">147</span>        &quot;definition_short&quot;: &quot;The interpretation of the HP as encoding alchemical processes beneath its love narrative.&quot;,
+<span class="line-num">148</span>        &quot;definition_long&quot;: &quot;Two annotators in Russell&#x27;s study -- Hand B in the BL copy and Hand E in the Buffalo copy -- independently read the HP as concealing alchemical formulae. This interpretive tradition dates to Beroalde de Verville&#x27;s 1600 French edition, which included a &#x27;tableau steganographique&#x27; listing alchemical equivalents for the narrative&#x27;s symbols. The two alchemists followed different schools: the BL annotator applied d&#x27;Espagnet&#x27;s mercury-centered framework, while the Buffalo annotator followed pseudo-Geber&#x27;s sulphur/Sol-Luna emphasis.&quot;,
+<span class="line-num">149</span>        &quot;source_basis&quot;: &quot;Russell 2014, Ch. 6-7; Perifano 2004&quot;,
+<span class="line-num">150</span>    },
+<span class="line-num">151</span>    {
+<span class="line-num">152</span>        &quot;slug&quot;: &quot;master-mercury&quot;,
+<span class="line-num">153</span>        &quot;label&quot;: &quot;Master Mercury&quot;,
+<span class="line-num">154</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">155</span>        &quot;definition_short&quot;: &quot;The central alchemical principle identified by the BL copy&#x27;s anonymous annotator (Hand B).&quot;,
+<span class="line-num">156</span>        &quot;definition_long&quot;: &quot;The BL alchemist wrote on the flyleaf verso: &#x27;verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae &amp; operationum Magisteri Mercurii Descriptio elegans, ampla&#x27; -- the HP&#x27;s true sense is the &#x27;full and elegant description of the energy and spirit of the whole nature, and of the operations of Master Mercury.&#x27; This reading positions mercury (quicksilver) as the catalytic principle uniting all elements, consistent with d&#x27;Espagnet&#x27;s Enchiridion Physicae Restitutae and with Isaac Newton&#x27;s corpuscularian alchemy.&quot;,
+<span class="line-num">157</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 159-160&quot;,
+<span class="line-num">158</span>    },
+<span class="line-num">159</span>    {
+<span class="line-num">160</span>        &quot;slug&quot;: &quot;sol-luna&quot;,
+<span class="line-num">161</span>        &quot;label&quot;: &quot;Sol and Luna&quot;,
+<span class="line-num">162</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">163</span>        &quot;definition_short&quot;: &quot;The Sun (gold, masculine) and Moon (silver, feminine) as alchemical principles of opposition and unity.&quot;,
+<span class="line-num">164</span>        &quot;definition_long&quot;: &quot;In the pseudo-Geberian tradition followed by the Buffalo annotator (Hand E), Sol and Luna represent the masculine and feminine principles whose union produces the philosopher&#x27;s stone. Hand E identified the king and queen statues in the HP as Sol and Luna, and read the chess match on h1r as an allegory of silver/gold transmutation. The chemical wedding -- the union of Sol and Luna -- maps onto Poliphilo and Polia&#x27;s love story.&quot;,
+<span class="line-num">165</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 187-190; Newman 1991&quot;,
+<span class="line-num">166</span>    },
+<span class="line-num">167</span>    {
+<span class="line-num">168</span>        &quot;slug&quot;: &quot;chemical-wedding&quot;,
+<span class="line-num">169</span>        &quot;label&quot;: &quot;Chemical Wedding&quot;,
+<span class="line-num">170</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">171</span>        &quot;definition_short&quot;: &quot;The alchemical union of two opposing substances, symbolized as a marriage producing a hermaphrodite.&quot;,
+<span class="line-num">172</span>        &quot;definition_long&quot;: &quot;The alchemical concept of the chemical wedding (chymische Hochzeit) posits that the refinement of base matter requires the union of opposing principles. In the HP, the love between Poliphilo and Polia was read by alchemically-inclined readers as encoding this process. The offspring of the chemical wedding is the hermaphrodite, harmonizing male and female elements. Russell documents how the Buffalo annotator identified such hermaphroditic imagery on h1r.&quot;,
+<span class="line-num">173</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 189-190&quot;,
+<span class="line-num">174</span>    },
+<span class="line-num">175</span>    {
+<span class="line-num">176</span>        &quot;slug&quot;: &quot;prisca-sapientia&quot;,
+<span class="line-num">177</span>        &quot;label&quot;: &quot;Prisca Sapientia&quot;,
+<span class="line-num">178</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">179</span>        &quot;definition_short&quot;: &quot;The concept of an &#x27;ancient wisdom&#x27; transmitted from Hermes Trismegistus through successive sages, which alchemists sought to recover.&quot;,
+<span class="line-num">180</span>        &quot;definition_long&quot;: &quot;Prisca sapientia held that original knowledge was progressively hidden under layers of allegory and obscurity. The more incomprehensible a text, the more ancient wisdom it was thought to contain. The HP&#x27;s deliberately obscure language and its prefatory claim that only the most learned could penetrate its meaning made it an ideal vehicle for alchemical interpretation. Newton, Boyle, and d&#x27;Espagnet all worked within this paradigm.&quot;,
+<span class="line-num">181</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 153-156; Muslow &amp; Hamalainen 2004&quot;,
+<span class="line-num">182</span>    },
+<span class="line-num">183</span>
+<span class="line-num">184</span>    # === Architecture &amp; Gardens ===
+<span class="line-num">185</span>    {
+<span class="line-num">186</span>        &quot;slug&quot;: &quot;architectural-body&quot;,
+<span class="line-num">187</span>        &quot;label&quot;: &quot;Architectural Body&quot;,
+<span class="line-num">188</span>        &quot;category&quot;: ARCH,
+<span class="line-num">189</span>        &quot;definition_short&quot;: &quot;Lefaivre&#x27;s concept that the HP treats architecture as an extension of embodied cognition and corporeal experience.&quot;,
+<span class="line-num">190</span>        &quot;definition_long&quot;: &quot;In her 1997 attribution study, Liane Lefaivre argued that the HP presents architecture not as abstract geometrical form but as an expression of the body&#x27;s engagement with space. This &#x27;architectural body&#x27; concept connects the HP to Alberti&#x27;s theories of design as dreamwork and to phenomenological approaches in architectural theory. Hunt (1998) extended this by arguing that the HP foregrounds the process of experiencing gardens over the description of finished architectural objects.&quot;,
+<span class="line-num">191</span>        &quot;source_basis&quot;: &quot;Lefaivre 1997; Hunt 1998&quot;,
+<span class="line-num">192</span>    },
+<span class="line-num">193</span>    {
+<span class="line-num">194</span>        &quot;slug&quot;: &quot;dream-narrative&quot;,
+<span class="line-num">195</span>        &quot;label&quot;: &quot;Dream Narrative&quot;,
+<span class="line-num">196</span>        &quot;category&quot;: DEBATE,
+<span class="line-num">197</span>        &quot;definition_short&quot;: &quot;A literary work framed as a dream, a genre to which the HP belongs alongside the Roman de la Rose.&quot;,
+<span class="line-num">198</span>        &quot;definition_long&quot;: &quot;The HP is structured as a dream within a dream: Poliphilo falls asleep and enters a vision, within which he falls asleep again and enters a deeper dream (the dream-within-a-dream beginning at a6v). Priki (2016) places the HP in a comparative tradition with the Roman de la Rose and the Byzantine Tale of Livistros and Rodamne, arguing that the dream frame enables pedagogical encounters that prepare the lover for union with the beloved. Gollnick (1999) provides a theoretical framework for dream-narrative hermeneutics through his study of Apuleius.&quot;,
+<span class="line-num">199</span>        &quot;source_basis&quot;: &quot;Priki 2016; Gollnick 1999; Agamben 1984&quot;,
+<span class="line-num">200</span>    },
+<span class="line-num">201</span>    {
+<span class="line-num">202</span>        &quot;slug&quot;: &quot;inventio&quot;,
+<span class="line-num">203</span>        &quot;label&quot;: &quot;Inventio&quot;,
+<span class="line-num">204</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">205</span>        &quot;definition_short&quot;: &quot;The rhetorical process of finding or discovering material for creative production; the act of gathering ideas.&quot;,
+<span class="line-num">206</span>        &quot;definition_long&quot;: &quot;In classical rhetoric, inventio is the first of five canons: the discovery of arguments and material. Russell argues that early modern readers used the HP as a source for inventio -- gathering visual, architectural, linguistic, and philosophical material for their own creative projects. Ben Jonson mined it for stage design ideas. Benedetto Giovio extracted botanical and natural-historical content. The alchemists sought hidden formulae. All were practicing inventio through annotation.&quot;,
+<span class="line-num">207</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 38-42; Sloane 1989&quot;,
+<span class="line-num">208</span>    },
+<span class="line-num">209</span>    {
+<span class="line-num">210</span>        &quot;slug&quot;: &quot;ingegno&quot;,
+<span class="line-num">211</span>        &quot;label&quot;: &quot;Ingegno&quot;,
+<span class="line-num">212</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">213</span>        &quot;definition_short&quot;: &quot;Wit, mental agility, and improvisational intelligence -- a faculty that HP readers cultivated through annotation.&quot;,
+<span class="line-num">214</span>        &quot;definition_long&quot;: &quot;Ingegno (or ingenium) in Renaissance usage encompassed wit, invention, and the ability to perceive unexpected connections. Russell proposes that the act of annotating the HP was itself a form of ingegno cultivation: readers sharpened their perceptiveness by decoding the text&#x27;s obscurities, tracing its sources, and making creative associations. The BL alchemist twice praised the HP as &#x27;ingeniosissimo,&#x27; recognizing it as exemplifying this virtue.&quot;,
+<span class="line-num">215</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 40-41, 160&quot;,
+<span class="line-num">216</span>    },
+<span class="line-num">217</span>    {
+<span class="line-num">218</span>        &quot;slug&quot;: &quot;antiquarianism&quot;,
+<span class="line-num">219</span>        &quot;label&quot;: &quot;Antiquarianism&quot;,
+<span class="line-num">220</span>        &quot;category&quot;: DEBATE,
+<span class="line-num">221</span>        &quot;definition_short&quot;: &quot;The systematic study and collection of artifacts from the ancient past, a practice central to the HP&#x27;s intellectual world.&quot;,
+<span class="line-num">222</span>        &quot;definition_long&quot;: &quot;Griggs (1998) argues that the HP should be understood as the culmination of fifteenth-century Italian antiquarianism rather than as Romantic escapism. The book&#x27;s verbal and visual strategies derive from Cyriacus of Ancona&#x27;s commentaria and mid-century antiquarian syllogae (topographically organized manuscript collections of inscriptions and monuments). Poliphilo&#x27;s journey through architectural ruins enacts the antiquarian mode of knowledge-making.&quot;,
+<span class="line-num">223</span>        &quot;source_basis&quot;: &quot;Griggs 1998; Curran 1998&quot;,
+<span class="line-num">224</span>    },
+<span class="line-num">225</span>    {
+<span class="line-num">226</span>        &quot;slug&quot;: &quot;vernacular-poetics&quot;,
+<span class="line-num">227</span>        &quot;label&quot;: &quot;Vernacular Poetics&quot;,
+<span class="line-num">228</span>        &quot;category&quot;: DEBATE,
+<span class="line-num">229</span>        &quot;definition_short&quot;: &quot;The HP as a work of Italian vernacular literature, adapting Petrarchan conventions into a prose-image hybrid.&quot;,
+<span class="line-num">230</span>        &quot;definition_long&quot;: &quot;Trippe (2002) argues that the HP has been understudied as literature, with scholars treating it primarily as architectural or philosophical. Through close analysis of woodcuts and their accompanying text, she demonstrates how the author adapted Petrarchan tropes -- the beloved&#x27;s beauty, the lover&#x27;s suffering -- into an interplay of word and image. The HP&#x27;s invented language operates within recognizable Italian vernacular poetic frameworks rather than being merely eccentric.&quot;,
+<span class="line-num">231</span>        &quot;source_basis&quot;: &quot;Trippe 2002&quot;,
+<span class="line-num">232</span>    },
+<span class="line-num">233</span>    {
+<span class="line-num">234</span>        &quot;slug&quot;: &quot;reception-history&quot;,
+<span class="line-num">235</span>        &quot;label&quot;: &quot;Reception History&quot;,
+<span class="line-num">236</span>        &quot;category&quot;: DEBATE,
+<span class="line-num">237</span>        &quot;definition_short&quot;: &quot;The study of how the HP was read, interpreted, and repurposed across five centuries and multiple cultures.&quot;,
+<span class="line-num">238</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s reception spans Venetian humanism, French court culture, Elizabethan theatre, Enlightenment bibliography, Romantic aestheticism, Jungian psychology, and contemporary digital humanities. Priki (2009) surveys two peak periods of engagement: early modern (through c.1657) and the twentieth-century scholarly revival. Blunt (1937) documented French seventeenth-century reception. Praz (1947) traced influence on Swinburne and Beardsley. Semler (2006) reframed the 1592 English translation as deliberate cultural appropriation rather than failed translation.&quot;,
+<span class="line-num">239</span>        &quot;source_basis&quot;: &quot;Priki 2009; Blunt 1937; Praz 1947; Semler 2006&quot;,
+<span class="line-num">240</span>    },
+<span class="line-num">241</span>    {
+<span class="line-num">242</span>        &quot;slug&quot;: &quot;apparatus&quot;,
+<span class="line-num">243</span>        &quot;label&quot;: &quot;Apparatus&quot;,
+<span class="line-num">244</span>        &quot;category&quot;: BOOK,
+<span class="line-num">245</span>        &quot;definition_short&quot;: &quot;The scholarly infrastructure surrounding a critical edition: introduction, notes, bibliography, indexes.&quot;,
+<span class="line-num">246</span>        &quot;definition_long&quot;: &quot;The HP has been the subject of two major critical editions: Pozzi &amp; Ciapponi (1964) and Ariani &amp; Gabriele (1998, Adelphi). Godwin&#x27;s 1999 English translation (Thames &amp; Hudson) provides the most accessible modern apparatus. The term &#x27;apparatus criticus&#x27; refers specifically to the textual notes recording variant readings across copies and editions.&quot;,
+<span class="line-num">247</span>        &quot;source_basis&quot;: &quot;Pozzi &amp; Ciapponi 1964; Ariani &amp; Gabriele 1998; Godwin 1999&quot;,
+<span class="line-num">248</span>    },
+<span class="line-num">249</span>    {
+<span class="line-num">250</span>        &quot;slug&quot;: &quot;commentary&quot;,
+<span class="line-num">251</span>        &quot;label&quot;: &quot;Commentary&quot;,
+<span class="line-num">252</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">253</span>        &quot;definition_short&quot;: &quot;A systematic explanation of a text, either printed alongside it or written in its margins.&quot;,
+<span class="line-num">254</span>        &quot;definition_long&quot;: &quot;The HP lacks a printed commentary in either of its Aldine editions (1499, 1545). Instead, the commentary tradition is supplied by readers&#x27; marginalia. Russell shows that annotations by Giovio, Jonson, the alchemists, and Alexander VII collectively constitute an informal commentary tradition. Beroalde de Verville&#x27;s 1600 edition adds the first published interpretive apparatus, though framed as an alchemical key rather than a philological commentary.&quot;,
+<span class="line-num">255</span>        &quot;source_basis&quot;: &quot;Russell 2014 passim&quot;,
+<span class="line-num">256</span>    },
+<span class="line-num">257</span>    {
+<span class="line-num">258</span>        &quot;slug&quot;: &quot;activity-book&quot;,
+<span class="line-num">259</span>        &quot;label&quot;: &quot;Activity Book&quot;,
+<span class="line-num">260</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">261</span>        &quot;definition_short&quot;: &quot;Russell&#x27;s concept of the HP as a text designed to provoke active, playful reader engagement.&quot;,
+<span class="line-num">262</span>        &quot;definition_long&quot;: &quot;Drawing on analogy with modern educational media, Russell reframes the HP as a &#x27;humanistic activity book&#x27; in which readers cultivated ingegno through creative engagement with the text and its woodcuts. The HP&#x27;s puzzles, obscure language, embedded inscriptions, and visual-textual interplay invited readers to decode, annotate, cross-reference, and extend the text in their own marginalia. This concept shifts attention from the author&#x27;s intent to the reader&#x27;s creative practice.&quot;,
+<span class="line-num">263</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 34-42&quot;,
+<span class="line-num">264</span>    },
+<span class="line-num">265</span>    {
+<span class="line-num">266</span>        &quot;slug&quot;: &quot;elephant-obelisk&quot;,
+<span class="line-num">267</span>        &quot;label&quot;: &quot;Elephant and Obelisk&quot;,
+<span class="line-num">268</span>        &quot;category&quot;: ARCH,
+<span class="line-num">269</span>        &quot;definition_short&quot;: &quot;A monumental image in the HP showing an elephant bearing an obelisk, later realized by Bernini in Rome.&quot;,
+<span class="line-num">270</span>        &quot;definition_long&quot;: &quot;The woodcut of the elephant bearing an obelisk (b6v-b7r) is one of the HP&#x27;s most influential images. Heckscher (1947) documented how Bernini drew upon it for his 1667 sculpture in the Piazza della Minerva, commissioned by Alexander VII (who annotated his own copy of the HP). The BL alchemist (Hand B) covered this image with alchemical ideograms, reading it as encoding alchemical processes. The Buffalo annotator (Hand E) identified the surrounding statues with Geberian Sol/Luna symbolism.&quot;,
+<span class="line-num">271</span>        &quot;source_basis&quot;: &quot;Heckscher 1947; Russell 2014, pp. 157, 187&quot;,
+<span class="line-num">272</span>    },
+<span class="line-num">273</span>    {
+<span class="line-num">274</span>        &quot;slug&quot;: &quot;cythera&quot;,
+<span class="line-num">275</span>        &quot;label&quot;: &quot;Cythera&quot;,
+<span class="line-num">276</span>        &quot;category&quot;: ARCH,
+<span class="line-num">277</span>        &quot;definition_short&quot;: &quot;The island of Venus, described in the HP with elaborate concentric garden designs.&quot;,
+<span class="line-num">278</span>        &quot;definition_long&quot;: &quot;In the HP, Poliphilo travels to the island of Cythera, sacred to Venus, where he encounters an elaborate circular garden with concentric rings of planting. Segre (1998) provides the first critical analysis of Cythera&#x27;s garden design, tracing its mythological associations and arguing it anticipates sixteenth-century botanical garden layouts. Fabiani Giannetto (2015) connects Cythera to the Sacro Bosco at Bomarzo through the lens of meraviglia (wonderment).&quot;,
+<span class="line-num">279</span>        &quot;source_basis&quot;: &quot;Segre 1998; Fabiani Giannetto 2015&quot;,
+<span class="line-num">280</span>    },
+<span class="line-num">281</span>    {
+<span class="line-num">282</span>        &quot;slug&quot;: &quot;aldus-manutius&quot;,
+<span class="line-num">283</span>        &quot;label&quot;: &quot;Aldus Manutius&quot;,
+<span class="line-num">284</span>        &quot;category&quot;: BOOK,
+<span class="line-num">285</span>        &quot;definition_short&quot;: &quot;The Venetian printer who published the HP in 1499, renowned for Greek scholarship and italic type.&quot;,
+<span class="line-num">286</span>        &quot;definition_long&quot;: &quot;Aldus Manutius (c.1449-1515) published the HP as one of his most ambitious productions, at a time when his press was primarily known for Greek texts. The HP stands apart from his other publications in its elaborate illustration program and vernacular language. Farrington (2015) contextualizes the HP within Aldus&#x27;s career and his partnership with Andrea Torresani. Davies (1999) provides the standard biography of Aldus as printer and publisher.&quot;,
+<span class="line-num">287</span>        &quot;source_basis&quot;: &quot;Farrington 2015; Davies 1999&quot;,
+<span class="line-num">288</span>    },
+<span class="line-num">289</span>    {
+<span class="line-num">290</span>        &quot;slug&quot;: &quot;authorship-debate&quot;,
+<span class="line-num">291</span>        &quot;label&quot;: &quot;Authorship Debate&quot;,
+<span class="line-num">292</span>        &quot;category&quot;: DEBATE,
+<span class="line-num">293</span>        &quot;definition_short&quot;: &quot;The centuries-long dispute over who wrote the HP, with candidates including two Francesco Colonnas, Alberti, and Feliciano.&quot;,
+<span class="line-num">294</span>        &quot;definition_long&quot;: &quot;The acrostic points to &#x27;Frater Franciscus Colonna,&#x27; but which one? Casella &amp; Pozzi (1959) established the Venetian Dominican Francesco Colonna (d.1527) as the canonical attribution. Calvesi (1996) argued for a Roman nobleman of the same name. Lefaivre (1997) proposed Leon Battista Alberti. Khomentovskaia (1935) suggested Felice Feliciano. O&#x27;Neill (2021) surveys all candidates and proposes that future research should use narratological analysis rather than archival evidence alone.&quot;,
+<span class="line-num">295</span>        &quot;source_basis&quot;: &quot;Casella &amp; Pozzi 1959; Calvesi 1996; Lefaivre 1997; O&#x27;Neill 2021&quot;,
+<span class="line-num">296</span>    },
+<span class="line-num">297</span>    {
+<span class="line-num">298</span>        &quot;slug&quot;: &quot;ideogram&quot;,
+<span class="line-num">299</span>        &quot;label&quot;: &quot;Ideogram (Alchemical)&quot;,
+<span class="line-num">300</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">301</span>        &quot;definition_short&quot;: &quot;A symbolic sign representing an alchemical element or process, used by annotators to label HP passages.&quot;,
+<span class="line-num">302</span>        &quot;definition_long&quot;: &quot;The BL alchemist (Hand B) used an extensive vocabulary of alchemical ideograms -- compact symbols for gold, silver, mercury, Venus, Jupiter, and other elements -- within the syntax of Latin annotations. These signs often had Latin inflections appended (e.g., the sun symbol + &#x27;-ra&#x27; for &#x27;aurata&#x27;). Russell notes that B&#x27;s ideographic vocabulary shows consistency with Newton&#x27;s Keynes MSS, suggesting a possible connection to the Royal Society or Cambridge circle.&quot;,
+<span class="line-num">303</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 156-158; Taylor 1951&quot;,
+<span class="line-num">304</span>    },
+<span class="line-num">305</span>    {
+<span class="line-num">306</span>        &quot;slug&quot;: &quot;acutezze&quot;,
+<span class="line-num">307</span>        &quot;label&quot;: &quot;Acutezze&quot;,
+<span class="line-num">308</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">309</span>        &quot;definition_short&quot;: &quot;Examples of verbal wit or sharp conceits; the primary interest of Pope Alexander VII&#x27;s annotations.&quot;,
+<span class="line-num">310</span>        &quot;definition_long&quot;: &quot;Fabio Chigi (Pope Alexander VII) annotated his copy of the HP with particular attention to acutezze -- instances of verbal cleverness, wordplay, and rhetorical ingenuity. This practice reflects the seventeenth-century Italian tradition of collecting examples of wit, codified in works like Tesauro&#x27;s Il cannocchiale aristotelico (1663) and Pellegrini&#x27;s Delle Acutezze (1639). Chigi&#x27;s reading of the HP was aesthetic rather than alchemical or encyclopedic.&quot;,
+<span class="line-num">311</span>        &quot;source_basis&quot;: &quot;Russell 2014, Ch. 8; Pellegrini 1639; Tesauro 1663&quot;,
+<span class="line-num">312</span>    },
+<span class="line-num">313</span>    {
+<span class="line-num">314</span>        &quot;slug&quot;: &quot;allegory&quot;,
+<span class="line-num">315</span>        &quot;label&quot;: &quot;Allegory&quot;,
+<span class="line-num">316</span>        &quot;category&quot;: TEXT,
+<span class="line-num">317</span>        &quot;definition_short&quot;: &quot;A narrative in which characters and events represent abstract ideas or principles beneath the surface meaning.&quot;,
+<span class="line-num">318</span>        &quot;definition_long&quot;: &quot;The HP has been read allegorically in multiple registers: as an allegory of love (the surface narrative), of alchemical transformation (Beroalde, the BL and Buffalo annotators), of humanist self-cultivation (Lefaivre), and of architectural and political dreams (Temple 1998). The multiplicity of allegorical readings reflects the HP&#x27;s deliberate obscurity. Priki (2009) shows how each historical audience imposed its own allegorical framework based on cultural context.&quot;,
+<span class="line-num">319</span>        &quot;source_basis&quot;: &quot;Priki 2009; Russell 2014 passim&quot;,
+<span class="line-num">320</span>    },
+<span class="line-num">321</span>]
+<span class="line-num">322</span>
+<span class="line-num">323</span># Related term links (slug pairs + type)
+<span class="line-num">324</span>LINKS = [
+<span class="line-num">325</span>    (&quot;signature&quot;, &quot;quire&quot;, &quot;RELATED&quot;),
+<span class="line-num">326</span>    (&quot;signature&quot;, &quot;folio&quot;, &quot;RELATED&quot;),
+<span class="line-num">327</span>    (&quot;signature&quot;, &quot;collation&quot;, &quot;RELATED&quot;),
+<span class="line-num">328</span>    (&quot;folio&quot;, &quot;recto&quot;, &quot;RELATED&quot;),
+<span class="line-num">329</span>    (&quot;folio&quot;, &quot;verso&quot;, &quot;RELATED&quot;),
+<span class="line-num">330</span>    (&quot;recto&quot;, &quot;verso&quot;, &quot;RELATED&quot;),
+<span class="line-num">331</span>    (&quot;quire&quot;, &quot;gathering&quot;, &quot;RELATED&quot;),
+<span class="line-num">332</span>    (&quot;gathering&quot;, &quot;collation&quot;, &quot;RELATED&quot;),
+<span class="line-num">333</span>    (&quot;incunabulum&quot;, &quot;aldus-manutius&quot;, &quot;RELATED&quot;),
+<span class="line-num">334</span>    (&quot;incunabulum&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">335</span>    (&quot;woodcut&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">336</span>    (&quot;woodcut&quot;, &quot;emblem&quot;, &quot;RELATED&quot;),
+<span class="line-num">337</span>    (&quot;hieroglyph&quot;, &quot;emblem&quot;, &quot;RELATED&quot;),
+<span class="line-num">338</span>    (&quot;hieroglyph&quot;, &quot;ideogram&quot;, &quot;SEE_ALSO&quot;),
+<span class="line-num">339</span>    (&quot;marginalia&quot;, &quot;annotator-hand&quot;, &quot;RELATED&quot;),
+<span class="line-num">340</span>    (&quot;marginalia&quot;, &quot;commentary&quot;, &quot;RELATED&quot;),
+<span class="line-num">341</span>    (&quot;marginalia&quot;, &quot;activity-book&quot;, &quot;RELATED&quot;),
+<span class="line-num">342</span>    (&quot;annotator-hand&quot;, &quot;inventio&quot;, &quot;RELATED&quot;),
+<span class="line-num">343</span>    (&quot;annotator-hand&quot;, &quot;ingegno&quot;, &quot;RELATED&quot;),
+<span class="line-num">344</span>    (&quot;acrostic&quot;, &quot;authorship-debate&quot;, &quot;RELATED&quot;),
+<span class="line-num">345</span>    (&quot;alchemical-allegory&quot;, &quot;master-mercury&quot;, &quot;RELATED&quot;),
+<span class="line-num">346</span>    (&quot;alchemical-allegory&quot;, &quot;sol-luna&quot;, &quot;RELATED&quot;),
+<span class="line-num">347</span>    (&quot;alchemical-allegory&quot;, &quot;chemical-wedding&quot;, &quot;RELATED&quot;),
+<span class="line-num">348</span>    (&quot;alchemical-allegory&quot;, &quot;prisca-sapientia&quot;, &quot;RELATED&quot;),
+<span class="line-num">349</span>    (&quot;master-mercury&quot;, &quot;ideogram&quot;, &quot;RELATED&quot;),
+<span class="line-num">350</span>    (&quot;sol-luna&quot;, &quot;chemical-wedding&quot;, &quot;RELATED&quot;),
+<span class="line-num">351</span>    (&quot;prisca-sapientia&quot;, &quot;alchemical-allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">352</span>    (&quot;architectural-body&quot;, &quot;dream-narrative&quot;, &quot;RELATED&quot;),
+<span class="line-num">353</span>    (&quot;architectural-body&quot;, &quot;ekphrasis&quot;, &quot;SEE_ALSO&quot;),
+<span class="line-num">354</span>    (&quot;dream-narrative&quot;, &quot;allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">355</span>    (&quot;inventio&quot;, &quot;ingegno&quot;, &quot;RELATED&quot;),
+<span class="line-num">356</span>    (&quot;inventio&quot;, &quot;activity-book&quot;, &quot;RELATED&quot;),
+<span class="line-num">357</span>    (&quot;antiquarianism&quot;, &quot;hieroglyph&quot;, &quot;RELATED&quot;),
+<span class="line-num">358</span>    (&quot;vernacular-poetics&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">359</span>    (&quot;reception-history&quot;, &quot;authorship-debate&quot;, &quot;RELATED&quot;),
+<span class="line-num">360</span>    (&quot;elephant-obelisk&quot;, &quot;alchemical-allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">361</span>    (&quot;elephant-obelisk&quot;, &quot;aldus-manutius&quot;, &quot;SEE_ALSO&quot;),
+<span class="line-num">362</span>    (&quot;cythera&quot;, &quot;architectural-body&quot;, &quot;RELATED&quot;),
+<span class="line-num">363</span>    (&quot;acutezze&quot;, &quot;ingegno&quot;, &quot;RELATED&quot;),
+<span class="line-num">364</span>    (&quot;allegory&quot;, &quot;alchemical-allegory&quot;, &quot;PARENT&quot;),
+<span class="line-num">365</span>    (&quot;apparatus&quot;, &quot;commentary&quot;, &quot;RELATED&quot;),
+<span class="line-num">366</span>    (&quot;aldus-manutius&quot;, &quot;incunabulum&quot;, &quot;RELATED&quot;),
+<span class="line-num">367</span>    (&quot;authorship-debate&quot;, &quot;acrostic&quot;, &quot;RELATED&quot;),
+<span class="line-num">368</span>]
+<span class="line-num">369</span>
+<span class="line-num">370</span>
+<span class="line-num">371</span>def main():
+<span class="line-num">372</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">373</span>    cur = conn.cursor()
+<span class="line-num">374</span>
+<span class="line-num">375</span>    print(&quot;Seeding dictionary terms...&quot;)
+<span class="line-num">376</span>    inserted = 0
+<span class="line-num">377</span>    for t in TERMS:
+<span class="line-num">378</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">379</span>            INSERT OR IGNORE INTO dictionary_terms
+<span class="line-num">380</span>                (slug, label, category, definition_short, definition_long,
+<span class="line-num">381</span>                 source_basis, review_status, needs_review)
+<span class="line-num">382</span>            VALUES (?, ?, ?, ?, ?, ?, &#x27;DRAFT&#x27;, 1)
+<span class="line-num">383</span>        &quot;&quot;&quot;, (t[&quot;slug&quot;], t[&quot;label&quot;], t[&quot;category&quot;],
+<span class="line-num">384</span>              t[&quot;definition_short&quot;], t[&quot;definition_long&quot;],
+<span class="line-num">385</span>              t.get(&quot;source_basis&quot;, &quot;&quot;)))
+<span class="line-num">386</span>        inserted += cur.rowcount
+<span class="line-num">387</span>    conn.commit()
+<span class="line-num">388</span>    print(f&quot;  Inserted {inserted} terms ({len(TERMS)} total defined)&quot;)
+<span class="line-num">389</span>
+<span class="line-num">390</span>    print(&quot;Creating term links...&quot;)
+<span class="line-num">391</span>    linked = 0
+<span class="line-num">392</span>    for slug_a, slug_b, link_type in LINKS:
+<span class="line-num">393</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_a,))
+<span class="line-num">394</span>        a = cur.fetchone()
+<span class="line-num">395</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_b,))
+<span class="line-num">396</span>        b = cur.fetchone()
+<span class="line-num">397</span>        if a and b:
+<span class="line-num">398</span>            cur.execute(&quot;&quot;&quot;
+<span class="line-num">399</span>                INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">400</span>                    (term_id, linked_term_id, link_type)
+<span class="line-num">401</span>                VALUES (?, ?, ?)
+<span class="line-num">402</span>            &quot;&quot;&quot;, (a[0], b[0], link_type))
+<span class="line-num">403</span>            linked += cur.rowcount
+<span class="line-num">404</span>            # Bidirectional for RELATED
+<span class="line-num">405</span>            if link_type == &quot;RELATED&quot;:
+<span class="line-num">406</span>                cur.execute(&quot;&quot;&quot;
+<span class="line-num">407</span>                    INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">408</span>                        (term_id, linked_term_id, link_type)
+<span class="line-num">409</span>                    VALUES (?, ?, ?)
+<span class="line-num">410</span>                &quot;&quot;&quot;, (b[0], a[0], link_type))
+<span class="line-num">411</span>                linked += cur.rowcount
+<span class="line-num">412</span>    conn.commit()
+<span class="line-num">413</span>    print(f&quot;  Created {linked} links&quot;)
+<span class="line-num">414</span>
+<span class="line-num">415</span>    # Summary
+<span class="line-num">416</span>    print(&quot;\nDictionary by category:&quot;)
+<span class="line-num">417</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">418</span>        SELECT category, COUNT(*) FROM dictionary_terms
+<span class="line-num">419</span>        GROUP BY category ORDER BY COUNT(*) DESC
+<span class="line-num">420</span>    &quot;&quot;&quot;)
+<span class="line-num">421</span>    for row in cur.fetchall():
+<span class="line-num">422</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">423</span>
+<span class="line-num">424</span>    conn.close()
+<span class="line-num">425</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">426</span>
+<span class="line-num">427</span>
+<span class="line-num">428</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">429</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

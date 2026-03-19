@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Quality Proposals - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Content Quality Proposals</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPproposals.md &mdash; 2,158 words</p>
+            <h2>HPproposals: Improving Content Quality Across the Site</h2>
+
+<p>Proposals for how to systematically improve the writing, consistency, and accuracy of the dictionary, bibliography, scholar, and summary pages through templating, structured LLM reading, and editorial workflows.</p>
+
+<hr>
+
+<h3>The Problem</h3>
+
+<p>The site currently has four kinds of prose content, all generated differently:</p>
+
+<table class="doc-table">
+<tr><th>Content</th><th>Count</th><th>How Generated</th><th>Quality</th></tr>
+<tr><td>Article summaries</td><td>34</td><td>LLM batch agents reading markdown</td><td>Uneven -- some rich and precise (Priki, Russell), some thin (Ure, Pumroy)</td></tr>
+<tr><td>Dictionary definitions</td><td>37</td><td>LLM writing in a single session</td><td>Consistent tone but untested against specialist knowledge</td></tr>
+<tr><td>Scholar profiles</td><td>30 pages</td><td>Template-filled from summaries.json</td><td>No biographical prose, just paper lists</td></tr>
+<tr><td>Bibliography entries</td><td>109</td><td>Hardcoded metadata, no annotation</td><td>Author-title-year only, no commentary</td></tr>
+</table>
+
+<p>The root issue: each content type was generated in a different session with different prompts, producing different levels of depth and different rhetorical registers. There is no shared style guide, no template structure, and no editorial pass.</p>
+
+<hr>
+
+<h3>Proposal 1: Structured Templates for Each Content Type</h3>
+
+<h4>Dictionary Term Template</h4>
+
+<p>Every dictionary entry should follow this structure:</p>
+
+<pre><code class="lang-">
+LABEL (Category)
+
+[1-sentence definition suitable for a tooltip or glossary sidebar]
+
+[2-4 sentence contextual definition situating the term within HP scholarship.
+Must answer: What is it? Why does it matter for the HP specifically?
+What scholarly debate or tradition does it belong to?]
+
+[1-2 sentences on how the term connects to our project&#x27;s data --
+e.g., &quot;Russell documents X instances in the BL copy&quot; or
+&quot;The Siena facsimile shows this feature on folios Y-Z.&quot;]
+
+Sources: [Specific citations, not vague attributions]
+Related: [Linked terms from dictionary_term_links]
+</code></pre>
+
+<p><strong>Current gap</strong>: Many definitions explain the general concept but don&#x27;t connect to our specific data. The entry for &quot;marginalia&quot; describes the concept but doesn&#x27;t say &quot;Russell documented 282 folio references across 6 copies, with 11 distinct hands identified.&quot; The template forces this connection.</p>
+
+<p><strong>Implementation</strong>: Add a <code>definition_project</code> TEXT column to <code>dictionary_terms</code> for the project-specific paragraph. Generate it by querying the database:</p>
+
+<pre><code class="lang-python">
+# For each term, query for related data
+if term.slug == &#x27;marginalia&#x27;:
+    cur.execute(&quot;SELECT COUNT(*) FROM dissertation_refs&quot;)
+    ref_count = cur.fetchone()[0]
+    cur.execute(&quot;SELECT COUNT(*) FROM annotators&quot;)
+    hand_count = cur.fetchone()[0]
+    definition_project = f&quot;This project documents {ref_count} folio references...&quot;
+</code></pre>
+
+<p>This keeps the project-specific content deterministic and always current.</p>
+
+<h4>Scholar Profile Template</h4>
+
+<p>Currently scholar pages are just lists of papers. Each should have:</p>
+
+<pre><code class="lang-">
+SCHOLAR NAME
+
+[1-2 sentence biographical context: period, nationality, institution, field]
+
+[1-2 sentences on their HP contribution: what question they addressed,
+what they found, why it matters]
+
+Relationship to Other Scholars:
+[How their work connects to or responds to other scholars in our database]
+
+Works in Our Collection:
+[Paper cards as currently generated]
+
+Works Cited but Not in Collection:
+[From bibliography table where in_collection = 0]
+</code></pre>
+
+<p><strong>Implementation</strong>: The biographical context can be generated from the <code>scholars</code> table fields we already have (nationality, institution, specialization, hp_focus). The relationship mapping requires a new query:</p>
+
+<pre><code class="lang-sql">
+-- Find scholars who cite or are cited by this scholar
+SELECT DISTINCT b2.author
+FROM bibliography b1
+JOIN bibliography b2 ON b2.topic_cluster = b1.topic_cluster
+WHERE b1.author = ? AND b2.author != ?
+AND b1.year &lt; b2.year
+</code></pre>
+
+<p>This is approximate (same topic + later date suggests engagement) but better than nothing. A proper citation graph would require parsing bibliography sections from the markdown files.</p>
+
+<h4>Article Summary Template</h4>
+
+<p>Current summaries vary wildly in structure. Standardize to:</p>
+
+<pre><code class="lang-">
+TITLE (Author, Year)
+Journal/Publisher
+
+[1-sentence thesis statement: what the article argues]
+
+[2-3 sentences on method and evidence: how they make their case]
+
+[1-2 sentences on significance: why this matters for HP scholarship,
+what it changes or challenges]
+
+[1 sentence on relationship to our project: which folios, hands,
+or copies are relevant]
+
+Topic: [cluster tags]
+</code></pre>
+
+<p><strong>Current gap</strong>: Some summaries are 200+ words of flowing prose, others are 50 words. The template doesn&#x27;t restrict length but enforces structure. The &quot;relationship to our project&quot; line is the key addition -- it transforms a generic summary into a pointer into our data.</p>
+
+<h4>Bibliography Entry Template</h4>
+
+<p>Currently bare metadata. Add structured annotations:</p>
+
+<pre><code class="lang-">
+AUTHOR (Year). TITLE. Journal/Publisher. [pub_type]
+
+[1-sentence annotation: what this work contributes to HP scholarship]
+
+Status: In Collection / Cited by Russell / Discovered via Web Search
+Verified: Yes (CrossRef DOI) / No (needs verification)
+Topics: [badges]
+</code></pre>
+
+<p><strong>Implementation</strong>: The 1-sentence annotation is the only part that requires LLM generation. Everything else is already in the database. The annotation could be derived from the <code>notes</code> field (which already contains brief descriptions for many entries) or generated in a batch pass.</p>
+
+<hr>
+
+<h3>Proposal 2: LLM Reading Pipeline for Quality Improvement</h3>
+
+<h4>Phase 1: Audit Existing Summaries Against Source Text</h4>
+
+<p>For each article where we have the markdown source:</p>
+
+<p>1. <strong>Load the summary</strong> from <code>summaries.json</code></p>
+<p>2. <strong>Load the source markdown</strong> from <code>md/</code></p>
+<p>3. <strong>Prompt the LLM</strong> with both:</p>
+
+<pre><code class="lang-">
+You are reviewing an article summary for accuracy and completeness.
+
+SOURCE ARTICLE (first 3000 words):
+{source_text}
+
+EXISTING SUMMARY:
+{summary}
+
+Check for:
+1. FACTUAL ERRORS: Does the summary misstate the article&#x27;s argument?
+2. MISSING KEY CLAIMS: Does the article make a major argument the summary omits?
+3. ATTRIBUTION: Does the summary correctly identify the author&#x27;s position vs. others&#x27;?
+4. SPECIFICITY: Does the summary use vague language where the article gives specifics?
+
+Output a JSON object:
+{
+  &quot;factual_errors&quot;: [...],
+  &quot;missing_claims&quot;: [...],
+  &quot;attribution_issues&quot;: [...],
+  &quot;specificity_gaps&quot;: [...],
+  &quot;revised_summary&quot;: &quot;...&quot;,
+  &quot;confidence&quot;: &quot;HIGH/MEDIUM/LOW&quot;
+}
+</code></pre>
+
+<p>4. <strong>If confidence is HIGH</strong> and no errors found, mark the summary as <code>reviewed</code></p>
+<p>5. <strong>If errors found</strong>, flag for human review with the specific issues listed</p>
+
+<p><strong>Key principle</strong>: The LLM reads the source article and checks the summary against it. This is a verification task (probabilistic but grounded), not a generation task (probabilistic and ungrounded). The source text anchors the LLM&#x27;s judgment.</p>
+
+<h4>Phase 2: Generate Missing Content from Source Text</h4>
+
+<p>For articles where we have the markdown but no summary yet (or a thin summary):</p>
+
+<p>1. <strong>Chunk the article</strong> using existing <code>chunk_documents.py</code></p>
+<p>2. <strong>Prompt the LLM</strong> with each chunk + the template structure:</p>
+
+<pre><code class="lang-">
+You are writing a structured summary of an HP scholarship article.
+Follow this template exactly:
+
+THESIS: [1 sentence]
+METHOD: [2-3 sentences]
+SIGNIFICANCE: [1-2 sentences]
+PROJECT RELEVANCE: [1 sentence connecting to folio refs, hands, or copies]
+
+Article chunk {n}/{total}:
+{chunk_text}
+</code></pre>
+
+<p>3. <strong>Merge chunk-level outputs</strong> into a single summary</p>
+<p>4. <strong>Tag</strong> with <code>source_method = &#x27;LLM_ASSISTED&#x27;</code>, <code>needs_review = 1</code></p>
+
+<h4>Phase 3: Cross-Reference Enhancement</h4>
+
+<p>After individual summaries are solid, run a cross-referencing pass:</p>
+
+<pre><code class="lang-">
+Given these two summaries of HP scholarship, identify:
+1. Do they address the same question? (authorship, reception, architecture, etc.)
+2. Do they agree or disagree?
+3. Does one cite or respond to the other?
+4. What folio references do they share?
+
+Article A: {summary_a}
+Article B: {summary_b}
+</code></pre>
+
+<p>This produces the &quot;relationship to other scholars&quot; data needed for enhanced scholar profiles.</p>
+
+<hr>
+
+<h3>Proposal 3: Deterministic Quality Checks</h3>
+
+<p>Not everything needs an LLM. These checks should be scripted:</p>
+
+<h4>Bibliography Consistency Checks (Pure Python)</h4>
+
+<pre><code class="lang-python">
+# 1. Author name normalization
+# &quot;L. E. Semler&quot; and &quot;L.E. Semler&quot; should match
+normalize_author(name):
+    return re.sub(r&#x27;\.(\s)&#x27;, &#x27;.&#x27;, name).strip()
+
+# 2. Year range validation
+# No HP scholarship before 1499, no entries from the future
+assert 1499 &lt;= year &lt;= 2026
+
+# 3. Journal name normalization
+# &quot;Word &amp; Image&quot; vs &quot;Word and Image&quot; vs &quot;Word &amp; Image 14:1-2&quot;
+# Normalize to base journal name + volume/issue
+
+# 4. Duplicate detection
+# Fuzzy match on normalized(author) + normalized(title)
+# Flag pairs with &gt;85% similarity
+
+# 5. Citation format validation
+# Every entry should have: author, title, year, pub_type
+# Flag entries missing any required field
+</code></pre>
+
+<h4>Dictionary Consistency Checks</h4>
+
+<pre><code class="lang-python">
+# 1. Every term should have both definition_short and definition_long
+# 2. definition_short should be &lt; 200 characters
+# 3. Every term should have at least 1 related term link
+# 4. No orphan terms (linked to but not existing)
+# 5. source_basis should cite at least one specific work
+# 6. Category distribution should be roughly even (flag if &gt;50% in one category)
+</code></pre>
+
+<h4>Summary Quality Metrics</h4>
+
+<pre><code class="lang-python">
+# 1. Word count: flag summaries &lt; 80 words or &gt; 400 words
+# 2. Specificity: count proper nouns, dates, folio references
+#    (summaries with 0 specific references are too vague)
+# 3. Template adherence: check for thesis/method/significance structure
+# 4. Unique vocabulary: flag summaries that share &gt;60% of their
+#    non-stopword vocabulary with another summary (possible duplication)
+</code></pre>
+
+<hr>
+
+<h3>Proposal 4: Editorial Workflow</h3>
+
+<h4>Review States</h4>
+
+<pre><code class="lang-">
+DRAFT → LLM_REVIEWED → HUMAN_REVIEWED → VERIFIED
+</code></pre>
+
+<ul>
+<li>**DRAFT**: Initial LLM generation. Displayed with yellow &quot;Unreviewed&quot; badge.</li>
+<li>**LLM_REVIEWED**: Passed the Phase 1 audit (LLM checked summary against source). Badge changes to &quot;LLM-checked.&quot;</li>
+<li>**HUMAN_REVIEWED**: A human has read and approved the content. Badge changes to &quot;Reviewed.&quot;</li>
+<li>**VERIFIED**: Content has been cross-checked against authoritative sources (VIAF for scholars, CrossRef for citations, specialist review for definitions). Badge removed entirely — verified content needs no badge.</li>
+</ul>
+
+<h4>Display Strategy</h4>
+
+<ul>
+<li>**DRAFT content**: Shown with prominent yellow badge. Tooltip: &quot;This content was generated with AI assistance and has not been verified.&quot;</li>
+<li>**LLM_REVIEWED content**: Shown with subtle blue badge. Tooltip: &quot;This content was checked against the source text by AI but has not been human-reviewed.&quot;</li>
+<li>**HUMAN_REVIEWED content**: Shown with green checkmark. No tooltip needed.</li>
+<li>**VERIFIED content**: No badge. Clean display.</li>
+</ul>
+
+<p>This gives the site graduated credibility signals rather than the current binary (everything is &quot;Unreviewed&quot;).</p>
+
+<hr>
+
+<h3>Proposal 5: Template-Driven Page Generation</h3>
+
+<h4>Current Approach (build_site.py)</h4>
+
+<p>Pages are generated with inline Python f-strings:</p>
+
+<pre><code class="lang-python">
+detail_body = f&quot;&quot;&quot;
+&lt;div class=&quot;scholar-detail&quot;&gt;
+    &lt;h2&gt;{escape(author)} {review_html}&lt;/h2&gt;
+    ...
+&quot;&quot;&quot;
+</code></pre>
+
+<p>This works but makes it hard to iterate on the design without touching Python code.</p>
+
+<h4>Proposed Approach: Lightweight Templates</h4>
+
+<p>Use Python&#x27;s built-in <code>string.Template</code> or a minimal template library (Jinja2 is overkill; <code>chevron</code> for Mustache is 1 file, no dependencies):</p>
+
+<pre><code class="lang-">
+templates/
+  scholar.html        # Scholar profile page template
+  scholar_card.html   # Scholar card for index page
+  dictionary.html     # Dictionary term page
+  dictionary_card.html
+  bibliography.html   # Bibliography page
+  bib_entry.html      # Individual entry
+  marginalia.html     # Folio detail page
+  nav.html            # Shared navigation
+  footer.html         # Shared footer
+  badges.html         # Review/confidence badge partials
+</code></pre>
+
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Designers can edit HTML without touching Python</li>
+<li>Templates can be previewed in a browser with placeholder data</li>
+<li>Consistent structure across page types</li>
+<li>Easier to add new page types (e.g., timeline, digital edition)</li>
+</ul>
+
+<p><strong>Constraint</strong>: Templates remain static files. No template engine runs at request time. The Python build script reads templates, fills them with data, and writes static HTML. The architecture stays static.</p>
+
+<h4>Implementation Path</h4>
+
+<p>1. Extract current f-string templates into <code>.html</code> files with <code>{{variable}}</code> placeholders</p>
+<p>2. Write a <code>render_template(template_path, context)</code> function that reads the file and substitutes</p>
+<p>3. Update <code>build_site.py</code> to use <code>render_template</code> instead of inline f-strings</p>
+<p>4. Keep the current f-string approach as a fallback for complex logic (e.g., conditional badge display)</p>
+
+<hr>
+
+<h3>Proposal 6: Batch LLM Improvement Runs</h3>
+
+<h4>Dictionary Enrichment Run</h4>
+
+<p>For each of the 37 dictionary terms, prompt the LLM with:</p>
+
+<pre><code class="lang-">
+You are enriching a dictionary entry for a digital humanities project
+on the Hypnerotomachia Poliphili.
+
+Current entry:
+  Term: {label}
+  Category: {category}
+  Short definition: {definition_short}
+  Long definition: {definition_long}
+  Sources: {source_basis}
+
+Database context:
+  - {n_refs} folio references mention this concept
+  - Related annotator hands: {hands}
+  - Related folios: {folios}
+
+Tasks:
+1. Add a &quot;Project data&quot; paragraph connecting this term to specific
+   folios, hands, or images in our database
+2. Suggest 1-2 additional related terms we should add to the dictionary
+3. Rate the current definition: GOOD / NEEDS_REVISION / NEEDS_SPECIALIST
+4. If NEEDS_REVISION, provide a revised definition
+</code></pre>
+
+<p>Run this as a foreground agent batch (7-10 terms per agent, 4 agents in parallel). Each agent reads only dictionary + DB context, no web access needed.</p>
+
+<h4>Summary Improvement Run</h4>
+
+<p>For each of the 34 summaries where we have the source markdown:</p>
+
+<pre><code class="lang-">
+Read the source article and the existing summary.
+Rewrite the summary following the template:
+  THESIS: [1 sentence]
+  METHOD: [2-3 sentences]
+  SIGNIFICANCE: [1-2 sentences]
+  PROJECT RELEVANCE: [1 sentence]
+Keep the total under 200 words.
+Do not invent claims not in the source.
+</code></pre>
+
+<p>This standardizes length and structure across all summaries.</p>
+
+<hr>
+
+<h3>Priority Order</h3>
+
+<table class="doc-table">
+<tr><th>Priority</th><th>Proposal</th><th>Effort</th><th>Impact</th></tr>
+<tr><td>1</td><td>Deterministic quality checks (Proposal 3)</td><td>Low</td><td>Catches errors immediately</td></tr>
+<tr><td>2</td><td>Structured templates for content types (Proposal 1)</td><td>Low</td><td>Enforces consistency going forward</td></tr>
+<tr><td>3</td><td>LLM audit of existing summaries (Proposal 2, Phase 1)</td><td>Medium</td><td>Catches factual errors in published content</td></tr>
+<tr><td>4</td><td>Editorial workflow with graduated badges (Proposal 4)</td><td>Medium</td><td>Builds user trust</td></tr>
+<tr><td>5</td><td>Template-driven page generation (Proposal 5)</td><td>Medium</td><td>Enables design iteration</td></tr>
+<tr><td>6</td><td>Batch LLM improvement runs (Proposal 6)</td><td>Medium</td><td>Raises overall quality</td></tr>
+<tr><td>7</td><td>Cross-reference enhancement (Proposal 2, Phase 3)</td><td>High</td><td>Adds scholarly relationship data</td></tr>
+</table>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

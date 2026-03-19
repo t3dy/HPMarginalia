@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-page">
+            <div class="intro">
+                <h2>Pipeline Scripts</h2>
+                <p>16 Python scripts that build the database, generate the site, and validate the data.
+                SQLite is the source of truth; these scripts are the processing pipeline.</p>
+            </div>
+            <table class="code-table">
+                <thead><tr><th>Script</th><th>Name</th><th>Description</th><th>Lines</th></tr></thead>
+                <tbody>
+            <tr>
+                <td><a href="add-bibliography.html">add_bibliography.py</a></td>
+                <td>Add Bibliography</td>
+                <td class="code-summary">Populates bibliography (58 entries), scholars (29), timeline (39 events) from hardcoded research data.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">327</td>
+            </tr>
+            <tr>
+                <td><a href="add-hands.html">add_hands.py</a></td>
+                <td>Add Annotator Hands</td>
+                <td class="code-summary">Creates 11 annotator hand profiles and attributes dissertation references to specific hands.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">443</td>
+            </tr>
+            <tr>
+                <td><a href="build-scholar-profiles.html">build_scholar_profiles.py</a></td>
+                <td>Build Scholar Profiles (Legacy)</td>
+                <td class="code-summary">Original scholar page generator from summaries.json. Superseded by build_site.py.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">283</td>
+            </tr>
+            <tr>
+                <td><a href="build-signature-map.html">build_signature_map.py</a></td>
+                <td>Build Signature Map</td>
+                <td class="code-summary">Generates the 448-entry signature-to-folio concordance from the Aldine collation formula (a-z, A-G).</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">103</td>
+            </tr>
+            <tr>
+                <td><a href="build-site.html">build_site.py</a></td>
+                <td>Build Site</td>
+                <td class="code-summary">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1337</td>
+            </tr>
+            <tr>
+                <td><a href="catalog-images.html">catalog_images.py</a></td>
+                <td>Catalog Images</td>
+                <td class="code-summary">Parses image filenames from BL and Siena collections into the images table with folio/side metadata.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">174</td>
+            </tr>
+            <tr>
+                <td><a href="chunk-documents.html">chunk_documents.py</a></td>
+                <td>Chunk Documents</td>
+                <td class="code-summary">Splits markdown files into ~1500-word semantic chunks for RAG/retrieval systems.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">261</td>
+            </tr>
+            <tr>
+                <td><a href="export-showcase-data.html">export_showcase_data.py</a></td>
+                <td>Export Showcase Data (Legacy)</td>
+                <td class="code-summary">Original data.json exporter for the gallery. Superseded by build_site.py.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">116</td>
+            </tr>
+            <tr>
+                <td><a href="extract-references.html">extract_references.py</a></td>
+                <td>Extract References</td>
+                <td class="code-summary">Uses PyMuPDF + regex to extract 282 folio/signature references from Russell&#x27;s PhD thesis PDF.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">176</td>
+            </tr>
+            <tr>
+                <td><a href="ingest-perplexity.html">ingest_perplexity.py</a></td>
+                <td>Ingest Perplexity Research</td>
+                <td class="code-summary">Adds 9 bibliography entries and 3 timeline events from HPPERPLEXITY.txt web research.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">217</td>
+            </tr>
+            <tr>
+                <td><a href="init-db.html">init_db.py</a></td>
+                <td>Initialize Database</td>
+                <td class="code-summary">Creates SQLite schema (7 core tables) and catalogs PDFs/documents from the filesystem.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">191</td>
+            </tr>
+            <tr>
+                <td><a href="match-refs-to-images.html">match_refs_to_images.py</a></td>
+                <td>Match Refs to Images</td>
+                <td class="code-summary">SQL join pipeline matching dissertation references to manuscript images via the signature map.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">142</td>
+            </tr>
+            <tr>
+                <td><a href="migrate-v2.html">migrate_v2.py</a></td>
+                <td>Schema Migration V2</td>
+                <td class="code-summary">Adds annotations, annotators, doc_folio_refs, dictionary tables, review/provenance columns. Downgrades BL confidence.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">389</td>
+            </tr>
+            <tr>
+                <td><a href="pdf-to-markdown.html">pdf_to_markdown.py</a></td>
+                <td>PDF to Markdown</td>
+                <td class="code-summary">Extracts all PDFs to markdown with YAML frontmatter, page markers, and metadata lookup.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">373</td>
+            </tr>
+            <tr>
+                <td><a href="seed-dictionary.html">seed_dictionary.py</a></td>
+                <td>Seed Dictionary</td>
+                <td class="code-summary">Inserts 37 dictionary terms across 6 categories with 76 bidirectional cross-reference links.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">429</td>
+            </tr>
+            <tr>
+                <td><a href="validate.html">validate.py</a></td>
+                <td>Validate &amp; QA</td>
+                <td class="code-summary">Checks data integrity (duplicate slugs, broken links, confidence distribution) and writes AUDIT_REPORT.md.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">264</td>
+            </tr></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Refs to Images - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Match Refs to Images</h2>
+            <div class="code-meta">match_refs_to_images.py &mdash; 142 lines</div>
+            <p style="margin-bottom:1rem">SQL join pipeline matching dissertation references to manuscript images via the signature map.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Match dissertation references to manuscript images via signature mapping.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import sqlite3
+<span class="line-num">4</span>from pathlib import Path
+<span class="line-num">5</span>
+<span class="line-num">6</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">7</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">8</span>
+<span class="line-num">9</span>
+<span class="line-num">10</span>def main():
+<span class="line-num">11</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">12</span>    cur = conn.cursor()
+<span class="line-num">13</span>
+<span class="line-num">14</span>    # Clear existing matches
+<span class="line-num">15</span>    cur.execute(&quot;DELETE FROM matches&quot;)
+<span class="line-num">16</span>
+<span class="line-num">17</span>    # Get all dissertation refs
+<span class="line-num">18</span>    cur.execute(&quot;&quot;&quot;SELECT id, signature_ref, manuscript_shelfmark, chapter_num
+<span class="line-num">19</span>                   FROM dissertation_refs&quot;&quot;&quot;)
+<span class="line-num">20</span>    refs = cur.fetchall()
+<span class="line-num">21</span>
+<span class="line-num">22</span>    stats = {&#x27;total&#x27;: len(refs), &#x27;matched&#x27;: 0, &#x27;unmatched&#x27;: 0,
+<span class="line-num">23</span>             &#x27;high&#x27;: 0, &#x27;medium&#x27;: 0, &#x27;low&#x27;: 0}
+<span class="line-num">24</span>
+<span class="line-num">25</span>    for ref_id, sig_ref, ms_shelfmark, chapter_num in refs:
+<span class="line-num">26</span>        # Look up signature in the mapping table
+<span class="line-num">27</span>        # Try lowercase first (Russell typically uses lowercase)
+<span class="line-num">28</span>        cur.execute(&quot;&quot;&quot;SELECT folio_number, side FROM signature_map
+<span class="line-num">29</span>                       WHERE signature = ? OR signature = ?&quot;&quot;&quot;,
+<span class="line-num">30</span>                    (sig_ref, sig_ref.lower()))
+<span class="line-num">31</span>        sig_row = cur.fetchone()
+<span class="line-num">32</span>
+<span class="line-num">33</span>        if not sig_row:
+<span class="line-num">34</span>            stats[&#x27;unmatched&#x27;] += 1
+<span class="line-num">35</span>            continue
+<span class="line-num">36</span>
+<span class="line-num">37</span>        folio_num, side = sig_row
+<span class="line-num">38</span>
+<span class="line-num">39</span>        # Find matching image(s) for this manuscript
+<span class="line-num">40</span>        if ms_shelfmark:
+<span class="line-num">41</span>            # Try exact manuscript match
+<span class="line-num">42</span>            cur.execute(&quot;&quot;&quot;
+<span class="line-num">43</span>                SELECT i.id FROM images i
+<span class="line-num">44</span>                JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">45</span>                WHERE m.shelfmark = ?
+<span class="line-num">46</span>                AND i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">47</span>                AND (i.folio_number = ? OR i.folio_number = ?)
+<span class="line-num">48</span>                ORDER BY i.sort_order
+<span class="line-num">49</span>            &quot;&quot;&quot;, (ms_shelfmark, str(folio_num), str(folio_num).zfill(4)))
+<span class="line-num">50</span>            image_rows = cur.fetchall()
+<span class="line-num">51</span>
+<span class="line-num">52</span>            if image_rows:
+<span class="line-num">53</span>                # If side is specified and Siena images have side info, prefer exact match
+<span class="line-num">54</span>                if side and ms_shelfmark == &#x27;O.III.38&#x27;:
+<span class="line-num">55</span>                    cur.execute(&quot;&quot;&quot;
+<span class="line-num">56</span>                        SELECT i.id FROM images i
+<span class="line-num">57</span>                        JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">58</span>                        WHERE m.shelfmark = ?
+<span class="line-num">59</span>                        AND i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">60</span>                        AND (i.folio_number = ? OR i.folio_number = ?)
+<span class="line-num">61</span>                        AND i.side = ?
+<span class="line-num">62</span>                    &quot;&quot;&quot;, (ms_shelfmark, str(folio_num), str(folio_num).zfill(4), side))
+<span class="line-num">63</span>                    exact_side = cur.fetchall()
+<span class="line-num">64</span>                    if exact_side:
+<span class="line-num">65</span>                        image_rows = exact_side
+<span class="line-num">66</span>
+<span class="line-num">67</span>                for (image_id,) in image_rows:
+<span class="line-num">68</span>                    confidence = &#x27;HIGH&#x27;
+<span class="line-num">69</span>                    method = &#x27;SIGNATURE_EXACT&#x27;
+<span class="line-num">70</span>                    cur.execute(&quot;&quot;&quot;
+<span class="line-num">71</span>                        INSERT INTO matches (ref_id, image_id, match_method, confidence, needs_review)
+<span class="line-num">72</span>                        VALUES (?, ?, ?, ?, ?)
+<span class="line-num">73</span>                    &quot;&quot;&quot;, (ref_id, image_id, method, confidence, 0))
+<span class="line-num">74</span>                    stats[&#x27;matched&#x27;] += 1
+<span class="line-num">75</span>                    stats[&#x27;high&#x27;] += 1
+<span class="line-num">76</span>            else:
+<span class="line-num">77</span>                # Try matching across all manuscripts as fallback
+<span class="line-num">78</span>                cur.execute(&quot;&quot;&quot;
+<span class="line-num">79</span>                    SELECT i.id, m.shelfmark FROM images i
+<span class="line-num">80</span>                    JOIN manuscripts m ON i.manuscript_id = m.id
+<span class="line-num">81</span>                    WHERE i.page_type = &#x27;PAGE&#x27;
+<span class="line-num">82</span>                    AND (i.folio_number = ? OR i.folio_number = ?)
+<span class="line-num">83</span>                    ORDER BY i.sort_order
+<span class="line-num">84</span>                &quot;&quot;&quot;, (str(folio_num), str(folio_num).zfill(4)))
+<span class="line-num">85</span>                fallback_rows = cur.fetchall()
+<span class="line-num">86</span>
+<span class="line-num">87</span>                if fallback_rows:
+<span class="line-num">88</span>                    for image_id, found_ms in fallback_rows:
+<span class="line-num">89</span>                        cur.execute(&quot;&quot;&quot;
+<span class="line-num">90</span>                            INSERT INTO matches (ref_id, image_id, match_method, confidence, needs_review)
+<span class="line-num">91</span>                            VALUES (?, ?, ?, ?, ?)
+<span class="line-num">92</span>                        &quot;&quot;&quot;, (ref_id, image_id, &#x27;FOLIO_EXACT&#x27;, &#x27;MEDIUM&#x27;, 1))
+<span class="line-num">93</span>                        stats[&#x27;matched&#x27;] += 1
+<span class="line-num">94</span>                        stats[&#x27;medium&#x27;] += 1
+<span class="line-num">95</span>                else:
+<span class="line-num">96</span>                    stats[&#x27;unmatched&#x27;] += 1
+<span class="line-num">97</span>        else:
+<span class="line-num">98</span>            stats[&#x27;unmatched&#x27;] += 1
+<span class="line-num">99</span>
+<span class="line-num">100</span>    conn.commit()
+<span class="line-num">101</span>
+<span class="line-num">102</span>    # Print statistics
+<span class="line-num">103</span>    print(&quot;Match Statistics:&quot;)
+<span class="line-num">104</span>    print(f&quot;  Total references: {stats[&#x27;total&#x27;]}&quot;)
+<span class="line-num">105</span>    print(f&quot;  Matched: {stats[&#x27;matched&#x27;]}&quot;)
+<span class="line-num">106</span>    print(f&quot;  Unmatched: {stats[&#x27;unmatched&#x27;]}&quot;)
+<span class="line-num">107</span>    print(f&quot;  HIGH confidence: {stats[&#x27;high&#x27;]}&quot;)
+<span class="line-num">108</span>    print(f&quot;  MEDIUM confidence: {stats[&#x27;medium&#x27;]}&quot;)
+<span class="line-num">109</span>    print(f&quot;  LOW confidence: {stats[&#x27;low&#x27;]}&quot;)
+<span class="line-num">110</span>
+<span class="line-num">111</span>    # Show unmatched refs
+<span class="line-num">112</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">113</span>        SELECT dr.id, dr.thesis_page, dr.signature_ref, dr.manuscript_shelfmark
+<span class="line-num">114</span>        FROM dissertation_refs dr
+<span class="line-num">115</span>        WHERE dr.id NOT IN (SELECT ref_id FROM matches)
+<span class="line-num">116</span>        LIMIT 20
+<span class="line-num">117</span>    &quot;&quot;&quot;)
+<span class="line-num">118</span>    unmatched = cur.fetchall()
+<span class="line-num">119</span>    if unmatched:
+<span class="line-num">120</span>        print(f&quot;\nUnmatched references (first 20):&quot;)
+<span class="line-num">121</span>        for ref_id, page, sig, ms in unmatched:
+<span class="line-num">122</span>            print(f&quot;  ref {ref_id}: p.{page} {sig} [{ms}]&quot;)
+<span class="line-num">123</span>
+<span class="line-num">124</span>    # Show sample matches
+<span class="line-num">125</span>    print(&quot;\nSample matches:&quot;)
+<span class="line-num">126</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">127</span>        SELECT dr.thesis_page, dr.signature_ref, dr.manuscript_shelfmark,
+<span class="line-num">128</span>               i.filename, m.confidence
+<span class="line-num">129</span>        FROM matches m
+<span class="line-num">130</span>        JOIN dissertation_refs dr ON m.ref_id = dr.id
+<span class="line-num">131</span>        JOIN images i ON m.image_id = i.id
+<span class="line-num">132</span>        LIMIT 10
+<span class="line-num">133</span>    &quot;&quot;&quot;)
+<span class="line-num">134</span>    for page, sig, ms, img_file, conf in cur.fetchall():
+<span class="line-num">135</span>        print(f&quot;  p.{page} {sig} [{ms}] -&gt; {img_file} ({conf})&quot;)
+<span class="line-num">136</span>
+<span class="line-num">137</span>    conn.close()
+<span class="line-num">138</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">139</span>
+<span class="line-num">140</span>
+<span class="line-num">141</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">142</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

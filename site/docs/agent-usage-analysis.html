@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Usage Analysis - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Agent Usage Analysis</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPAGENTS.md &mdash; 807 words</p>
+            <h2>HPAGENTS: Why and How We Used Claude Agents</h2>
+
+<h3>Summary</h3>
+
+<p>Throughout this project, Claude agents (subprocesses spawned via the Agent tool) were used extensively to parallelize research-intensive tasks. This document explains the rationale, what worked, what didn&#x27;t, and lessons learned.</p>
+
+<h3>Why Agents Were Used</h3>
+
+<p>The HP project involves a large corpus of heterogeneous source material: 34 scholarly PDFs converted to markdown, a 250-page PhD thesis, two image collections (674 images total), and a growing bibliography of 97+ entries. Many tasks required reading large amounts of text and producing structured output -- exactly the pattern where agents add value.</p>
+
+<h4>Tasks Delegated to Agents</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Agent Type</th><th>Why Delegated</th><th>Outcome</th></tr>
+<tr><td>**Batch article summarization (3 batches x 7-13 articles)**</td><td>general-purpose</td><td>Each batch required reading 50-100KB of markdown and producing structured JSON summaries. Too much context for a single pass.</td><td>SUCCESS -- produced accurate summaries with important corrections (identified mislabeled files, corrected author attributions)</td></tr>
+<tr><td>**Full codebase exploration**</td><td>Explore</td><td>Needed to inventory image folders (674 files), check database schema, and map site structure simultaneously.</td><td>SUCCESS -- fast, thorough inventory</td></tr>
+<tr><td>**Folio reference extraction (4 parallel agents for Ch. 4-9)**</td><td>Explore</td><td>Russell&#x27;s thesis has 282 folio references scattered across 250 pages. Parallelizing by chapter was natural.</td><td>SUCCESS -- each agent covered its chapter and returned complete reference lists</td></tr>
+<tr><td>**Bibliography gap analysis**</td><td>general-purpose</td><td>Required reading Russell&#x27;s 310-entry bibliography, comparing against our 30-item collection, and categorizing gaps by priority.</td><td>SUCCESS -- produced comprehensive gap analysis with priority ranking</td></tr>
+<tr><td>**MIT site reverse-engineering**</td><td>general-purpose (background)</td><td>Required fetching multiple pages, analyzing HTML structure, and producing strategic document.</td><td>PARTIAL -- agent timed out, work had to be redone manually</td></tr>
+<tr><td>**Web scholarship search**</td><td>general-purpose (background)</td><td>Required multiple web searches and synthesis of results.</td><td>PARTIAL -- agent timed out, work redone manually</td></tr>
+<tr><td>**Pipeline audit**</td><td>Explore</td><td>Needed to read all 11 Python scripts and produce per-script analysis.</td><td>SUCCESS -- thorough, accurate audit</td></tr>
+</table>
+
+<h3>When Agents Worked Well</h3>
+
+<p>1. <strong>Batch processing of independent items</strong>: The article summarization batches (3 agents, each processing 7-13 articles) were the clearest win. Each agent operated on a separate set of files with no dependencies on the others. All three ran in parallel and returned in ~60-170 seconds each.</p>
+
+<p>2. <strong>Exploration tasks with bounded scope</strong>: Explore agents given specific directories or file ranges consistently returned complete, well-structured results.</p>
+
+<p>3. <strong>Foreground agents with immediate consumption</strong>: Agents whose output was needed right away (and was consumed in the next message) worked reliably. The results were visible in the conversation and could be acted on immediately.</p>
+
+<h3>When Agents Failed or Underperformed</h3>
+
+<p>1. <strong>Background agents with long-running web tasks</strong>: The MIT site analysis and scholarship search agents were launched in the background with <code>run_in_background: true</code>. Both ran for extended periods and their results were not reliably accessible afterward. The output files were 0 bytes despite the agents appearing to complete.</p>
+
+<p>2. <strong>Agents doing work that the main conversation then duplicated</strong>: After the background agents returned empty output files, the same work (MIT site fetching, web search) had to be redone in the main conversation. This doubled the total effort.</p>
+
+<p>3. <strong>Cross-agent coordination</strong>: There was no mechanism for one agent to inform another&#x27;s work. Each agent started fresh with its full prompt but no awareness of what other agents had found. This meant some overlap (e.g., multiple agents reading the same introductory chapters of Russell&#x27;s thesis).</p>
+
+<h3>Lessons Learned</h3>
+
+<h4>Use Foreground Agents for Critical-Path Work</h4>
+<p>If you need the output to proceed, run the agent in the foreground. Background agents are appropriate only for genuinely independent, non-blocking tasks where you have other work to do in parallel.</p>
+
+<h4>Batch by Independence, Not by Size</h4>
+<p>The most successful pattern was batching by <strong>independence</strong> (each agent gets its own non-overlapping set of files) rather than by size. The three article-summarization batches worked because they shared zero source files.</p>
+
+<h4>Give Agents Precise Output Schemas</h4>
+<p>Agents that were told to output &quot;a JSON array with fields: author, title, year, journal, summary, topic_cluster&quot; produced consistently structured, mergeable results. Agents given vaguer instructions produced harder-to-integrate prose.</p>
+
+<h4>Don&#x27;t Trust Background Agent Output Files</h4>
+<p>The 0-byte output file issue (documented in HPEMPTYOUTPUTFILES.md) means background agent results should be treated as fire-and-forget. If you need guaranteed output, use foreground agents or save critical results to a file within the agent&#x27;s own execution.</p>
+
+<h4>Total Agent Usage</h4>
+
+<p>Over the project&#x27;s lifetime, approximately 15-20 agent invocations were made:</p>
+<ul>
+<li>~10 foreground agents (all succeeded)</li>
+<li>~5 background agents (2-3 produced usable results, 2 did not)</li>
+<li>Estimated total tokens consumed by agents: ~500K-700K</li>
+<li>Estimated time saved vs. serial processing: 5-10 minutes of wall-clock time per batch</li>
+</ul>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

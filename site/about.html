@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scholars.css">
+    <link rel="stylesheet" href="components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="about.html" class="active">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="scholar-detail">
+            <h2>About This Project</h2>
+
+            <div class="paper-detail">
+                <h3>What Is This?</h3>
+                <div class="paper-summary-full"><p>
+                This is a digital humanities project documenting the readership and
+                marginalia of the <em>Hypnerotomachia Poliphili</em> (Venice: Aldus Manutius, 1499),
+                based on James Russell's PhD thesis
+                <em>Many Other Things Worthy of Knowledge and Memory</em> (Durham University, 2014).
+                </p><p>
+                Russell conducted a world census of annotated copies of the HP, documenting
+                marginalia by readers including Ben Jonson, Pope Alexander VII, Benedetto Giovio,
+                and anonymous alchemists. This site presents his findings alongside photographs
+                of two annotated copies, a dictionary of HP terminology, and an index of
+                scholarship spanning five centuries.
+                </p></div>
+            </div>
+
+            <div class="paper-detail">
+                <h3>Database Statistics</h3>
+                <div class="paper-summary-full">
+                <ul style="list-style:none; padding:0;">
+                    <li><strong>674</strong> manuscript images catalogued</li>
+                    <li><strong>282</strong> folio references extracted from Russell's thesis</li>
+                    <li><strong>610</strong> image-reference matches
+                        (26 high confidence, 218 low/provisional)</li>
+                    <li><strong>11</strong> annotator hands identified</li>
+                    <li><strong>109</strong> works in bibliography
+                        (39 in our collection)</li>
+                    <li><strong>60</strong> scholar profiles</li>
+                    <li><strong>37</strong> dictionary terms</li>
+                    <li><strong>42</strong> timeline events</li>
+                </ul>
+                </div>
+            </div>
+
+            <div class="paper-detail">
+                <h3>Data Provenance</h3>
+                <div class="paper-summary-full"><p>
+                Content on this site has varying levels of verification:
+                </p>
+                <ul>
+                    <li><strong>Verified</strong>: Signature maps, collation formulae, and image
+                    cataloging are deterministic and correct.</li>
+                    <li><strong>High confidence</strong>: Siena O.III.38 image matches use explicit
+                    recto/verso naming.</li>
+                    <li><strong>Low confidence</strong>: BL C.60.o.12 matches assume sequential photo
+                    numbers equal folio numbers. The BL copy is the 1545 edition; the signature map
+                    is based on the 1499. Manual verification needed.</li>
+                    <li><strong>Unreviewed</strong>: Scholar summaries, dictionary definitions, and
+                    hand attributions were generated with LLM assistance and have not been verified
+                    by a domain expert. These are marked with
+                    <span class="review-badge" style="font-size:0.7rem">Unreviewed</span> badges.</li>
+                </ul>
+                </div>
+            </div>
+
+            <div class="paper-detail">
+                <h3>How to Rebuild</h3>
+                <div class="paper-summary-full"><p>
+                The site is generated from a SQLite database (<code>db/hp.db</code>).
+                To rebuild all pages:
+                </p>
+                <pre style="background:var(--bg); padding:1rem; border-radius:4px; overflow-x:auto; font-size:0.85rem">
+python scripts/migrate_v2.py        # Schema migration (idempotent)
+python scripts/seed_dictionary.py   # Dictionary terms (idempotent)
+python scripts/build_site.py        # Generate all HTML + JSON
+                </pre>
+                <p>Individual pipeline steps:</p>
+                <pre style="background:var(--bg); padding:1rem; border-radius:4px; overflow-x:auto; font-size:0.85rem">
+python scripts/init_db.py           # Initialize DB schema
+python scripts/catalog_images.py    # Catalog manuscript images
+python scripts/build_signature_map.py  # Build signature map
+python scripts/extract_references.py   # Extract refs from thesis PDF
+python scripts/match_refs_to_images.py # Match refs to images
+python scripts/add_hands.py         # Add annotator hand profiles
+python scripts/add_bibliography.py  # Add bibliography and timeline
+                </pre>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

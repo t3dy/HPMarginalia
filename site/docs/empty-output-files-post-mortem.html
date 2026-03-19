@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empty Output Files Post-Mortem - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Empty Output Files Post-Mortem</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPEMPTYOUTPUTFILES.md &mdash; 763 words</p>
+            <h2>HPEMPTYOUTPUTFILES: Post-Mortem on Empty Agent Output Files</h2>
+
+<h3>What Happened</h3>
+
+<p>During the bibliography expansion phase, two agents were launched in the background:</p>
+
+<p>1. <strong>MIT site reverse-engineering agent</strong> (ID: <code>a761319f218a3eba7</code>) -- tasked with fetching and analyzing the MIT Electronic Hypnerotomachia site</p>
+<p>2. <strong>Web scholarship search agent</strong> (ID: <code>acb35c0d2ba97a5be</code>) -- tasked with searching the web for missing HP scholarship</p>
+
+<p>Both agents were launched with <code>run_in_background: true</code>. After waiting for them to complete, their output files were found to be <strong>0 bytes</strong>:</p>
+
+<pre><code class="lang-">
+-rw-r--r-- 1 PC 197121  0 Mar 18 19:41 acb35c0d2ba97a5be.output
+-rw-r--r-- 1 PC 197121  0 Mar 18 19:44 a761319f218a3eba7.output (task file name: bn5xup07h.output)
+</code></pre>
+
+<h3>Why It Happened</h3>
+
+<h4>Mechanism</h4>
+
+<p>Background agents in Claude Code run as subprocesses. Their results are returned through a notification system to the parent conversation. The <code>.output</code> files in the temp directory serve as a communication channel. When an agent completes, its result is delivered via the <code>task-notification</code> system in the conversation.</p>
+
+<p>In this case, the likely sequence was:</p>
+
+<p>1. Agents were launched at ~19:39-19:41</p>
+<p>2. The parent conversation continued working on other tasks (ingesting Perplexity data, writing HPDECKARD2.md)</p>
+<p>3. When the parent checked on the agents via <code>TaskOutput</code>, both returned <code>not_ready</code></p>
+<p>4. The parent waited, then the task IDs were no longer found (<code>No task found with ID</code>)</p>
+<p>5. The output files remained at 0 bytes</p>
+
+<h4>Root Cause Analysis</h4>
+
+<p>Several factors may have contributed:</p>
+
+<p>1. <strong>Session context limits</strong>: The conversation was already deep (this is a long session with many tool calls). Background agents share the session&#x27;s resource envelope. If the session approached limits, agent subprocesses may have been terminated.</p>
+
+<p>2. <strong>Timeout</strong>: Both agents involved multiple web fetches (MIT site has ~15 pages to analyze; scholarship search requires multiple web queries). Web fetches can be slow, and agent subprocesses may have hit time limits.</p>
+
+<p>3. <strong>Output not persisted to file</strong>: The agent notification system delivers results as in-conversation messages (<code>&lt;task-notification&gt;</code> tags), not as file writes. The <code>.output</code> files may be placeholders created at launch but never written to if the agent&#x27;s result was delivered through a different channel.</p>
+
+<p>4. <strong>Agent completion during a tool call</strong>: If the agent completed while the parent was mid-tool-call, the notification may have been queued but not persisted to the output file.</p>
+
+<h4>Evidence</h4>
+
+<p>Earlier in the same session, the article-summarization agents (batch 1, 2, 3, 4) were also launched as background agents. Their output files were ALSO 0 bytes:</p>
+
+<pre><code class="lang-">
+-rw-r--r-- 1 PC 197121  0 Mar 18 18:43 abcfa8e220976991e.output
+-rw-r--r-- 1 PC 197121  0 Mar 18 17:59 acd1132e6d44abca6.output
+</code></pre>
+
+<p>But those agents <strong>did</strong> return results -- their output appeared as <code>&lt;task-notification&gt;</code> messages in the conversation. The difference is that for the earlier agents, the parent conversation received the notifications and processed them. For the later agents (MIT + scholarship), the parent may not have been in a state to receive the notifications, or the agents may not have completed before the session state shifted.</p>
+
+<h3>Impact</h3>
+
+<h4>Work Lost</h4>
+<ul>
+<li>MIT site analysis: ~5 minutes of web fetching and analysis. **Redone manually** using direct `WebFetch` calls in the parent conversation.</li>
+<li>Scholarship search: ~5 minutes of web searching. **Redone manually** using `WebSearch` calls.</li>
+</ul>
+
+<h4>Work NOT Lost</h4>
+<ul>
+<li>All results that were produced by earlier agents (batches 1-4) were successfully received and integrated into the database.</li>
+<li>The manual redo produced equivalent or better results (the direct web searches found additional scholarship the agent might have missed).</li>
+</ul>
+
+<h3>Lessons</h3>
+
+<p>1. <strong>Output files are not the primary delivery mechanism.</strong> Agent results arrive as <code>&lt;task-notification&gt;</code> messages in the conversation, not as file contents. The <code>.output</code> files are diagnostic artifacts, not reliable storage.</p>
+
+<p>2. <strong>Background agents are fire-and-forget.</strong> If you need guaranteed results, use foreground agents (<code>run_in_background: false</code>, the default). Foreground agents block the parent until they complete, ensuring the result is received.</p>
+
+<p>3. <strong>Long-running web tasks are risky for background agents.</strong> Multiple web fetches compound timeout risk. Prefer giving agents bounded, fast tasks (read local files) over open-ended web exploration.</p>
+
+<p>4. <strong>Always have a fallback.</strong> The manual redo worked fine. The agent pattern is an optimization, not a requirement. When it fails, falling back to direct tool calls loses time but not data.</p>
+
+<h3>Recommendation</h3>
+
+<p>For this project going forward:</p>
+<ul>
+<li>Use **foreground agents** for all critical-path work (summarization, extraction, analysis)</li>
+<li>Use **background agents** only for genuinely non-blocking tasks where failure is acceptable</li>
+<li>**Never assume** background agent output files contain results -- always check via TaskOutput or conversation notifications</li>
+<li>For web research tasks, prefer **direct WebSearch/WebFetch** in the parent conversation where results can be immediately verified and acted on</li>
+</ul>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

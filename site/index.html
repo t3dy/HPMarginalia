@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marginalia of the Hypnerotomachia Poliphili</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scholars.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Marginalia of the <em>Hypnerotomachia Poliphili</em></h1>
+            <p class="subtitle">Annotations from Two Copies of the 1499 Aldine Edition</p>
+            <p class="attribution">Based on the doctoral research of James Russell</p>
+            <nav class="site-nav"><a href="index.html" class="active">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="about.html">About</a></nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="intro">
+            <div class="intro-content">
+                <p>The <em>Hypnerotomachia Poliphili</em>, published by Aldus Manutius in Venice in 1499, is one of the most celebrated and enigmatic books of the Italian Renaissance. Its dense prose, interweaving classical languages with architectural description and allegorical narrative, invited generations of readers to leave their marks in the margins.</p>
+                <p>This showcase presents marginal annotations from two surviving copies studied by James Russell in his PhD dissertation: the <strong>British Library copy</strong> (shelfmark C.60.o.12) and the <strong>Biblioteca degli Intronati copy</strong> in Siena (shelfmark O.III.38). Each entry pairs the manuscript image with Russell's analysis of the annotation found there.</p>
+            </div>
+        </section>
+
+        <section class="stats" id="stats">
+            <div class="stat-card">
+                <span class="stat-number" id="stat-refs">--</span>
+                <span class="stat-label">Folio References</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="stat-sigs">--</span>
+                <span class="stat-label">Unique Signatures</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="stat-matches">--</span>
+                <span class="stat-label">Image Matches</span>
+            </div>
+        </section>
+
+        <section class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="C.60.o.12">British Library</button>
+            <button class="filter-btn" data-filter="O.III.38">Siena</button>
+        </section>
+
+        <section class="gallery" id="gallery">
+            <!-- Populated by JavaScript -->
+        </section>
+    </main>
+
+    <!-- Lightbox overlay -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&lsaquo;</button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next">&rsaquo;</button>
+        <div class="lightbox-content">
+            <div class="lightbox-image-wrap">
+                <img id="lightbox-img" src="" alt="">
+            </div>
+            <div class="lightbox-details" id="lightbox-details">
+                <h3 id="lightbox-sig"></h3>
+                <p class="lightbox-ms" id="lightbox-ms"></p>
+                <div class="lightbox-marginal" id="lightbox-marginal"></div>
+                <div class="lightbox-context" id="lightbox-context"></div>
+                <p class="lightbox-page" id="lightbox-page"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Manuscripts</h4>
+                <p><strong>BL C.60.o.12</strong> &mdash; British Library, London</p>
+                <p><strong>O.III.38</strong> &mdash; Biblioteca degli Intronati, Siena</p>
+            </div>
+            <div class="footer-section">
+                <h4>Source</h4>
+                <p>James Russell, PhD Thesis: <em>Hypnerotomachia Poliphili</em></p>
+                <p>Images referenced from digital facsimiles and photographs of the original manuscripts.</p>
+            </div>
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project cataloging the marginalia and readership history of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

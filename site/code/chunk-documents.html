@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunk Documents - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Chunk Documents</h2>
+            <div class="code-meta">chunk_documents.py &mdash; 261 lines</div>
+            <p style="margin-bottom:1rem">Splits markdown files into ~1500-word semantic chunks for RAG/retrieval systems.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Split markdown files into semantic chunks.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import re
+<span class="line-num">4</span>import os
+<span class="line-num">5</span>from pathlib import Path
+<span class="line-num">6</span>
+<span class="line-num">7</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">8</span>MD_DIR = BASE_DIR / &quot;md&quot;
+<span class="line-num">9</span>CHUNKS_DIR = BASE_DIR / &quot;chunks&quot;
+<span class="line-num">10</span>
+<span class="line-num">11</span>TARGET_CHUNK_SIZE = 1500  # words
+<span class="line-num">12</span>MIN_CHUNK_SIZE = 200  # words
+<span class="line-num">13</span>
+<span class="line-num">14</span>
+<span class="line-num">15</span>def parse_frontmatter(text):
+<span class="line-num">16</span>    &quot;&quot;&quot;Extract YAML frontmatter and body from markdown.&quot;&quot;&quot;
+<span class="line-num">17</span>    if text.startswith(&#x27;---&#x27;):
+<span class="line-num">18</span>        end = text.find(&#x27;---&#x27;, 3)
+<span class="line-num">19</span>        if end &gt; 0:
+<span class="line-num">20</span>            frontmatter = text[3:end].strip()
+<span class="line-num">21</span>            body = text[end + 3:].strip()
+<span class="line-num">22</span>            # Parse simple YAML
+<span class="line-num">23</span>            meta = {}
+<span class="line-num">24</span>            for line in frontmatter.split(&#x27;\n&#x27;):
+<span class="line-num">25</span>                if &#x27;:&#x27; in line:
+<span class="line-num">26</span>                    key, _, val = line.partition(&#x27;:&#x27;)
+<span class="line-num">27</span>                    val = val.strip().strip(&#x27;&quot;&#x27;).strip(&quot;&#x27;&quot;)
+<span class="line-num">28</span>                    meta[key.strip()] = val
+<span class="line-num">29</span>            return meta, body
+<span class="line-num">30</span>    return {}, text
+<span class="line-num">31</span>
+<span class="line-num">32</span>
+<span class="line-num">33</span>def find_section_breaks(text):
+<span class="line-num">34</span>    &quot;&quot;&quot;Find natural section breaks in the text.&quot;&quot;&quot;
+<span class="line-num">35</span>    # Look for markdown headings
+<span class="line-num">36</span>    heading_pattern = re.compile(r&#x27;^(#{1,3})\s+(.+)$&#x27;, re.MULTILINE)
+<span class="line-num">37</span>    # Look for page markers
+<span class="line-num">38</span>    page_pattern = re.compile(r&#x27;^&lt;!-- Page (\d+) --&gt;$&#x27;, re.MULTILINE)
+<span class="line-num">39</span>    # Look for horizontal rules
+<span class="line-num">40</span>    rule_pattern = re.compile(r&#x27;^---+$&#x27;, re.MULTILINE)
+<span class="line-num">41</span>
+<span class="line-num">42</span>    breaks = []
+<span class="line-num">43</span>    for m in heading_pattern.finditer(text):
+<span class="line-num">44</span>        level = len(m.group(1))
+<span class="line-num">45</span>        breaks.append({
+<span class="line-num">46</span>            &#x27;pos&#x27;: m.start(),
+<span class="line-num">47</span>            &#x27;type&#x27;: &#x27;heading&#x27;,
+<span class="line-num">48</span>            &#x27;level&#x27;: level,
+<span class="line-num">49</span>            &#x27;title&#x27;: m.group(2).strip(),
+<span class="line-num">50</span>        })
+<span class="line-num">51</span>
+<span class="line-num">52</span>    for m in page_pattern.finditer(text):
+<span class="line-num">53</span>        breaks.append({
+<span class="line-num">54</span>            &#x27;pos&#x27;: m.start(),
+<span class="line-num">55</span>            &#x27;type&#x27;: &#x27;page&#x27;,
+<span class="line-num">56</span>            &#x27;level&#x27;: 99,
+<span class="line-num">57</span>            &#x27;title&#x27;: f&#x27;Page {m.group(1)}&#x27;,
+<span class="line-num">58</span>        })
+<span class="line-num">59</span>
+<span class="line-num">60</span>    for m in rule_pattern.finditer(text):
+<span class="line-num">61</span>        breaks.append({
+<span class="line-num">62</span>            &#x27;pos&#x27;: m.start(),
+<span class="line-num">63</span>            &#x27;type&#x27;: &#x27;rule&#x27;,
+<span class="line-num">64</span>            &#x27;level&#x27;: 99,
+<span class="line-num">65</span>            &#x27;title&#x27;: &#x27;&#x27;,
+<span class="line-num">66</span>        })
+<span class="line-num">67</span>
+<span class="line-num">68</span>    breaks.sort(key=lambda b: b[&#x27;pos&#x27;])
+<span class="line-num">69</span>    return breaks
+<span class="line-num">70</span>
+<span class="line-num">71</span>
+<span class="line-num">72</span>def chunk_by_headings(text, meta):
+<span class="line-num">73</span>    &quot;&quot;&quot;Split text into chunks based on headings, page markers, and size.&quot;&quot;&quot;
+<span class="line-num">74</span>    breaks = find_section_breaks(text)
+<span class="line-num">75</span>    total_words = len(text.split())
+<span class="line-num">76</span>
+<span class="line-num">77</span>    # If we have good heading structure, split by headings
+<span class="line-num">78</span>    heading_breaks = [b for b in breaks if b[&#x27;type&#x27;] == &#x27;heading&#x27;]
+<span class="line-num">79</span>
+<span class="line-num">80</span>    if len(heading_breaks) &gt;= 3:
+<span class="line-num">81</span>        chunks = []
+<span class="line-num">82</span>        for i, brk in enumerate(heading_breaks):
+<span class="line-num">83</span>            start = brk[&#x27;pos&#x27;]
+<span class="line-num">84</span>            end = heading_breaks[i + 1][&#x27;pos&#x27;] if i + 1 &lt; len(heading_breaks) else len(text)
+<span class="line-num">85</span>            chunk_text = text[start:end].strip()
+<span class="line-num">86</span>            word_count = len(chunk_text.split())
+<span class="line-num">87</span>
+<span class="line-num">88</span>            if word_count &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">89</span>                chunks.append({
+<span class="line-num">90</span>                    &#x27;text&#x27;: chunk_text,
+<span class="line-num">91</span>                    &#x27;title&#x27;: brk[&#x27;title&#x27;],
+<span class="line-num">92</span>                    &#x27;word_count&#x27;: word_count,
+<span class="line-num">93</span>                })
+<span class="line-num">94</span>            elif chunks:
+<span class="line-num">95</span>                # Merge small chunks with previous
+<span class="line-num">96</span>                chunks[-1][&#x27;text&#x27;] += &#x27;\n\n&#x27; + chunk_text
+<span class="line-num">97</span>                chunks[-1][&#x27;word_count&#x27;] += word_count
+<span class="line-num">98</span>
+<span class="line-num">99</span>        # Handle text before first heading
+<span class="line-num">100</span>        pre_text = text[:heading_breaks[0][&#x27;pos&#x27;]].strip()
+<span class="line-num">101</span>        if pre_text and len(pre_text.split()) &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">102</span>            chunks.insert(0, {
+<span class="line-num">103</span>                &#x27;text&#x27;: pre_text,
+<span class="line-num">104</span>                &#x27;title&#x27;: &#x27;Introduction&#x27;,
+<span class="line-num">105</span>                &#x27;word_count&#x27;: len(pre_text.split()),
+<span class="line-num">106</span>            })
+<span class="line-num">107</span>
+<span class="line-num">108</span>        # If chunks are still too big (&gt;3000 words), sub-chunk them
+<span class="line-num">109</span>        final_chunks = []
+<span class="line-num">110</span>        for chunk in chunks:
+<span class="line-num">111</span>            if chunk[&#x27;word_count&#x27;] &gt; 3000:
+<span class="line-num">112</span>                sub = chunk_by_size(chunk[&#x27;text&#x27;], base_title=chunk[&#x27;title&#x27;])
+<span class="line-num">113</span>                final_chunks.extend(sub)
+<span class="line-num">114</span>            else:
+<span class="line-num">115</span>                final_chunks.append(chunk)
+<span class="line-num">116</span>        return final_chunks
+<span class="line-num">117</span>
+<span class="line-num">118</span>    # For large documents without headings, split by page markers
+<span class="line-num">119</span>    page_breaks = [b for b in breaks if b[&#x27;type&#x27;] == &#x27;page&#x27;]
+<span class="line-num">120</span>    if page_breaks and total_words &gt; TARGET_CHUNK_SIZE * 2:
+<span class="line-num">121</span>        return chunk_by_pages(text, page_breaks)
+<span class="line-num">122</span>
+<span class="line-num">123</span>    # Small documents: split by size if needed
+<span class="line-num">124</span>    if total_words &gt; TARGET_CHUNK_SIZE * 2:
+<span class="line-num">125</span>        return chunk_by_size(text)
+<span class="line-num">126</span>
+<span class="line-num">127</span>    # Small enough to be one chunk
+<span class="line-num">128</span>    if total_words &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">129</span>        return [{&#x27;text&#x27;: text, &#x27;title&#x27;: meta.get(&#x27;title&#x27;, &#x27;Full Text&#x27;),
+<span class="line-num">130</span>                 &#x27;word_count&#x27;: total_words}]
+<span class="line-num">131</span>    return []
+<span class="line-num">132</span>
+<span class="line-num">133</span>
+<span class="line-num">134</span>def chunk_by_pages(text, page_breaks):
+<span class="line-num">135</span>    &quot;&quot;&quot;Group page markers into chunks of ~TARGET_CHUNK_SIZE words.&quot;&quot;&quot;
+<span class="line-num">136</span>    chunks = []
+<span class="line-num">137</span>    current_text = []
+<span class="line-num">138</span>    current_words = 0
+<span class="line-num">139</span>    current_start_page = None
+<span class="line-num">140</span>
+<span class="line-num">141</span>    for i, brk in enumerate(page_breaks):
+<span class="line-num">142</span>        start = brk[&#x27;pos&#x27;]
+<span class="line-num">143</span>        end = page_breaks[i + 1][&#x27;pos&#x27;] if i + 1 &lt; len(page_breaks) else len(text)
+<span class="line-num">144</span>        page_text = text[start:end].strip()
+<span class="line-num">145</span>        page_words = len(page_text.split())
+<span class="line-num">146</span>        page_num = brk[&#x27;title&#x27;].replace(&#x27;Page &#x27;, &#x27;&#x27;)
+<span class="line-num">147</span>
+<span class="line-num">148</span>        if current_start_page is None:
+<span class="line-num">149</span>            current_start_page = page_num
+<span class="line-num">150</span>
+<span class="line-num">151</span>        if current_words + page_words &gt; TARGET_CHUNK_SIZE and current_words &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">152</span>            chunks.append({
+<span class="line-num">153</span>                &#x27;text&#x27;: &#x27;\n\n&#x27;.join(current_text),
+<span class="line-num">154</span>                &#x27;title&#x27;: f&#x27;Pages {current_start_page}-{page_num}&#x27;,
+<span class="line-num">155</span>                &#x27;word_count&#x27;: current_words,
+<span class="line-num">156</span>            })
+<span class="line-num">157</span>            current_text = [page_text]
+<span class="line-num">158</span>            current_words = page_words
+<span class="line-num">159</span>            current_start_page = page_num
+<span class="line-num">160</span>        else:
+<span class="line-num">161</span>            current_text.append(page_text)
+<span class="line-num">162</span>            current_words += page_words
+<span class="line-num">163</span>
+<span class="line-num">164</span>    if current_text and current_words &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">165</span>        chunks.append({
+<span class="line-num">166</span>            &#x27;text&#x27;: &#x27;\n\n&#x27;.join(current_text),
+<span class="line-num">167</span>            &#x27;title&#x27;: f&#x27;Pages {current_start_page}-end&#x27;,
+<span class="line-num">168</span>            &#x27;word_count&#x27;: current_words,
+<span class="line-num">169</span>        })
+<span class="line-num">170</span>
+<span class="line-num">171</span>    return chunks
+<span class="line-num">172</span>
+<span class="line-num">173</span>
+<span class="line-num">174</span>def chunk_by_size(text, base_title=None):
+<span class="line-num">175</span>    &quot;&quot;&quot;Split text into roughly equal chunks by word count.&quot;&quot;&quot;
+<span class="line-num">176</span>    paragraphs = re.split(r&#x27;\n\n+&#x27;, text)
+<span class="line-num">177</span>    chunks = []
+<span class="line-num">178</span>    current_text = []
+<span class="line-num">179</span>    current_words = 0
+<span class="line-num">180</span>
+<span class="line-num">181</span>    for para in paragraphs:
+<span class="line-num">182</span>        para_words = len(para.split())
+<span class="line-num">183</span>        if current_words + para_words &gt; TARGET_CHUNK_SIZE and current_words &gt;= MIN_CHUNK_SIZE:
+<span class="line-num">184</span>            n = len(chunks) + 1
+<span class="line-num">185</span>            title = f&#x27;{base_title} (part {n})&#x27; if base_title else f&#x27;Section {n}&#x27;
+<span class="line-num">186</span>            chunks.append({
+<span class="line-num">187</span>                &#x27;text&#x27;: &#x27;\n\n&#x27;.join(current_text),
+<span class="line-num">188</span>                &#x27;title&#x27;: title,
+<span class="line-num">189</span>                &#x27;word_count&#x27;: current_words,
+<span class="line-num">190</span>            })
+<span class="line-num">191</span>            current_text = [para]
+<span class="line-num">192</span>            current_words = para_words
+<span class="line-num">193</span>        else:
+<span class="line-num">194</span>            current_text.append(para)
+<span class="line-num">195</span>            current_words += para_words
+<span class="line-num">196</span>
+<span class="line-num">197</span>    if current_text:
+<span class="line-num">198</span>        n = len(chunks) + 1
+<span class="line-num">199</span>        title = f&#x27;{base_title} (part {n})&#x27; if base_title and len(chunks) &gt; 0 else (base_title or f&#x27;Section {n}&#x27;)
+<span class="line-num">200</span>        chunks.append({
+<span class="line-num">201</span>            &#x27;text&#x27;: &#x27;\n\n&#x27;.join(current_text),
+<span class="line-num">202</span>            &#x27;title&#x27;: title,
+<span class="line-num">203</span>            &#x27;word_count&#x27;: current_words,
+<span class="line-num">204</span>        })
+<span class="line-num">205</span>
+<span class="line-num">206</span>    return chunks
+<span class="line-num">207</span>
+<span class="line-num">208</span>
+<span class="line-num">209</span>def slugify(title):
+<span class="line-num">210</span>    &quot;&quot;&quot;Create a filename-safe slug from a title.&quot;&quot;&quot;
+<span class="line-num">211</span>    slug = re.sub(r&#x27;[^\w\s-]&#x27;, &#x27;&#x27;, title.lower())
+<span class="line-num">212</span>    slug = re.sub(r&#x27;[\s]+&#x27;, &#x27;_&#x27;, slug).strip(&#x27;_&#x27;)
+<span class="line-num">213</span>    return slug[:50] if slug else &#x27;untitled&#x27;
+<span class="line-num">214</span>
+<span class="line-num">215</span>
+<span class="line-num">216</span>def main():
+<span class="line-num">217</span>    md_files = sorted(MD_DIR.glob(&#x27;*.md&#x27;))
+<span class="line-num">218</span>    print(f&quot;Found {len(md_files)} markdown files to chunk&quot;)
+<span class="line-num">219</span>
+<span class="line-num">220</span>    total_chunks = 0
+<span class="line-num">221</span>
+<span class="line-num">222</span>    for md_path in md_files:
+<span class="line-num">223</span>        doc_slug = md_path.stem
+<span class="line-num">224</span>        doc_chunks_dir = CHUNKS_DIR / doc_slug
+<span class="line-num">225</span>        doc_chunks_dir.mkdir(parents=True, exist_ok=True)
+<span class="line-num">226</span>
+<span class="line-num">227</span>        text = md_path.read_text(encoding=&#x27;utf-8&#x27;)
+<span class="line-num">228</span>        meta, body = parse_frontmatter(text)
+<span class="line-num">229</span>
+<span class="line-num">230</span>        chunks = chunk_by_headings(body, meta)
+<span class="line-num">231</span>
+<span class="line-num">232</span>        # Merge very small trailing chunks
+<span class="line-num">233</span>        if len(chunks) &gt; 1 and chunks[-1][&#x27;word_count&#x27;] &lt; MIN_CHUNK_SIZE:
+<span class="line-num">234</span>            chunks[-2][&#x27;text&#x27;] += &#x27;\n\n&#x27; + chunks[-1][&#x27;text&#x27;]
+<span class="line-num">235</span>            chunks[-2][&#x27;word_count&#x27;] += chunks[-1][&#x27;word_count&#x27;]
+<span class="line-num">236</span>            chunks.pop()
+<span class="line-num">237</span>
+<span class="line-num">238</span>        for i, chunk in enumerate(chunks):
+<span class="line-num">239</span>            chunk_slug = slugify(chunk[&#x27;title&#x27;])
+<span class="line-num">240</span>            chunk_filename = f&quot;chunk_{i + 1:03d}_{chunk_slug}.md&quot;
+<span class="line-num">241</span>            chunk_path = doc_chunks_dir / chunk_filename
+<span class="line-num">242</span>
+<span class="line-num">243</span>            frontmatter = f&quot;&quot;&quot;---
+<span class="line-num">244</span>source: &quot;md/{md_path.name}&quot;
+<span class="line-num">245</span>chunk: {i + 1}
+<span class="line-num">246</span>total_chunks: {len(chunks)}
+<span class="line-num">247</span>section: &quot;{chunk[&#x27;title&#x27;]}&quot;
+<span class="line-num">248</span>word_count: {chunk[&#x27;word_count&#x27;]}
+<span class="line-num">249</span>---
+<span class="line-num">250</span>
+<span class="line-num">251</span>&quot;&quot;&quot;
+<span class="line-num">252</span>            chunk_path.write_text(frontmatter + chunk[&#x27;text&#x27;], encoding=&#x27;utf-8&#x27;)
+<span class="line-num">253</span>
+<span class="line-num">254</span>        print(f&quot;  {doc_slug}: {len(chunks)} chunks&quot;)
+<span class="line-num">255</span>        total_chunks += len(chunks)
+<span class="line-num">256</span>
+<span class="line-num">257</span>    print(f&quot;\nTotal: {total_chunks} chunks from {len(md_files)} documents&quot;)
+<span class="line-num">258</span>
+<span class="line-num">259</span>
+<span class="line-num">260</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">261</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

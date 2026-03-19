@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Scholar Profiles (Legacy) - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Build Scholar Profiles (Legacy)</h2>
+            <div class="code-meta">build_scholar_profiles.py &mdash; 283 lines</div>
+            <p style="margin-bottom:1rem">Original scholar page generator from summaries.json. Superseded by build_site.py.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Build scholar profile pages and paper summary pages from summaries JSON.&quot;&quot;&quot;
+<span class="line-num">2</span>
+<span class="line-num">3</span>import json
+<span class="line-num">4</span>import re
+<span class="line-num">5</span>import os
+<span class="line-num">6</span>from pathlib import Path
+<span class="line-num">7</span>
+<span class="line-num">8</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">9</span>SCHOLARS_DIR = BASE_DIR / &quot;scholars&quot;
+<span class="line-num">10</span>SUMMARIES_PATH = BASE_DIR / &quot;scholars&quot; / &quot;summaries.json&quot;
+<span class="line-num">11</span>SITE_DIR = BASE_DIR / &quot;site&quot;
+<span class="line-num">12</span>
+<span class="line-num">13</span>
+<span class="line-num">14</span>def slugify(name):
+<span class="line-num">15</span>    &quot;&quot;&quot;Create a URL-safe slug from a name.&quot;&quot;&quot;
+<span class="line-num">16</span>    slug = name.lower().strip()
+<span class="line-num">17</span>    slug = re.sub(r&quot;[&#x27;\u2019]&quot;, &#x27;&#x27;, slug)
+<span class="line-num">18</span>    slug = re.sub(r&#x27;[^\w\s-]&#x27;, &#x27;&#x27;, slug)
+<span class="line-num">19</span>    slug = re.sub(r&#x27;[\s]+&#x27;, &#x27;-&#x27;, slug)
+<span class="line-num">20</span>    return slug.strip(&#x27;-&#x27;)
+<span class="line-num">21</span>
+<span class="line-num">22</span>
+<span class="line-num">23</span>def paper_slug(title):
+<span class="line-num">24</span>    &quot;&quot;&quot;Create a short slug from a paper title.&quot;&quot;&quot;
+<span class="line-num">25</span>    words = re.sub(r&#x27;[^\w\s]&#x27;, &#x27;&#x27;, title.lower()).split()
+<span class="line-num">26</span>    return &#x27;-&#x27;.join(words[:6])
+<span class="line-num">27</span>
+<span class="line-num">28</span>
+<span class="line-num">29</span>def group_by_scholar(summaries):
+<span class="line-num">30</span>    &quot;&quot;&quot;Group paper summaries by author.&quot;&quot;&quot;
+<span class="line-num">31</span>    scholars = {}
+<span class="line-num">32</span>    for paper in summaries:
+<span class="line-num">33</span>        author = paper.get(&#x27;author&#x27;, &#x27;Unknown&#x27;)
+<span class="line-num">34</span>        if author not in scholars:
+<span class="line-num">35</span>            scholars[author] = []
+<span class="line-num">36</span>        scholars[author].append(paper)
+<span class="line-num">37</span>    return scholars
+<span class="line-num">38</span>
+<span class="line-num">39</span>
+<span class="line-num">40</span>def write_scholar_profile(scholar_name, papers, scholar_dir):
+<span class="line-num">41</span>    &quot;&quot;&quot;Write a scholar&#x27;s profile.md.&quot;&quot;&quot;
+<span class="line-num">42</span>    slug = slugify(scholar_name)
+<span class="line-num">43</span>    profile_dir = scholar_dir / slug
+<span class="line-num">44</span>    profile_dir.mkdir(parents=True, exist_ok=True)
+<span class="line-num">45</span>
+<span class="line-num">46</span>    paper_list = []
+<span class="line-num">47</span>    for p in sorted(papers, key=lambda x: x.get(&#x27;year&#x27;, 0) or 0):
+<span class="line-num">48</span>        year = p.get(&#x27;year&#x27;, &#x27;?&#x27;)
+<span class="line-num">49</span>        journal = p.get(&#x27;journal&#x27;, &#x27;&#x27;)
+<span class="line-num">50</span>        p_slug = paper_slug(p[&#x27;title&#x27;])
+<span class="line-num">51</span>        paper_list.append(f&quot;- [{p[&#x27;title&#x27;]}]({p_slug}.md) ({journal} {year})&quot;)
+<span class="line-num">52</span>
+<span class="line-num">53</span>    content = f&quot;&quot;&quot;---
+<span class="line-num">54</span>name: &quot;{scholar_name}&quot;
+<span class="line-num">55</span>slug: &quot;{slug}&quot;
+<span class="line-num">56</span>paper_count: {len(papers)}
+<span class="line-num">57</span>topic_clusters: {json.dumps(list(set(p.get(&#x27;topic_cluster&#x27;, &#x27;unknown&#x27;) for p in papers)))}
+<span class="line-num">58</span>---
+<span class="line-num">59</span>
+<span class="line-num">60</span># {scholar_name}
+<span class="line-num">61</span>
+<span class="line-num">62</span>## Papers in the HP Corpus
+<span class="line-num">63</span>
+<span class="line-num">64</span>{chr(10).join(paper_list)}
+<span class="line-num">65</span>&quot;&quot;&quot;
+<span class="line-num">66</span>
+<span class="line-num">67</span>    (profile_dir / &quot;profile.md&quot;).write_text(content, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">68</span>
+<span class="line-num">69</span>    # Write individual paper summary files
+<span class="line-num">70</span>    for p in papers:
+<span class="line-num">71</span>        p_slug = paper_slug(p[&#x27;title&#x27;])
+<span class="line-num">72</span>        year = p.get(&#x27;year&#x27;, &#x27;?&#x27;)
+<span class="line-num">73</span>        journal = p.get(&#x27;journal&#x27;, &#x27;&#x27;)
+<span class="line-num">74</span>        topic = p.get(&#x27;topic_cluster&#x27;, &#x27;unknown&#x27;)
+<span class="line-num">75</span>        summary = p.get(&#x27;summary&#x27;, &#x27;Summary pending.&#x27;)
+<span class="line-num">76</span>
+<span class="line-num">77</span>        paper_content = f&quot;&quot;&quot;---
+<span class="line-num">78</span>title: &quot;{p[&#x27;title&#x27;]}&quot;
+<span class="line-num">79</span>author: &quot;{scholar_name}&quot;
+<span class="line-num">80</span>year: {year if year and year != &#x27;?&#x27; else &#x27;null&#x27;}
+<span class="line-num">81</span>journal: &quot;{journal}&quot;
+<span class="line-num">82</span>topic_cluster: &quot;{topic}&quot;
+<span class="line-num">83</span>source_pdf: &quot;{p.get(&#x27;filename&#x27;, &#x27;&#x27;)}&quot;
+<span class="line-num">84</span>---
+<span class="line-num">85</span>
+<span class="line-num">86</span># {p[&#x27;title&#x27;]}
+<span class="line-num">87</span>
+<span class="line-num">88</span>**{scholar_name}** | {journal} {year}
+<span class="line-num">89</span>
+<span class="line-num">90</span>## Summary
+<span class="line-num">91</span>
+<span class="line-num">92</span>{summary}
+<span class="line-num">93</span>
+<span class="line-num">94</span>## Topic
+<span class="line-num">95</span>
+<span class="line-num">96</span>{topic.replace(&#x27;_&#x27;, &#x27; &#x27;).title()}
+<span class="line-num">97</span>&quot;&quot;&quot;
+<span class="line-num">98</span>        (profile_dir / f&quot;{p_slug}.md&quot;).write_text(paper_content, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">99</span>
+<span class="line-num">100</span>    return slug
+<span class="line-num">101</span>
+<span class="line-num">102</span>
+<span class="line-num">103</span>def generate_scholars_html(scholars_data, papers_data):
+<span class="line-num">104</span>    &quot;&quot;&quot;Generate the scholars directory HTML page.&quot;&quot;&quot;
+<span class="line-num">105</span>    cards = []
+<span class="line-num">106</span>    for name, papers in sorted(scholars_data.items()):
+<span class="line-num">107</span>        slug = slugify(name)
+<span class="line-num">108</span>        topics = set(p.get(&#x27;topic_cluster&#x27;, &#x27;&#x27;) for p in papers)
+<span class="line-num">109</span>        topic_badges = &#x27; &#x27;.join(
+<span class="line-num">110</span>            f&#x27;&lt;span class=&quot;topic-badge topic-{t}&quot;&gt;{t.replace(&quot;_&quot;, &quot; &quot;).title()}&lt;/span&gt;&#x27;
+<span class="line-num">111</span>            for t in sorted(topics) if t
+<span class="line-num">112</span>        )
+<span class="line-num">113</span>        paper_count = len(papers)
+<span class="line-num">114</span>
+<span class="line-num">115</span>        # Index card summaries for each paper
+<span class="line-num">116</span>        paper_cards = []
+<span class="line-num">117</span>        for p in sorted(papers, key=lambda x: x.get(&#x27;year&#x27;, 0) or 0):
+<span class="line-num">118</span>            year = p.get(&#x27;year&#x27;, &#x27;?&#x27;)
+<span class="line-num">119</span>            journal = p.get(&#x27;journal&#x27;, &#x27;&#x27;)
+<span class="line-num">120</span>            summary = p.get(&#x27;summary&#x27;, &#x27;Summary pending.&#x27;)
+<span class="line-num">121</span>            p_slug = paper_slug(p[&#x27;title&#x27;])
+<span class="line-num">122</span>
+<span class="line-num">123</span>            paper_cards.append(f&quot;&quot;&quot;
+<span class="line-num">124</span>                &lt;div class=&quot;paper-card&quot;&gt;
+<span class="line-num">125</span>                    &lt;h4&gt;&lt;a href=&quot;scholar/{slug}.html#{p_slug}&quot;&gt;{escape_html(p[&#x27;title&#x27;])}&lt;/a&gt;&lt;/h4&gt;
+<span class="line-num">126</span>                    &lt;div class=&quot;paper-meta&quot;&gt;{escape_html(journal)} {year}&lt;/div&gt;
+<span class="line-num">127</span>                    &lt;p class=&quot;paper-summary&quot;&gt;{escape_html(summary)}&lt;/p&gt;
+<span class="line-num">128</span>                &lt;/div&gt;&quot;&quot;&quot;)
+<span class="line-num">129</span>
+<span class="line-num">130</span>        cards.append(f&quot;&quot;&quot;
+<span class="line-num">131</span>            &lt;div class=&quot;scholar-card&quot; id=&quot;{slug}&quot;&gt;
+<span class="line-num">132</span>                &lt;h3&gt;&lt;a href=&quot;scholar/{slug}.html&quot;&gt;{escape_html(name)}&lt;/a&gt;&lt;/h3&gt;
+<span class="line-num">133</span>                &lt;div class=&quot;scholar-meta&quot;&gt;{paper_count} paper{&#x27;s&#x27; if paper_count != 1 else &#x27;&#x27;} {topic_badges}&lt;/div&gt;
+<span class="line-num">134</span>                &lt;div class=&quot;scholar-papers&quot;&gt;
+<span class="line-num">135</span>                    {&#x27;&#x27;.join(paper_cards)}
+<span class="line-num">136</span>                &lt;/div&gt;
+<span class="line-num">137</span>            &lt;/div&gt;&quot;&quot;&quot;)
+<span class="line-num">138</span>
+<span class="line-num">139</span>    return cards
+<span class="line-num">140</span>
+<span class="line-num">141</span>
+<span class="line-num">142</span>def generate_scholar_page_html(name, papers):
+<span class="line-num">143</span>    &quot;&quot;&quot;Generate an individual scholar&#x27;s HTML page.&quot;&quot;&quot;
+<span class="line-num">144</span>    slug = slugify(name)
+<span class="line-num">145</span>
+<span class="line-num">146</span>    paper_sections = []
+<span class="line-num">147</span>    for p in sorted(papers, key=lambda x: x.get(&#x27;year&#x27;, 0) or 0):
+<span class="line-num">148</span>        year = p.get(&#x27;year&#x27;, &#x27;?&#x27;)
+<span class="line-num">149</span>        journal = p.get(&#x27;journal&#x27;, &#x27;&#x27;)
+<span class="line-num">150</span>        summary = p.get(&#x27;summary&#x27;, &#x27;Summary pending.&#x27;)
+<span class="line-num">151</span>        topic = p.get(&#x27;topic_cluster&#x27;, &#x27;unknown&#x27;)
+<span class="line-num">152</span>        p_slug = paper_slug(p[&#x27;title&#x27;])
+<span class="line-num">153</span>
+<span class="line-num">154</span>        paper_sections.append(f&quot;&quot;&quot;
+<span class="line-num">155</span>        &lt;article class=&quot;paper-detail&quot; id=&quot;{p_slug}&quot;&gt;
+<span class="line-num">156</span>            &lt;h3&gt;{escape_html(p[&#x27;title&#x27;])}&lt;/h3&gt;
+<span class="line-num">157</span>            &lt;div class=&quot;paper-meta&quot;&gt;
+<span class="line-num">158</span>                {escape_html(journal)} {year}
+<span class="line-num">159</span>                &lt;span class=&quot;topic-badge topic-{topic}&quot;&gt;{topic.replace(&#x27;_&#x27;, &#x27; &#x27;).title()}&lt;/span&gt;
+<span class="line-num">160</span>            &lt;/div&gt;
+<span class="line-num">161</span>            &lt;div class=&quot;paper-summary-full&quot;&gt;
+<span class="line-num">162</span>                &lt;p&gt;{escape_html(summary)}&lt;/p&gt;
+<span class="line-num">163</span>            &lt;/div&gt;
+<span class="line-num">164</span>        &lt;/article&gt;&quot;&quot;&quot;)
+<span class="line-num">165</span>
+<span class="line-num">166</span>    return f&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
+<span class="line-num">167</span>&lt;html lang=&quot;en&quot;&gt;
+<span class="line-num">168</span>&lt;head&gt;
+<span class="line-num">169</span>    &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="line-num">170</span>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="line-num">171</span>    &lt;title&gt;{escape_html(name)} — HP Scholarship&lt;/title&gt;
+<span class="line-num">172</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;../style.css&quot;&gt;
+<span class="line-num">173</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;../scholars.css&quot;&gt;
+<span class="line-num">174</span>&lt;/head&gt;
+<span class="line-num">175</span>&lt;body&gt;
+<span class="line-num">176</span>    &lt;header&gt;
+<span class="line-num">177</span>        &lt;div class=&quot;header-content&quot;&gt;
+<span class="line-num">178</span>            &lt;h1&gt;{escape_html(name)}&lt;/h1&gt;
+<span class="line-num">179</span>            &lt;p class=&quot;subtitle&quot;&gt;&lt;a href=&quot;../scholars.html&quot;&gt;&amp;larr; All Scholars&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">180</span>        &lt;/div&gt;
+<span class="line-num">181</span>    &lt;/header&gt;
+<span class="line-num">182</span>    &lt;main&gt;
+<span class="line-num">183</span>        &lt;section class=&quot;scholar-detail&quot;&gt;
+<span class="line-num">184</span>            &lt;h2&gt;Papers in the HP Corpus ({len(papers)})&lt;/h2&gt;
+<span class="line-num">185</span>            {&#x27;&#x27;.join(paper_sections)}
+<span class="line-num">186</span>        &lt;/section&gt;
+<span class="line-num">187</span>    &lt;/main&gt;
+<span class="line-num">188</span>    &lt;footer&gt;
+<span class="line-num">189</span>        &lt;div class=&quot;footer-content&quot;&gt;
+<span class="line-num">190</span>            &lt;div class=&quot;footer-section&quot;&gt;
+<span class="line-num">191</span>                &lt;h4&gt;HP Scholarship Database&lt;/h4&gt;
+<span class="line-num">192</span>                &lt;p&gt;Part of the &lt;a href=&quot;../index.html&quot;&gt;Hypnerotomachia Poliphili&lt;/a&gt; digital humanities project.&lt;/p&gt;
+<span class="line-num">193</span>            &lt;/div&gt;
+<span class="line-num">194</span>        &lt;/div&gt;
+<span class="line-num">195</span>    &lt;/footer&gt;
+<span class="line-num">196</span>&lt;/body&gt;
+<span class="line-num">197</span>&lt;/html&gt;&quot;&quot;&quot;
+<span class="line-num">198</span>
+<span class="line-num">199</span>
+<span class="line-num">200</span>def escape_html(text):
+<span class="line-num">201</span>    &quot;&quot;&quot;Escape HTML special characters.&quot;&quot;&quot;
+<span class="line-num">202</span>    if not text:
+<span class="line-num">203</span>        return &#x27;&#x27;
+<span class="line-num">204</span>    return (text.replace(&#x27;&amp;&#x27;, &#x27;&amp;amp;&#x27;)
+<span class="line-num">205</span>                .replace(&#x27;&lt;&#x27;, &#x27;&amp;lt;&#x27;)
+<span class="line-num">206</span>                .replace(&#x27;&gt;&#x27;, &#x27;&amp;gt;&#x27;)
+<span class="line-num">207</span>                .replace(&#x27;&quot;&#x27;, &#x27;&amp;quot;&#x27;))
+<span class="line-num">208</span>
+<span class="line-num">209</span>
+<span class="line-num">210</span>def main():
+<span class="line-num">211</span>    if not SUMMARIES_PATH.exists():
+<span class="line-num">212</span>        print(f&quot;ERROR: {SUMMARIES_PATH} not found. Create summaries.json first.&quot;)
+<span class="line-num">213</span>        return
+<span class="line-num">214</span>
+<span class="line-num">215</span>    with open(SUMMARIES_PATH, &#x27;r&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">216</span>        summaries = json.load(f)
+<span class="line-num">217</span>
+<span class="line-num">218</span>    print(f&quot;Loaded {len(summaries)} paper summaries&quot;)
+<span class="line-num">219</span>
+<span class="line-num">220</span>    scholars = group_by_scholar(summaries)
+<span class="line-num">221</span>    print(f&quot;Found {len(scholars)} unique scholars&quot;)
+<span class="line-num">222</span>
+<span class="line-num">223</span>    # Write scholar profile markdown files
+<span class="line-num">224</span>    for name, papers in scholars.items():
+<span class="line-num">225</span>        slug = write_scholar_profile(name, papers, SCHOLARS_DIR)
+<span class="line-num">226</span>        print(f&quot;  {name} ({slug}): {len(papers)} papers&quot;)
+<span class="line-num">227</span>
+<span class="line-num">228</span>    # Generate HTML pages
+<span class="line-num">229</span>    scholar_page_dir = SITE_DIR / &quot;scholar&quot;
+<span class="line-num">230</span>    scholar_page_dir.mkdir(parents=True, exist_ok=True)
+<span class="line-num">231</span>
+<span class="line-num">232</span>    # Individual scholar pages
+<span class="line-num">233</span>    for name, papers in scholars.items():
+<span class="line-num">234</span>        slug = slugify(name)
+<span class="line-num">235</span>        html = generate_scholar_page_html(name, papers)
+<span class="line-num">236</span>        (scholar_page_dir / f&quot;{slug}.html&quot;).write_text(html, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">237</span>
+<span class="line-num">238</span>    # Scholars directory page
+<span class="line-num">239</span>    cards = generate_scholars_html(scholars, summaries)
+<span class="line-num">240</span>    scholars_html = f&quot;&quot;&quot;&lt;!DOCTYPE html&gt;
+<span class="line-num">241</span>&lt;html lang=&quot;en&quot;&gt;
+<span class="line-num">242</span>&lt;head&gt;
+<span class="line-num">243</span>    &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="line-num">244</span>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="line-num">245</span>    &lt;title&gt;Scholars — Hypnerotomachia Poliphili&lt;/title&gt;
+<span class="line-num">246</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+<span class="line-num">247</span>    &lt;link rel=&quot;stylesheet&quot; href=&quot;scholars.css&quot;&gt;
+<span class="line-num">248</span>&lt;/head&gt;
+<span class="line-num">249</span>&lt;body&gt;
+<span class="line-num">250</span>    &lt;header&gt;
+<span class="line-num">251</span>        &lt;div class=&quot;header-content&quot;&gt;
+<span class="line-num">252</span>            &lt;h1&gt;HP Scholarship&lt;/h1&gt;
+<span class="line-num">253</span>            &lt;p class=&quot;subtitle&quot;&gt;Scholars and Their Contributions&lt;/p&gt;
+<span class="line-num">254</span>            &lt;p class=&quot;attribution&quot;&gt;&lt;a href=&quot;index.html&quot;&gt;&amp;larr; Back to Marginalia&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">255</span>        &lt;/div&gt;
+<span class="line-num">256</span>    &lt;/header&gt;
+<span class="line-num">257</span>    &lt;main&gt;
+<span class="line-num">258</span>        &lt;section class=&quot;intro&quot;&gt;
+<span class="line-num">259</span>            &lt;div class=&quot;intro-content&quot;&gt;
+<span class="line-num">260</span>                &lt;p&gt;Five centuries of scholarship on the &lt;em&gt;Hypnerotomachia Poliphili&lt;/em&gt;, organized by author. Each scholar&#x27;s profile links to summaries of their contributions to the field.&lt;/p&gt;
+<span class="line-num">261</span>            &lt;/div&gt;
+<span class="line-num">262</span>        &lt;/section&gt;
+<span class="line-num">263</span>        &lt;section class=&quot;scholars-grid&quot;&gt;
+<span class="line-num">264</span>            {&#x27;&#x27;.join(cards)}
+<span class="line-num">265</span>        &lt;/section&gt;
+<span class="line-num">266</span>    &lt;/main&gt;
+<span class="line-num">267</span>    &lt;footer&gt;
+<span class="line-num">268</span>        &lt;div class=&quot;footer-content&quot;&gt;
+<span class="line-num">269</span>            &lt;div class=&quot;footer-section&quot;&gt;
+<span class="line-num">270</span>                &lt;h4&gt;HP Scholarship Database&lt;/h4&gt;
+<span class="line-num">271</span>                &lt;p&gt;Part of the &lt;a href=&quot;index.html&quot;&gt;Hypnerotomachia Poliphili&lt;/a&gt; digital humanities project.&lt;/p&gt;
+<span class="line-num">272</span>            &lt;/div&gt;
+<span class="line-num">273</span>        &lt;/div&gt;
+<span class="line-num">274</span>    &lt;/footer&gt;
+<span class="line-num">275</span>&lt;/body&gt;
+<span class="line-num">276</span>&lt;/html&gt;&quot;&quot;&quot;
+<span class="line-num">277</span>
+<span class="line-num">278</span>    (SITE_DIR / &quot;scholars.html&quot;).write_text(scholars_html, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">279</span>    print(f&quot;\nGenerated {len(scholars)} scholar pages + scholars.html&quot;)
+<span class="line-num">280</span>
+<span class="line-num">281</span>
+<span class="line-num">282</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">283</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

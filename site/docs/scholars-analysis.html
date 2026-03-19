@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholars Analysis - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Scholars Analysis</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                HPSCHOLARS.md &mdash; 1,470 words</p>
+            <h2>HP Scholars: Representing the Scholarship of the Hypnerotomachia Poliphili</h2>
+
+<h3>The Problem of Scholarly Representation</h3>
+
+<p>We have 38 documents about the <em>Hypnerotomachia Poliphili</em> sitting in a folder. They span from a 1937 <em>Journal of the Warburg Institute</em> article by Anthony Blunt to James Russell&#x27;s 2024 PhD thesis. They are written in English, Italian, and German. They address architecture, gardens, hieroglyphs, literary reception, emblematics, pedagogy, love rhetoric, dream narrative, and philological method. They cite each other, contradict each other, and occasionally ignore each other entirely.</p>
+
+<p>The question is: how do we make this body of scholarship navigable, queryable, and ultimately presentable on a website — without flattening the intellectual complexity that makes it valuable?</p>
+
+<h3>What We Have: The Documents Table</h3>
+
+<p>Our SQLite database currently stores each document with minimal metadata:</p>
+
+<table class="doc-table">
+<tr><th>Field</th><th>Example</th></tr>
+<tr><td>filename</td><td>`Word Image 1998 jan vol 14 iss 1 2 Bury John Chapter III of the Hypnerotomachia.pdf`</td></tr>
+<tr><td>title</td><td>(extracted from filename, imperfect)</td></tr>
+<tr><td>author</td><td>(extracted from filename, imperfect)</td></tr>
+<tr><td>doc_type</td><td>SCHOLARSHIP / PRIMARY_TEXT / DISSERTATION / PRESENTATION</td></tr>
+<tr><td>file_size_bytes</td><td>varies</td></tr>
+</table>
+
+<p>This is a starting point, not a destination. The filename-based metadata extraction is rough — it captures author names and journal information when they happen to be encoded in the filename, but misses publication year, volume, DOI, abstract, and subject classification.</p>
+
+<h3>Thinking Through the Scholarly Landscape</h3>
+
+<h4>Clustering by Topic</h4>
+
+<p>Reading through the filenames and sampling the PDFs, the scholarship clusters into recognizable research threads:</p>
+
+<p><strong>1. Authorship and Attribution</strong></p>
+<p>The HP&#x27;s authorship has been debated for five centuries. The acrostic formed by the decorated initials of each chapter spells POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT (&quot;Brother Francesco Colonna greatly loved Polia&quot;), but which Francesco Colonna? A Dominican friar in Venice? A Roman nobleman? Someone else entirely?</p>
+<ul>
+<li>O&#x27;Neill, &quot;A Narrative in Search of an Author&quot;</li>
+<li>Lefaivre, &quot;Leon Battista Alberti&#x27;s Hypnerotomachia Poliphili: Re-Cognizing the Architectural Body&quot;</li>
+</ul>
+
+<p><strong>2. Architecture and Gardens</strong></p>
+<p>The HP is one of the most detailed architectural descriptions in Renaissance literature. Scholars have traced its influence on real gardens and buildings.</p>
+<ul>
+<li>Wright, &quot;Alberti and the Hypnerotomachia Poliphili&quot; (Warburg &amp; Courtauld, 1984)</li>
+<li>Hunt, &quot;Experiencing gardens in the Hypnerotomachia&quot; (Word &amp; Image, 1998)</li>
+<li>Temple, &quot;The Hypnerotomachia Poliphili as a possible model for garden design&quot; (Word &amp; Image, 1998)</li>
+<li>Jarzombek, &quot;The structural problematic of the HP&quot; (Renaissance Studies, 1990)</li>
+<li>&quot;Untangling the knot: Garden design in Francesco Colonna&#x27;s HP&quot;</li>
+<li>&quot;Walking in the Boboli Gardens in Florence&quot;</li>
+<li>Fabiani Giannetto, &quot;Not before either...&quot; (Word &amp; Image, 2015)</li>
+</ul>
+
+<p><strong>3. Text-Image Relations</strong></p>
+<p>The 172 woodcuts are inseparable from the text. How do they function narratively, symbolically, and materially?</p>
+<ul>
+<li>Bury, &quot;Chapter III of the Hypnerotomachia&quot; (Word &amp; Image, 1998)</li>
+<li>Stewering, &quot;The relationship between...&quot; (Word &amp; Image, 1998)</li>
+<li>Leslie, &quot;The Hypnerotomachia Poliphili and...&quot; (Word &amp; Image, 1998)</li>
+<li>Nygren, &quot;The Hypnerotomachia Poliphili...&quot; (Word &amp; Image, 2015)</li>
+<li>&quot;Crossing the text-image boundary&quot;</li>
+<li>&quot;The Narrative Function of Hieroglyphs&quot;</li>
+</ul>
+
+<p><strong>4. Literary Reception and Influence</strong></p>
+<p>How was the HP read, imitated, and repurposed in later centuries?</p>
+<ul>
+<li>Praz, &quot;Some Foreign Imitators of the Hypnerotomachia&quot; (Italica, 1947)</li>
+<li>Francon, on Colonna and Rabelais (MLR, 1955)</li>
+<li>Semler, &quot;Robert Dallington&#x27;s Hypnerotomachia&quot; (Studies in Philology, 2006)</li>
+<li>Trippe, &quot;The Hypnerotomachia Poliphili...&quot; (Renaissance Quarterly, 2002)</li>
+<li>Farrington, &quot;Though I could lead a quiet life...&quot; (Word &amp; Image, 2015)</li>
+<li>Keller, &quot;Hypnerotomachia joins the Party&quot; (Word &amp; Image, 2015)</li>
+<li>&quot;The HP of Ben Jonson and Kenelm Digby&quot; (presentation)</li>
+</ul>
+
+<p><strong>5. Dream, Religion, and Initiation</strong></p>
+<p>The HP as dream narrative, mystery religion, or initiatory journey.</p>
+<ul>
+<li>Gollnick, &quot;Religious Dreamworld of Apuleius&#x27; Metamorphoses&quot;</li>
+<li>&quot;Dream Narratives and Initiation Processes&quot;</li>
+<li>&quot;Teaching Eros: The Rhetoric of Love&quot;</li>
+<li>O&#x27;Neill, &quot;Self-transformation in the HP&quot; (Durham thesis)</li>
+<li>&quot;Elucidating and Enigmatizing the Reception&quot;</li>
+</ul>
+
+<p><strong>6. Material and Bibliographic Study</strong></p>
+<p>The physical book as an object of study — its printing, its copies, its readers&#x27; marks.</p>
+<ul>
+<li>**Russell, PhD Thesis** — the central work for our project</li>
+<li>Pumroy, &quot;Bryn Mawr College&#x27;s 1499 edition&quot; (Word &amp; Image, 2015)</li>
+<li>Curran, &quot;The Hypnerotomachia Poliphili and...&quot; (Word &amp; Image, 1998)</li>
+<li>Griggs, &quot;Promoting the past&quot; (Word &amp; Image, 1998)</li>
+<li>Ure, &quot;Some notes on the vocabulary&quot; (Notes and Queries, 1952)</li>
+<li>Blunt, &quot;The Hypnerotomachia Poliphili...&quot; (Warburg, 1937)</li>
+<li>Canone &amp; Spruit, &quot;Emblematics in the Early Modern Age&quot;</li>
+</ul>
+
+<h4>Clustering by Publication Venue</h4>
+
+<p>Two special journal issues dominate the corpus:</p>
+<ul>
+<li>**Word &amp; Image 14:1-2 (1998)**: 7 articles — a dedicated HP issue</li>
+<li>**Word &amp; Image 31:2 (2015)**: 5 articles — another dedicated HP issue</li>
+</ul>
+
+<p>These two issues alone account for 12 of our 32 scholarship PDFs. They represent coordinated scholarly interventions, and the website should present them as such — not as 12 isolated articles but as two curated collections with editorial framing.</p>
+
+<h3>Schema Enhancements for Scholarly Representation</h3>
+
+<p>The current <code>documents</code> table needs enrichment. Here is my thinking on what to add:</p>
+
+<h4>Enhanced Document Metadata</h4>
+
+<pre><code class="lang-sql">
+ALTER TABLE documents ADD COLUMN journal TEXT;
+ALTER TABLE documents ADD COLUMN volume TEXT;
+ALTER TABLE documents ADD COLUMN issue TEXT;
+ALTER TABLE documents ADD COLUMN pub_year INTEGER;
+ALTER TABLE documents ADD COLUMN language TEXT DEFAULT &#x27;en&#x27;;
+ALTER TABLE documents ADD COLUMN abstract TEXT;
+ALTER TABLE documents ADD COLUMN topic_cluster TEXT;
+ALTER TABLE documents ADD COLUMN doi TEXT;
+</code></pre>
+
+<h4>A Citations Table</h4>
+
+<p>Scholarship is a web of references. If Russell cites Blunt, and Blunt cites Colonna, those links are information. A <code>citations</code> table would capture:</p>
+
+<pre><code class="lang-sql">
+CREATE TABLE citations (
+    id INTEGER PRIMARY KEY,
+    citing_doc_id INTEGER REFERENCES documents(id),
+    cited_doc_id INTEGER REFERENCES documents(id),
+    citation_context TEXT,  -- the sentence containing the citation
+    page_in_citing INTEGER  -- where in the citing work
+);
+</code></pre>
+
+<p>This enables &quot;cited by&quot; views on the website and bibliographic network visualization.</p>
+
+<h4>A Folio-to-Document Reference Table</h4>
+
+<p>Many scholarly works reference specific folios. A <code>doc_folio_refs</code> table would link:</p>
+
+<pre><code class="lang-sql">
+CREATE TABLE doc_folio_refs (
+    id INTEGER PRIMARY KEY,
+    document_id INTEGER REFERENCES documents(id),
+    signature_ref TEXT,
+    page_in_document INTEGER,
+    context TEXT
+);
+</code></pre>
+
+<p>This would allow the showcase page to say: &quot;This folio (c7v) is discussed by Russell (p. 97), Blunt (p. 154), and Bury (p. 23).&quot;</p>
+
+<h3>How to Process the Scholarship</h3>
+
+<h4>Phase A: Metadata Extraction</h4>
+<p>For each of the 38 documents:</p>
+<p>1. Extract text with PyMuPDF (already proven to work on Russell&#x27;s thesis)</p>
+<p>2. Parse the first few pages for title, author, journal, year, abstract</p>
+<p>3. Classify into topic clusters using the taxonomy above</p>
+<p>4. Store enhanced metadata in the database</p>
+
+<p>This is partially automated, partially manual. Journal articles from Word &amp; Image have standardized metadata in their headers. Monographs and theses are less predictable.</p>
+
+<h4>Phase B: Citation Network</h4>
+<p>For each document:</p>
+<p>1. Extract the bibliography/references section</p>
+<p>2. Match cited works against our document inventory</p>
+<p>3. Build the citation graph</p>
+
+<p>This is harder. Citation formats vary wildly across five decades of scholarship. A pragmatic approach: extract author-year pairs from bibliographies, fuzzy-match against our documents table, and flag uncertain matches for human review.</p>
+
+<h4>Phase C: Folio Reference Extraction</h4>
+<p>For each document (not just Russell):</p>
+<p>1. Run the same signature-pattern regex used on Russell&#x27;s thesis</p>
+<p>2. Store folio references with page numbers and context</p>
+
+<p>This would reveal which folios are the most discussed across the entire scholarly literature — likely the decorated initials, the major woodcuts, and the hieroglyphic passages.</p>
+
+<h3>Representing Scholars as People</h3>
+
+<p>Beyond documents, scholars themselves are entities worth tracking:</p>
+
+<table class="doc-table">
+<tr><th>Scholar</th><th>Affiliation</th><th>Active Period</th><th>Key Contribution</th></tr>
+<tr><td>James Russell</td><td>(thesis)</td><td>2024</td><td>Systematic marginalia analysis across 6 copies</td></tr>
+<tr><td>Anthony Blunt</td><td>Warburg Institute</td><td>1937</td><td>Early architectural analysis</td></tr>
+<tr><td>Liane Lefaivre</td><td>—</td><td>1997</td><td>Alberti attribution argument</td></tr>
+<tr><td>John Dixon Hunt</td><td>—</td><td>1998</td><td>Garden history perspective</td></tr>
+<tr><td>Mario Praz</td><td>—</td><td>1947</td><td>Early reception history</td></tr>
+</table>
+
+<p>A <code>scholars</code> table could link to their documents and institutional affiliations, enabling &quot;browse by scholar&quot; on the website. But this is a later enhancement — the documents themselves are the primary interface.</p>
+
+<h3>The Key Insight: Scholarship as Layered Interpretation</h3>
+
+<p>The most important thing about representing HP scholarship is recognizing that scholars don&#x27;t just &quot;study&quot; the HP — they construct interpretive frameworks that guide what subsequent scholars notice. Blunt&#x27;s 1937 architectural reading shaped fifty years of HP studies. The 1998 Word &amp; Image issue reframed the book as a multimedia object. Russell&#x27;s 2024 thesis reframed it as a material object bearing traces of its readers.</p>
+
+<p>The website should make these interpretive layers visible. When a user looks at folio c7v, they should be able to see not just the image and Russell&#x27;s note, but the entire stack of scholarly attention that folio has received, ordered chronologically, revealing how understanding of that page has evolved.</p>
+
+<p>This is what distinguishes a digital humanities project from a digital filing cabinet.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

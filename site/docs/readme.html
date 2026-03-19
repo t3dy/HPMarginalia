@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>README - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>README</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                README.md &mdash; 576 words</p>
+            <h2>Hypnerotomachia Poliphili — Digital Marginalia &amp; Scholarship</h2>
+
+<p>A digital humanities project documenting the readership, marginalia, and scholarship of the <em>Hypnerotomachia Poliphili</em> (Venice: Aldus Manutius, 1499), based on James Russell&#x27;s PhD thesis <em>Many Other Things Worthy of Knowledge and Memory</em> (Durham University, 2014).</p>
+
+<p><strong>Live site</strong>: [https://t3dy.github.io/HPMarginalia](https://t3dy.github.io/HPMarginalia)</p>
+
+<h3>What&#x27;s Here</h3>
+
+<ul>
+<li>**Marginalia gallery** — 305 annotated folio images from two copies (BL C.60.o.12 and Siena O.III.38) matched to Russell&#x27;s thesis references</li>
+<li>**118 folio detail pages** — individual pages for each annotated signature with images, hand attributions, and context</li>
+<li>**30 scholar profiles** — index cards summarizing HP scholarship from 1899 to 2021</li>
+<li>**37 dictionary entries** — glossary of book history, alchemical, architectural, and scholarly terms</li>
+<li>**88 bibliography entries** — with gap analysis against Russell&#x27;s 310-item bibliography</li>
+<li>**39 timeline events** — spanning 1499 (first publication) to 2020</li>
+</ul>
+
+<h3>Architecture</h3>
+
+<p>SQLite is the source of truth. Export scripts generate JSON and static HTML pages.</p>
+
+<pre><code class="lang-">
+db/hp.db                    SQLite database (18 tables)
+scripts/                    Python pipeline
+  migrate_v2.py             Schema migration (idempotent)
+  seed_dictionary.py        Dictionary terms (idempotent)
+  build_site.py             Generate all HTML + JSON
+  validate.py               QA checks and audit report
+  init_db.py                Initialize base schema
+  catalog_images.py         Parse image filenames
+  build_signature_map.py    Aldine collation formula
+  extract_references.py     Extract refs from thesis PDF
+  match_refs_to_images.py   Match refs to images
+  add_hands.py              Annotator hand profiles
+  add_bibliography.py       Bibliography and timeline
+site/                       Generated static site
+  index.html                Marginalia gallery
+  scholars.html             Scholars overview
+  scholar/*.html             Individual scholar pages
+  dictionary/index.html     Dictionary landing
+  dictionary/*.html          Individual term pages
+  marginalia/index.html     Folio index
+  marginalia/*.html          Individual folio pages
+  about.html                 Project info and stats
+  data.json                  Gallery data export
+</code></pre>
+
+<h3>How to Rebuild</h3>
+
+<pre><code class="lang-bash">
+# Full rebuild from database
+python scripts/migrate_v2.py        # Schema migration (safe to re-run)
+python scripts/seed_dictionary.py   # Dictionary terms (safe to re-run)
+python scripts/build_site.py        # Generate all HTML + JSON
+
+# Validation
+python scripts/validate.py          # QA checks + audit report
+
+# Full pipeline from scratch (requires PDFs + PyMuPDF)
+python scripts/init_db.py
+python scripts/catalog_images.py
+python scripts/build_signature_map.py
+python scripts/extract_references.py
+python scripts/match_refs_to_images.py
+python scripts/add_hands.py
+python scripts/add_bibliography.py
+python scripts/migrate_v2.py
+python scripts/seed_dictionary.py
+python scripts/build_site.py
+</code></pre>
+
+<h3>Data Provenance</h3>
+
+<table class="doc-table">
+<tr><th>Data</th><th>Method</th><th>Confidence</th></tr>
+<tr><td>Signature map</td><td>Deterministic (Aldine collation formula)</td><td>Verified</td></tr>
+<tr><td>Image cataloging</td><td>Deterministic (filename parsing)</td><td>Verified</td></tr>
+<tr><td>Siena image matches</td><td>Folio-exact (explicit r/v naming)</td><td>HIGH</td></tr>
+<tr><td>BL image matches</td><td>Folio-exact (assumes photo# = folio#)</td><td>LOW</td></tr>
+<tr><td>Scholar summaries</td><td>LLM-assisted (Claude)</td><td>Unreviewed</td></tr>
+<tr><td>Dictionary definitions</td><td>LLM-assisted (Claude)</td><td>Unreviewed (Draft)</td></tr>
+<tr><td>Hand attributions</td><td>LLM-assisted (from Russell&#x27;s prose)</td><td>Unreviewed</td></tr>
+<tr><td>Scholar metadata</td><td>LLM-assisted</td><td>Unreviewed</td></tr>
+<tr><td>Timeline events</td><td>LLM-assisted</td><td>Unreviewed</td></tr>
+</table>
+
+<p>Content marked <strong>Unreviewed</strong> has not been verified by a domain expert.</p>
+<p>The site displays review badges on all LLM-assisted content.</p>
+
+<h3>Key Database Tables</h3>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>`images`</td><td>674</td><td>Cataloged manuscript photographs</td></tr>
+<tr><td>`signature_map`</td><td>448</td><td>Signature-to-folio concordance</td></tr>
+<tr><td>`dissertation_refs`</td><td>282</td><td>Folio references from Russell&#x27;s thesis</td></tr>
+<tr><td>`matches`</td><td>610</td><td>Image-reference matches with confidence</td></tr>
+<tr><td>`annotators`</td><td>11</td><td>Identified annotator hands</td></tr>
+<tr><td>`bibliography`</td><td>88</td><td>HP scholarship with gap analysis</td></tr>
+<tr><td>`scholars`</td><td>52</td><td>Scholar profiles</td></tr>
+<tr><td>`dictionary_terms`</td><td>37</td><td>HP terminology glossary</td></tr>
+<tr><td>`timeline_events`</td><td>39</td><td>Publication/scholarship timeline</td></tr>
+</table>
+
+<h3>Dependencies</h3>
+
+<ul>
+<li>Python 3.10+</li>
+<li>SQLite3 (bundled with Python)</li>
+<li>PyMuPDF (`pip install PyMuPDF`) — only needed for PDF extraction pipeline</li>
+</ul>
+
+<p>No web framework required. The site is plain HTML/CSS/JS.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
