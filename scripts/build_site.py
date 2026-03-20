@@ -84,8 +84,8 @@ def page_shell(title, body, active_nav='', extra_css='', extra_js='', depth=0):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{escape(title)} - Hypnerotomachia Poliphili</title>
-    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <title>{escape(title)} - Alchemical Hands in the Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Alchemical hands in the marginalia of the Hypnerotomachia Poliphili (Venice, 1499). A digital scholarship platform based on James Russell's PhD thesis.">
     <link rel="stylesheet" href="{prefix}style.css">
     <link rel="stylesheet" href="{prefix}scholars.css">
     <link rel="stylesheet" href="{prefix}components.css">
@@ -94,8 +94,8 @@ def page_shell(title, body, active_nav='', extra_css='', extra_js='', depth=0):
 <body>
     <header>
         <div class="header-content">
-            <h1><a href="{prefix}index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
-            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <h1><a href="{prefix}index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
             {nav_html(active_nav, prefix)}
         </div>
     </header>
@@ -106,9 +106,9 @@ def page_shell(title, body, active_nav='', extra_css='', extra_js='', depth=0):
         <div class="footer-content">
             <div class="footer-section">
                 <h4>About This Project</h4>
-                <p>A digital humanities project documenting the readership
-                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
-                based on James Russell's PhD thesis (Durham, 2014).</p>
+                <p>A digital scholarship platform exploring the alchemical
+                annotations and wider marginalia of the 1499 <em>Hypnerotomachia
+                Poliphili</em>, based on James Russell's PhD thesis (Durham, 2014).</p>
             </div>
             <div class="footer-section">
                 <h4>Data Provenance</h4>
