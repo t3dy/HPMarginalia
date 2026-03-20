@@ -38,6 +38,11 @@ function renderGallery(entries) {
         const badgeClass = isBL ? 'badge-bl' : 'badge-siena';
         const badgeText = isBL ? 'British Library' : 'Siena';
 
+        const description = entry.card_description || entry.desc_title || '';
+        const descHtml = description
+            ? `<div class="card-desc" style="font-size:0.82rem;color:#6b5b4b;line-height:1.5;margin-top:0.3rem">${escapeHtml(description.substring(0, 160))}${description.length > 160 ? '...' : ''}</div>`
+            : '';
+
         card.innerHTML = `
             <img class="card-image"
                  src="${imagePath(entry)}"
@@ -49,6 +54,7 @@ function renderGallery(entries) {
                     <span class="badge ${badgeClass}">${badgeText}</span>
                     ${entry.manuscript} &mdash; folio ${entry.folio_number || '?'}${entry.side || ''}
                 </div>
+                ${descHtml}
                 ${entry.marginal_text
                     ? `<div class="card-marginal">&ldquo;${escapeHtml(entry.marginal_text)}&rdquo;</div>`
                     : ''}

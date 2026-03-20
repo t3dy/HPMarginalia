@@ -221,6 +221,32 @@ def export_data_json(conn):
             entry['desc_title'] = fd['desc_title']
             entry['desc_text'] = fd['desc_text']
             entry['alch_element'] = fd['alch_element']
+
+        # Generate a brief description for every entry
+        parts = []
+        if entry.get('desc_title'):
+            parts.append(entry['desc_title'] + '.')
+        else:
+            # Build description from available data
+            ms_name = 'the BL copy' if ms == 'C.60.o.12' else 'the Siena copy'
+            if entry.get('hand_label') and entry.get('hand_attribution'):
+                hand_desc = f"Hand {entry['hand_label']}"
+                if entry['hand_attribution'] and entry['hand_attribution'] != 'Anonymous':
+                    hand_desc += f" ({entry['hand_attribution']})"
+                if entry.get('is_alchemist'):
+                    hand_desc += ', an alchemist'
+                parts.append(f"Annotated by {hand_desc} in {ms_name}.")
+            elif entry.get('hand_label'):
+                parts.append(f"Annotated by Hand {entry['hand_label']} in {ms_name}.")
+            else:
+                parts.append(f"A folio from {ms_name} referenced in Russell's thesis.")
+
+            if entry.get('marginal_text'):
+                mt = entry['marginal_text']
+                if len(mt) > 5:
+                    parts.append(f'Russell records the marginal note: "{mt[:80]}{"..." if len(mt) > 80 else ""}"')
+
+        entry['card_description'] = ' '.join(parts)
         entries.append(entry)
         sigs.add(sig)
 
