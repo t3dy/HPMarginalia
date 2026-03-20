@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concordance Status - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Concordance Status</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                CONCORDANCESTATUS.md &mdash; 1,633 words</p>
+            <h2>CONCORDANCESTATUS: Current State of the HP Concordance System</h2>
+
+<blockquote>Generated 2026-03-20. All figures drawn from db/hp.db and the live site.</blockquote>
+
+<hr>
+
+<h3>1. Pipeline Overview</h3>
+
+<p>The concordance links Russell&#x27;s signature-based dissertation references to manuscript photographs through a deterministic pipeline:</p>
+
+<pre><code class="lang-">
+Russell&#x27;s thesis (PDF)
+  → extract_references.py (regex extraction)
+    → 282 dissertation_refs
+      → build_signature_map.py (1499 collation formula)
+        → 448 signature_map entries
+          → match_refs_to_images.py (join via folio number)
+            → 610 matches to 674 images
+</code></pre>
+
+<p>Each step is deterministic. The only probabilistic elements enter downstream: hand attribution (68% coverage), folio descriptions (LLM-assisted), and significance prose (LLM-assisted).</p>
+
+<hr>
+
+<h3>2. Core Data Inventory</h3>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Status</th></tr>
+<tr><td>dissertation_refs</td><td>282</td><td>Complete extraction from Russell&#x27;s thesis</td></tr>
+<tr><td>doc_folio_refs</td><td>282</td><td>Redundant mirror of dissertation_refs with provenance columns</td></tr>
+<tr><td>signature_map</td><td>448</td><td>Deterministic, correct for 1499 edition</td></tr>
+<tr><td>images</td><td>674</td><td>196 BL (C.60.o.12) + 478 Siena (O.III.38)</td></tr>
+<tr><td>matches</td><td>610</td><td>26 HIGH + 366 MEDIUM + 218 LOW</td></tr>
+<tr><td>annotations</td><td>0</td><td>Schema exists, never populated</td></tr>
+<tr><td>annotator_hands</td><td>11</td><td>Complete with prose descriptions</td></tr>
+<tr><td>folio_descriptions</td><td>13</td><td>Alchemist folios only</td></tr>
+<tr><td>alchemical_symbols</td><td>10</td><td>7 planetary metals + 3 substances</td></tr>
+<tr><td>symbol_occurrences</td><td>26</td><td>Mapped across 13 folios (9 BL, 4 Buffalo)</td></tr>
+<tr><td>hp_copies</td><td>6</td><td>Russell&#x27;s 6 annotated copies</td></tr>
+</table>
+
+<hr>
+
+<h3>3. Confidence Distribution</h3>
+
+<h4>By Manuscript</h4>
+
+<table class="doc-table">
+<tr><th>Manuscript</th><th>HIGH</th><th>MEDIUM</th><th>LOW</th><th>Total</th></tr>
+<tr><td>Siena O.III.38</td><td>26</td><td>366</td><td>0</td><td>392</td></tr>
+<tr><td>BL C.60.o.12</td><td>0</td><td>0</td><td>218</td><td>218</td></tr>
+<tr><td>**Total**</td><td>**26**</td><td>**366**</td><td>**218**</td><td>**610**</td></tr>
+</table>
+
+<h4>Why BL Is LOW</h4>
+
+<p>All 218 BL matches are LOW confidence because:</p>
+<p>1. BL photographs are sequentially numbered (001-196), not labeled by folio</p>
+<p>2. The matching pipeline assumes photo N = folio N, which is unverified</p>
+<p>3. The BL copy is the 1545 edition; the signature map is based on the 1499 collation</p>
+<p>4. Any differences in pagination between editions would invalidate the mapping</p>
+
+<h4>Why Siena Is HIGH/MEDIUM</h4>
+
+<p>Siena images encode folio information directly in filenames (O.III.38_0014r.jpg = folio 14 recto). HIGH matches are exact signature+side matches. MEDIUM matches are folio-number matches where side is ambiguous or cross-referenced.</p>
+
+<hr>
+
+<h3>4. Hand Attribution</h3>
+
+<h4>Coverage</h4>
+
+<table class="doc-table">
+<tr><th>Status</th><th>Count</th><th>Percentage</th></tr>
+<tr><td>Attributed (hand_id set)</td><td>193</td><td>68%</td></tr>
+<tr><td>Unattributed (hand_id NULL)</td><td>89</td><td>32%</td></tr>
+</table>
+
+<h4>By Hand</h4>
+
+<table class="doc-table">
+<tr><th>Hand</th><th>Manuscript</th><th>Refs</th><th>Alchemist</th><th>Framework</th></tr>
+<tr><td>A</td><td>C.60.o.12</td><td>8</td><td>No</td><td>—</td></tr>
+<tr><td>B</td><td>C.60.o.12</td><td>11</td><td>Yes</td><td>mercury_despagnet</td></tr>
+<tr><td>A</td><td>Buffalo RBR</td><td>2</td><td>No</td><td>—</td></tr>
+<tr><td>B</td><td>Buffalo RBR</td><td>6</td><td>No</td><td>—</td></tr>
+<tr><td>C</td><td>Buffalo RBR</td><td>0</td><td>No</td><td>—</td></tr>
+<tr><td>D</td><td>Buffalo RBR</td><td>4</td><td>No</td><td>—</td></tr>
+<tr><td>E</td><td>Buffalo RBR</td><td>8</td><td>Yes</td><td>sulphur_pseudo_geber</td></tr>
+<tr><td>Primary</td><td>Modena (Panini)</td><td>29</td><td>No</td><td>—</td></tr>
+<tr><td>Primary</td><td>INCUN A.5.13</td><td>42</td><td>No</td><td>—</td></tr>
+<tr><td>Primary</td><td>Inc.Stam.Chig.II.610</td><td>55</td><td>No</td><td>—</td></tr>
+<tr><td>Primary</td><td>O.III.38</td><td>28</td><td>No</td><td>—</td></tr>
+</table>
+
+<h4>Gap: 89 Unattributed References</h4>
+
+<p>Most unattributed refs come from introductory/methodological chapters where Russell discusses multiple copies without assigning specific hands. A regex pass against the thesis text could recover some attributions, but many are genuinely multi-copy references.</p>
+
+<hr>
+
+<h3>5. Dissertation References by Manuscript</h3>
+
+<table class="doc-table">
+<tr><th>Manuscript</th><th>Copy</th><th>Refs</th><th>Chapter(s)</th></tr>
+<tr><td>Buffalo RBR</td><td>Buffalo &amp; Erie County PL</td><td>59</td><td>Ch. 7</td></tr>
+<tr><td>Inc.Stam.Chig.II.610</td><td>Vatican Library</td><td>55</td><td>Ch. 8</td></tr>
+<tr><td>C.60.o.12</td><td>British Library</td><td>50</td><td>Ch. 6</td></tr>
+<tr><td>INCUN A.5.13</td><td>Cambridge UL</td><td>42</td><td>Ch. 5</td></tr>
+<tr><td>Modena (Panini)</td><td>Biblioteca Panini</td><td>29</td><td>Ch. 4</td></tr>
+<tr><td>O.III.38</td><td>Biblioteca degli Intronati</td><td>28</td><td>Ch. 9</td></tr>
+</table>
+
+<hr>
+
+<h3>6. Alchemical Symbol System</h3>
+
+<h4>Symbols in Database</h4>
+
+<table class="doc-table">
+<tr><th>Symbol</th><th>Metal</th><th>Planet</th><th>Gender</th><th>Framework</th></tr>
+<tr><td>Sol</td><td>Gold</td><td>Sun</td><td>masculine</td><td>standard</td></tr>
+<tr><td>Luna</td><td>Silver</td><td>Moon</td><td>feminine</td><td>standard</td></tr>
+<tr><td>Mercury</td><td>Quicksilver</td><td>Mercury</td><td>hermaphroditic</td><td>d_espagnet</td></tr>
+<tr><td>Venus</td><td>Copper</td><td>Venus</td><td>feminine</td><td>standard</td></tr>
+<tr><td>Mars</td><td>Iron</td><td>Mars</td><td>masculine</td><td>standard</td></tr>
+<tr><td>Jupiter</td><td>Tin</td><td>Jupiter</td><td>masculine</td><td>standard</td></tr>
+<tr><td>Saturn</td><td>Lead</td><td>Saturn</td><td>masculine</td><td>standard</td></tr>
+<tr><td>Cinnabar</td><td>Mercuric Sulphide</td><td>—</td><td>—</td><td>standard</td></tr>
+<tr><td>Sulphur</td><td>Brimstone</td><td>—</td><td>masculine</td><td>pseudo_geber</td></tr>
+<tr><td>Hermaphrodite</td><td>—</td><td>—</td><td>hermaphroditic</td><td>both</td></tr>
+</table>
+
+<h4>Occurrence Distribution</h4>
+
+<table class="doc-table">
+<tr><th>Symbol</th><th>Occurrences</th><th>Primary Hand</th></tr>
+<tr><td>Sol</td><td>8</td><td>Both B and E</td></tr>
+<tr><td>Mercury</td><td>6</td><td>Hand B (BL)</td></tr>
+<tr><td>Luna</td><td>5</td><td>Both B and E</td></tr>
+<tr><td>Sulphur</td><td>2</td><td>Hand E (Buffalo)</td></tr>
+<tr><td>Jupiter</td><td>2</td><td>Hand B (BL)</td></tr>
+<tr><td>Venus</td><td>1</td><td>Hand B (BL)</td></tr>
+<tr><td>Hermaphrodite</td><td>1</td><td>Hand E (Buffalo)</td></tr>
+<tr><td>Cinnabar</td><td>1</td><td>Hand B (BL)</td></tr>
+</table>
+
+<h4>Two Alchemical Frameworks</h4>
+
+<p><strong>Hand B (BL, d&#x27;Espagnet):</strong> Mercury-centered. The HP&#x27;s &quot;true sense&quot; is the operations of Master Mercury. Uses extensive ideographic vocabulary with Latin inflections. Possible Royal Society / Cambridge connection (consistency with Newton&#x27;s Keynes MSS).</p>
+
+<p><strong>Hand E (Buffalo, pseudo-Geber):</strong> Sulphur and Sol/Luna centered. Emphasizes gender inversion as the principle of transmutation. Reads the chess match (h1r) as three rounds of distillation producing a hermaphrodite (coincidentia oppositorum).</p>
+
+<hr>
+
+<h3>7. What Works</h3>
+
+<ul>
+<li>**Signature map:** Deterministic and correct for the 1499 edition (448 entries)</li>
+<li>**Siena concordance:** HIGH/MEDIUM confidence, folio-labeled filenames, 478 images</li>
+<li>**Hand profiles:** All 11 hands described with attribution, language, interests</li>
+<li>**Folio descriptions:** 13 detailed analyses of alchemist-annotated folios</li>
+<li>**Symbol mapping:** 26 occurrences tracked across 13 folios with provenance</li>
+<li>**Cross-linking:** Folios link to dictionary terms, essays, and scholar pages</li>
+</ul>
+
+<h3>8. What Does Not Work or Is Missing</h3>
+
+<h4>Critical</h4>
+
+<table class="doc-table">
+<tr><th>Gap</th><th>Impact</th><th>What Would Fix It</th></tr>
+<tr><td>BL concordance unverified (218 LOW matches)</td><td>Cannot trust any BL folio-to-image claim</td><td>Manual verification against high-res images, or multimodal AI reading visible signatures</td></tr>
+<tr><td>`annotations` table empty (0 rows)</td><td>No first-class annotation entity; data split across dissertation_refs and folio_descriptions</td><td>Migrate dissertation_refs into annotations as canonical table</td></tr>
+<tr><td>`doc_folio_refs` duplicates `dissertation_refs`</td><td>Redundant data, maintenance burden</td><td>Deprecate one table, consolidate</td></tr>
+<tr><td>89 unattributed refs</td><td>32% of refs have no hand assignment</td><td>Regex attribution pass + manual review</td></tr>
+</table>
+
+<h4>Structural</h4>
+
+<table class="doc-table">
+<tr><th>Gap</th><th>Impact</th><th>What Would Fix It</th></tr>
+<tr><td>No annotation type classification</td><td>Cannot query &quot;all lexical annotations&quot; vs &quot;all alchemical annotations&quot;</td><td>Add annotation_type field, classify with LLM (DRAFT)</td></tr>
+<tr><td>No hand-to-hand interaction tracking</td><td>Cannot model stratigraphic relationships (who overwrites whom)</td><td>New table: hand_interactions (hand_a, hand_b, relationship, folio)</td></tr>
+<tr><td>No HP source text linked to annotations</td><td>Cannot show what text the annotator was responding to</td><td>Link dissertation_refs to HP passage via signature + folio offset</td></tr>
+<tr><td>Buffalo copy has no images</td><td>Cannot verify any Buffalo annotations visually</td><td>Acquire photographs or note limitation</td></tr>
+<tr><td>Hand C (Buffalo) has 0 extracted refs</td><td>Gap in coverage</td><td>Re-read thesis Ch. 7 for Hand C mentions</td></tr>
+</table>
+
+<h4>Data Quality</h4>
+
+<table class="doc-table">
+<tr><th>Issue</th><th>Current State</th><th>Target</th></tr>
+<tr><td>Folio descriptions</td><td>13 of 282 refs (5%)</td><td>All alchemist refs (28) should have descriptions</td></tr>
+<tr><td>Symbol occurrences</td><td>26 occurrences across 13 folios</td><td>Could be expanded with deeper thesis reading</td></tr>
+<tr><td>Alchemical process stages</td><td>Not classified</td><td>Each alchemist ref could be tagged with nigredo/albedo/citrinitas/rubedo</td></tr>
+</table>
+
+<hr>
+
+<h3>9. Site Integration Status</h3>
+
+<table class="doc-table">
+<tr><th>Feature</th><th>Pages</th><th>Status</th></tr>
+<tr><td>Marginalia folio pages</td><td>118</td><td>Complete with images, annotations, alchemist tags</td></tr>
+<tr><td>Alchemical analysis blocks</td><td>13 folios</td><td>Showing on folio pages with element/process/framework</td></tr>
+<tr><td>Symbol occurrence tables</td><td>13 folios</td><td>Showing on folio pages with symbol/metal/planet/gender</td></tr>
+<tr><td>Cross-links to dictionary</td><td>~25 terms</td><td>Alchemical folios link to relevant dictionary entries</td></tr>
+<tr><td>Cross-links to essays</td><td>2 essays</td><td>Folios link to Russell Alchemical Hands + Concordance Method</td></tr>
+<tr><td>Manuscripts tab</td><td>6 copies</td><td>Each copy page shows hands, match stats, confidence</td></tr>
+<tr><td>Timeline</td><td>71 events</td><td>Chronological view of HP reception and scholarship</td></tr>
+</table>
+
+<hr>
+
+<h3>10. Recommended Next Actions (Priority Order)</h3>
+
+<p>1. <strong>Consolidate annotations table:</strong> Migrate dissertation_refs into the annotations table as the canonical source. Deprecate doc_folio_refs.</p>
+
+<p>2. <strong>Regex hand attribution pass:</strong> Run pattern matching on thesis text to attribute some of the 89 unattributed refs. Log all new attributions to staging for review.</p>
+
+<p>3. <strong>Annotation type classification:</strong> Add annotation_type field to annotations. Classify each ref as LEXICAL, ALCHEMICAL, ARCHITECTURAL, BOTANICAL, CROSS_REFERENCE, SOURCE_ID, or OTHER. LLM-assisted, DRAFT provenance.</p>
+
+<p>4. <strong>Expand folio descriptions:</strong> Generate descriptions for the remaining 15 alchemist-attributed refs that currently lack descriptions. Use reading packets + thesis chunks.</p>
+
+<p>5. <strong>Alchemical process stage tagging:</strong> Tag each alchemist ref with the relevant transmutation stage (nigredo, albedo, citrinitas, rubedo) where identifiable from thesis evidence.</p>
+
+<p>6. <strong>Hand interaction table:</strong> Create hand_interactions table tracking stratigraphic relationships (who overwrites whom, on which folios).</p>
+
+<p>7. <strong>BL verification (blocked):</strong> When high-resolution BL images become available, verify the sequential-number-to-folio assumption either manually or via multimodal AI.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

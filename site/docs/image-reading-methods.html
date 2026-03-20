@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Reading Methods - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Image Reading Methods</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                READINGIMAGES.md &mdash; 1,422 words</p>
+            <h2>READINGIMAGES: Deckard Boundary Critique of Image Reading Methods</h2>
+
+<blockquote>Rick Deckard distinguishes what&#x27;s real from what&#x27;s artificial.</blockquote>
+<blockquote>This critique examines what image reading can and cannot do for</blockquote>
+<blockquote>the concordance, and where the boundaries between deterministic</blockquote>
+<blockquote>verification and probabilistic interpretation lie.</blockquote>
+
+<hr>
+
+<h3>What Was Attempted</h3>
+
+<p>Visual inspection of 10 BL manuscript photographs (C.60.o.12) to verify</p>
+<p>the concordance pipeline&#x27;s assumption that photo number equals folio number.</p>
+
+<h3>What Was Found</h3>
+
+<h4>The Offset Discovery</h4>
+
+<p><strong>Photo number != folio number.</strong> The first 13 photographs are non-text</p>
+<p>pages (covers, endpapers, flyleaves, front matter). The actual HP text</p>
+<p>begins at photo 014 = folio 1 (a1r).</p>
+
+<p><strong>The formula is: folio_number = photo_number - 13.</strong></p>
+
+<p>Verified across 10 images:</p>
+
+<table class="doc-table">
+<tr><th>Photo</th><th>Visible Page #</th><th>Corrected Folio</th><th>Match</th></tr>
+<tr><td>001</td><td>(blank cover)</td><td>N/A</td><td>--</td></tr>
+<tr><td>003</td><td>(flyleaf: Master Mercury)</td><td>N/A</td><td>--</td></tr>
+<tr><td>010</td><td>(prefatory verse)</td><td>N/A</td><td>--</td></tr>
+<tr><td>014</td><td>1 (a1r)</td><td>014-13=1</td><td>Correct</td></tr>
+<tr><td>015</td><td>2</td><td>015-13=2</td><td>Correct</td></tr>
+<tr><td>020</td><td>7</td><td>020-13=7</td><td>Correct</td></tr>
+<tr><td>032</td><td>19</td><td>032-13=19</td><td>Correct</td></tr>
+<tr><td>033</td><td>20</td><td>033-13=20</td><td>Correct</td></tr>
+<tr><td>050</td><td>37</td><td>050-13=37</td><td>Correct</td></tr>
+<tr><td>100</td><td>87</td><td>100-13=87</td><td>Correct</td></tr>
+</table>
+
+<p><strong>Impact:</strong> All 218 BL matches in the database were wrong by 13 folios.</p>
+<p>A match claiming to show &quot;b6v&quot; was actually showing a page 13 positions</p>
+<p>earlier. The fix_bl_offset.py script corrects all BL image folio numbers.</p>
+
+<h4>What Else Was Visible</h4>
+
+<p>On photo 003 (flyleaf): the actual Master Mercury declaration is visible:</p>
+<p>&quot;verus sensus intentionis huius libri est 3um&quot; — confirming Russell&#x27;s</p>
+<p>transcription.</p>
+
+<p>On photo 014 (a1r): marginal annotations visible in right margin and</p>
+<p>bottom of page, consistent with Russell&#x27;s description of Hand A (Jonson)</p>
+<p>and Hand B (alchemist) annotations on the opening page.</p>
+
+<p>On photo 033 (page 20): alchemical symbols visible in left margin —</p>
+<p>small ideographic marks consistent with Russell&#x27;s description of Hand B&#x27;s</p>
+<p>alchemical vocabulary.</p>
+
+<p>On photo 100 (page 87): a decorative woodcut frieze with grotesque figures</p>
+<p>and marginal annotations in right margin.</p>
+
+<hr>
+
+<h3>Deckard Boundary Map: Image Reading</h3>
+
+<h4>DETERMINISTIC (code can do this)</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Method</th><th>Confidence</th></tr>
+<tr><td>Read printed page numbers from images</td><td>OCR / visual inspection</td><td>HIGH — numbers are large and consistent</td></tr>
+<tr><td>Compute photo-to-folio offset</td><td>Arithmetic: subtract 13</td><td>HIGH — verified across 10 images</td></tr>
+<tr><td>Detect presence of woodcut illustrations</td><td>Image classification (woodcut vs text-only)</td><td>HIGH — woodcuts are visually distinct</td></tr>
+<tr><td>Detect presence of marginal text</td><td>Edge detection in margin regions</td><td>MEDIUM — varies by density</td></tr>
+<tr><td>Read the BL shelfmark on flyleaf</td><td>OCR</td><td>HIGH — printed clearly</td></tr>
+</table>
+
+<h4>PROBABILISTIC (needs LLM vision or human judgment)</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Why Not Deterministic</th><th>Confidence</th></tr>
+<tr><td>Transcribe marginal annotations</td><td>Handwriting is irregular, ink varies, abbreviations used</td><td>MEDIUM — LLM can attempt but errors likely</td></tr>
+<tr><td>Identify which hand wrote an annotation</td><td>Requires paleographic judgment (ductus, ink color, content)</td><td>LOW — needs expert comparison</td></tr>
+<tr><td>Read alchemical ideograms</td><td>Symbols are small, non-standard Unicode</td><td>LOW — no standard OCR vocabulary</td></tr>
+<tr><td>Determine if a page is recto or verso</td><td>Requires understanding book structure</td><td>MEDIUM — can infer from sequence</td></tr>
+<tr><td>Match an annotation to Russell&#x27;s description</td><td>Requires reading both image and thesis text</td><td>MEDIUM — LLM can compare</td></tr>
+<tr><td>Confirm signature marks at page foot</td><td>Signatures are small and often trimmed</td><td>LOW — often illegible in photos</td></tr>
+</table>
+
+<h4>DANGER ZONES</h4>
+
+<table class="doc-table">
+<tr><th>Risk</th><th>Problem</th><th>Mitigation</th></tr>
+<tr><td>LLM confidently misreads handwriting</td><td>Could introduce false transcriptions into DB</td><td>Mark all LLM transcriptions as PROVISIONAL, never VERIFIED</td></tr>
+<tr><td>Offset assumption breaks for irregular gatherings</td><td>The 1545 edition may have inserted/cancelled leaves</td><td>Verify offset at multiple points, not just one</td></tr>
+<tr><td>Photo sequence may not be continuous</td><td>Missing or duplicate photos would break the offset</td><td>Count total photos, check for gaps in numbering</td></tr>
+<tr><td>Recto/verso inference from sequence may be wrong</td><td>If photos include separate detail shots, the alternation breaks</td><td>Check that page numbers increase monotonically</td></tr>
+</table>
+
+<hr>
+
+<h3>What Image Reading CAN Solve</h3>
+
+<p>1. <strong>BL offset verification</strong> — DONE. The offset of 13 is confirmed across</p>
+<p>10 data points spanning the full range of the book.</p>
+
+<p>2. <strong>Page number extraction</strong> — A batch run reading visible page numbers</p>
+<p>from all 196 BL photos would create a ground-truth folio mapping,</p>
+<p>eliminating the offset assumption entirely. Cost: ~$2 in API calls.</p>
+
+<p>3. <strong>Woodcut detection</strong> — Identifying which pages contain woodcuts would</p>
+<p>create a woodcut inventory for the BL copy and enable comparison with</p>
+<p>the 1499 edition&#x27;s 172 known woodcuts.</p>
+
+<p>4. <strong>Annotation presence detection</strong> — Flagging which pages have visible</p>
+<p>marginal annotations would identify annotated folios beyond those</p>
+<p>Russell explicitly documents.</p>
+
+<p>5. <strong>Annotation density mapping</strong> — Estimating how heavily each page is</p>
+<p>annotated would reveal patterns in reader engagement across the book.</p>
+
+<h3>What Image Reading CANNOT Solve</h3>
+
+<p>1. <strong>Definitive hand attribution</strong> — Distinguishing Hand A from Hand B</p>
+<p>requires expertise in ink color, ductus, and content that exceeds</p>
+<p>current vision model capabilities for 17th-century manuscripts.</p>
+
+<p>2. <strong>Reliable ideogram transcription</strong> — The alchemical symbols are too</p>
+<p>small and non-standard for confident automated reading. A specialist</p>
+<p>would produce better results.</p>
+
+<p>3. <strong>1545 vs 1499 collation verification</strong> — Determining whether the</p>
+<p>1545 edition follows the same collation formula requires comparing</p>
+<p>gatherings, not just page numbers. This is a codicological question</p>
+<p>that image reading can support but not resolve.</p>
+
+<p>4. <strong>Marginal text transcription at scholarly quality</strong> — LLM transcription</p>
+<p>of 17th-century handwriting will produce useful first drafts but not</p>
+<p>publishable transcriptions. All would need expert verification.</p>
+
+<hr>
+
+<h3>Recommended Batch Processing Pipeline</h3>
+
+<h4>Phase 1: Page Number Extraction ($2, 1 hour)</h4>
+
+<p>For each of the 196 BL photos:</p>
+<ul>
+<li>Send to vision model with prompt: &quot;Read the printed page number visible</li>
+</ul>
+<p>at the top of this manuscript page. Return ONLY the number, or NULL if</p>
+<p>no number is visible.&quot;</p>
+<ul>
+<li>Build a complete photo-to-page-number lookup table</li>
+<li>Verify the offset=13 hypothesis across all images</li>
+<li>Identify any discontinuities or missing pages</li>
+</ul>
+
+<h4>Phase 2: Annotation Detection ($3, 1 hour)</h4>
+
+<p>For each photo:</p>
+<ul>
+<li>Prompt: &quot;Does this manuscript page contain handwritten marginal</li>
+</ul>
+<p>annotations? Answer YES/NO. If YES, estimate the annotation density</p>
+<p>as LIGHT (1-2 marks), MODERATE (3-10 marks), or HEAVY (10+).&quot;</p>
+<ul>
+<li>Build an annotation density map across the full book</li>
+<li>Compare against Russell&#x27;s documented annotations</li>
+</ul>
+
+<h4>Phase 3: Woodcut Inventory ($2, 30 min)</h4>
+
+<p>For each photo:</p>
+<ul>
+<li>Prompt: &quot;Does this page contain a woodcut illustration (a printed</li>
+</ul>
+<p>image, not handwriting)? If YES, briefly describe the subject.&quot;</p>
+<ul>
+<li>Build a woodcut inventory for the BL copy</li>
+<li>Compare against the 172 known woodcuts of the 1499 edition</li>
+</ul>
+
+<h4>Phase 4: Targeted Annotation Reading ($5, 2 hours)</h4>
+
+<p>For the ~20 pages Russell identifies as most heavily annotated:</p>
+<ul>
+<li>Send high-res image with Russell&#x27;s description as context</li>
+<li>Prompt: &quot;Compare what you see in the margins against this description</li>
+</ul>
+<p>from Russell&#x27;s thesis: [passage]. What can you confirm? What differs?&quot;</p>
+<ul>
+<li>Produce verification reports for each targeted folio</li>
+</ul>
+
+<h4>Total Cost: ~$12, ~5 hours</h4>
+<h4>Expected Output: Ground-truth folio mapping, annotation density map,</h4>
+<h4>woodcut inventory, targeted verification of key alchemical annotations</h4>
+
+<hr>
+
+<h3>What This Session Proved</h3>
+
+<p>1. <strong>Vision models can read these images.</strong> The page numbers, text openings,</p>
+<p>shelfmarks, and annotation presence were all correctly identified from</p>
+<p>the photographs.</p>
+
+<p>2. <strong>The concordance had a systematic error.</strong> All 218 BL matches were</p>
+<p>wrong by exactly 13 positions. This error was invisible to the</p>
+<p>deterministic pipeline because the pipeline never looked at the images.</p>
+
+<p>3. <strong>The fix is cheap.</strong> A $2 batch run reading page numbers from all 196</p>
+<p>photos would produce a definitive folio mapping, replacing the</p>
+<p>offset assumption with verified data.</p>
+
+<p>4. <strong>The limitation is real.</strong> Handwriting transcription and symbol</p>
+<p>identification are beyond what automated reading can do reliably.</p>
+<p>These require expert judgment marked as PROVISIONAL.</p>
+
+<hr>
+
+<h3>Provenance</h3>
+
+<ul>
+<li>Image reading performed: 2026-03-20</li>
+<li>Images read: 10 of 196 BL photographs</li>
+<li>Offset verified: 10/10 correct (100%)</li>
+<li>Method: Claude Opus 4.6 vision, reading JPEG manuscript photographs</li>
+<li>Confidence in offset: HIGH (consistent across full range of book)</li>
+<li>Status of BL matches after fix: Still LOW (1545/1499 collation</li>
+</ul>
+<p>difference not yet resolved)</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

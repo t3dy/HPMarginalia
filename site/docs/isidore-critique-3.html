@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isidore Critique 3 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Isidore Critique 3</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                ISIDORE3.md &mdash; 1,227 words</p>
+            <h2>ISIDORE3: Critique of the Next-Phases Plan</h2>
+
+<blockquote>Jack Isidore forces scrutiny. This critique examines the HiroPlantagenet plan for Layers 1-5 (data fixes, ontology rewrite, alchemical enrichment, multimodal spec, scholarship infrastructure specs) and asks: where does this plan lie to itself?</blockquote>
+
+<hr>
+
+<h3>CRITIQUE: Next-Phases Plan (HiroPlantagenet Output, 2026-03-20)</h3>
+
+<h4>STRONGEST PASSAGE</h4>
+
+<p>The plan&#x27;s best move is splitting execution from specification: Layers 1-3 are executable work, Layers 4-5 are spec-only. This prevents the project&#x27;s chronic pattern of designing five features at once and executing none completely. The explicit marking of &quot;do not execute without user approval&quot; on the multimodal phase is honest about the API-cost boundary.</p>
+
+<hr>
+
+<h4>ISSUES (by priority)</h4>
+
+<p><strong>1. BURIED LEDE: The plan avoids the project&#x27;s actual crisis.</strong></p>
+
+<p>The explore agent documented the core problem clearly: &quot;Significant gap between what has been proposed/designed and what has been implemented.&quot; The project has 25 specification documents. It has built 330 pages. But the specifications keep growing faster than the execution.</p>
+
+<p>This plan responds by — writing more specifications (Layers 4 and 5).</p>
+
+<p>The plan should lead with: &quot;The next phase is about CLOSING gaps, not opening new ones.&quot; Instead it buries this behind five layers of technical work, three of which produce more .md files.</p>
+
+<p><strong>FIX:</strong> Reframe the plan. Layer 1 is &quot;close the data quality gap.&quot; Layer 2 is &quot;close the documentation-reality gap.&quot; Layer 3 is &quot;deepen what exists.&quot; Layers 4-5 are &quot;prepare — but do not start — the next expansion.&quot; The framing should make explicit that the project&#x27;s failure mode is over-specification, and this plan consciously resists it.</p>
+
+<hr>
+
+<p><strong>2. LOGICAL GAP: The annotation type classification was done with a blunt instrument and the plan doesn&#x27;t acknowledge this.</strong></p>
+
+<p>The classify_annotations.py script assigned 127 of 282 annotations as INDEX_ENTRY based on regex matching for &quot;nota&quot; and &quot;nb&quot; and &quot;index&quot; and &quot;label&quot; in the context text. But Russell&#x27;s thesis uses &quot;nota&quot; and &quot;label&quot; constantly as ordinary English words (&quot;nota bene&quot; aside, &quot;he labels the passage&quot; is not an index entry). The classification is almost certainly overfitting: many of those 127 INDEX_ENTRY annotations are probably MARGINAL_NOTE or CROSS_REFERENCE that happen to contain &quot;nota&quot; in their context.</p>
+
+<p>The plan proposes no validation of this classification. It treats it as done.</p>
+
+<p><strong>FIX:</strong> Add a validation step: sample 20 annotations classified as INDEX_ENTRY and manually check whether the classification is correct. If the error rate is &gt;30%, re-run with a more careful regex or reclassify the dubious ones as MARGINAL_NOTE.</p>
+
+<hr>
+
+<p><strong>3. UNSUPPORTED CLAIM: &quot;15 of 28 alchemist refs need descriptions&quot; is wrong.</strong></p>
+
+<p>The plan says there are 28 alchemist-attributed refs and 13 folio descriptions, leaving 15 undescribed. But the fact check shows only 11 distinct alchemist signatures. The folio_descriptions table has 13 rows covering all 11 signatures (some signatures have multiple descriptions from different hands). The actual gap is zero — all alchemist signatures have at least one description.</p>
+
+<p>The plan inherited this error from the explore agent, which read the CONCORDANCESTATUS.md (written before consolidation) and treated its numbers as current.</p>
+
+<p><strong>FIX:</strong> Remove &quot;generate remaining 15 folio descriptions&quot; from Layer 3. The actual remaining work is process-stage tagging and hand-interaction analysis, not more description generation.</p>
+
+<hr>
+
+<p><strong>4. AUDIENCE ASSUMPTION: The plan assumes the user wants more infrastructure.</strong></p>
+
+<p>The plan proposes five layers, three of which produce database tables, scripts, and spec files. But the user&#x27;s actual request was &quot;read through all my design docs and make a plan for the next phases.&quot; The user may want to hear: &quot;stop building infrastructure and start writing the book-level content that makes the site worth visiting.&quot; Or: &quot;run the multimodal pipeline and solve the BL confidence problem.&quot; Or: &quot;write the six manuscript copy essays.&quot;</p>
+
+<p>The plan never asks what the user wants to prioritize. It assumes infrastructure is always the answer.</p>
+
+<p><strong>FIX:</strong> Present the plan with explicit priority choices: &quot;Do you want to (A) fix data quality, (B) write copy essays, (C) run multimodal image reading, or (D) all three in sequence?&quot; Don&#x27;t default to the builder&#x27;s preference for schema work over content.</p>
+
+<hr>
+
+<p><strong>5. REDUNDANCY: Layers 4 and 5 duplicate existing documents.</strong></p>
+
+<p>Layer 4 proposes writing &quot;docs/MULTIMODAL_SPEC.md&quot; — but HPMULTIMODAL.md already exists and is a detailed, well-written 2000+ word proposal with a complete implementation roadmap, cost estimates, and expected outputs. Writing another spec file duplicates it.</p>
+
+<p>Layer 5 proposes &quot;docs/BIBLIOGRAPHY_VERIFICATION_SPEC.md&quot; — but HPDECKARD2.md already contains the hybrid verification pipeline design, including deterministic normalization, CrossRef lookup, URL validation, LLM fallback, and human review stages.</p>
+
+<p>The plan should reference these existing documents, not propose creating new versions.</p>
+
+<p><strong>FIX:</strong> Layer 4 becomes &quot;install HPMULTIMODAL.md as the executable spec and create the batch script.&quot; Layer 5 becomes &quot;extract the bibliography pipeline from HPDECKARD2.md into a standalone script.&quot; Point to existing docs, don&#x27;t re-spec.</p>
+
+<hr>
+
+<p><strong>6. WEAK TRANSITION: The plan doesn&#x27;t connect to what was just built.</strong></p>
+
+<p>This session built: annotations table (282 rows), type classification, symbol occurrences (26 rows), alchemical framework columns, timeline (71 events), manuscripts (6 copies), 94 dictionary terms with significance, 59 scholar overviews. That is a massive amount of new infrastructure.</p>
+
+<p>The plan should start by acknowledging this and asking: &quot;Is the new infrastructure correct? Has anyone verified it?&quot; Instead it proposes building more on top of unverified foundations.</p>
+
+<p>The 94 significance_to_hp entries were generated by LLM in a single batch without any human review. The 59 scholar overviews were generated the same way. The annotation type classifications are regex-based and likely noisy. The plan proposes adding alchemical process stages and hand interactions on top of this unreviewed base.</p>
+
+<p><strong>FIX:</strong> Add a Layer 0: &quot;Spot-check session outputs.&quot; Sample 10 dictionary significance entries, 5 scholar overviews, 10 annotation type classifications. Identify error rates. Fix systematic errors before building more.</p>
+
+<hr>
+
+<p><strong>7. MISSING: The plan never mentions the user&#x27;s actual design documents as actionable.</strong></p>
+
+<p>HPMIT.md contains specific, excellent design recommendations for the digital edition: parallel translations, multi-panel manuscript viewer, cross-copy comparison tools. HPproposals.md contains 6 concrete proposals for content quality improvement. HPWEBAESTHETICS.md identifies 9 CSS/design issues.</p>
+
+<p>The plan ignores all of these. It proposes ontology rewrites and schema extensions instead.</p>
+
+<p><strong>FIX:</strong> Add a layer that directly addresses one of the user&#x27;s own design documents. For example: &quot;Execute HPproposals.md Proposal 3 (deterministic quality checks)&quot; or &quot;Fix the 2 critical issues from HPWEBAESTHETICS.md.&quot;</p>
+
+<hr>
+
+<h4>REVISION PRIORITY</h4>
+
+<p>Fix Issue #1 first — the buried lede. The plan should open with: &quot;The project&#x27;s chronic pattern is over-specification. This plan breaks that pattern by executing three layers of concrete work and installing only two future specs that reference existing documents.&quot;</p>
+
+<p>Then fix Issue #6 — add the verification layer. Building more on unverified foundations compounds errors.</p>
+
+<h4>OVERALL</h4>
+
+<p>The plan is technically competent but strategically evasive. It proposes the kind of work the builder finds satisfying (schema design, data extraction, spec writing) rather than the kind of work the project needs (verification, content depth, closing the gap between specs and execution). The five-layer structure looks like progress but three of the five layers produce documents, not site content. The plan should be honest about this tension: the project has enough infrastructure. What it needs is content, verification, and the courage to stop designing and start finishing.</p>
+
+<p>The plan&#x27;s best quality is its explicit separation of &quot;execute now&quot; from &quot;spec for later.&quot; Its worst quality is that it doesn&#x27;t interrogate whether the executed work from this session is correct before proposing to build more on top of it.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

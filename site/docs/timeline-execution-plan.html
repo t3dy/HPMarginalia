@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Execution Plan - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Timeline Execution Plan</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                TIMELINEPLAN.md &mdash; 495 words</p>
+            <h2>TIMELINEPLAN: Execution Plan for the Timeline Tab</h2>
+
+<h3>What Exists</h3>
+
+<ul>
+<li>**42 timeline events** already in `timeline_events` table (editions, annotations, acquisitions, scholarship)</li>
+<li>**Full spec** at `docs/TIMELINE_SPEC.md` with data model, page design, and content plan</li>
+<li>**109 bibliography entries** with dates that can be mapped to timeline events</li>
+<li>**Writing templates** at `docs/WRITING_TEMPLATES.md` governing prose style</li>
+</ul>
+
+<h3>What Needs Building</h3>
+
+<h4>Schema Migration (5 minutes)</h4>
+
+<p>Add 5 columns to <code>timeline_events</code>:</p>
+<ul>
+<li>`category` TEXT — visual grouping for the timeline</li>
+<li>`medium` TEXT — for art events: painting/sculpture/engraving</li>
+<li>`location` TEXT — where art/objects are now</li>
+<li>`image_ref` TEXT — optional image reference</li>
+<li>`confidence` TEXT DEFAULT &#x27;MEDIUM&#x27;</li>
+</ul>
+
+<p>Script: <code>scripts/migrate_timeline.py</code> (to create)</p>
+
+<h4>Content Seeding (30 minutes)</h4>
+
+<p>Extend 42 events to ~100+ by adding:</p>
+
+<p><strong>Art inspired by the HP:</strong></p>
+<ul>
+<li>Garofalo painting with HP scene (c.1520, identified by Saxl 1937)</li>
+<li>Bernini&#x27;s elephant-obelisk (1667, Piazza della Minerva, Rome)</li>
+<li>Sleeping nymph fountain copies across European gardens (16th-17th c.)</li>
+<li>Watteau&#x27;s L&#x27;Embarquement pour Cythere (1717, Louvre)</li>
+<li>Beardsley illustrations (1890s, referenced by Praz 1947)</li>
+</ul>
+
+<p><strong>Literary influence:</strong></p>
+<ul>
+<li>Rabelais, Gargantua — Abbey of Theleme (1534)</li>
+<li>Robert Dallington, English translation (1592)</li>
+<li>Beroalde de Verville, alchemical French edition (1600)</li>
+<li>Swinburne references (19th c., per Praz)</li>
+</ul>
+
+<p><strong>Scholarly milestones (from bibliography):</strong></p>
+<ul>
+<li>Gnoli 1899 (first modern study)</li>
+<li>Huelsen 1910 (woodcut sources)</li>
+<li>Blunt 1937 (French reception)</li>
+<li>Fierz-David 1950 (Jungian reading)</li>
+<li>Casella &amp; Pozzi 1959 (authorship attribution)</li>
+<li>Pozzi &amp; Ciapponi 1964 (critical edition)</li>
+<li>Gombrich 1972 (emblematics)</li>
+<li>Calvesi 1996 (Roman Colonna)</li>
+<li>Lefaivre 1997 (Alberti attribution)</li>
+<li>Ariani &amp; Gabriele 2004 (Adelphi edition)</li>
+<li>Russell 2014 (annotation study)</li>
+<li>Young 2024 (new English translation)</li>
+</ul>
+
+<p><strong>Music:</strong> Research needed — currently no documented musical works confirmed</p>
+
+<p>Script: <code>scripts/seed_timeline_v2.py</code> (to create)</p>
+
+<h4>Page Builder (1 hour)</h4>
+
+<p>Add <code>build_timeline_page()</code> to <code>build_site.py</code>:</p>
+<ul>
+<li>Vertical scrolling timeline with year markers</li>
+<li>Event cards color-coded by type</li>
+<li>JavaScript filter checkboxes (Editions, Annotations, Scholarship, Art)</li>
+<li>Cross-links to scholar pages, dictionary terms, bibliography</li>
+<li>No framework — vanilla HTML/CSS/JS</li>
+</ul>
+
+<p>Add &quot;Timeline&quot; tab to <code>nav_html()</code>.</p>
+
+<h4>Cross-Linking (15 minutes)</h4>
+
+<ul>
+<li>Timeline events link to scholar pages where `scholar_id` is set</li>
+<li>Timeline events link to bibliography entries where `bib_id` is set</li>
+<li>Dictionary terms like `reception-history`, `1499-edition`, `beroalde-1600` link to timeline</li>
+</ul>
+
+<h3>Execution Order</h3>
+
+<pre><code class="lang-">
+1. scripts/migrate_timeline.py     # Schema migration
+2. scripts/seed_timeline_v2.py     # Seed ~60 new events
+3. Update build_site.py            # Add build_timeline_page() + nav tab
+4. python scripts/build_site.py    # Rebuild
+5. Validate                        # Nav, paths, page count
+6. Deploy                          # git push
+</code></pre>
+
+<h3>Infrastructure vs Prompts</h3>
+
+<p>Everything above is grounded in <code>docs/TIMELINE_SPEC.md</code>. A future session reads that file and executes. No prompt archaeology needed.</p>
+
+<h3>What This Plan Does NOT Do</h3>
+
+<ul>
+<li>Does not research music comprehensively (needs separate investigation)</li>
+<li>Does not create interactive JavaScript timeline libraries (keeps it vanilla)</li>
+<li>Does not add images to timeline events (image hosting is a separate concern)</li>
+<li>Does not claim completeness — the timeline will grow as more events are identified</li>
+</ul>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

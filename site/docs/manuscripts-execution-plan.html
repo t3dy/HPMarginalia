@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuscripts Execution Plan - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Manuscripts Execution Plan</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                MANUSCRIPTSPLAN.md &mdash; 724 words</p>
+            <h2>MANUSCRIPTSPLAN: Execution Plan for the Manuscripts Tab</h2>
+
+<h3>What Exists</h3>
+
+<ul>
+<li>**2 manuscripts** in `manuscripts` table (BL and Siena — only copies with local images)</li>
+<li>**11 annotator hands** in `annotator_hands` table across 6 copies</li>
+<li>**282 dissertation references** distributed across 6 shelfmarks</li>
+<li>**610 image matches** linking references to photographs</li>
+<li>**Full spec** at `docs/MANUSCRIPTS_SPEC.md` with data model, essay templates, and pipeline</li>
+<li>**Corpus evidence** in Russell&#x27;s thesis chunks (73 chunks, covering all 6 copies)</li>
+</ul>
+
+<h3>What Needs Building</h3>
+
+<h4>Schema: `hp_copies` Table (5 minutes)</h4>
+
+<p>New table tracking all known HP copies worldwide:</p>
+<pre><code class="lang-sql">
+hp_copies (id, shelfmark, institution, city, country, edition,
+           has_annotations, studied_by, annotation_summary,
+           hand_count, copy_notes, has_images_in_project,
+           istc_id, review_status, source_method, confidence)
+</code></pre>
+
+<p>Script: <code>scripts/seed_copies.py</code> (to create)</p>
+
+<h4>Content: Russell&#x27;s 6 Annotated Copies (30 minutes)</h4>
+
+<p>Seed with full metadata from the DB:</p>
+
+<table class="doc-table">
+<tr><th>Copy</th><th>Institution</th><th>Hands</th><th>Refs</th><th>Images</th><th>Confidence</th></tr>
+<tr><td>C.60.o.12</td><td>British Library</td><td>2</td><td>50</td><td>196</td><td>LOW (1545 ed.)</td></tr>
+<tr><td>Buffalo RBR</td><td>Buffalo &amp; Erie County PL</td><td>5</td><td>59</td><td>0</td><td>N/A</td></tr>
+<tr><td>Inc.Stam.Chig.II.610</td><td>Vatican Library</td><td>1</td><td>55</td><td>0</td><td>N/A</td></tr>
+<tr><td>INCUN A.5.13</td><td>Cambridge UL</td><td>1</td><td>42</td><td>0</td><td>N/A</td></tr>
+<tr><td>Modena (Panini)</td><td>Biblioteca Panini</td><td>1</td><td>29</td><td>0</td><td>N/A</td></tr>
+<tr><td>O.III.38</td><td>Biblioteca degli Intronati</td><td>1</td><td>28</td><td>478</td><td>HIGH</td></tr>
+</table>
+
+<p>Additional copies from ISTC/bibliography to be researched.</p>
+
+<h4>Per-Copy Essays (2 hours)</h4>
+
+<p>Six essays, each 800-2000 words, grounded in DB + corpus evidence:</p>
+
+<p><strong>1. BL C.60.o.12</strong> — The most complex: two hands (Jonson + alchemist), 1545 edition problem, Master Mercury declaration, alchemical ideogram vocabulary, Thomas Bourne provenance, LOW confidence concordance. Links to: Russell essay, alchemical dictionary terms.</p>
+
+<p><strong>2. Buffalo RBR</strong> — Five interleaved hands, the most densely annotated copy. Jesuit/St. Omer connection for Hands A-D. Hand E pseudo-Geber alchemist. Chess match interpretation (h1r). Stratigraphic analysis. Links to: Sol/Luna, chemical wedding terms.</p>
+
+<p><strong>3. Vatican Chig.II.610</strong> — Alexander VII as reader. Acutezze (verbal wit) focus. Connection to Bernini commission. Papal reader as cultural patron. Links to: acutezze, elephant-obelisk terms.</p>
+
+<p><strong>4. Cambridge INCUN A.5.13</strong> — Benedetto Giovio&#x27;s Plinian reading. HP as natural history compendium. Extractive annotation mode (inventio). Links to: inventio, activity-book terms.</p>
+
+<p><strong>5. Modena (Panini)</strong> — Also Giovio. Comparison with Cambridge annotations. Bibliographic and natural-historical interests. Links to: same as Cambridge.</p>
+
+<p><strong>6. Siena O.III.38</strong> — Anonymous annotations. 478-image digital facsimile. HIGH confidence matches. Basis for the most reliable concordance data. Links to: signature, folio, concordance essay.</p>
+
+<p>Script: <code>scripts/generate_copy_essays.py</code> (to create)</p>
+<p>Evidence source: <code>scripts/build_essay_data.py</code> + <code>scripts/corpus_search.py</code></p>
+
+<h4>Page Builder (1 hour)</h4>
+
+<p>Add to <code>build_site.py</code>:</p>
+<ul>
+<li>`build_manuscripts_page()` — landing page with annotated copies cards + other copies table</li>
+<li>`build_manuscripts_detail_pages()` — per-copy essay pages in `site/manuscripts/`</li>
+<li>Add &quot;Manuscripts&quot; tab to `nav_html()`</li>
+</ul>
+
+<h4>Cross-Linking (15 minutes)</h4>
+
+<ul>
+<li>Copy pages link to: scholar pages (annotators), dictionary terms, marginalia pages, essays</li>
+<li>Historical figure scholar pages link to their copy pages</li>
+<li>Dictionary terms (annotator-hand, marginalia, world-census) link to manuscripts landing</li>
+<li>Russell essay links to relevant copy pages</li>
+<li>Concordance essay links to BL and Siena copy pages</li>
+</ul>
+
+<h3>Execution Order</h3>
+
+<pre><code class="lang-">
+1. scripts/seed_copies.py              # Create table + seed 6 copies
+2. scripts/generate_copy_essays.py     # Generate 6 essays from evidence
+3. Update build_site.py                # Add page builders + nav tab
+4. python scripts/build_site.py        # Rebuild
+5. Validate                            # Nav, paths, page count
+6. Deploy                              # git push
+</code></pre>
+
+<h3>Infrastructure vs Prompts</h3>
+
+<p>Everything above is grounded in <code>docs/MANUSCRIPTS_SPEC.md</code>. The spec defines:</p>
+<ul>
+<li>The exact table schema (lines 25-40)</li>
+<li>The 6 copy metadata (lines 46-56)</li>
+<li>The essay template structure (lines 68-84)</li>
+<li>The pipeline steps (lines 113-143)</li>
+<li>The validation gates (lines 168-178)</li>
+</ul>
+
+<p>A future session reads that file, creates the scripts, and executes. No prompt needed.</p>
+
+<h3>What This Plan Does NOT Do</h3>
+
+<ul>
+<li>Does not populate ISTC copies beyond Russell&#x27;s 6 (needs ISTC database access)</li>
+<li>Does not create a world map visualization (would require a mapping library)</li>
+<li>Does not host high-resolution manuscript images (storage/permission blocker)</li>
+<li>Does not generate commentary overlays on images (future edition phase)</li>
+</ul>
+
+<h3>Dependencies</h3>
+
+<ul>
+<li>Requires corpus_search.py (already built) for essay evidence retrieval</li>
+<li>Requires build_essay_data.py pattern (already built) for structured evidence extraction</li>
+<li>Requires WRITING_TEMPLATES.md Template 6 (essays) for prose style</li>
+<li>Requires enriched dictionary (already 94 terms) for cross-linking</li>
+</ul>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

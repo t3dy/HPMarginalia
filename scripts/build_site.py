@@ -1305,6 +1305,11 @@ DOC_METADATA = {
     'HPWEBAESTHETICS.md': ('Visual Design Audit', 'Rachael visual design logic audit: whether the site design communicates the right things at the right trust level.'),
     'HPengCRIT.md': ('Prompt Engineering Critique', 'Isidore critique of user prompting patterns: what worked, what failed, what the prompts reveal about assumptions.'),
     'HPGPTWEBWRITING.txt': ('Orientation Copy', 'Ready-to-use orientation blurbs for all site tabs and page types, grounded in project architecture and editorial goals.'),
+    'CONCORDANCESTATUS.md': ('Concordance Status', 'Full audit of the concordance pipeline: 282 refs, 610 matches, confidence distribution, attribution gaps, and 7 prioritized next actions.'),
+    'ISIDORE3.md': ('Isidore Critique 3', 'Critique of the next-phases plan: identifies over-specification pattern, annotation classification noise, and verification gaps.'),
+    'READINGIMAGES.md': ('Image Reading Methods', 'Deckard boundary critique of manuscript image reading: what vision can verify, the BL offset discovery, and a 4-phase batch pipeline.'),
+    'TIMELINEPLAN.md': ('Timeline Execution Plan', 'Detailed plan for the Timeline tab: schema migration, content seeding, page builder, cross-linking.'),
+    'MANUSCRIPTSPLAN.md': ('Manuscripts Execution Plan', 'Detailed plan for the Manuscripts tab: hp_copies table, 6 per-copy essays, page builder.'),
 }
 
 # Script metadata: (filename, title, one-line summary)
