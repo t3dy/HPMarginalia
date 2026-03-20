@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Migration - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Timeline Migration</h2>
+            <div class="code-meta">migrate_timeline.py &mdash; 41 lines</div>
+            <p style="margin-bottom:1rem">Adds category, medium, location, image_ref, confidence columns to timeline_events table.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Add new columns to timeline_events for the Timeline tab.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Adds: category, medium, location, image_ref, confidence.
+<span class="line-num">4</span>Idempotent.
+<span class="line-num">5</span>&quot;&quot;&quot;
+<span class="line-num">6</span>
+<span class="line-num">7</span>import sqlite3
+<span class="line-num">8</span>from pathlib import Path
+<span class="line-num">9</span>
+<span class="line-num">10</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">11</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">12</span>
+<span class="line-num">13</span>NEW_COLUMNS = [
+<span class="line-num">14</span>    (&quot;category&quot;, &quot;TEXT&quot;),
+<span class="line-num">15</span>    (&quot;medium&quot;, &quot;TEXT&quot;),
+<span class="line-num">16</span>    (&quot;location&quot;, &quot;TEXT&quot;),
+<span class="line-num">17</span>    (&quot;image_ref&quot;, &quot;TEXT&quot;),
+<span class="line-num">18</span>    (&quot;confidence&quot;, &quot;TEXT DEFAULT &#x27;MEDIUM&#x27;&quot;),
+<span class="line-num">19</span>]
+<span class="line-num">20</span>
+<span class="line-num">21</span>
+<span class="line-num">22</span>def main():
+<span class="line-num">23</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">24</span>    cur = conn.cursor()
+<span class="line-num">25</span>    cur.execute(&quot;PRAGMA table_info(timeline_events)&quot;)
+<span class="line-num">26</span>    existing = {r[1] for r in cur.fetchall()}
+<span class="line-num">27</span>
+<span class="line-num">28</span>    added = 0
+<span class="line-num">29</span>    for col, ctype in NEW_COLUMNS:
+<span class="line-num">30</span>        if col not in existing:
+<span class="line-num">31</span>            cur.execute(f&quot;ALTER TABLE timeline_events ADD COLUMN {col} {ctype}&quot;)
+<span class="line-num">32</span>            print(f&quot;  Added: {col}&quot;)
+<span class="line-num">33</span>            added += 1
+<span class="line-num">34</span>
+<span class="line-num">35</span>    conn.commit()
+<span class="line-num">36</span>    conn.close()
+<span class="line-num">37</span>    print(f&quot;Done. Added {added} columns.&quot;)
+<span class="line-num">38</span>
+<span class="line-num">39</span>
+<span class="line-num">40</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">41</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

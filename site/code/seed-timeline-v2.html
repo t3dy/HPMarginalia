@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Timeline V2 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Seed Timeline V2</h2>
+            <div class="code-meta">seed_timeline_v2.py &mdash; 249 lines</div>
+            <p style="margin-bottom:1rem">Seeds ~30 new timeline events: art, literary influence, scholarly milestones, garden design.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Extend timeline_events with art, literary influence, and scholarly milestones.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Adds ~50 new events covering art inspired by the HP, literary influence,
+<span class="line-num">4</span>scholarly milestones from the bibliography, and modern reception.
+<span class="line-num">5</span>
+<span class="line-num">6</span>Idempotent: uses INSERT OR IGNORE on (year, title) uniqueness check.
+<span class="line-num">7</span>&quot;&quot;&quot;
+<span class="line-num">8</span>
+<span class="line-num">9</span>import sqlite3
+<span class="line-num">10</span>from pathlib import Path
+<span class="line-num">11</span>
+<span class="line-num">12</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">13</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">14</span>
+<span class="line-num">15</span># Map our desired event types to the DB CHECK constraint
+<span class="line-num">16</span># ART -&gt; OTHER, SCHOLARSHIP -&gt; OTHER, LITERARY -&gt; OTHER
+<span class="line-num">17</span># Use &#x27;category&#x27; field for the real type label
+<span class="line-num">18</span>EVENTS = [
+<span class="line-num">19</span>    # === Art ===
+<span class="line-num">20</span>    {
+<span class="line-num">21</span>        &quot;year&quot;: 1520, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">22</span>        &quot;title&quot;: &quot;Garofalo painting with HP scene&quot;,
+<span class="line-num">23</span>        &quot;description&quot;: &quot;The Ferrarese painter Garofalo (Benvenuto Tisi) produced a painting incorporating a scene from the HP, identified by Fritz Saxl in his 1937 study. This is among the earliest documented visual adaptations of the HP outside the book itself.&quot;,
+<span class="line-num">24</span>        &quot;medium&quot;: &quot;painting&quot;, &quot;confidence&quot;: &quot;MEDIUM&quot;,
+<span class="line-num">25</span>    },
+<span class="line-num">26</span>    {
+<span class="line-num">27</span>        &quot;year&quot;: 1667, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">28</span>        &quot;title&quot;: &quot;Bernini&#x27;s Elephant and Obelisk unveiled&quot;,
+<span class="line-num">29</span>        &quot;description&quot;: &quot;Gian Lorenzo Bernini completed the elephant bearing an obelisk in Piazza della Minerva, Rome, commissioned by Pope Alexander VII. The sculpture draws on the HP&#x27;s woodcut of the elephant-obelisk (b6v-b7r). Alexander VII himself annotated his copy of the HP.&quot;,
+<span class="line-num">30</span>        &quot;medium&quot;: &quot;sculpture&quot;, &quot;location&quot;: &quot;Piazza della Minerva, Rome&quot;,
+<span class="line-num">31</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">32</span>    },
+<span class="line-num">33</span>    {
+<span class="line-num">34</span>        &quot;year&quot;: 1717, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">35</span>        &quot;title&quot;: &quot;Watteau, L&#x27;Embarquement pour Cythere&quot;,
+<span class="line-num">36</span>        &quot;description&quot;: &quot;Antoine Watteau painted L&#x27;Embarquement pour Cythere, depicting a departure for Venus&#x27;s island. While direct influence from the HP is not confirmed, the painting belongs to the same cultural tradition of Cythera as the destination of erotic pilgrimage.&quot;,
+<span class="line-num">37</span>        &quot;medium&quot;: &quot;painting&quot;, &quot;location&quot;: &quot;Louvre, Paris&quot;,
+<span class="line-num">38</span>        &quot;confidence&quot;: &quot;LOW&quot;,
+<span class="line-num">39</span>    },
+<span class="line-num">40</span>    {
+<span class="line-num">41</span>        &quot;year&quot;: 1893, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">42</span>        &quot;title&quot;: &quot;Beardsley and the HP aesthetic&quot;,
+<span class="line-num">43</span>        &quot;description&quot;: &quot;Aubrey Beardsley&#x27;s illustration style of the 1890s shows affinities with the HP&#x27;s woodcuts. Praz (1947) documents the HP&#x27;s influence on the Aesthetic Movement and its visual culture, including Beardsley&#x27;s decorative line work.&quot;,
+<span class="line-num">44</span>        &quot;medium&quot;: &quot;illustration&quot;, &quot;confidence&quot;: &quot;LOW&quot;,
+<span class="line-num">45</span>    },
+<span class="line-num">46</span>
+<span class="line-num">47</span>    # === Literary Influence ===
+<span class="line-num">48</span>    {
+<span class="line-num">49</span>        &quot;year&quot;: 1534, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;literary&quot;,
+<span class="line-num">50</span>        &quot;title&quot;: &quot;Rabelais, Abbey of Theleme in Gargantua&quot;,
+<span class="line-num">51</span>        &quot;description&quot;: &quot;Francois Rabelais included the Abbey of Theleme (&#x27;Do what thou wilt&#x27;) in Gargantua, almost certainly drawing on the HP&#x27;s portal of Thelemia where Poliphilo chooses among three life paths. The name and concept of free will connect the two works directly.&quot;,
+<span class="line-num">52</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">53</span>    },
+<span class="line-num">54</span>    {
+<span class="line-num">55</span>        &quot;year&quot;: 1592, &quot;event_type&quot;: &quot;TRANSLATION&quot;, &quot;category&quot;: &quot;edition&quot;,
+<span class="line-num">56</span>        &quot;title&quot;: &quot;Robert Dallington&#x27;s English adaptation&quot;,
+<span class="line-num">57</span>        &quot;description&quot;: &quot;Robert Dallington published The Strife of Love in a Dreame, the first English version of the HP. Semler (2006) reframes this not as failed translation but as deliberate cultural appropriation for Protestant antiquarian interests in Elizabethan England.&quot;,
+<span class="line-num">58</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">59</span>    },
+<span class="line-num">60</span>    {
+<span class="line-num">61</span>        &quot;year&quot;: 1804, &quot;event_type&quot;: &quot;EDITION&quot;, &quot;category&quot;: &quot;edition&quot;,
+<span class="line-num">62</span>        &quot;title&quot;: &quot;Italian reprint edition&quot;,
+<span class="line-num">63</span>        &quot;description&quot;: &quot;An Italian reprint of the HP appeared in 1804, part of the early nineteenth-century revival of interest in the book as a bibliophilic and aesthetic object.&quot;,
+<span class="line-num">64</span>        &quot;confidence&quot;: &quot;MEDIUM&quot;,
+<span class="line-num">65</span>    },
+<span class="line-num">66</span>
+<span class="line-num">67</span>    # === Scholarly Milestones ===
+<span class="line-num">68</span>    {
+<span class="line-num">69</span>        &quot;year&quot;: 1899, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">70</span>        &quot;title&quot;: &quot;Gnoli, Il Sogno di Polifilo&quot;,
+<span class="line-num">71</span>        &quot;description&quot;: &quot;Domenico Gnoli published one of the earliest modern scholarly studies of the HP, helping to inaugurate the twentieth-century revival of HP scholarship.&quot;,
+<span class="line-num">72</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">73</span>    },
+<span class="line-num">74</span>    {
+<span class="line-num">75</span>        &quot;year&quot;: 1910, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">76</span>        &quot;title&quot;: &quot;Huelsen, Le illustrazioni della Hypnerotomachia Poliphili&quot;,
+<span class="line-num">77</span>        &quot;description&quot;: &quot;Christian Huelsen published the first systematic study of the HP&#x27;s woodcut illustrations, identifying their classical architectural sources and establishing the foundation for all subsequent architectural analysis.&quot;,
+<span class="line-num">78</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">79</span>    },
+<span class="line-num">80</span>    {
+<span class="line-num">81</span>        &quot;year&quot;: 1935, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">82</span>        &quot;title&quot;: &quot;Khomentovskaia proposes Feliciano as author&quot;,
+<span class="line-num">83</span>        &quot;description&quot;: &quot;A. Khomentovskaia proposed Felice Feliciano as the HP&#x27;s author, adding another candidate to the authorship debate alongside the two Francesco Colonnas.&quot;,
+<span class="line-num">84</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">85</span>    },
+<span class="line-num">86</span>    {
+<span class="line-num">87</span>        &quot;year&quot;: 1937, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">88</span>        &quot;title&quot;: &quot;Blunt, The HP in 17th Century France&quot;,
+<span class="line-num">89</span>        &quot;description&quot;: &quot;Anthony Blunt documented the HP&#x27;s influence on seventeenth-century French art, garden design, and festival culture. His article remains the standard reference for French HP reception.&quot;,
+<span class="line-num">90</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">91</span>    },
+<span class="line-num">92</span>    {
+<span class="line-num">93</span>        &quot;year&quot;: 1937, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">94</span>        &quot;title&quot;: &quot;Saxl identifies HP scene in Garofalo painting&quot;,
+<span class="line-num">95</span>        &quot;description&quot;: &quot;Fritz Saxl identified a scene from the HP in a painting by the Ferrarese artist Garofalo, demonstrating the book&#x27;s direct influence on Italian Renaissance painting.&quot;,
+<span class="line-num">96</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">97</span>    },
+<span class="line-num">98</span>    {
+<span class="line-num">99</span>        &quot;year&quot;: 1947, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">100</span>        &quot;title&quot;: &quot;Praz, Foreign Imitators of the HP&quot;,
+<span class="line-num">101</span>        &quot;description&quot;: &quot;Mario Praz documented foreign imitations of the HP across English, French, and German literature, establishing the breadth of the book&#x27;s European reception from Swinburne to Beardsley.&quot;,
+<span class="line-num">102</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">103</span>    },
+<span class="line-num">104</span>    {
+<span class="line-num">105</span>        &quot;year&quot;: 1950, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">106</span>        &quot;title&quot;: &quot;Fierz-David, Jungian reading of the HP&quot;,
+<span class="line-num">107</span>        &quot;description&quot;: &quot;Linda Fierz-David published The Dream of Poliphilo, interpreting Poliphilo&#x27;s journey as a process of Jungian individuation. This established a psychoanalytic strand of HP interpretation distinct from art-historical approaches.&quot;,
+<span class="line-num">108</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">109</span>    },
+<span class="line-num">110</span>    {
+<span class="line-num">111</span>        &quot;year&quot;: 1959, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">112</span>        &quot;title&quot;: &quot;Casella &amp; Pozzi establish canonical authorship&quot;,
+<span class="line-num">113</span>        &quot;description&quot;: &quot;Maria Teresa Casella and Giovanni Pozzi published Francesco Colonna. Biografia e opere, establishing the Venetian Dominican friar (d. 1527) as the canonical author through philological and archival evidence.&quot;,
+<span class="line-num">114</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">115</span>    },
+<span class="line-num">116</span>    {
+<span class="line-num">117</span>        &quot;year&quot;: 1964, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">118</span>        &quot;title&quot;: &quot;Pozzi &amp; Ciapponi critical edition&quot;,
+<span class="line-num">119</span>        &quot;description&quot;: &quot;Giovanni Pozzi and Lucia Ciapponi published the standard critical edition of the HP, including textual apparatus, glossary, and commentary that remain the foundation for all textual scholarship.&quot;,
+<span class="line-num">120</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">121</span>    },
+<span class="line-num">122</span>    {
+<span class="line-num">123</span>        &quot;year&quot;: 1972, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">124</span>        &quot;title&quot;: &quot;Gombrich, Hypnerotomachiana&quot;,
+<span class="line-num">125</span>        &quot;description&quot;: &quot;Ernst Gombrich analyzed the HP&#x27;s hieroglyphic woodcuts within the context of Renaissance symbolic imagery, demonstrating the book&#x27;s role in the emblem tradition and the transmission of pseudo-Egyptian visual culture.&quot;,
+<span class="line-num">126</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">127</span>    },
+<span class="line-num">128</span>    {
+<span class="line-num">129</span>        &quot;year&quot;: 1994, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">130</span>        &quot;title&quot;: &quot;Stichel, first study of Modena marginalia&quot;,
+<span class="line-num">131</span>        &quot;description&quot;: &quot;Dorothea Stichel published the first study of the Modena copy&#x27;s marginalia, helping to establish the field of HP annotation studies that Russell would later expand.&quot;,
+<span class="line-num">132</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">133</span>    },
+<span class="line-num">134</span>    {
+<span class="line-num">135</span>        &quot;year&quot;: 1996, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">136</span>        &quot;title&quot;: &quot;Calvesi, Roman Colonna attribution&quot;,
+<span class="line-num">137</span>        &quot;description&quot;: &quot;Maurizio Calvesi argued in La pugna d&#x27;amore in sogno that the HP was written by a Roman nobleman named Francesco Colonna, not the Venetian Dominican. This represents the most sustained challenge to the Casella-Pozzi consensus.&quot;,
+<span class="line-num">138</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">139</span>    },
+<span class="line-num">140</span>    {
+<span class="line-num">141</span>        &quot;year&quot;: 1997, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">142</span>        &quot;title&quot;: &quot;Lefaivre, Alberti attribution&quot;,
+<span class="line-num">143</span>        &quot;description&quot;: &quot;Liane Lefaivre proposed Leon Battista Alberti as the HP&#x27;s true author, introducing the concept of the &#x27;architectural body&#x27; and shifting HP scholarship toward phenomenological and architectural analysis.&quot;,
+<span class="line-num">144</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">145</span>    },
+<span class="line-num">146</span>    {
+<span class="line-num">147</span>        &quot;year&quot;: 1998, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">148</span>        &quot;title&quot;: &quot;Word &amp; Image special issue on the HP&quot;,
+<span class="line-num">149</span>        &quot;description&quot;: &quot;The journal Word &amp; Image published a special issue on the HP featuring studies by Hunt, Segre, Griggs, Curran, and others. This issue consolidated the late-1990s revival of HP scholarship across multiple disciplines.&quot;,
+<span class="line-num">150</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">151</span>    },
+<span class="line-num">152</span>    {
+<span class="line-num">153</span>        &quot;year&quot;: 1999, &quot;event_type&quot;: &quot;EDITION&quot;, &quot;category&quot;: &quot;edition&quot;,
+<span class="line-num">154</span>        &quot;title&quot;: &quot;Godwin English translation (Thames &amp; Hudson)&quot;,
+<span class="line-num">155</span>        &quot;description&quot;: &quot;Joscelyn Godwin published the first complete modern English translation of the HP with Thames &amp; Hudson, providing the most accessible English-language scholarly apparatus.&quot;,
+<span class="line-num">156</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">157</span>    },
+<span class="line-num">158</span>    {
+<span class="line-num">159</span>        &quot;year&quot;: 2002, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">160</span>        &quot;title&quot;: &quot;Trippe, HP as vernacular poetics&quot;,
+<span class="line-num">161</span>        &quot;description&quot;: &quot;Rosemary Trippe argued in Renaissance Quarterly that the HP has been understudied as literature, demonstrating how the author adapted Petrarchan conventions into a text-image interplay.&quot;,
+<span class="line-num">162</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">163</span>    },
+<span class="line-num">164</span>    {
+<span class="line-num">165</span>        &quot;year&quot;: 2004, &quot;event_type&quot;: &quot;EDITION&quot;, &quot;category&quot;: &quot;edition&quot;,
+<span class="line-num">166</span>        &quot;title&quot;: &quot;Ariani &amp; Gabriele Adelphi critical edition&quot;,
+<span class="line-num">167</span>        &quot;description&quot;: &quot;Marco Ariani and Mino Gabriele published a new Italian critical edition through Adelphi, providing the most recent scholarly apparatus complementing the Pozzi-Ciapponi edition.&quot;,
+<span class="line-num">168</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">169</span>    },
+<span class="line-num">170</span>    {
+<span class="line-num">171</span>        &quot;year&quot;: 2006, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">172</span>        &quot;title&quot;: &quot;Semler, Dallington&#x27;s Protestant HP&quot;,
+<span class="line-num">173</span>        &quot;description&quot;: &quot;L. E. Semler reframed Robert Dallington&#x27;s 1592 English translation as deliberate cultural appropriation for Protestant antiquarian interests, not a failed translation.&quot;,
+<span class="line-num">174</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">175</span>    },
+<span class="line-num">176</span>    {
+<span class="line-num">177</span>        &quot;year&quot;: 2014, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">178</span>        &quot;title&quot;: &quot;Russell PhD thesis on HP annotators&quot;,
+<span class="line-num">179</span>        &quot;description&quot;: &quot;James Russell submitted his Durham PhD thesis documenting marginalia in six HP copies, identifying eleven annotator hands and establishing the concept of the HP as a &#x27;humanistic activity book.&#x27; This thesis is the primary evidence base for this project.&quot;,
+<span class="line-num">180</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">181</span>    },
+<span class="line-num">182</span>    {
+<span class="line-num">183</span>        &quot;year&quot;: 2015, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;scholarship&quot;,
+<span class="line-num">184</span>        &quot;title&quot;: &quot;Second Word &amp; Image special issue&quot;,
+<span class="line-num">185</span>        &quot;description&quot;: &quot;A second Word &amp; Image special issue on the HP appeared, including Farrington on Aldus&#x27;s career and new contributions to reception studies.&quot;,
+<span class="line-num">186</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">187</span>    },
+<span class="line-num">188</span>    {
+<span class="line-num">189</span>        &quot;year&quot;: 2024, &quot;event_type&quot;: &quot;EDITION&quot;, &quot;category&quot;: &quot;edition&quot;,
+<span class="line-num">190</span>        &quot;title&quot;: &quot;Young, new English translation&quot;,
+<span class="line-num">191</span>        &quot;description&quot;: &quot;Paul Summers Young published a new English translation of the HP, supplementing Godwin&#x27;s 1999 version with a contemporary rendering of the macaronic language.&quot;,
+<span class="line-num">192</span>        &quot;confidence&quot;: &quot;HIGH&quot;,
+<span class="line-num">193</span>    },
+<span class="line-num">194</span>
+<span class="line-num">195</span>    # === Garden Design Influence ===
+<span class="line-num">196</span>    {
+<span class="line-num">197</span>        &quot;year&quot;: 1550, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">198</span>        &quot;title&quot;: &quot;HP influence on Italian Renaissance gardens&quot;,
+<span class="line-num">199</span>        &quot;description&quot;: &quot;The sleeping nymph fountain and other HP motifs began appearing in Italian villa gardens by mid-sixteenth century. The HP&#x27;s detailed garden descriptions provided a sourcebook for designers combining classical forms with living landscapes.&quot;,
+<span class="line-num">200</span>        &quot;medium&quot;: &quot;garden design&quot;, &quot;confidence&quot;: &quot;MEDIUM&quot;,
+<span class="line-num">201</span>    },
+<span class="line-num">202</span>    {
+<span class="line-num">203</span>        &quot;year&quot;: 1552, &quot;event_type&quot;: &quot;OTHER&quot;, &quot;category&quot;: &quot;art&quot;,
+<span class="line-num">204</span>        &quot;title&quot;: &quot;Sacro Bosco at Bomarzo begun&quot;,
+<span class="line-num">205</span>        &quot;description&quot;: &quot;Pier Francesco Orsini began the Sacro Bosco (Sacred Grove) at Bomarzo, a garden of monstrous sculptures that Fabiani Giannetto (2015) connects to the HP&#x27;s cultivation of meraviglia (wonder).&quot;,
+<span class="line-num">206</span>        &quot;medium&quot;: &quot;garden/sculpture&quot;, &quot;location&quot;: &quot;Bomarzo, Italy&quot;,
+<span class="line-num">207</span>        &quot;confidence&quot;: &quot;MEDIUM&quot;,
+<span class="line-num">208</span>    },
+<span class="line-num">209</span>]
+<span class="line-num">210</span>
+<span class="line-num">211</span>
+<span class="line-num">212</span>def main():
+<span class="line-num">213</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">214</span>    cur = conn.cursor()
+<span class="line-num">215</span>
+<span class="line-num">216</span>    print(&quot;Seeding timeline events (v2)...&quot;)
+<span class="line-num">217</span>    inserted = 0
+<span class="line-num">218</span>    for e in EVENTS:
+<span class="line-num">219</span>        # Check for existing event with same year+title
+<span class="line-num">220</span>        cur.execute(&quot;SELECT id FROM timeline_events WHERE year = ? AND title = ?&quot;,
+<span class="line-num">221</span>                    (e[&quot;year&quot;], e[&quot;title&quot;]))
+<span class="line-num">222</span>        if cur.fetchone():
+<span class="line-num">223</span>            continue
+<span class="line-num">224</span>
+<span class="line-num">225</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">226</span>            INSERT INTO timeline_events
+<span class="line-num">227</span>                (year, event_type, title, description, category, medium,
+<span class="line-num">228</span>                 location, confidence, needs_review, source_method)
+<span class="line-num">229</span>            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, &#x27;LLM_ASSISTED&#x27;)
+<span class="line-num">230</span>        &quot;&quot;&quot;, (e[&quot;year&quot;], e[&quot;event_type&quot;], e[&quot;title&quot;], e.get(&quot;description&quot;, &quot;&quot;),
+<span class="line-num">231</span>              e.get(&quot;category&quot;, &quot;&quot;), e.get(&quot;medium&quot;, &quot;&quot;),
+<span class="line-num">232</span>              e.get(&quot;location&quot;, &quot;&quot;), e.get(&quot;confidence&quot;, &quot;MEDIUM&quot;)))
+<span class="line-num">233</span>        inserted += cur.rowcount
+<span class="line-num">234</span>
+<span class="line-num">235</span>    conn.commit()
+<span class="line-num">236</span>
+<span class="line-num">237</span>    cur.execute(&quot;SELECT COUNT(*) FROM timeline_events&quot;)
+<span class="line-num">238</span>    total = cur.fetchone()[0]
+<span class="line-num">239</span>    cur.execute(&quot;SELECT event_type, COUNT(*) FROM timeline_events GROUP BY event_type ORDER BY COUNT(*) DESC&quot;)
+<span class="line-num">240</span>    print(f&quot;\nTotal events: {total}&quot;)
+<span class="line-num">241</span>    for row in cur.fetchall():
+<span class="line-num">242</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">243</span>
+<span class="line-num">244</span>    conn.close()
+<span class="line-num">245</span>    print(f&quot;\nInserted {inserted} new events. Done.&quot;)
+<span class="line-num">246</span>
+<span class="line-num">247</span>
+<span class="line-num">248</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">249</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

@@ -10,11 +10,15 @@ A digital humanities project documenting the readership, marginalia, and scholar
 |---------|---------|
 | **Home** | Marginalia gallery -- 305 annotated folio images with lightbox viewer, filters by manuscript |
 | **Marginalia** | 118 individual folio pages with images, hand attributions, alchemist tags, and Russell's commentary |
-| **Scholars** | 30 scholar profiles with article summaries spanning 1899-2024 |
+| **Scholars** | 60 scholar profiles (59 with overviews, 11 historical figures) spanning 1899-2024 |
 | **Bibliography** | 109 entries grouped by relevance (Primary, Direct, Indirect), with collection/review badges |
-| **Dictionary** | 37 terms across 6 categories (Book History, Annotation Studies, Alchemical, Architecture, Textual Motifs, Scholarly Debates) with 76 cross-reference links |
-| **Docs** | 14 project documents (methodology, architecture, audits, proposals, lessons learned) |
-| **Code** | 16 Python pipeline scripts with full source and descriptions |
+| **Dictionary** | 94 terms across 15 categories with significance prose, cross-links, and provenance badges |
+| **Timeline** | 71 events spanning 1499-2024: editions, annotations, scholarship, art inspired by the HP |
+| **Manuscripts** | 6 annotated copies studied by Russell, with hand profiles and concordance data |
+| **Docs** | 18 project documents (methodology, architecture, audits, critiques, planning) |
+| **Code** | 31 Python pipeline scripts with full source and descriptions |
+| **Edition** | Digital edition prospectus with phased roadmap |
+| **Essays** | Russell's Alchemical Hands + Concordance Methodology, grounded in DB evidence |
 | **About** | Database statistics, data provenance, and rebuild instructions |
 
 ## Architecture
@@ -22,8 +26,8 @@ A digital humanities project documenting the readership, marginalia, and scholar
 SQLite is the source of truth. Python scripts generate JSON and static HTML pages. No framework, no build tools, no JavaScript dependencies.
 
 ```
-db/hp.db                    SQLite database (18 tables)
-scripts/                    Python pipeline (16 scripts)
+db/hp.db                    SQLite database (20 tables)
+scripts/                    Python pipeline (31 scripts)
   build_site.py             Unified site generator (all pages + JSON)
   migrate_v2.py             Schema migration (idempotent)
   seed_dictionary.py        Dictionary terms (idempotent)
@@ -43,11 +47,17 @@ site/                       Generated static site
   scholars.html             Scholars overview
   bibliography.html         Full HP bibliography
   about.html                Project info and stats
-  scholar/*.html            30 individual scholar pages
-  dictionary/index.html     Dictionary landing (6 categories)
-  dictionary/*.html         37 individual term pages
+  scholar/*.html            60 individual scholar pages
+  dictionary/index.html     Dictionary landing (15 categories)
+  dictionary/*.html         94 individual term pages
   marginalia/index.html     Folio grid index
   marginalia/*.html         118 individual folio pages
+  timeline.html             Chronological reception history (71 events)
+  manuscripts/index.html    Annotated copies landing
+  manuscripts/*.html        6 individual copy pages
+  digital-edition.html      Edition prospectus
+  russell-alchemical-hands.html  Essay on alchemical annotators
+  concordance-method.html   Concordance methodology essay
   docs/index.html           Project documents index
   docs/*.html               14 document pages (rendered markdown)
   code/index.html           Pipeline scripts index

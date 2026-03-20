@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Dictionary V3 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Seed Dictionary V3</h2>
+            <div class="code-meta">seed_dictionary_v3.py &mdash; 260 lines</div>
+            <p style="margin-bottom:1rem">Seeds 14 additional terms: narrative form, built form, aesthetics, alchemy, material culture.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Seed additional HP entity terms — third expansion wave.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Adds terms for: narrative structures, specific woodcuts, editions/translations,
+<span class="line-num">4</span>scholarly methodology, and concepts that fill gaps in existing categories.
+<span class="line-num">5</span>
+<span class="line-num">6</span>Idempotent: uses INSERT OR IGNORE.
+<span class="line-num">7</span>&quot;&quot;&quot;
+<span class="line-num">8</span>
+<span class="line-num">9</span>import sqlite3
+<span class="line-num">10</span>from pathlib import Path
+<span class="line-num">11</span>
+<span class="line-num">12</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">13</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">14</span>
+<span class="line-num">15</span># Categories
+<span class="line-num">16</span>CHARS = &quot;Characters &amp; Figures&quot;
+<span class="line-num">17</span>PLACES = &quot;Places &amp; Settings&quot;
+<span class="line-num">18</span>BUILT = &quot;Architecture &amp; Built Form&quot;
+<span class="line-num">19</span>GARDEN = &quot;Gardens &amp; Landscape&quot;
+<span class="line-num">20</span>PROC = &quot;Processions &amp; Ritual&quot;
+<span class="line-num">21</span>VISUAL = &quot;Visual &amp; Typographic&quot;
+<span class="line-num">22</span>AESTH = &quot;Aesthetic Concepts&quot;
+<span class="line-num">23</span>MATERIAL = &quot;Material Culture&quot;
+<span class="line-num">24</span>BOOK = &quot;Book History &amp; Bibliography&quot;
+<span class="line-num">25</span>TEXT = &quot;Textual &amp; Visual Motifs&quot;
+<span class="line-num">26</span>ANNOT = &quot;Annotation Studies&quot;
+<span class="line-num">27</span>ALCHEM = &quot;Alchemical Interpretation&quot;
+<span class="line-num">28</span>DEBATE = &quot;Scholarly Debates&quot;
+<span class="line-num">29</span>NARR = &quot;Narrative &amp; Literary Form&quot;
+<span class="line-num">30</span>
+<span class="line-num">31</span>TERMS = [
+<span class="line-num">32</span>    # === Narrative &amp; Literary Form (new category) ===
+<span class="line-num">33</span>    {
+<span class="line-num">34</span>        &quot;slug&quot;: &quot;dream-vision&quot;,
+<span class="line-num">35</span>        &quot;label&quot;: &quot;Dream Vision&quot;,
+<span class="line-num">36</span>        &quot;category&quot;: NARR,
+<span class="line-num">37</span>        &quot;definition_short&quot;: &quot;A literary genre in which the narrator falls asleep and experiences a visionary journey, to which the HP belongs.&quot;,
+<span class="line-num">38</span>        &quot;definition_long&quot;: &quot;The dream vision is a medieval and early modern literary genre in which the narrator falls asleep and undergoes a guided journey through an allegorical landscape. The HP belongs to this tradition alongside the Roman de la Rose, Dante&#x27;s Commedia, and Chaucer&#x27;s Book of the Duchess. The genre provides a license for mixing registers (erotic, philosophical, architectural) and for encounters with allegorical figures that would be implausible in a realistic narrative frame. Priki (2016) places the HP&#x27;s double dream within this comparative tradition.&quot;,
+<span class="line-num">39</span>        &quot;source_basis&quot;: &quot;Priki 2016; Gollnick 1999; Agamben 1984&quot;,
+<span class="line-num">40</span>    },
+<span class="line-num">41</span>    {
+<span class="line-num">42</span>        &quot;slug&quot;: &quot;petrarchism&quot;,
+<span class="line-num">43</span>        &quot;label&quot;: &quot;Petrarchism&quot;,
+<span class="line-num">44</span>        &quot;category&quot;: NARR,
+<span class="line-num">45</span>        &quot;definition_short&quot;: &quot;The literary tradition of imitating Petrarch&#x27;s love poetry, whose conventions the HP adapts into a prose-image hybrid.&quot;,
+<span class="line-num">46</span>        &quot;definition_long&quot;: &quot;Petrarchism — the tradition of imitating Petrarch&#x27;s Canzoniere — provides the HP with its central love vocabulary: the distant beloved, the suffering lover, the transformative power of beauty, and the interplay of desire and frustration. Trippe (2002) argues that the HP adapts these Petrarchan conventions from lyric poetry into a visual register, translating the beloved&#x27;s beauty from metaphor into woodcut illustration. The HP&#x27;s treatment of Polia draws heavily on Petrarchan tropes while exceeding them through narrative and architectural elaboration.&quot;,
+<span class="line-num">47</span>        &quot;source_basis&quot;: &quot;Trippe 2002; Godwin 1999&quot;,
+<span class="line-num">48</span>    },
+<span class="line-num">49</span>    {
+<span class="line-num">50</span>        &quot;slug&quot;: &quot;roman-de-la-rose&quot;,
+<span class="line-num">51</span>        &quot;label&quot;: &quot;Roman de la Rose&quot;,
+<span class="line-num">52</span>        &quot;category&quot;: NARR,
+<span class="line-num">53</span>        &quot;definition_short&quot;: &quot;The thirteenth-century French allegorical poem that is the HP&#x27;s most important literary predecessor in the dream-vision genre.&quot;,
+<span class="line-num">54</span>        &quot;definition_long&quot;: &quot;The Roman de la Rose (c. 1230-1275), by Guillaume de Lorris and Jean de Meun, is the foundational European dream-vision allegory. Like the HP, it combines a love quest with encyclopedic digressions and allegorical encounters in a garden setting. Priki (2016) places the HP within a lineage running from the Roman de la Rose through the HP to later dream narratives, arguing that both texts use the dream frame to enable pedagogical encounters that prepare the dreamer for union with the beloved.&quot;,
+<span class="line-num">55</span>        &quot;source_basis&quot;: &quot;Priki 2016; Godwin 1999&quot;,
+<span class="line-num">56</span>    },
+<span class="line-num">57</span>    {
+<span class="line-num">58</span>        &quot;slug&quot;: &quot;neoplatonism&quot;,
+<span class="line-num">59</span>        &quot;label&quot;: &quot;Neoplatonism&quot;,
+<span class="line-num">60</span>        &quot;category&quot;: NARR,
+<span class="line-num">61</span>        &quot;definition_short&quot;: &quot;The philosophical tradition of Plotinus and Ficino that informs the HP&#x27;s treatment of beauty, love, and ascent from sensory experience to intellectual vision.&quot;,
+<span class="line-num">62</span>        &quot;definition_long&quot;: &quot;Neoplatonic philosophy pervades the HP&#x27;s structure and imagery. Poliphilo&#x27;s journey from the dark forest through sensory initiation to union with Polia on Cythera enacts a Neoplatonic ascent from material confusion to intellectual clarity. The five nymphs represent the senses as stages in this ascent. The circular garden of Cythera embodies the Neoplatonic emanation from the One. The HP&#x27;s combination of erotic desire and philosophical aspiration reflects Ficino&#x27;s reading of Platonic eros as the soul&#x27;s drive toward beauty and truth.&quot;,
+<span class="line-num">63</span>        &quot;source_basis&quot;: &quot;Lefaivre 1997; Godwin 1999; Gollnick 1999&quot;,
+<span class="line-num">64</span>    },
+<span class="line-num">65</span>
+<span class="line-num">66</span>    # === More Characters ===
+<span class="line-num">67</span>    {
+<span class="line-num">68</span>        &quot;slug&quot;: &quot;logistica-thelemia&quot;,
+<span class="line-num">69</span>        &quot;label&quot;: &quot;Logistica and Thelemia&quot;,
+<span class="line-num">70</span>        &quot;category&quot;: CHARS,
+<span class="line-num">71</span>        &quot;definition_short&quot;: &quot;Two allegorical figures representing reason (Logistica) and desire/will (Thelemia) who guide Poliphilo at a critical juncture.&quot;,
+<span class="line-num">72</span>        &quot;definition_long&quot;: &quot;At a key narrative moment, Poliphilo encounters two female figures: Logistica (reason, calculation) and Thelemia (will, desire). They represent the competing claims of rational judgment and passionate aspiration. Poliphilo must navigate between them, and his choice reflects the HP&#x27;s humanist conviction that neither pure reason nor pure desire suffices — both must be integrated. The pairing echoes the three gates of Thelemia (vita contemplativa, vita activa, vita voluptuosa) and the broader Renaissance discourse on free will.&quot;,
+<span class="line-num">73</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Lefaivre 1997&quot;,
+<span class="line-num">74</span>    },
+<span class="line-num">75</span>
+<span class="line-num">76</span>    # === More Architecture ===
+<span class="line-num">77</span>    {
+<span class="line-num">78</span>        &quot;slug&quot;: &quot;colossus&quot;,
+<span class="line-num">79</span>        &quot;label&quot;: &quot;Colossus&quot;,
+<span class="line-num">80</span>        &quot;category&quot;: BUILT,
+<span class="line-num">81</span>        &quot;definition_short&quot;: &quot;A gigantic figure or statue encountered by Poliphilo, described with measurements evoking the Colossus of Rhodes.&quot;,
+<span class="line-num">82</span>        &quot;definition_long&quot;: &quot;Poliphilo encounters colossal statues and figures that evoke the ancient Wonders of the World, particularly the Colossus of Rhodes. These passages demonstrate the HP&#x27;s interest in extreme scale as a vehicle for meraviglia (wonder). The colossal figures are described with precise measurements, combining the awe of gigantism with the rationality of architectural proportion. They represent the HP&#x27;s characteristic fusion of the marvelous and the measurable.&quot;,
+<span class="line-num">83</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999&quot;,
+<span class="line-num">84</span>    },
+<span class="line-num">85</span>    {
+<span class="line-num">86</span>        &quot;slug&quot;: &quot;mosaic&quot;,
+<span class="line-num">87</span>        &quot;label&quot;: &quot;Mosaic&quot;,
+<span class="line-num">88</span>        &quot;category&quot;: BUILT,
+<span class="line-num">89</span>        &quot;definition_short&quot;: &quot;Intricate floor and wall mosaics described in the HP, depicting mythological scenes in tessellated stone and glass.&quot;,
+<span class="line-num">90</span>        &quot;definition_long&quot;: &quot;The HP describes elaborate mosaic work on floors, walls, and ceilings of the buildings Poliphilo explores. These mosaics depict mythological scenes, geometric patterns, and symbolic imagery. Poliphilo reads them as visual texts, interpreting their iconography alongside their material composition. The mosaic passages contribute to the HP&#x27;s broader interest in surfaces that carry meaning — inscribed, painted, carved, or tessellated.&quot;,
+<span class="line-num">91</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Stewering 2000&quot;,
+<span class="line-num">92</span>    },
+<span class="line-num">93</span>
+<span class="line-num">94</span>    # === More Visual/Typographic ===
+<span class="line-num">95</span>    {
+<span class="line-num">96</span>        &quot;slug&quot;: &quot;colophon&quot;,
+<span class="line-num">97</span>        &quot;label&quot;: &quot;Colophon&quot;,
+<span class="line-num">98</span>        &quot;category&quot;: BOOK,
+<span class="line-num">99</span>        &quot;definition_short&quot;: &quot;The printed statement at the end of the 1499 HP identifying the printer (Aldus), place (Venice), and date (December 1499).&quot;,
+<span class="line-num">100</span>        &quot;definition_long&quot;: &quot;The 1499 HP ends with a colophon identifying the book as printed in Venice by Aldus Manutius in December 1499. The colophon is one of the few paratextual elements that provides external evidence about the book&#x27;s production. It confirms the date and printer but does not name the author, leaving the authorship question dependent on internal evidence like the acrostic and stylistic analysis.&quot;,
+<span class="line-num">101</span>        &quot;source_basis&quot;: &quot;HP colophon; Painter 1963; Farrington 2015&quot;,
+<span class="line-num">102</span>    },
+<span class="line-num">103</span>    {
+<span class="line-num">104</span>        &quot;slug&quot;: &quot;world-census&quot;,
+<span class="line-num">105</span>        &quot;label&quot;: &quot;World Census of Annotated Copies&quot;,
+<span class="line-num">106</span>        &quot;category&quot;: ANNOT,
+<span class="line-num">107</span>        &quot;definition_short&quot;: &quot;Russell&#x27;s systematic survey identifying all known annotated copies of the HP, conducted through ISTC records and institutional catalogs.&quot;,
+<span class="line-num">108</span>        &quot;definition_long&quot;: &quot;Russell&#x27;s world census of annotated HP copies involved searching the Incunabula Short Title Catalogue (ISTC) and contacting holding institutions worldwide to identify copies bearing manuscript annotations. From this census he selected six copies for detailed study, encompassing eleven distinct annotator hands. The census methodology — systematic, institutionally grounded, and reproducible — established the evidentiary foundation for his annotation studies.&quot;,
+<span class="line-num">109</span>        &quot;source_basis&quot;: &quot;Russell 2014, Ch. 1-2&quot;,
+<span class="line-num">110</span>    },
+<span class="line-num">111</span>
+<span class="line-num">112</span>    # === Aesthetic/Intellectual ===
+<span class="line-num">113</span>    {
+<span class="line-num">114</span>        &quot;slug&quot;: &quot;ut-pictura-poesis&quot;,
+<span class="line-num">115</span>        &quot;label&quot;: &quot;Ut Pictura Poesis&quot;,
+<span class="line-num">116</span>        &quot;category&quot;: AESTH,
+<span class="line-num">117</span>        &quot;definition_short&quot;: &quot;The classical principle &#x27;as painting, so poetry&#x27; — the interchangeability of verbal and visual art — which the HP embodies.&quot;,
+<span class="line-num">118</span>        &quot;definition_long&quot;: &quot;The Horatian principle ut pictura poesis (&#x27;as painting, so poetry&#x27;) asserts a fundamental analogy between visual and verbal art. The HP takes this principle further than perhaps any other Renaissance text: its 172 woodcuts are not subordinate illustrations but integral components of the work, and its verbal descriptions aspire to the vividness of painting. Trippe (2002) and Priki analyze how the HP negotiates the text-image boundary, making ut pictura poesis a structural rather than merely theoretical commitment.&quot;,
+<span class="line-num">119</span>        &quot;source_basis&quot;: &quot;Trippe 2002; Priki; Horace, Ars Poetica&quot;,
+<span class="line-num">120</span>    },
+<span class="line-num">121</span>    {
+<span class="line-num">122</span>        &quot;slug&quot;: &quot;horror-vacui&quot;,
+<span class="line-num">123</span>        &quot;label&quot;: &quot;Horror Vacui&quot;,
+<span class="line-num">124</span>        &quot;category&quot;: AESTH,
+<span class="line-num">125</span>        &quot;definition_short&quot;: &quot;The aesthetic tendency to fill every available surface with ornament, characteristic of the HP&#x27;s descriptive and visual density.&quot;,
+<span class="line-num">126</span>        &quot;definition_long&quot;: &quot;The HP exhibits a pronounced horror vacui — an aversion to empty space — in both its verbal descriptions and its woodcut illustrations. Every surface Poliphilo encounters is carved, inscribed, painted, or planted. Every page of text is dense with description, digression, and learned vocabulary. This aesthetic density is not accidental but structural: the HP&#x27;s meaning emerges from accumulation, overlay, and the refusal to leave any surface unworked.&quot;,
+<span class="line-num">127</span>        &quot;source_basis&quot;: &quot;HP passim; Jarzombek 1990&quot;,
+<span class="line-num">128</span>    },
+<span class="line-num">129</span>
+<span class="line-num">130</span>    # === More Alchemical ===
+<span class="line-num">131</span>    {
+<span class="line-num">132</span>        &quot;slug&quot;: &quot;great-work&quot;,
+<span class="line-num">133</span>        &quot;label&quot;: &quot;Great Work (Magnum Opus)&quot;,
+<span class="line-num">134</span>        &quot;category&quot;: ALCHEM,
+<span class="line-num">135</span>        &quot;definition_short&quot;: &quot;The alchemical process of transmuting base matter into gold or the philosopher&#x27;s stone, which both HP alchemist annotators read into the narrative.&quot;,
+<span class="line-num">136</span>        &quot;definition_long&quot;: &quot;The Great Work (magnum opus) is the central goal of alchemy: the transformation of base matter into gold, the philosopher&#x27;s stone, or the elixir of life. Both the BL and Buffalo alchemist annotators read the HP as encoding stages of the Great Work beneath its love narrative. The BL alchemist followed d&#x27;Espagnet&#x27;s mercury-centered framework; the Buffalo alchemist followed pseudo-Geber&#x27;s sulphur and Sol/Luna emphasis. In both readings, Poliphilo&#x27;s journey maps onto the stages of refinement, and his union with Polia represents the successful completion of the Work.&quot;,
+<span class="line-num">137</span>        &quot;source_basis&quot;: &quot;Russell 2014, Ch. 6-7; Perifano 2004&quot;,
+<span class="line-num">138</span>    },
+<span class="line-num">139</span>
+<span class="line-num">140</span>    # === Material Culture additions ===
+<span class="line-num">141</span>    {
+<span class="line-num">142</span>        &quot;slug&quot;: &quot;gold-leaf&quot;,
+<span class="line-num">143</span>        &quot;label&quot;: &quot;Gold Leaf&quot;,
+<span class="line-num">144</span>        &quot;category&quot;: MATERIAL,
+<span class="line-num">145</span>        &quot;definition_short&quot;: &quot;Thin sheets of hammered gold used for gilding surfaces, frequently described adorning the HP&#x27;s architectural interiors.&quot;,
+<span class="line-num">146</span>        &quot;definition_long&quot;: &quot;Gold leaf and gilding appear throughout the HP as markers of supreme luxury and divine association. Poliphilo describes ceilings, columns, and sculptural details covered in gold, specifying the quality of the application and the visual effect of light on gilded surfaces. The alchemical annotators took particular interest in gold references, reading them as encoding the final stage of transmutation.&quot;,
+<span class="line-num">147</span>        &quot;source_basis&quot;: &quot;HP passim; Russell 2014&quot;,
+<span class="line-num">148</span>    },
+<span class="line-num">149</span>    {
+<span class="line-num">150</span>        &quot;slug&quot;: &quot;silk&quot;,
+<span class="line-num">151</span>        &quot;label&quot;: &quot;Silk&quot;,
+<span class="line-num">152</span>        &quot;category&quot;: MATERIAL,
+<span class="line-num">153</span>        &quot;definition_short&quot;: &quot;Fine textile featured prominently in the HP&#x27;s descriptions of clothing, drapery, and ceremonial hangings.&quot;,
+<span class="line-num">154</span>        &quot;definition_long&quot;: &quot;Silk and other fine textiles receive detailed attention in the HP. Poliphilo describes the garments of nymphs, queens, and processional figures with attention to weave, color, drape, and embroidery. These textile descriptions contribute to the HP&#x27;s tactile and sensory richness, reinforcing the book&#x27;s investment in material culture as a vehicle for meaning.&quot;,
+<span class="line-num">155</span>        &quot;source_basis&quot;: &quot;HP passim; Godwin 1999&quot;,
+<span class="line-num">156</span>    },
+<span class="line-num">157</span>]
+<span class="line-num">158</span>
+<span class="line-num">159</span>LINKS = [
+<span class="line-num">160</span>    # Narrative form
+<span class="line-num">161</span>    (&quot;dream-vision&quot;, &quot;dream-narrative&quot;, &quot;RELATED&quot;),
+<span class="line-num">162</span>    (&quot;dream-vision&quot;, &quot;dream-within-dream&quot;, &quot;RELATED&quot;),
+<span class="line-num">163</span>    (&quot;dream-vision&quot;, &quot;roman-de-la-rose&quot;, &quot;RELATED&quot;),
+<span class="line-num">164</span>    (&quot;petrarchism&quot;, &quot;vernacular-poetics&quot;, &quot;RELATED&quot;),
+<span class="line-num">165</span>    (&quot;petrarchism&quot;, &quot;polia&quot;, &quot;RELATED&quot;),
+<span class="line-num">166</span>    (&quot;petrarchism&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">167</span>    (&quot;roman-de-la-rose&quot;, &quot;dream-narrative&quot;, &quot;RELATED&quot;),
+<span class="line-num">168</span>    (&quot;roman-de-la-rose&quot;, &quot;allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">169</span>    (&quot;neoplatonism&quot;, &quot;venus-aphrodite&quot;, &quot;RELATED&quot;),
+<span class="line-num">170</span>    (&quot;neoplatonism&quot;, &quot;circular-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">171</span>    (&quot;neoplatonism&quot;, &quot;prisca-sapientia&quot;, &quot;RELATED&quot;),
+<span class="line-num">172</span>
+<span class="line-num">173</span>    # Characters
+<span class="line-num">174</span>    (&quot;logistica-thelemia&quot;, &quot;thelemia&quot;, &quot;RELATED&quot;),
+<span class="line-num">175</span>    (&quot;logistica-thelemia&quot;, &quot;eleuterylida&quot;, &quot;RELATED&quot;),
+<span class="line-num">176</span>
+<span class="line-num">177</span>    # Architecture
+<span class="line-num">178</span>    (&quot;colossus&quot;, &quot;meraviglia&quot;, &quot;RELATED&quot;),
+<span class="line-num">179</span>    (&quot;colossus&quot;, &quot;pyramid&quot;, &quot;RELATED&quot;),
+<span class="line-num">180</span>    (&quot;mosaic&quot;, &quot;grotesque&quot;, &quot;RELATED&quot;),
+<span class="line-num">181</span>    (&quot;mosaic&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">182</span>
+<span class="line-num">183</span>    # Book
+<span class="line-num">184</span>    (&quot;colophon&quot;, &quot;aldus-manutius&quot;, &quot;RELATED&quot;),
+<span class="line-num">185</span>    (&quot;colophon&quot;, &quot;1499-edition&quot;, &quot;RELATED&quot;),
+<span class="line-num">186</span>    (&quot;world-census&quot;, &quot;annotator-hand&quot;, &quot;RELATED&quot;),
+<span class="line-num">187</span>    (&quot;world-census&quot;, &quot;incunabulum&quot;, &quot;RELATED&quot;),
+<span class="line-num">188</span>
+<span class="line-num">189</span>    # Aesthetic
+<span class="line-num">190</span>    (&quot;ut-pictura-poesis&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">191</span>    (&quot;ut-pictura-poesis&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">192</span>    (&quot;horror-vacui&quot;, &quot;varieta&quot;, &quot;RELATED&quot;),
+<span class="line-num">193</span>    (&quot;horror-vacui&quot;, &quot;grotesque&quot;, &quot;RELATED&quot;),
+<span class="line-num">194</span>
+<span class="line-num">195</span>    # Alchemy
+<span class="line-num">196</span>    (&quot;great-work&quot;, &quot;alchemical-allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">197</span>    (&quot;great-work&quot;, &quot;master-mercury&quot;, &quot;RELATED&quot;),
+<span class="line-num">198</span>    (&quot;great-work&quot;, &quot;chemical-wedding&quot;, &quot;RELATED&quot;),
+<span class="line-num">199</span>
+<span class="line-num">200</span>    # Material
+<span class="line-num">201</span>    (&quot;gold-leaf&quot;, &quot;porphyry&quot;, &quot;RELATED&quot;),
+<span class="line-num">202</span>    (&quot;silk&quot;, &quot;nymphs-five-senses&quot;, &quot;RELATED&quot;),
+<span class="line-num">203</span>]
+<span class="line-num">204</span>
+<span class="line-num">205</span>
+<span class="line-num">206</span>def main():
+<span class="line-num">207</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">208</span>    cur = conn.cursor()
+<span class="line-num">209</span>
+<span class="line-num">210</span>    print(&quot;Seeding HP entity dictionary terms (v3)...&quot;)
+<span class="line-num">211</span>    inserted = 0
+<span class="line-num">212</span>    for t in TERMS:
+<span class="line-num">213</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">214</span>            INSERT OR IGNORE INTO dictionary_terms
+<span class="line-num">215</span>                (slug, label, category, definition_short, definition_long,
+<span class="line-num">216</span>                 source_basis, review_status, needs_review, source_method)
+<span class="line-num">217</span>            VALUES (?, ?, ?, ?, ?, ?, &#x27;DRAFT&#x27;, 1, &#x27;LLM_ASSISTED&#x27;)
+<span class="line-num">218</span>        &quot;&quot;&quot;, (t[&quot;slug&quot;], t[&quot;label&quot;], t[&quot;category&quot;],
+<span class="line-num">219</span>              t[&quot;definition_short&quot;], t[&quot;definition_long&quot;],
+<span class="line-num">220</span>              t.get(&quot;source_basis&quot;, &quot;&quot;)))
+<span class="line-num">221</span>        inserted += cur.rowcount
+<span class="line-num">222</span>    conn.commit()
+<span class="line-num">223</span>    print(f&quot;  Inserted {inserted} new terms ({len(TERMS)} defined)&quot;)
+<span class="line-num">224</span>
+<span class="line-num">225</span>    print(&quot;Creating term links...&quot;)
+<span class="line-num">226</span>    linked = 0
+<span class="line-num">227</span>    for slug_a, slug_b, link_type in LINKS:
+<span class="line-num">228</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_a,))
+<span class="line-num">229</span>        a = cur.fetchone()
+<span class="line-num">230</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_b,))
+<span class="line-num">231</span>        b = cur.fetchone()
+<span class="line-num">232</span>        if a and b:
+<span class="line-num">233</span>            cur.execute(&quot;&quot;&quot;
+<span class="line-num">234</span>                INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">235</span>                    (term_id, linked_term_id, link_type)
+<span class="line-num">236</span>                VALUES (?, ?, ?)
+<span class="line-num">237</span>            &quot;&quot;&quot;, (a[0], b[0], link_type))
+<span class="line-num">238</span>            linked += cur.rowcount
+<span class="line-num">239</span>            if link_type == &quot;RELATED&quot;:
+<span class="line-num">240</span>                cur.execute(&quot;&quot;&quot;
+<span class="line-num">241</span>                    INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">242</span>                        (term_id, linked_term_id, link_type)
+<span class="line-num">243</span>                    VALUES (?, ?, ?)
+<span class="line-num">244</span>                &quot;&quot;&quot;, (b[0], a[0], link_type))
+<span class="line-num">245</span>                linked += cur.rowcount
+<span class="line-num">246</span>    conn.commit()
+<span class="line-num">247</span>    print(f&quot;  Created {linked} links&quot;)
+<span class="line-num">248</span>
+<span class="line-num">249</span>    cur.execute(&quot;SELECT COUNT(*) FROM dictionary_terms&quot;)
+<span class="line-num">250</span>    print(f&quot;\nTotal terms: {cur.fetchone()[0]}&quot;)
+<span class="line-num">251</span>    cur.execute(&quot;SELECT category, COUNT(*) FROM dictionary_terms GROUP BY category ORDER BY COUNT(*) DESC&quot;)
+<span class="line-num">252</span>    for row in cur.fetchall():
+<span class="line-num">253</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">254</span>
+<span class="line-num">255</span>    conn.close()
+<span class="line-num">256</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">257</span>
+<span class="line-num">258</span>
+<span class="line-num">259</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">260</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

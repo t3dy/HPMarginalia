@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Scholars - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Link Scholars</h2>
+            <div class="code-meta">link_scholars.py &mdash; 205 lines</div>
+            <p style="margin-bottom:1rem">Links scholars to bibliography, tags historical figures, matches summaries.json to bibliography entries.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Link scholars to bibliography entries and summaries.json.
+<span class="line-num">2</span>
+<span class="line-num">3</span>Step 1 of the Scholar Pipeline (docs/SCHOLAR_PIPELINE.md).
+<span class="line-num">4</span>
+<span class="line-num">5</span>This script:
+<span class="line-num">6</span>1. Adds missing columns (scholar_overview, is_historical_subject, has_summary, summary_source)
+<span class="line-num">7</span>2. Tags historical figures
+<span class="line-num">8</span>3. Matches summaries.json -&gt; bibliography by author+title
+<span class="line-num">9</span>4. Sets has_summary flags on scholar_works
+<span class="line-num">10</span>5. Logs unmatched entries
+<span class="line-num">11</span>
+<span class="line-num">12</span>Idempotent and non-destructive.
+<span class="line-num">13</span>&quot;&quot;&quot;
+<span class="line-num">14</span>
+<span class="line-num">15</span>import sqlite3
+<span class="line-num">16</span>import json
+<span class="line-num">17</span>import re
+<span class="line-num">18</span>import unicodedata
+<span class="line-num">19</span>from pathlib import Path
+<span class="line-num">20</span>
+<span class="line-num">21</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">22</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">23</span>SUMMARIES_PATH = BASE_DIR / &quot;scholars&quot; / &quot;summaries.json&quot;
+<span class="line-num">24</span>STAGING_DIR = BASE_DIR / &quot;staging&quot; / &quot;scholar&quot;
+<span class="line-num">25</span>
+<span class="line-num">26</span># Historical figures: HP subjects, not modern scholars
+<span class="line-num">27</span>HISTORICAL_FIGURES = [
+<span class="line-num">28</span>    &quot;Francesco Colonna&quot;,
+<span class="line-num">29</span>    &quot;Aldus Manutius&quot;,
+<span class="line-num">30</span>    &quot;Ben Jonson&quot;,
+<span class="line-num">31</span>    &quot;Fabio Chigi (Pope Alexander VII)&quot;,
+<span class="line-num">32</span>    &quot;Benedetto Giovio&quot;,
+<span class="line-num">33</span>    &quot;Paolo Giovio&quot;,
+<span class="line-num">34</span>    &quot;Jean Martin&quot;,
+<span class="line-num">35</span>    &quot;Beroalde de Verville&quot;,
+<span class="line-num">36</span>    &quot;Charles Nodier&quot;,
+<span class="line-num">37</span>    &quot;Pope Alexander VII&quot;,
+<span class="line-num">38</span>]
+<span class="line-num">39</span>
+<span class="line-num">40</span>
+<span class="line-num">41</span>def normalize_name(name):
+<span class="line-num">42</span>    &quot;&quot;&quot;Normalize a name for comparison: lowercase, strip periods, collapse spaces.&quot;&quot;&quot;
+<span class="line-num">43</span>    if not name:
+<span class="line-num">44</span>        return &#x27;&#x27;
+<span class="line-num">45</span>    s = name.lower().strip()
+<span class="line-num">46</span>    # Remove accents for comparison
+<span class="line-num">47</span>    s = unicodedata.normalize(&#x27;NFKD&#x27;, s)
+<span class="line-num">48</span>    s = &#x27;&#x27;.join(c for c in s if not unicodedata.combining(c))
+<span class="line-num">49</span>    # Strip periods
+<span class="line-num">50</span>    s = s.replace(&#x27;.&#x27;, &#x27;&#x27;)
+<span class="line-num">51</span>    # Collapse whitespace
+<span class="line-num">52</span>    s = re.sub(r&#x27;\s+&#x27;, &#x27; &#x27;, s)
+<span class="line-num">53</span>    return s
+<span class="line-num">54</span>
+<span class="line-num">55</span>
+<span class="line-num">56</span>def normalize_title(title):
+<span class="line-num">57</span>    &quot;&quot;&quot;Normalize a title for comparison.&quot;&quot;&quot;
+<span class="line-num">58</span>    if not title:
+<span class="line-num">59</span>        return &#x27;&#x27;
+<span class="line-num">60</span>    s = title.lower().strip()
+<span class="line-num">61</span>    # Remove common prefixes
+<span class="line-num">62</span>    s = re.sub(r&#x27;^(the|a|an)\s+&#x27;, &#x27;&#x27;, s)
+<span class="line-num">63</span>    # Remove punctuation
+<span class="line-num">64</span>    s = re.sub(r&#x27;[^\w\s]&#x27;, &#x27;&#x27;, s)
+<span class="line-num">65</span>    s = re.sub(r&#x27;\s+&#x27;, &#x27; &#x27;, s)
+<span class="line-num">66</span>    return s[:80]  # First 80 chars for matching
+<span class="line-num">67</span>
+<span class="line-num">68</span>
+<span class="line-num">69</span>def main():
+<span class="line-num">70</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">71</span>    cur = conn.cursor()
+<span class="line-num">72</span>
+<span class="line-num">73</span>    print(&quot;=== Scholar Linking Pipeline ===\n&quot;)
+<span class="line-num">74</span>
+<span class="line-num">75</span>    # Step 1: Add missing columns
+<span class="line-num">76</span>    print(&quot;Step 1: Adding missing columns...&quot;)
+<span class="line-num">77</span>    existing_scholar_cols = {r[1] for r in cur.execute(&quot;PRAGMA table_info(scholars)&quot;)}
+<span class="line-num">78</span>    existing_sw_cols = {r[1] for r in cur.execute(&quot;PRAGMA table_info(scholar_works)&quot;)}
+<span class="line-num">79</span>
+<span class="line-num">80</span>    if &#x27;scholar_overview&#x27; not in existing_scholar_cols:
+<span class="line-num">81</span>        cur.execute(&quot;ALTER TABLE scholars ADD COLUMN scholar_overview TEXT&quot;)
+<span class="line-num">82</span>        print(&quot;  Added scholars.scholar_overview&quot;)
+<span class="line-num">83</span>    if &#x27;is_historical_subject&#x27; not in existing_scholar_cols:
+<span class="line-num">84</span>        cur.execute(&quot;ALTER TABLE scholars ADD COLUMN is_historical_subject BOOLEAN DEFAULT 0&quot;)
+<span class="line-num">85</span>        print(&quot;  Added scholars.is_historical_subject&quot;)
+<span class="line-num">86</span>    if &#x27;has_summary&#x27; not in existing_sw_cols:
+<span class="line-num">87</span>        cur.execute(&quot;ALTER TABLE scholar_works ADD COLUMN has_summary BOOLEAN DEFAULT 0&quot;)
+<span class="line-num">88</span>        print(&quot;  Added scholar_works.has_summary&quot;)
+<span class="line-num">89</span>    if &#x27;summary_source&#x27; not in existing_sw_cols:
+<span class="line-num">90</span>        cur.execute(&quot;ALTER TABLE scholar_works ADD COLUMN summary_source TEXT&quot;)
+<span class="line-num">91</span>        print(&quot;  Added scholar_works.summary_source&quot;)
+<span class="line-num">92</span>    conn.commit()
+<span class="line-num">93</span>
+<span class="line-num">94</span>    # Step 2: Tag historical figures
+<span class="line-num">95</span>    print(&quot;\nStep 2: Tagging historical figures...&quot;)
+<span class="line-num">96</span>    tagged = 0
+<span class="line-num">97</span>    for hist_name in HISTORICAL_FIGURES:
+<span class="line-num">98</span>        norm = normalize_name(hist_name)
+<span class="line-num">99</span>        cur.execute(&quot;SELECT id, name FROM scholars&quot;)
+<span class="line-num">100</span>        for sid, sname in cur.fetchall():
+<span class="line-num">101</span>            if normalize_name(sname) == norm or norm in normalize_name(sname):
+<span class="line-num">102</span>                cur.execute(&quot;UPDATE scholars SET is_historical_subject = 1 WHERE id = ?&quot;, (sid,))
+<span class="line-num">103</span>                if cur.rowcount:
+<span class="line-num">104</span>                    tagged += 1
+<span class="line-num">105</span>                    print(f&quot;  Tagged: {sname}&quot;)
+<span class="line-num">106</span>    conn.commit()
+<span class="line-num">107</span>    print(f&quot;  {tagged} historical figures tagged&quot;)
+<span class="line-num">108</span>
+<span class="line-num">109</span>    # Step 3: Load summaries and match to bibliography
+<span class="line-num">110</span>    print(&quot;\nStep 3: Matching summaries.json to bibliography...&quot;)
+<span class="line-num">111</span>    summaries = []
+<span class="line-num">112</span>    if SUMMARIES_PATH.exists():
+<span class="line-num">113</span>        with open(SUMMARIES_PATH, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">114</span>            summaries = json.load(f)
+<span class="line-num">115</span>
+<span class="line-num">116</span>    # Get all bibliography entries
+<span class="line-num">117</span>    cur.execute(&quot;SELECT id, author, title, year FROM bibliography&quot;)
+<span class="line-num">118</span>    bib_entries = cur.fetchall()
+<span class="line-num">119</span>
+<span class="line-num">120</span>    # Build normalized lookup
+<span class="line-num">121</span>    bib_lookup = {}
+<span class="line-num">122</span>    for bid, bauthor, btitle, byear in bib_entries:
+<span class="line-num">123</span>        key = (normalize_name(bauthor), normalize_title(btitle))
+<span class="line-num">124</span>        bib_lookup[key] = bid
+<span class="line-num">125</span>
+<span class="line-num">126</span>    matched_summaries = 0
+<span class="line-num">127</span>    unmatched_summaries = []
+<span class="line-num">128</span>
+<span class="line-num">129</span>    for s in summaries:
+<span class="line-num">130</span>        s_author = s.get(&#x27;author&#x27;, &#x27;&#x27;)
+<span class="line-num">131</span>        s_title = s.get(&#x27;title&#x27;, &#x27;&#x27;)
+<span class="line-num">132</span>        s_key = (normalize_name(s_author), normalize_title(s_title))
+<span class="line-num">133</span>
+<span class="line-num">134</span>        # Try exact match first
+<span class="line-num">135</span>        bib_id = bib_lookup.get(s_key)
+<span class="line-num">136</span>
+<span class="line-num">137</span>        # Try partial title match if no exact
+<span class="line-num">138</span>        if not bib_id:
+<span class="line-num">139</span>            norm_author = normalize_name(s_author)
+<span class="line-num">140</span>            norm_title = normalize_title(s_title)
+<span class="line-num">141</span>            for (ba, bt), bid in bib_lookup.items():
+<span class="line-num">142</span>                if norm_author == ba and (norm_title[:30] in bt or bt[:30] in norm_title):
+<span class="line-num">143</span>                    bib_id = bid
+<span class="line-num">144</span>                    break
+<span class="line-num">145</span>
+<span class="line-num">146</span>        if bib_id:
+<span class="line-num">147</span>            matched_summaries += 1
+<span class="line-num">148</span>            # Find the scholar for this author
+<span class="line-num">149</span>            cur.execute(&quot;SELECT id FROM scholars WHERE LOWER(name) = LOWER(?)&quot;, (s_author,))
+<span class="line-num">150</span>            scholar = cur.fetchone()
+<span class="line-num">151</span>            if scholar:
+<span class="line-num">152</span>                # Update scholar_works with has_summary
+<span class="line-num">153</span>                cur.execute(&quot;&quot;&quot;
+<span class="line-num">154</span>                    UPDATE scholar_works SET has_summary = 1, summary_source = &#x27;summaries.json&#x27;
+<span class="line-num">155</span>                    WHERE scholar_id = ? AND bib_id = ?
+<span class="line-num">156</span>                &quot;&quot;&quot;, (scholar[0], bib_id))
+<span class="line-num">157</span>                if cur.rowcount == 0:
+<span class="line-num">158</span>                    # Link might not exist, create it
+<span class="line-num">159</span>                    cur.execute(&quot;&quot;&quot;
+<span class="line-num">160</span>                        INSERT OR IGNORE INTO scholar_works (scholar_id, bib_id, has_summary, summary_source)
+<span class="line-num">161</span>                        VALUES (?, ?, 1, &#x27;summaries.json&#x27;)
+<span class="line-num">162</span>                    &quot;&quot;&quot;, (scholar[0], bib_id))
+<span class="line-num">163</span>        else:
+<span class="line-num">164</span>            unmatched_summaries.append({
+<span class="line-num">165</span>                &#x27;author&#x27;: s_author,
+<span class="line-num">166</span>                &#x27;title&#x27;: s_title,
+<span class="line-num">167</span>                &#x27;reason&#x27;: &#x27;no bibliography match found&#x27;,
+<span class="line-num">168</span>            })
+<span class="line-num">169</span>
+<span class="line-num">170</span>    conn.commit()
+<span class="line-num">171</span>    print(f&quot;  Matched: {matched_summaries}/{len(summaries)} summaries to bibliography&quot;)
+<span class="line-num">172</span>    print(f&quot;  Unmatched: {len(unmatched_summaries)}&quot;)
+<span class="line-num">173</span>
+<span class="line-num">174</span>    # Step 4: Log unmatched
+<span class="line-num">175</span>    STAGING_DIR.mkdir(parents=True, exist_ok=True)
+<span class="line-num">176</span>    unmatched_path = STAGING_DIR / &quot;unmatched.json&quot;
+<span class="line-num">177</span>    with open(unmatched_path, &#x27;w&#x27;, encoding=&#x27;utf-8&#x27;) as f:
+<span class="line-num">178</span>        json.dump({
+<span class="line-num">179</span>            &#x27;unmatched_summaries&#x27;: unmatched_summaries,
+<span class="line-num">180</span>            &#x27;summary_match_rate&#x27;: f&quot;{matched_summaries}/{len(summaries)}&quot;,
+<span class="line-num">181</span>        }, f, indent=2, ensure_ascii=False)
+<span class="line-num">182</span>    print(f&quot;\n  Unmatched log: {unmatched_path}&quot;)
+<span class="line-num">183</span>
+<span class="line-num">184</span>    # Step 5: Report
+<span class="line-num">185</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholars WHERE is_historical_subject = 1&quot;)
+<span class="line-num">186</span>    hist_count = cur.fetchone()[0]
+<span class="line-num">187</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholars WHERE is_historical_subject = 0 OR is_historical_subject IS NULL&quot;)
+<span class="line-num">188</span>    modern_count = cur.fetchone()[0]
+<span class="line-num">189</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholar_works WHERE has_summary = 1&quot;)
+<span class="line-num">190</span>    with_summary = cur.fetchone()[0]
+<span class="line-num">191</span>    cur.execute(&quot;SELECT COUNT(*) FROM scholar_works&quot;)
+<span class="line-num">192</span>    total_links = cur.fetchone()[0]
+<span class="line-num">193</span>
+<span class="line-num">194</span>    print(f&quot;\n=== Summary ===&quot;)
+<span class="line-num">195</span>    print(f&quot;  Historical figures: {hist_count}&quot;)
+<span class="line-num">196</span>    print(f&quot;  Modern scholars: {modern_count}&quot;)
+<span class="line-num">197</span>    print(f&quot;  Scholar-work links: {total_links}&quot;)
+<span class="line-num">198</span>    print(f&quot;  Links with summaries: {with_summary}&quot;)
+<span class="line-num">199</span>    print(f&quot;  Summary match rate: {matched_summaries}/{len(summaries)}&quot;)
+<span class="line-num">200</span>
+<span class="line-num">201</span>    conn.close()
+<span class="line-num">202</span>
+<span class="line-num">203</span>
+<span class="line-num">204</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">205</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Dictionary V2 - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="code-content">
+            <p><a href="index.html">&larr; All Scripts</a></p>
+            <h2>Seed Dictionary V2</h2>
+            <div class="code-meta">seed_dictionary_v2.py &mdash; 543 lines</div>
+            <p style="margin-bottom:1rem">Seeds 43 HP entity terms: characters, places, architecture, gardens, processions, aesthetics, materials.</p>
+            <pre><span class="line-num">1</span>&quot;&quot;&quot;Seed dictionary_terms with HP entities: characters, places, architecture,
+<span class="line-num">2</span>gardens, processions, visual/typographic features, aesthetic concepts,
+<span class="line-num">3</span>and material culture from the Hypnerotomachia Poliphili itself.
+<span class="line-num">4</span>
+<span class="line-num">5</span>Extends the existing 37 scholarly-apparatus terms with ~65 new terms
+<span class="line-num">6</span>drawn from the book&#x27;s narrative, imagery, and intellectual world.
+<span class="line-num">7</span>
+<span class="line-num">8</span>Idempotent: uses INSERT OR IGNORE.
+<span class="line-num">9</span>All new terms are seeded as review_status=&#x27;DRAFT&#x27;, source_method=&#x27;LLM_ASSISTED&#x27;.
+<span class="line-num">10</span>&quot;&quot;&quot;
+<span class="line-num">11</span>
+<span class="line-num">12</span>import sqlite3
+<span class="line-num">13</span>from pathlib import Path
+<span class="line-num">14</span>
+<span class="line-num">15</span>BASE_DIR = Path(__file__).resolve().parent.parent
+<span class="line-num">16</span>DB_PATH = BASE_DIR / &quot;db&quot; / &quot;hp.db&quot;
+<span class="line-num">17</span>
+<span class="line-num">18</span># Category constants (existing)
+<span class="line-num">19</span>BOOK = &quot;Book History &amp; Bibliography&quot;
+<span class="line-num">20</span>TEXT = &quot;Textual &amp; Visual Motifs&quot;
+<span class="line-num">21</span>ANNOT = &quot;Annotation Studies&quot;
+<span class="line-num">22</span>ALCHEM = &quot;Alchemical Interpretation&quot;
+<span class="line-num">23</span>ARCH = &quot;Architecture &amp; Gardens&quot;
+<span class="line-num">24</span>DEBATE = &quot;Scholarly Debates&quot;
+<span class="line-num">25</span>
+<span class="line-num">26</span># New categories
+<span class="line-num">27</span>CHARS = &quot;Characters &amp; Figures&quot;
+<span class="line-num">28</span>PLACES = &quot;Places &amp; Settings&quot;
+<span class="line-num">29</span>BUILT = &quot;Architecture &amp; Built Form&quot;
+<span class="line-num">30</span>GARDEN = &quot;Gardens &amp; Landscape&quot;
+<span class="line-num">31</span>PROC = &quot;Processions &amp; Ritual&quot;
+<span class="line-num">32</span>VISUAL = &quot;Visual &amp; Typographic&quot;
+<span class="line-num">33</span>AESTH = &quot;Aesthetic Concepts&quot;
+<span class="line-num">34</span>MATERIAL = &quot;Material Culture&quot;
+<span class="line-num">35</span>
+<span class="line-num">36</span>TERMS = [
+<span class="line-num">37</span>    # === Characters &amp; Figures ===
+<span class="line-num">38</span>    {
+<span class="line-num">39</span>        &quot;slug&quot;: &quot;poliphilo&quot;,
+<span class="line-num">40</span>        &quot;label&quot;: &quot;Poliphilo&quot;,
+<span class="line-num">41</span>        &quot;category&quot;: CHARS,
+<span class="line-num">42</span>        &quot;definition_short&quot;: &quot;The protagonist and dreamer of the HP, whose name means &#x27;lover of many things&#x27; or &#x27;lover of Polia.&#x27;&quot;,
+<span class="line-num">43</span>        &quot;definition_long&quot;: &quot;Poliphilo is the first-person narrator of the HP&#x27;s outer dream frame. He falls asleep, enters a dark forest, and journeys through architectural ruins, gardens, and allegorical landscapes toward union with his beloved Polia. His name encodes the book&#x27;s central ambiguity: &#x27;poliphilo&#x27; can mean either &#x27;lover of many things&#x27; (from Greek poly + philos) or &#x27;lover of Polia.&#x27; This double meaning reflects the HP&#x27;s oscillation between encyclopedic desire and erotic narrative. Poliphilo&#x27;s voice is learned, digressive, and obsessively attentive to visual and material detail.&quot;,
+<span class="line-num">44</span>        &quot;source_basis&quot;: &quot;HP passim; Godwin 1999, introduction; Lefaivre 1997&quot;,
+<span class="line-num">45</span>    },
+<span class="line-num">46</span>    {
+<span class="line-num">47</span>        &quot;slug&quot;: &quot;polia&quot;,
+<span class="line-num">48</span>        &quot;label&quot;: &quot;Polia&quot;,
+<span class="line-num">49</span>        &quot;category&quot;: CHARS,
+<span class="line-num">50</span>        &quot;definition_short&quot;: &quot;Poliphilo&#x27;s beloved and the object of his dream quest, who narrates the second part of the HP in her own voice.&quot;,
+<span class="line-num">51</span>        &quot;definition_long&quot;: &quot;Polia appears first as the goal of Poliphilo&#x27;s journey and then, in Book II, as narrator of her own backstory. Her account reframes the love story from the beloved&#x27;s perspective, including her initial rejection of Poliphilo and her eventual conversion by Venus. Polia&#x27;s name derives from the Greek polis (city) or polios (gray/ancient), linking her to antiquity itself. Trippe (2002) argues that Polia&#x27;s narration adapts Petrarchan conventions by giving the beloved a textual voice rather than reducing her to a silent image.&quot;,
+<span class="line-num">52</span>        &quot;source_basis&quot;: &quot;HP Book II; Trippe 2002; Godwin 1999&quot;,
+<span class="line-num">53</span>    },
+<span class="line-num">54</span>    {
+<span class="line-num">55</span>        &quot;slug&quot;: &quot;eleuterylida&quot;,
+<span class="line-num">56</span>        &quot;label&quot;: &quot;Queen Eleuterylida&quot;,
+<span class="line-num">57</span>        &quot;category&quot;: CHARS,
+<span class="line-num">58</span>        &quot;definition_short&quot;: &quot;The queen of the realm of free will whom Poliphilo encounters early in his journey, presiding over a court of allegorical figures.&quot;,
+<span class="line-num">59</span>        &quot;definition_long&quot;: &quot;Eleuterylida (from Greek eleutheria, &#x27;freedom&#x27;) rules a palace where Poliphilo must choose among three doors or gates representing different life paths. Her realm stages the HP&#x27;s philosophical core: the exercise of rational choice guided by desire. The queen&#x27;s court introduces the five senses as personified nymphs who attend Poliphilo and guide him toward deeper understanding. Her name and function connect the HP to the broader Renaissance discourse on free will, virtue, and the vita activa.&quot;,
+<span class="line-num">60</span>        &quot;source_basis&quot;: &quot;HP a4r-b2v; Godwin 1999, pp. 31-52&quot;,
+<span class="line-num">61</span>    },
+<span class="line-num">62</span>    {
+<span class="line-num">63</span>        &quot;slug&quot;: &quot;nymphs-five-senses&quot;,
+<span class="line-num">64</span>        &quot;label&quot;: &quot;Nymphs of the Five Senses&quot;,
+<span class="line-num">65</span>        &quot;category&quot;: CHARS,
+<span class="line-num">66</span>        &quot;definition_short&quot;: &quot;Five allegorical nymphs who guide Poliphilo through Queen Eleuterylida&#x27;s realm, each representing a bodily sense.&quot;,
+<span class="line-num">67</span>        &quot;definition_long&quot;: &quot;The five nymphs who attend Poliphilo embody sight, hearing, smell, taste, and touch. They bathe him, dress him, and lead him through the queen&#x27;s palace in a sequence that combines sensory education with erotic initiation. The nymphs&#x27; names and attributes are drawn from classical and Neoplatonic traditions linking sensory experience to philosophical knowledge. Their ministrations constitute one of the HP&#x27;s most sustained ekphrastic sequences, described in lavish material detail.&quot;,
+<span class="line-num">68</span>        &quot;source_basis&quot;: &quot;HP b2v-c4r; Hunt 1998; Godwin 1999&quot;,
+<span class="line-num">69</span>    },
+<span class="line-num">70</span>    {
+<span class="line-num">71</span>        &quot;slug&quot;: &quot;cupid-eros&quot;,
+<span class="line-num">72</span>        &quot;label&quot;: &quot;Cupid / Eros&quot;,
+<span class="line-num">73</span>        &quot;category&quot;: CHARS,
+<span class="line-num">74</span>        &quot;definition_short&quot;: &quot;The god of love who appears throughout the HP as guide, tormentor, and agent of transformation.&quot;,
+<span class="line-num">75</span>        &quot;definition_long&quot;: &quot;Cupid appears in multiple forms in the HP: as a child archer, as a participant in the triumphal procession, and as an allegorical force driving Poliphilo&#x27;s journey. The HP&#x27;s Cupid draws on both Ovidian and Neoplatonic traditions, functioning simultaneously as erotic desire and as the philosophical eros that moves the soul toward beauty and truth. The alchemical annotators read Cupid&#x27;s arrows as symbols of chemical transformation.&quot;,
+<span class="line-num">76</span>        &quot;source_basis&quot;: &quot;HP passim; Russell 2014, Ch. 6-7; Gollnick 1999&quot;,
+<span class="line-num">77</span>    },
+<span class="line-num">78</span>    {
+<span class="line-num">79</span>        &quot;slug&quot;: &quot;venus-aphrodite&quot;,
+<span class="line-num">80</span>        &quot;label&quot;: &quot;Venus / Aphrodite&quot;,
+<span class="line-num">81</span>        &quot;category&quot;: CHARS,
+<span class="line-num">82</span>        &quot;definition_short&quot;: &quot;The goddess of love and beauty whose island (Cythera) is the destination of Poliphilo&#x27;s journey and the site of his union with Polia.&quot;,
+<span class="line-num">83</span>        &quot;definition_long&quot;: &quot;Venus presides over the HP&#x27;s climactic sequences on the island of Cythera, where Poliphilo and Polia are united at her temple. The HP presents Venus in her dual aspect: Venus Genetrix (generative love, fertility) and Venus Urania (celestial love, philosophical beauty). The alchemical annotators read Venus as encoding the feminine principle in the chemical wedding. Segre (1998) analyzes the elaborate garden designs surrounding Venus&#x27;s temple as the HP&#x27;s most sophisticated landscape composition.&quot;,
+<span class="line-num">84</span>        &quot;source_basis&quot;: &quot;HP Book I, final sections; Segre 1998; Russell 2014&quot;,
+<span class="line-num">85</span>    },
+<span class="line-num">86</span>
+<span class="line-num">87</span>    # === Places &amp; Settings ===
+<span class="line-num">88</span>    {
+<span class="line-num">89</span>        &quot;slug&quot;: &quot;dark-forest&quot;,
+<span class="line-num">90</span>        &quot;label&quot;: &quot;Dark Forest (Selva Oscura)&quot;,
+<span class="line-num">91</span>        &quot;category&quot;: PLACES,
+<span class="line-num">92</span>        &quot;definition_short&quot;: &quot;The dense, terrifying forest where Poliphilo&#x27;s dream begins, echoing Dante&#x27;s opening of the Commedia.&quot;,
+<span class="line-num">93</span>        &quot;definition_long&quot;: &quot;The HP opens with Poliphilo lost in a dark wood, a deliberate echo of Dante&#x27;s &#x27;selva oscura&#x27; from Inferno I. The forest represents confusion, sensory deprivation, and the threshold between waking consciousness and dream vision. Poliphilo&#x27;s emergence from the forest into a sunlit landscape marks the beginning of his architectural and erotic education. Priki (2016) reads the dark forest as a structural device common to dream narratives from the Roman de la Rose onward.&quot;,
+<span class="line-num">94</span>        &quot;source_basis&quot;: &quot;HP a1r-a3v; Priki 2016; Godwin 1999, pp. 17-23&quot;,
+<span class="line-num">95</span>    },
+<span class="line-num">96</span>    {
+<span class="line-num">97</span>        &quot;slug&quot;: &quot;thelemia&quot;,
+<span class="line-num">98</span>        &quot;label&quot;: &quot;Thelemia (Gate of Free Will)&quot;,
+<span class="line-num">99</span>        &quot;category&quot;: PLACES,
+<span class="line-num">100</span>        &quot;definition_short&quot;: &quot;The gate or portal of free will where Poliphilo chooses among three paths, representing different modes of life.&quot;,
+<span class="line-num">101</span>        &quot;definition_long&quot;: &quot;At the portal of Thelemia (from Greek thelema, &#x27;will&#x27;), Poliphilo confronts three doors leading to the vita voluptuosa (life of pleasure), the vita activa (active life), and the vita contemplativa (contemplative life). His choice of the middle path reflects the HP&#x27;s humanist ethics. Rabelais later adopted the name &#x27;Theleme&#x27; for his utopian abbey in Gargantua (1534), almost certainly drawing on the HP. The three-gate motif connects the HP to the Choice of Hercules tradition in Renaissance moral philosophy.&quot;,
+<span class="line-num">102</span>        &quot;source_basis&quot;: &quot;HP b5r-b6r; Godwin 1999; Lefaivre 1997&quot;,
+<span class="line-num">103</span>    },
+<span class="line-num">104</span>    {
+<span class="line-num">105</span>        &quot;slug&quot;: &quot;ruined-temple&quot;,
+<span class="line-num">106</span>        &quot;label&quot;: &quot;Ruined Temple&quot;,
+<span class="line-num">107</span>        &quot;category&quot;: PLACES,
+<span class="line-num">108</span>        &quot;definition_short&quot;: &quot;The great ruined classical temple Poliphilo explores early in his journey, establishing the HP&#x27;s antiquarian and architectural program.&quot;,
+<span class="line-num">109</span>        &quot;definition_long&quot;: &quot;Poliphilo encounters a vast ruined temple shortly after escaping the dark forest. He describes its columns, capitals, entablatures, and inscriptions in obsessive architectural detail, establishing the ekphrastic mode that dominates the rest of the narrative. The temple&#x27;s ruins embody the Renaissance topos of antiquity&#x27;s grandeur and loss. Griggs (1998) reads this passage as the HP&#x27;s closest approach to the antiquarian tradition of Cyriacus of Ancona, where encountering ruins generates knowledge through careful observation.&quot;,
+<span class="line-num">110</span>        &quot;source_basis&quot;: &quot;HP a4r-a8v; Griggs 1998; Huelsen 1910&quot;,
+<span class="line-num">111</span>    },
+<span class="line-num">112</span>    {
+<span class="line-num">113</span>        &quot;slug&quot;: &quot;triumphal-gate&quot;,
+<span class="line-num">114</span>        &quot;label&quot;: &quot;Triumphal Gate&quot;,
+<span class="line-num">115</span>        &quot;category&quot;: PLACES,
+<span class="line-num">116</span>        &quot;definition_short&quot;: &quot;A monumental arch decorated with reliefs and inscriptions that Poliphilo passes through, modeled on Roman triumphal architecture.&quot;,
+<span class="line-num">117</span>        &quot;definition_long&quot;: &quot;The HP describes several triumphal gates and arches, each decorated with carved reliefs, pseudo-classical inscriptions, and allegorical imagery. These gates function as thresholds between narrative zones and as occasions for sustained architectural ekphrasis. The woodcut illustrations of the gates are among the HP&#x27;s most architecturally detailed images, and they influenced subsequent Renaissance architectural treatises. Stewering (2000) analyzes their relationship to Alberti&#x27;s De re aedificatoria.&quot;,
+<span class="line-num">118</span>        &quot;source_basis&quot;: &quot;HP passim; Stewering 2000; Huelsen 1910&quot;,
+<span class="line-num">119</span>    },
+<span class="line-num">120</span>
+<span class="line-num">121</span>    # === Architecture &amp; Built Form ===
+<span class="line-num">122</span>    {
+<span class="line-num">123</span>        &quot;slug&quot;: &quot;column-orders&quot;,
+<span class="line-num">124</span>        &quot;label&quot;: &quot;Column Orders&quot;,
+<span class="line-num">125</span>        &quot;category&quot;: BUILT,
+<span class="line-num">126</span>        &quot;definition_short&quot;: &quot;The classical orders of architecture (Doric, Ionic, Corinthian, Composite) described and illustrated throughout the HP.&quot;,
+<span class="line-num">127</span>        &quot;definition_long&quot;: &quot;The HP contains detailed descriptions of column orders, including measurements, proportions, and ornamental details that rival contemporary architectural treatises. Poliphilo&#x27;s accounts of columns and their capitals reflect the Vitruvian tradition as filtered through fifteenth-century Italian humanism. The woodcuts depict columns with remarkable architectural precision. Jarzombek (1990) argues that the HP&#x27;s architectural descriptions are not merely decorative but structurally constitutive of the narrative&#x27;s meaning.&quot;,
+<span class="line-num">128</span>        &quot;source_basis&quot;: &quot;HP passim; Jarzombek 1990; Stewering 2000&quot;,
+<span class="line-num">129</span>    },
+<span class="line-num">130</span>    {
+<span class="line-num">131</span>        &quot;slug&quot;: &quot;pyramid&quot;,
+<span class="line-num">132</span>        &quot;label&quot;: &quot;Pyramid&quot;,
+<span class="line-num">133</span>        &quot;category&quot;: BUILT,
+<span class="line-num">134</span>        &quot;definition_short&quot;: &quot;A massive pyramidal structure Poliphilo encounters, surmounted by an obelisk and described with precise geometric proportions.&quot;,
+<span class="line-num">135</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s pyramid is one of its most celebrated architectural set pieces, described in minute detail including dimensions, materials, and the stairways ascending its faces. The structure combines Egyptian and classical motifs in a way characteristic of Renaissance pseudo-archaeology. An obelisk surmounts the pyramid, anticipating the elephant-obelisk combination that later influenced Bernini. The alchemical annotators read the pyramid as encoding stages of material refinement.&quot;,
+<span class="line-num">136</span>        &quot;source_basis&quot;: &quot;HP a6r-a8r; Godwin 1999; Russell 2014&quot;,
+<span class="line-num">137</span>    },
+<span class="line-num">138</span>    {
+<span class="line-num">139</span>        &quot;slug&quot;: &quot;triumphal-arch&quot;,
+<span class="line-num">140</span>        &quot;label&quot;: &quot;Triumphal Arch&quot;,
+<span class="line-num">141</span>        &quot;category&quot;: BUILT,
+<span class="line-num">142</span>        &quot;definition_short&quot;: &quot;Monumental arched structures in the HP modeled on Roman victory arches, decorated with relief sculptures and inscriptions.&quot;,
+<span class="line-num">143</span>        &quot;definition_long&quot;: &quot;The HP features several triumphal arches that serve as both architectural showpieces and narrative thresholds. Their carved reliefs depict processions, sacrifices, and mythological scenes that Poliphilo interprets at length. The arches demonstrate the HP&#x27;s characteristically dense interweaving of architectural description, visual imagery, and allegorical meaning. They are among the most architecturally accurate structures in the HP, reflecting knowledge of surviving Roman arches.&quot;,
+<span class="line-num">144</span>        &quot;source_basis&quot;: &quot;HP passim; Stewering 2000; Huelsen 1910&quot;,
+<span class="line-num">145</span>    },
+<span class="line-num">146</span>    {
+<span class="line-num">147</span>        &quot;slug&quot;: &quot;bath-thermae&quot;,
+<span class="line-num">148</span>        &quot;label&quot;: &quot;Bath / Thermae&quot;,
+<span class="line-num">149</span>        &quot;category&quot;: BUILT,
+<span class="line-num">150</span>        &quot;definition_short&quot;: &quot;Elaborate bathing scenes in the HP where Poliphilo is ritually cleansed by nymphs in architecturally detailed bath complexes.&quot;,
+<span class="line-num">151</span>        &quot;definition_long&quot;: &quot;The bathing sequences in the HP combine architectural description of classical thermae with erotic content and ritual significance. The nymphs bathe Poliphilo in sequences that move from purification to sensory awakening. The bath architecture is described with attention to water systems, marble surfaces, and spatial arrangement. These passages illustrate the HP&#x27;s fusion of bodily experience with architectural knowledge, central to Lefaivre&#x27;s (1997) concept of the &#x27;architectural body.&#x27;&quot;,
+<span class="line-num">152</span>        &quot;source_basis&quot;: &quot;HP c1r-c4r; Lefaivre 1997; Godwin 1999&quot;,
+<span class="line-num">153</span>    },
+<span class="line-num">154</span>    {
+<span class="line-num">155</span>        &quot;slug&quot;: &quot;amphitheatre&quot;,
+<span class="line-num">156</span>        &quot;label&quot;: &quot;Amphitheatre&quot;,
+<span class="line-num">157</span>        &quot;category&quot;: BUILT,
+<span class="line-num">158</span>        &quot;definition_short&quot;: &quot;A classical amphitheatre Poliphilo encounters, described with attention to seating, proportions, and performance spaces.&quot;,
+<span class="line-num">159</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s amphitheatre passages describe a classical performance venue with careful attention to architectural proportions and the experience of spectatorship. Poliphilo observes performances and processions from within the structure, making the amphitheatre a site where architecture, spectacle, and narrative converge. The description reflects knowledge of surviving Roman amphitheatres and Renaissance theoretical interest in theatre architecture.&quot;,
+<span class="line-num">160</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Stewering 2000&quot;,
+<span class="line-num">161</span>    },
+<span class="line-num">162</span>    {
+<span class="line-num">163</span>        &quot;slug&quot;: &quot;fountain&quot;,
+<span class="line-num">164</span>        &quot;label&quot;: &quot;Fountain&quot;,
+<span class="line-num">165</span>        &quot;category&quot;: BUILT,
+<span class="line-num">166</span>        &quot;definition_short&quot;: &quot;Elaborate fountains described throughout the HP, combining hydraulic engineering with allegorical sculpture and symbolic water imagery.&quot;,
+<span class="line-num">167</span>        &quot;definition_long&quot;: &quot;Fountains are among the HP&#x27;s most frequently described architectural features. They range from simple springs to elaborate multi-tiered structures with sculptural programs, water jets, and inscribed basins. The sleeping nymph fountain, in particular, became one of the HP&#x27;s most influential images, copied in Renaissance gardens across Europe. Hunt (1998) reads the fountains as nodes where the HP&#x27;s garden discourse achieves its fullest integration of architecture, water, sculpture, and meaning.&quot;,
+<span class="line-num">168</span>        &quot;source_basis&quot;: &quot;HP passim; Hunt 1998; Segre 1998&quot;,
+<span class="line-num">169</span>    },
+<span class="line-num">170</span>    {
+<span class="line-num">171</span>        &quot;slug&quot;: &quot;labyrinth&quot;,
+<span class="line-num">172</span>        &quot;label&quot;: &quot;Labyrinth&quot;,
+<span class="line-num">173</span>        &quot;category&quot;: BUILT,
+<span class="line-num">174</span>        &quot;definition_short&quot;: &quot;Maze structures in the HP that Poliphilo navigates, combining garden design with allegorical significance.&quot;,
+<span class="line-num">175</span>        &quot;definition_long&quot;: &quot;The HP describes labyrinthine structures that function both as garden features and as allegories of the questing mind. Poliphilo&#x27;s navigation of these mazes parallels his broader journey from confusion to understanding. The labyrinth connects the HP to classical myth (Theseus and the Minotaur) and to Renaissance garden design, where hedge mazes served as sites of aristocratic recreation and philosophical contemplation.&quot;,
+<span class="line-num">176</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Fabiani Giannetto 2015&quot;,
+<span class="line-num">177</span>    },
+<span class="line-num">178</span>    {
+<span class="line-num">179</span>        &quot;slug&quot;: &quot;portal&quot;,
+<span class="line-num">180</span>        &quot;label&quot;: &quot;Portal&quot;,
+<span class="line-num">181</span>        &quot;category&quot;: BUILT,
+<span class="line-num">182</span>        &quot;definition_short&quot;: &quot;Doorways and thresholds in the HP that mark transitions between narrative zones and allegorical states.&quot;,
+<span class="line-num">183</span>        &quot;definition_long&quot;: &quot;The HP uses portals, doors, and gateways as structural devices that divide the narrative into discrete zones of experience. Each portal is described architecturally (material, proportion, decoration) and allegorically (what it represents, what choice it demands). The three doors of Thelemia are the most famous example, but portals appear throughout the narrative as sites where Poliphilo must choose, pause, or transform before proceeding.&quot;,
+<span class="line-num">184</span>        &quot;source_basis&quot;: &quot;HP passim; Godwin 1999&quot;,
+<span class="line-num">185</span>    },
+<span class="line-num">186</span>
+<span class="line-num">187</span>    # === Gardens &amp; Landscape ===
+<span class="line-num">188</span>    {
+<span class="line-num">189</span>        &quot;slug&quot;: &quot;circular-garden&quot;,
+<span class="line-num">190</span>        &quot;label&quot;: &quot;Circular Garden&quot;,
+<span class="line-num">191</span>        &quot;category&quot;: GARDEN,
+<span class="line-num">192</span>        &quot;definition_short&quot;: &quot;The elaborate concentric garden on the island of Cythera, with circular rings of planting surrounding Venus&#x27;s temple.&quot;,
+<span class="line-num">193</span>        &quot;definition_long&quot;: &quot;The garden of Cythera is designed as a series of concentric circles radiating from Venus&#x27;s temple at the center. Each ring contains different plantings arranged in geometric patterns. Segre (1998) provides the first critical analysis of this garden, arguing it anticipates sixteenth-century botanical garden layouts. The circular form carries cosmological significance: it maps the Neoplatonic emanation from the One (Venus at the center) outward through successive levels of material existence.&quot;,
+<span class="line-num">194</span>        &quot;source_basis&quot;: &quot;HP Book I, final sections; Segre 1998; Hunt 1998&quot;,
+<span class="line-num">195</span>    },
+<span class="line-num">196</span>    {
+<span class="line-num">197</span>        &quot;slug&quot;: &quot;topiary&quot;,
+<span class="line-num">198</span>        &quot;label&quot;: &quot;Topiary&quot;,
+<span class="line-num">199</span>        &quot;category&quot;: GARDEN,
+<span class="line-num">200</span>        &quot;definition_short&quot;: &quot;Ornamental clipping of trees and shrubs into geometric or figurative shapes, described in the HP&#x27;s garden passages.&quot;,
+<span class="line-num">201</span>        &quot;definition_long&quot;: &quot;The HP describes topiary in its garden passages with attention to the shapes formed (spheres, cones, animal figures) and the relationship between clipped vegetation and architectural structure. These descriptions place the HP at the origin of Renaissance garden discourse, where the shaping of nature into art is a central concern. The topiary passages illustrate the HP&#x27;s broader interest in the boundary between natural and artificial form.&quot;,
+<span class="line-num">202</span>        &quot;source_basis&quot;: &quot;HP; Hunt 1998; Leslie 1998&quot;,
+<span class="line-num">203</span>    },
+<span class="line-num">204</span>    {
+<span class="line-num">205</span>        &quot;slug&quot;: &quot;pergola&quot;,
+<span class="line-num">206</span>        &quot;label&quot;: &quot;Pergola&quot;,
+<span class="line-num">207</span>        &quot;category&quot;: GARDEN,
+<span class="line-num">208</span>        &quot;definition_short&quot;: &quot;Garden structures of columns or posts supporting climbing plants, creating shaded walkways described in the HP.&quot;,
+<span class="line-num">209</span>        &quot;definition_long&quot;: &quot;Pergolas appear in the HP as transitional garden structures that mediate between built architecture and living vegetation. Poliphilo describes their materials (marble columns, vine-covered beams) and the sensory experience of walking through them (shade, fragrance, filtered light). The pergola serves the HP&#x27;s characteristic fusion of architectural precision with bodily immersion in landscape.&quot;,
+<span class="line-num">210</span>        &quot;source_basis&quot;: &quot;HP; Hunt 1998; Godwin 1999&quot;,
+<span class="line-num">211</span>    },
+<span class="line-num">212</span>    {
+<span class="line-num">213</span>        &quot;slug&quot;: &quot;water-garden&quot;,
+<span class="line-num">214</span>        &quot;label&quot;: &quot;Water Garden&quot;,
+<span class="line-num">215</span>        &quot;category&quot;: GARDEN,
+<span class="line-num">216</span>        &quot;definition_short&quot;: &quot;Gardens organized around water features — canals, fountains, pools — that figure prominently in the HP&#x27;s landscape descriptions.&quot;,
+<span class="line-num">217</span>        &quot;definition_long&quot;: &quot;Water is a governing element in the HP&#x27;s garden passages. Poliphilo encounters gardens structured around canals, reflecting pools, cascading fountains, and streams. Water serves both practical functions (irrigation, cooling) and symbolic ones (purification, reflection, the flow of time and desire). The HP&#x27;s water gardens influenced real Renaissance garden design, particularly in the great villa gardens of the Veneto and Rome.&quot;,
+<span class="line-num">218</span>        &quot;source_basis&quot;: &quot;HP passim; Hunt 1998; Segre 1998&quot;,
+<span class="line-num">219</span>    },
+<span class="line-num">220</span>
+<span class="line-num">221</span>    # === Processions &amp; Ritual ===
+<span class="line-num">222</span>    {
+<span class="line-num">223</span>        &quot;slug&quot;: &quot;triumphal-procession&quot;,
+<span class="line-num">224</span>        &quot;label&quot;: &quot;Triumphal Procession&quot;,
+<span class="line-num">225</span>        &quot;category&quot;: PROC,
+<span class="line-num">226</span>        &quot;definition_short&quot;: &quot;Elaborate processions described in the HP, modeled on Roman triumphs, featuring chariots, musicians, allegorical figures, and captives.&quot;,
+<span class="line-num">227</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s triumphal processions are among its most visually spectacular passages. They depict chariots drawn by exotic animals, musicians, dancers, allegorical personifications, and crowds of participants, all described in exhaustive detail. The procession woodcuts are among the most complex in the book. These passages connect the HP to Renaissance festival culture and to the classical literary tradition of the triumphus. The alchemical annotators read the processions as encoding stages of the Great Work.&quot;,
+<span class="line-num">228</span>        &quot;source_basis&quot;: &quot;HP d1r-e4v; Russell 2014; Godwin 1999&quot;,
+<span class="line-num">229</span>    },
+<span class="line-num">230</span>    {
+<span class="line-num">231</span>        &quot;slug&quot;: &quot;sacrifice-priapus&quot;,
+<span class="line-num">232</span>        &quot;label&quot;: &quot;Sacrifice to Priapus&quot;,
+<span class="line-num">233</span>        &quot;category&quot;: PROC,
+<span class="line-num">234</span>        &quot;definition_short&quot;: &quot;A ritual sacrifice scene in the HP where a donkey is offered to Priapus, the garden god of fertility.&quot;,
+<span class="line-num">235</span>        &quot;definition_long&quot;: &quot;The sacrifice to Priapus is one of the HP&#x27;s most explicitly pagan ritual scenes. A donkey is sacrificed at Priapus&#x27;s altar in a ceremony that combines classical sacrificial practice with garden-cult imagery. The scene&#x27;s frank treatment of fertility symbolism made it a focus for later allegorical interpreters, including the alchemical annotators who read Priapus as encoding generative force in the alchemical process.&quot;,
+<span class="line-num">236</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Russell 2014&quot;,
+<span class="line-num">237</span>    },
+<span class="line-num">238</span>    {
+<span class="line-num">239</span>        &quot;slug&quot;: &quot;navigation-cythera&quot;,
+<span class="line-num">240</span>        &quot;label&quot;: &quot;Navigation to Cythera&quot;,
+<span class="line-num">241</span>        &quot;category&quot;: PROC,
+<span class="line-num">242</span>        &quot;definition_short&quot;: &quot;The sea voyage carrying Poliphilo and Polia to the island of Cythera, Venus&#x27;s sacred island.&quot;,
+<span class="line-num">243</span>        &quot;definition_long&quot;: &quot;The voyage to Cythera marks the transition from the HP&#x27;s mainland landscapes to its island climax. Poliphilo and Polia travel by boat to Venus&#x27;s island, where their union will be consecrated. The navigation passage combines maritime description with allegorical significance: the sea crossing represents the passage from earthly desire to divine love. Watteau&#x27;s later painting L&#x27;Embarquement pour Cythere (1717) may owe something to this literary tradition.&quot;,
+<span class="line-num">244</span>        &quot;source_basis&quot;: &quot;HP Book I; Godwin 1999; Praz 1947&quot;,
+<span class="line-num">245</span>    },
+<span class="line-num">246</span>    {
+<span class="line-num">247</span>        &quot;slug&quot;: &quot;dream-within-dream&quot;,
+<span class="line-num">248</span>        &quot;label&quot;: &quot;Dream within a Dream&quot;,
+<span class="line-num">249</span>        &quot;category&quot;: PROC,
+<span class="line-num">250</span>        &quot;definition_short&quot;: &quot;The nested dream structure of the HP: Poliphilo falls asleep within his dream, entering a deeper level of vision.&quot;,
+<span class="line-num">251</span>        &quot;definition_long&quot;: &quot;At a6v, Poliphilo falls asleep within his own dream, creating a two-layered dream structure. The inner dream contains the main narrative (the journey, the ruins, the gardens, the union with Polia), while the outer frame provides the initial dark-forest setting and the final awakening. Priki (2016) reads this structure as a deliberate adaptation of the Roman de la Rose&#x27;s single-layer dream frame, arguing that the double dream enables pedagogical encounters that prepare the lover for union.&quot;,
+<span class="line-num">252</span>        &quot;source_basis&quot;: &quot;HP a6v; Priki 2016; Gollnick 1999&quot;,
+<span class="line-num">253</span>    },
+<span class="line-num">254</span>
+<span class="line-num">255</span>    # === Visual &amp; Typographic ===
+<span class="line-num">256</span>    {
+<span class="line-num">257</span>        &quot;slug&quot;: &quot;macaronic-language&quot;,
+<span class="line-num">258</span>        &quot;label&quot;: &quot;Macaronic Language&quot;,
+<span class="line-num">259</span>        &quot;category&quot;: VISUAL,
+<span class="line-num">260</span>        &quot;definition_short&quot;: &quot;The HP&#x27;s distinctive hybrid language mixing Italian, Latin, and Greek vocabulary with invented words and pseudo-classical formations.&quot;,
+<span class="line-num">261</span>        &quot;definition_long&quot;: &quot;The HP is written in a language that is neither standard Italian nor Latin but a deliberate hybrid. Poliphilo&#x27;s prose mixes Italian syntax with Latinate vocabulary, Greek loanwords, and invented terms. This macaronic style was long dismissed as eccentric affectation, but Trippe (2002) argues it is a literary strategy that enacts the HP&#x27;s thematic interest in translation, hybridity, and the gap between ancient and modern expression. Semler (2006) examines how Robert Dallington navigated this language in his 1592 English adaptation.&quot;,
+<span class="line-num">262</span>        &quot;source_basis&quot;: &quot;HP passim; Trippe 2002; Semler 2006; Ure 1952&quot;,
+<span class="line-num">263</span>    },
+<span class="line-num">264</span>    {
+<span class="line-num">265</span>        &quot;slug&quot;: &quot;historiated-initial&quot;,
+<span class="line-num">266</span>        &quot;label&quot;: &quot;Historiated Initial&quot;,
+<span class="line-num">267</span>        &quot;category&quot;: VISUAL,
+<span class="line-num">268</span>        &quot;definition_short&quot;: &quot;Decorated capital letters at the start of HP chapters that contain figurative imagery and spell out the acrostic.&quot;,
+<span class="line-num">269</span>        &quot;definition_long&quot;: &quot;Each chapter of the HP begins with a large historiated initial — a capital letter containing or surrounded by figurative decoration. The sequence of these initials spells out the acrostic POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT. The initials are part of the book&#x27;s typographic program, designed to be read both as text (the letter itself) and as image (the figurative decoration). They demonstrate Aldus Manutius&#x27;s press at its most ambitious, integrating type and woodcut illustration.&quot;,
+<span class="line-num">270</span>        &quot;source_basis&quot;: &quot;HP passim; Painter 1963; Godwin 1999&quot;,
+<span class="line-num">271</span>    },
+<span class="line-num">272</span>    {
+<span class="line-num">273</span>        &quot;slug&quot;: &quot;in-text-inscription&quot;,
+<span class="line-num">274</span>        &quot;label&quot;: &quot;In-Text Inscription&quot;,
+<span class="line-num">275</span>        &quot;category&quot;: VISUAL,
+<span class="line-num">276</span>        &quot;definition_short&quot;: &quot;Pseudo-classical inscriptions embedded within the HP&#x27;s text and woodcuts, which Poliphilo reads and interprets.&quot;,
+<span class="line-num">277</span>        &quot;definition_long&quot;: &quot;The HP contains numerous inscriptions set into its architectural descriptions and woodcut illustrations. These inscriptions are presented as carved into monuments, buildings, and tombs that Poliphilo encounters. He reads and translates them, often at length. The inscriptions are in Latin, Greek, Hebrew, Arabic, and pseudo-Egyptian, and they function as textual puzzles that reward the learned reader. Curran (1998) connects them to the Renaissance epigraphic tradition of collecting and interpreting ancient inscriptions.&quot;,
+<span class="line-num">278</span>        &quot;source_basis&quot;: &quot;HP passim; Curran 1998; Griggs 1998&quot;,
+<span class="line-num">279</span>    },
+<span class="line-num">280</span>    {
+<span class="line-num">281</span>        &quot;slug&quot;: &quot;pseudo-latin&quot;,
+<span class="line-num">282</span>        &quot;label&quot;: &quot;Pseudo-Latin&quot;,
+<span class="line-num">283</span>        &quot;category&quot;: VISUAL,
+<span class="line-num">284</span>        &quot;definition_short&quot;: &quot;Invented Latin-like vocabulary in the HP, formed by applying Latin morphology to Italian or Greek roots.&quot;,
+<span class="line-num">285</span>        &quot;definition_long&quot;: &quot;The HP&#x27;s characteristic vocabulary includes many pseudo-Latin words: terms that look and sound Latin but do not appear in classical texts. These are formed by applying Latin declensions and conjugations to Italian roots, or by adapting Greek words through Latin morphological patterns. The result is a learned-sounding language that resists easy translation. Ure (1952) provides early notes on this vocabulary, and Pozzi and Ciapponi&#x27;s critical edition (1964) includes a glossary of the HP&#x27;s most distinctive coinages.&quot;,
+<span class="line-num">286</span>        &quot;source_basis&quot;: &quot;HP passim; Ure 1952; Pozzi &amp; Ciapponi 1964&quot;,
+<span class="line-num">287</span>    },
+<span class="line-num">288</span>
+<span class="line-num">289</span>    # === Aesthetic Concepts ===
+<span class="line-num">290</span>    {
+<span class="line-num">291</span>        &quot;slug&quot;: &quot;meraviglia&quot;,
+<span class="line-num">292</span>        &quot;label&quot;: &quot;Meraviglia (Wonder)&quot;,
+<span class="line-num">293</span>        &quot;category&quot;: AESTH,
+<span class="line-num">294</span>        &quot;definition_short&quot;: &quot;The aesthetic experience of wonder that the HP cultivates through its descriptions of extraordinary architecture, gardens, and spectacles.&quot;,
+<span class="line-num">295</span>        &quot;definition_long&quot;: &quot;Meraviglia — wonder, marvel, astonishment — is the dominant aesthetic response the HP seeks to produce. Poliphilo repeatedly expresses stupefaction before the sights he encounters: colossal ruins, intricate gardens, bejeweled fountains, and processions of unearthly beauty. Fabiani Giannetto (2015) connects the HP&#x27;s cultivation of meraviglia to the Sacro Bosco at Bomarzo, arguing that both deploy architectural surprise as a mode of philosophical instruction.&quot;,
+<span class="line-num">296</span>        &quot;source_basis&quot;: &quot;HP passim; Fabiani Giannetto 2015; Hunt 1998&quot;,
+<span class="line-num">297</span>    },
+<span class="line-num">298</span>    {
+<span class="line-num">299</span>        &quot;slug&quot;: &quot;varieta&quot;,
+<span class="line-num">300</span>        &quot;label&quot;: &quot;Varieta (Variety)&quot;,
+<span class="line-num">301</span>        &quot;category&quot;: AESTH,
+<span class="line-num">302</span>        &quot;definition_short&quot;: &quot;The aesthetic principle of variety — in materials, forms, and experiences — that governs the HP&#x27;s descriptive abundance.&quot;,
+<span class="line-num">303</span>        &quot;definition_long&quot;: &quot;The HP enacts the Renaissance principle of varieta through its relentless accumulation of different materials, architectural forms, plant species, animal figures, and human types. Poliphilo&#x27;s descriptions catalog variety with taxonomic precision: types of marble, species of tree, kinds of column capital. This principle connects the HP to Alberti&#x27;s aesthetic theory, where varieta is the quality that sustains visual interest and pleasure across an extended work.&quot;,
+<span class="line-num">304</span>        &quot;source_basis&quot;: &quot;HP passim; Lefaivre 1997; Alberti, De re aedificatoria&quot;,
+<span class="line-num">305</span>    },
+<span class="line-num">306</span>    {
+<span class="line-num">307</span>        &quot;slug&quot;: &quot;disegno&quot;,
+<span class="line-num">308</span>        &quot;label&quot;: &quot;Disegno&quot;,
+<span class="line-num">309</span>        &quot;category&quot;: AESTH,
+<span class="line-num">310</span>        &quot;definition_short&quot;: &quot;The concept of design as both drawing and intellectual conception, central to the HP&#x27;s integration of text and image.&quot;,
+<span class="line-num">311</span>        &quot;definition_long&quot;: &quot;Disegno in Renaissance usage encompasses both the physical act of drawing and the intellectual faculty of design or conception. The HP&#x27;s 172 woodcuts and their precise relationship to the text demonstrate disegno in action: the images are not merely illustrations but integral components of the work&#x27;s meaning. The HP&#x27;s influence on subsequent design culture — from garden design to emblem books to architectural treatises — stems from its demonstration that disegno operates across media.&quot;,
+<span class="line-num">312</span>        &quot;source_basis&quot;: &quot;HP passim; Jarzombek 1990; Stewering 2000&quot;,
+<span class="line-num">313</span>    },
+<span class="line-num">314</span>    {
+<span class="line-num">315</span>        &quot;slug&quot;: &quot;decorum&quot;,
+<span class="line-num">316</span>        &quot;label&quot;: &quot;Decorum&quot;,
+<span class="line-num">317</span>        &quot;category&quot;: AESTH,
+<span class="line-num">318</span>        &quot;definition_short&quot;: &quot;The classical principle of fitness or appropriateness — matching style to subject, ornament to function — applied throughout the HP.&quot;,
+<span class="line-num">319</span>        &quot;definition_long&quot;: &quot;The HP applies the classical principle of decorum to its architectural and garden descriptions: each structure is ornamented according to its purpose, and each garden element is placed according to its symbolic function. Poliphilo notes where decorum is observed and where it is violated. This attention to fitness connects the HP to the Vitruvian tradition and to Alberti&#x27;s insistence that beauty arises from the rational correspondence between part and whole.&quot;,
+<span class="line-num">320</span>        &quot;source_basis&quot;: &quot;HP passim; Stewering 2000; Vitruvius, De architectura&quot;,
+<span class="line-num">321</span>    },
+<span class="line-num">322</span>    {
+<span class="line-num">323</span>        &quot;slug&quot;: &quot;grotesque&quot;,
+<span class="line-num">324</span>        &quot;label&quot;: &quot;Grotesque&quot;,
+<span class="line-num">325</span>        &quot;category&quot;: AESTH,
+<span class="line-num">326</span>        &quot;definition_short&quot;: &quot;Ornamental style combining human, animal, and vegetable forms in fantastical hybrids, described and depicted in the HP.&quot;,
+<span class="line-num">327</span>        &quot;definition_long&quot;: &quot;The HP describes and illustrates grotesque ornament — the hybrid decorative style rediscovered in the grottoes (grotte) of Nero&#x27;s Domus Aurea in Rome around 1480. Poliphilo encounters carved surfaces where human figures merge with acanthus scrolls, animal forms sprout architectural elements, and natural and artificial forms intertwine. The HP is among the earliest printed works to depict and theorize this ornamental mode, which became one of the defining visual vocabularies of Renaissance decoration.&quot;,
+<span class="line-num">328</span>        &quot;source_basis&quot;: &quot;HP passim; Dacos 1969; Godwin 1999&quot;,
+<span class="line-num">329</span>    },
+<span class="line-num">330</span>
+<span class="line-num">331</span>    # === Material Culture ===
+<span class="line-num">332</span>    {
+<span class="line-num">333</span>        &quot;slug&quot;: &quot;porphyry&quot;,
+<span class="line-num">334</span>        &quot;label&quot;: &quot;Porphyry&quot;,
+<span class="line-num">335</span>        &quot;category&quot;: MATERIAL,
+<span class="line-num">336</span>        &quot;definition_short&quot;: &quot;A hard purple-red stone associated with imperial authority, frequently named in the HP&#x27;s material descriptions.&quot;,
+<span class="line-num">337</span>        &quot;definition_long&quot;: &quot;Porphyry appears throughout the HP as a marker of supreme quality and imperial association. Poliphilo describes columns, floors, basins, and sculptures made of porphyry, often specifying its color and the difficulty of working it. In Renaissance material culture, porphyry carried associations of antiquity, authority, and permanence. The HP&#x27;s repeated invocation of porphyry situates its imagined architecture within the highest register of classical luxury.&quot;,
+<span class="line-num">338</span>        &quot;source_basis&quot;: &quot;HP passim; Godwin 1999&quot;,
+<span class="line-num">339</span>    },
+<span class="line-num">340</span>    {
+<span class="line-num">341</span>        &quot;slug&quot;: &quot;chalcedony&quot;,
+<span class="line-num">342</span>        &quot;label&quot;: &quot;Chalcedony&quot;,
+<span class="line-num">343</span>        &quot;category&quot;: MATERIAL,
+<span class="line-num">344</span>        &quot;definition_short&quot;: &quot;A translucent microcrystalline quartz named among the precious stones in the HP&#x27;s descriptions of luxury surfaces.&quot;,
+<span class="line-num">345</span>        &quot;definition_long&quot;: &quot;The HP catalogs precious and semi-precious stones with lapidary precision: chalcedony, jasper, agate, sardonyx, and others. These material descriptions serve both aesthetic and symbolic functions. Each stone carries traditional associations (chalcedony with eloquence and courage, jasper with healing) that add layers of meaning to the architectural surfaces Poliphilo describes. The HP&#x27;s material vocabulary reflects the Renaissance fascination with natural history and the moral significance of stones.&quot;,
+<span class="line-num">346</span>        &quot;source_basis&quot;: &quot;HP passim; Godwin 1999&quot;,
+<span class="line-num">347</span>    },
+<span class="line-num">348</span>    {
+<span class="line-num">349</span>        &quot;slug&quot;: &quot;jasper&quot;,
+<span class="line-num">350</span>        &quot;label&quot;: &quot;Jasper&quot;,
+<span class="line-num">351</span>        &quot;category&quot;: MATERIAL,
+<span class="line-num">352</span>        &quot;definition_short&quot;: &quot;An opaque quartz used for columns and pavements in the HP, associated with healing and protection in lapidary tradition.&quot;,
+<span class="line-num">353</span>        &quot;definition_long&quot;: &quot;Jasper (diaspro) is one of the most frequently named stones in the HP. Poliphilo describes jasper columns, jasper pavements, and jasper vessel interiors. The stone&#x27;s variety of colors (red, green, yellow) allows the HP to build complex chromatic descriptions of architectural surfaces. In the medieval and Renaissance lapidary tradition, jasper was associated with healing, protection from poison, and the stopping of blood — associations that the alchemical annotators may have found significant.&quot;,
+<span class="line-num">354</span>        &quot;source_basis&quot;: &quot;HP passim; Russell 2014; Godwin 1999&quot;,
+<span class="line-num">355</span>    },
+<span class="line-num">356</span>
+<span class="line-num">357</span>    # === Additional Architecture &amp; Gardens (expanding existing category) ===
+<span class="line-num">358</span>    {
+<span class="line-num">359</span>        &quot;slug&quot;: &quot;sleeping-nymph-fountain&quot;,
+<span class="line-num">360</span>        &quot;label&quot;: &quot;Sleeping Nymph Fountain&quot;,
+<span class="line-num">361</span>        &quot;category&quot;: BUILT,
+<span class="line-num">362</span>        &quot;definition_short&quot;: &quot;A famous HP image of a reclining nymph beside a spring, which became one of the book&#x27;s most widely copied motifs.&quot;,
+<span class="line-num">363</span>        &quot;definition_long&quot;: &quot;The sleeping nymph fountain depicts a female figure reclining beside a natural spring with the inscription PANTΩΝ TOKAΔI (&#x27;mother of all things&#x27;). This image was widely copied in Renaissance gardens, appearing as actual fountain sculptures across Italy and France. It combines the classical tradition of the sleeping Ariadne with the Renaissance cult of the genius loci (spirit of place). The nymph fountain is one of the clearest examples of the HP&#x27;s direct influence on material culture.&quot;,
+<span class="line-num">364</span>        &quot;source_basis&quot;: &quot;HP; Godwin 1999; Kurz 1953&quot;,
+<span class="line-num">365</span>    },
+<span class="line-num">366</span>    {
+<span class="line-num">367</span>        &quot;slug&quot;: &quot;obelisk&quot;,
+<span class="line-num">368</span>        &quot;label&quot;: &quot;Obelisk&quot;,
+<span class="line-num">369</span>        &quot;category&quot;: BUILT,
+<span class="line-num">370</span>        &quot;definition_short&quot;: &quot;Tall, tapering stone monuments in the HP, associated with Egyptian wisdom and the encoding of hidden knowledge.&quot;,
+<span class="line-num">371</span>        &quot;definition_long&quot;: &quot;Obelisks appear throughout the HP as bearers of hieroglyphic inscriptions and as monuments connecting the narrative to Egyptian antiquity. The most famous is the obelisk surmounting the elephant (b6v-b7r), which Bernini later adapted for his 1667 sculpture in Piazza della Minerva. The HP&#x27;s obelisks reflect the Renaissance conviction that Egyptian monuments encoded prisca sapientia — ancient wisdom accessible only to initiated readers. The alchemical annotators treated the obelisk passages as particularly dense with hidden meaning.&quot;,
+<span class="line-num">372</span>        &quot;source_basis&quot;: &quot;HP b6v-b7r passim; Heckscher 1947; Curran 1998&quot;,
+<span class="line-num">373</span>    },
+<span class="line-num">374</span>
+<span class="line-num">375</span>    # === Additional Scholarly/Textual ===
+<span class="line-num">376</span>    {
+<span class="line-num">377</span>        &quot;slug&quot;: &quot;1545-edition&quot;,
+<span class="line-num">378</span>        &quot;label&quot;: &quot;1545 Edition&quot;,
+<span class="line-num">379</span>        &quot;category&quot;: BOOK,
+<span class="line-num">380</span>        &quot;definition_short&quot;: &quot;The second Aldine edition of the HP, published in 1545, which reused the 1499 text but with new woodcut blocks.&quot;,
+<span class="line-num">381</span>        &quot;definition_long&quot;: &quot;The 1545 edition was published by the Aldine press (then under Paolo Manuzio, Aldus&#x27;s son) with new woodcut blocks that generally followed the 1499 designs but with some variations. The BL copy in this project (C.60.o.12) is a 1545 edition, which complicates folio-to-image matching since the signature map is based on the 1499 collation. Priki (2009) documents the differences between editions as part of the HP&#x27;s reception history.&quot;,
+<span class="line-num">382</span>        &quot;source_basis&quot;: &quot;Priki 2009; Russell 2014; Painter 1963&quot;,
+<span class="line-num">383</span>    },
+<span class="line-num">384</span>    {
+<span class="line-num">385</span>        &quot;slug&quot;: &quot;1499-edition&quot;,
+<span class="line-num">386</span>        &quot;label&quot;: &quot;1499 Edition&quot;,
+<span class="line-num">387</span>        &quot;category&quot;: BOOK,
+<span class="line-num">388</span>        &quot;definition_short&quot;: &quot;The first edition of the HP, printed by Aldus Manutius in Venice in December 1499, with 172 woodcut illustrations.&quot;,
+<span class="line-num">389</span>        &quot;definition_long&quot;: &quot;The editio princeps of the HP was published by Aldus Manutius&#x27;s press in Venice, dated December 1499. It is a folio volume with 172 woodcut illustrations, historiated initials, and the author-attribution acrostic. The 1499 edition is the basis for Russell&#x27;s world census of annotated copies and for this project&#x27;s signature map. It is widely regarded as the most elaborately illustrated incunabulum ever produced. The Incunabula Short Title Catalogue (ISTC) records approximately 200 surviving copies.&quot;,
+<span class="line-num">390</span>        &quot;source_basis&quot;: &quot;Russell 2014, p. 16; Painter 1963; ISTC&quot;,
+<span class="line-num">391</span>    },
+<span class="line-num">392</span>    {
+<span class="line-num">393</span>        &quot;slug&quot;: &quot;beroalde-1600&quot;,
+<span class="line-num">394</span>        &quot;label&quot;: &quot;Beroalde de Verville&#x27;s 1600 Edition&quot;,
+<span class="line-num">395</span>        &quot;category&quot;: BOOK,
+<span class="line-num">396</span>        &quot;definition_short&quot;: &quot;The French alchemical edition of the HP published by Beroalde de Verville in 1600, with a &#x27;tableau steganographique&#x27; of alchemical keys.&quot;,
+<span class="line-num">397</span>        &quot;definition_long&quot;: &quot;Beroalde de Verville published a French adaptation of the HP in 1600 that included a &#x27;tableau steganographique&#x27; — a systematic table mapping narrative elements to alchemical processes and substances. This edition inaugurated the tradition of reading the HP as alchemical allegory that Russell documents in the BL and Buffalo annotators. Beroalde&#x27;s edition is the earliest published alchemical interpretation of the HP and influenced all subsequent alchemical readings.&quot;,
+<span class="line-num">398</span>        &quot;source_basis&quot;: &quot;Russell 2014, pp. 147-153; Perifano 2004&quot;,
+<span class="line-num">399</span>    },
+<span class="line-num">400</span>]
+<span class="line-num">401</span>
+<span class="line-num">402</span># Cross-links between new terms and between new and existing terms
+<span class="line-num">403</span>LINKS = [
+<span class="line-num">404</span>    # Characters
+<span class="line-num">405</span>    (&quot;poliphilo&quot;, &quot;polia&quot;, &quot;RELATED&quot;),
+<span class="line-num">406</span>    (&quot;poliphilo&quot;, &quot;dream-narrative&quot;, &quot;RELATED&quot;),
+<span class="line-num">407</span>    (&quot;poliphilo&quot;, &quot;dark-forest&quot;, &quot;RELATED&quot;),
+<span class="line-num">408</span>    (&quot;polia&quot;, &quot;venus-aphrodite&quot;, &quot;RELATED&quot;),
+<span class="line-num">409</span>    (&quot;eleuterylida&quot;, &quot;thelemia&quot;, &quot;RELATED&quot;),
+<span class="line-num">410</span>    (&quot;eleuterylida&quot;, &quot;nymphs-five-senses&quot;, &quot;RELATED&quot;),
+<span class="line-num">411</span>    (&quot;nymphs-five-senses&quot;, &quot;bath-thermae&quot;, &quot;RELATED&quot;),
+<span class="line-num">412</span>    (&quot;cupid-eros&quot;, &quot;venus-aphrodite&quot;, &quot;RELATED&quot;),
+<span class="line-num">413</span>    (&quot;cupid-eros&quot;, &quot;triumphal-procession&quot;, &quot;RELATED&quot;),
+<span class="line-num">414</span>    (&quot;venus-aphrodite&quot;, &quot;cythera&quot;, &quot;RELATED&quot;),
+<span class="line-num">415</span>    (&quot;venus-aphrodite&quot;, &quot;circular-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">416</span>    (&quot;venus-aphrodite&quot;, &quot;chemical-wedding&quot;, &quot;SEE_ALSO&quot;),
+<span class="line-num">417</span>
+<span class="line-num">418</span>    # Places
+<span class="line-num">419</span>    (&quot;dark-forest&quot;, &quot;dream-narrative&quot;, &quot;RELATED&quot;),
+<span class="line-num">420</span>    (&quot;dark-forest&quot;, &quot;dream-within-dream&quot;, &quot;RELATED&quot;),
+<span class="line-num">421</span>    (&quot;thelemia&quot;, &quot;portal&quot;, &quot;RELATED&quot;),
+<span class="line-num">422</span>    (&quot;ruined-temple&quot;, &quot;antiquarianism&quot;, &quot;RELATED&quot;),
+<span class="line-num">423</span>    (&quot;ruined-temple&quot;, &quot;column-orders&quot;, &quot;RELATED&quot;),
+<span class="line-num">424</span>    (&quot;triumphal-gate&quot;, &quot;triumphal-arch&quot;, &quot;RELATED&quot;),
+<span class="line-num">425</span>
+<span class="line-num">426</span>    # Architecture
+<span class="line-num">427</span>    (&quot;column-orders&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">428</span>    (&quot;pyramid&quot;, &quot;obelisk&quot;, &quot;RELATED&quot;),
+<span class="line-num">429</span>    (&quot;pyramid&quot;, &quot;hieroglyph&quot;, &quot;RELATED&quot;),
+<span class="line-num">430</span>    (&quot;triumphal-arch&quot;, &quot;triumphal-procession&quot;, &quot;RELATED&quot;),
+<span class="line-num">431</span>    (&quot;bath-thermae&quot;, &quot;architectural-body&quot;, &quot;RELATED&quot;),
+<span class="line-num">432</span>    (&quot;fountain&quot;, &quot;sleeping-nymph-fountain&quot;, &quot;RELATED&quot;),
+<span class="line-num">433</span>    (&quot;fountain&quot;, &quot;water-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">434</span>    (&quot;labyrinth&quot;, &quot;circular-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">435</span>    (&quot;sleeping-nymph-fountain&quot;, &quot;meraviglia&quot;, &quot;RELATED&quot;),
+<span class="line-num">436</span>    (&quot;obelisk&quot;, &quot;elephant-obelisk&quot;, &quot;RELATED&quot;),
+<span class="line-num">437</span>    (&quot;obelisk&quot;, &quot;hieroglyph&quot;, &quot;RELATED&quot;),
+<span class="line-num">438</span>
+<span class="line-num">439</span>    # Gardens
+<span class="line-num">440</span>    (&quot;circular-garden&quot;, &quot;cythera&quot;, &quot;RELATED&quot;),
+<span class="line-num">441</span>    (&quot;topiary&quot;, &quot;circular-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">442</span>    (&quot;pergola&quot;, &quot;circular-garden&quot;, &quot;RELATED&quot;),
+<span class="line-num">443</span>    (&quot;water-garden&quot;, &quot;fountain&quot;, &quot;RELATED&quot;),
+<span class="line-num">444</span>
+<span class="line-num">445</span>    # Processions &amp; Ritual
+<span class="line-num">446</span>    (&quot;triumphal-procession&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">447</span>    (&quot;sacrifice-priapus&quot;, &quot;alchemical-allegory&quot;, &quot;SEE_ALSO&quot;),
+<span class="line-num">448</span>    (&quot;navigation-cythera&quot;, &quot;cythera&quot;, &quot;RELATED&quot;),
+<span class="line-num">449</span>    (&quot;dream-within-dream&quot;, &quot;dream-narrative&quot;, &quot;PARENT&quot;),
+<span class="line-num">450</span>
+<span class="line-num">451</span>    # Visual &amp; Typographic
+<span class="line-num">452</span>    (&quot;macaronic-language&quot;, &quot;vernacular-poetics&quot;, &quot;RELATED&quot;),
+<span class="line-num">453</span>    (&quot;macaronic-language&quot;, &quot;pseudo-latin&quot;, &quot;RELATED&quot;),
+<span class="line-num">454</span>    (&quot;historiated-initial&quot;, &quot;acrostic&quot;, &quot;RELATED&quot;),
+<span class="line-num">455</span>    (&quot;historiated-initial&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">456</span>    (&quot;in-text-inscription&quot;, &quot;hieroglyph&quot;, &quot;RELATED&quot;),
+<span class="line-num">457</span>    (&quot;in-text-inscription&quot;, &quot;antiquarianism&quot;, &quot;RELATED&quot;),
+<span class="line-num">458</span>    (&quot;pseudo-latin&quot;, &quot;macaronic-language&quot;, &quot;RELATED&quot;),
+<span class="line-num">459</span>
+<span class="line-num">460</span>    # Aesthetic
+<span class="line-num">461</span>    (&quot;meraviglia&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">462</span>    (&quot;varieta&quot;, &quot;ekphrasis&quot;, &quot;RELATED&quot;),
+<span class="line-num">463</span>    (&quot;disegno&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">464</span>    (&quot;decorum&quot;, &quot;column-orders&quot;, &quot;RELATED&quot;),
+<span class="line-num">465</span>    (&quot;grotesque&quot;, &quot;woodcut&quot;, &quot;RELATED&quot;),
+<span class="line-num">466</span>
+<span class="line-num">467</span>    # Material
+<span class="line-num">468</span>    (&quot;porphyry&quot;, &quot;jasper&quot;, &quot;RELATED&quot;),
+<span class="line-num">469</span>    (&quot;porphyry&quot;, &quot;chalcedony&quot;, &quot;RELATED&quot;),
+<span class="line-num">470</span>    (&quot;jasper&quot;, &quot;chalcedony&quot;, &quot;RELATED&quot;),
+<span class="line-num">471</span>
+<span class="line-num">472</span>    # Editions
+<span class="line-num">473</span>    (&quot;1499-edition&quot;, &quot;aldus-manutius&quot;, &quot;RELATED&quot;),
+<span class="line-num">474</span>    (&quot;1499-edition&quot;, &quot;incunabulum&quot;, &quot;RELATED&quot;),
+<span class="line-num">475</span>    (&quot;1499-edition&quot;, &quot;1545-edition&quot;, &quot;RELATED&quot;),
+<span class="line-num">476</span>    (&quot;1545-edition&quot;, &quot;1499-edition&quot;, &quot;RELATED&quot;),
+<span class="line-num">477</span>    (&quot;beroalde-1600&quot;, &quot;alchemical-allegory&quot;, &quot;RELATED&quot;),
+<span class="line-num">478</span>    (&quot;beroalde-1600&quot;, &quot;reception-history&quot;, &quot;RELATED&quot;),
+<span class="line-num">479</span>]
+<span class="line-num">480</span>
+<span class="line-num">481</span>
+<span class="line-num">482</span>def main():
+<span class="line-num">483</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">484</span>    cur = conn.cursor()
+<span class="line-num">485</span>
+<span class="line-num">486</span>    print(&quot;Seeding HP entity dictionary terms (v2)...&quot;)
+<span class="line-num">487</span>    inserted = 0
+<span class="line-num">488</span>    for t in TERMS:
+<span class="line-num">489</span>        cur.execute(&quot;&quot;&quot;
+<span class="line-num">490</span>            INSERT OR IGNORE INTO dictionary_terms
+<span class="line-num">491</span>                (slug, label, category, definition_short, definition_long,
+<span class="line-num">492</span>                 source_basis, review_status, needs_review, source_method)
+<span class="line-num">493</span>            VALUES (?, ?, ?, ?, ?, ?, &#x27;DRAFT&#x27;, 1, &#x27;LLM_ASSISTED&#x27;)
+<span class="line-num">494</span>        &quot;&quot;&quot;, (t[&quot;slug&quot;], t[&quot;label&quot;], t[&quot;category&quot;],
+<span class="line-num">495</span>              t[&quot;definition_short&quot;], t[&quot;definition_long&quot;],
+<span class="line-num">496</span>              t.get(&quot;source_basis&quot;, &quot;&quot;)))
+<span class="line-num">497</span>        inserted += cur.rowcount
+<span class="line-num">498</span>    conn.commit()
+<span class="line-num">499</span>    print(f&quot;  Inserted {inserted} new terms ({len(TERMS)} defined)&quot;)
+<span class="line-num">500</span>
+<span class="line-num">501</span>    print(&quot;Creating term links...&quot;)
+<span class="line-num">502</span>    linked = 0
+<span class="line-num">503</span>    for slug_a, slug_b, link_type in LINKS:
+<span class="line-num">504</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_a,))
+<span class="line-num">505</span>        a = cur.fetchone()
+<span class="line-num">506</span>        cur.execute(&quot;SELECT id FROM dictionary_terms WHERE slug=?&quot;, (slug_b,))
+<span class="line-num">507</span>        b = cur.fetchone()
+<span class="line-num">508</span>        if a and b:
+<span class="line-num">509</span>            cur.execute(&quot;&quot;&quot;
+<span class="line-num">510</span>                INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">511</span>                    (term_id, linked_term_id, link_type)
+<span class="line-num">512</span>                VALUES (?, ?, ?)
+<span class="line-num">513</span>            &quot;&quot;&quot;, (a[0], b[0], link_type))
+<span class="line-num">514</span>            linked += cur.rowcount
+<span class="line-num">515</span>            if link_type == &quot;RELATED&quot;:
+<span class="line-num">516</span>                cur.execute(&quot;&quot;&quot;
+<span class="line-num">517</span>                    INSERT OR IGNORE INTO dictionary_term_links
+<span class="line-num">518</span>                        (term_id, linked_term_id, link_type)
+<span class="line-num">519</span>                    VALUES (?, ?, ?)
+<span class="line-num">520</span>                &quot;&quot;&quot;, (b[0], a[0], link_type))
+<span class="line-num">521</span>                linked += cur.rowcount
+<span class="line-num">522</span>    conn.commit()
+<span class="line-num">523</span>    print(f&quot;  Created {linked} links&quot;)
+<span class="line-num">524</span>
+<span class="line-num">525</span>    # Summary
+<span class="line-num">526</span>    print(&quot;\nDictionary by category:&quot;)
+<span class="line-num">527</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">528</span>        SELECT category, COUNT(*) FROM dictionary_terms
+<span class="line-num">529</span>        GROUP BY category ORDER BY COUNT(*) DESC
+<span class="line-num">530</span>    &quot;&quot;&quot;)
+<span class="line-num">531</span>    for row in cur.fetchall():
+<span class="line-num">532</span>        print(f&quot;  {row[0]}: {row[1]}&quot;)
+<span class="line-num">533</span>
+<span class="line-num">534</span>    cur.execute(&quot;SELECT COUNT(*) FROM dictionary_terms&quot;)
+<span class="line-num">535</span>    total = cur.fetchone()[0]
+<span class="line-num">536</span>    print(f&quot;\nTotal terms: {total}&quot;)
+<span class="line-num">537</span>
+<span class="line-num">538</span>    conn.close()
+<span class="line-num">539</span>    print(&quot;\nDone.&quot;)
+<span class="line-num">540</span>
+<span class="line-num">541</span>
+<span class="line-num">542</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">543</span>    main()</pre>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

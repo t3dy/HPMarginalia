@@ -46,6 +46,8 @@ def nav_html(active='', prefix=''):
         (f'{prefix}dictionary/index.html', 'Dictionary', 'dictionary'),
         (f'{prefix}docs/index.html', 'Docs', 'docs'),
         (f'{prefix}code/index.html', 'Code', 'code'),
+        (f'{prefix}timeline.html', 'Timeline', 'timeline'),
+        (f'{prefix}manuscripts/index.html', 'Manuscripts', 'manuscripts'),
         (f'{prefix}digital-edition.html', 'Edition', 'edition'),
         (f'{prefix}russell-alchemical-hands.html', 'Alchemical Hands', 'russell'),
         (f'{prefix}concordance-method.html', 'Concordance', 'concordance'),
@@ -1257,6 +1259,14 @@ SCRIPT_METADATA = {
     'enrich_dictionary.py': ('Enrich Dictionary', 'Populates dictionary fields from reading packets with source provenance and review status.'),
     'build_essay_data.py': ('Build Essay Data', 'Extracts structured evidence from DB and corpus for the Russell and Concordance essays.'),
     'add_alchemist_descriptions.py': ('Add Alchemist Descriptions', 'Inserts 13 folio-specific scholarly descriptions for the two alchemist annotators from Russell Ch. 6-7.'),
+    'seed_dictionary_v2.py': ('Seed Dictionary V2', 'Seeds 43 HP entity terms: characters, places, architecture, gardens, processions, aesthetics, materials.'),
+    'seed_dictionary_v3.py': ('Seed Dictionary V3', 'Seeds 14 additional terms: narrative form, built form, aesthetics, alchemy, material culture.'),
+    'generate_dictionary_significance.py': ('Generate Significance', 'Generates significance_to_hp and significance_to_scholarship prose for all 80+ dictionary terms.'),
+    'link_scholars.py': ('Link Scholars', 'Links scholars to bibliography, tags historical figures, matches summaries.json to bibliography entries.'),
+    'generate_scholar_overviews.py': ('Generate Scholar Overviews', 'Generates 2-3 paragraph overview prose for modern scholars and role descriptions for historical figures.'),
+    'migrate_timeline.py': ('Timeline Migration', 'Adds category, medium, location, image_ref, confidence columns to timeline_events table.'),
+    'seed_timeline_v2.py': ('Seed Timeline V2', 'Seeds ~30 new timeline events: art, literary influence, scholarly milestones, garden design.'),
+    'seed_copies.py': ('Seed Copies', 'Creates hp_copies table and seeds six annotated copies with full metadata from Russell 2014.'),
 }
 
 
@@ -2032,6 +2042,321 @@ def build_concordance_essay_page(conn):
 
 
 # ============================================================
+# Timeline page
+# ============================================================
+
+def build_timeline_page(conn):
+    """Generate timeline.html with chronological HP reception history."""
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT year, year_end, event_type, title, description, category,
+               medium, location, confidence, manuscript_shelfmark
+        FROM timeline_events ORDER BY year, id
+    """)
+    events = cur.fetchall()
+
+    # Group by year
+    by_year = {}
+    for e in events:
+        by_year.setdefault(e[0], []).append(e)
+
+    # Category colors
+    cat_colors = {
+        'art': '#8b5cf6', 'scholarship': '#3b82f6', 'edition': '#10b981',
+        'literary': '#f59e0b', '': '#6b7280',
+    }
+    cat_labels = {
+        'art': 'Art & Design', 'scholarship': 'Scholarship', 'edition': 'Edition',
+        'literary': 'Literary Influence', '': 'Other',
+    }
+
+    timeline_css = '<style>' + """
+        .timeline-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+        .timeline-page h2 { color: var(--accent); }
+        .timeline-page p { line-height: 1.8; }
+        .timeline-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
+        .timeline-filters label { display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; font-family: var(--font-sans); cursor: pointer; padding: 0.3rem 0.6rem; border: 1px solid var(--border); border-radius: 3px; }
+        .timeline-filters input { margin: 0; }
+        .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-year { margin-bottom: 2rem; position: relative; }
+        .year-marker { position: sticky; top: 4rem; font-size: 1.3rem; font-weight: 700; color: var(--accent); font-family: var(--font-sans); margin-bottom: 0.5rem; padding-left: 0; margin-left: -2rem; background: var(--bg-main, #fff); z-index: 1; }
+        .timeline-card { padding: 0.75rem 1rem; margin-bottom: 0.75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; position: relative; }
+        .timeline-card::before { content: ''; position: absolute; left: -1.55rem; top: 1rem; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+        .card-type-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.1rem 0.4rem; border-radius: 2px; color: white; margin-bottom: 0.3rem; font-family: var(--font-sans); }
+        .timeline-card h4 { margin: 0 0 0.3rem 0; font-size: 0.95rem; }
+        .timeline-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
+        .timeline-card .card-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); margin-top: 0.3rem; }
+    """ + '</style>'
+
+    # Build timeline HTML
+    timeline_html = ''
+    for year in sorted(by_year.keys()):
+        year_events = by_year[year]
+        cards = ''
+        for e in year_events:
+            (yr, yr_end, etype, title, desc, cat, medium, loc, conf, ms) = e
+            cat = cat or ''
+            color = cat_colors.get(cat, '#6b7280')
+            label = cat_labels.get(cat, etype or 'Other')
+            badge = f'<span class="card-type-badge" style="background:{color}">{escape(label)}</span>'
+            meta_parts = []
+            if medium:
+                meta_parts.append(escape(medium))
+            if loc:
+                meta_parts.append(escape(loc))
+            if conf and conf != 'HIGH':
+                meta_parts.append(f'Confidence: {escape(conf)}')
+            meta = f'<div class="card-meta">{" | ".join(meta_parts)}</div>' if meta_parts else ''
+
+            cards += f"""
+                <div class="timeline-card" data-category="{escape(cat)}">
+                    {badge}
+                    <h4>{escape(title)}</h4>
+                    <p>{escape(desc or '')}</p>
+                    {meta}
+                </div>"""
+
+        year_label = f"{year}" if not year_events[0][1] else f"{year}-{year_events[0][1]}"
+        timeline_html += f"""
+            <div class="timeline-year">
+                <div class="year-marker">{year_label}</div>
+                {cards}
+            </div>"""
+
+    # Filters
+    categories = sorted(set(e[5] or '' for e in events))
+    filter_html = ''
+    for cat in categories:
+        label = cat_labels.get(cat, cat or 'Other')
+        color = cat_colors.get(cat, '#6b7280')
+        filter_html += f'<label><input type="checkbox" checked data-filter="{escape(cat)}"> <span style="color:{color}">{escape(label)}</span></label>'
+
+    filter_js = """
+    <script>
+    document.querySelectorAll('.timeline-filters input').forEach(cb => {
+        cb.addEventListener('change', () => {
+            const cat = cb.dataset.filter;
+            const show = cb.checked;
+            document.querySelectorAll(`.timeline-card[data-category="${cat}"]`).forEach(card => {
+                card.style.display = show ? '' : 'none';
+            });
+            // Hide empty year markers
+            document.querySelectorAll('.timeline-year').forEach(yr => {
+                const visible = yr.querySelectorAll('.timeline-card:not([style*="display: none"])');
+                yr.style.display = visible.length ? '' : 'none';
+            });
+        });
+    });
+    </script>"""
+
+    body = f"""
+    <div class="timeline-page">
+        <h2>Timeline of the <em>Hypnerotomachia Poliphili</em></h2>
+        <p>A chronological view of the HP's five-century reception: editions, translations,
+        annotations, scholarship, and art inspired by the book. {len(events)} events spanning
+        {min(by_year.keys())}&ndash;{max(by_year.keys())}.</p>
+        <p style="font-size:0.85rem; color:var(--text-muted)">Filter by category:</p>
+        <div class="timeline-filters">{filter_html}</div>
+        <div class="timeline">{timeline_html}</div>
+    </div>"""
+
+    page = page_shell('Timeline', body, active_nav='timeline',
+                       extra_css=timeline_css, extra_js=filter_js)
+    (SITE_DIR / 'timeline.html').write_text(page, encoding='utf-8')
+    print(f"  timeline.html ({len(events)} events)")
+
+
+# ============================================================
+# Manuscripts pages
+# ============================================================
+
+def build_manuscripts_pages(conn):
+    """Generate manuscripts/index.html and manuscripts/*.html from hp_copies."""
+    cur = conn.cursor()
+    manu_dir = SITE_DIR / 'manuscripts'
+    manu_dir.mkdir(exist_ok=True)
+
+    # Get all copies
+    cur.execute("""
+        SELECT id, shelfmark, institution, city, country, edition,
+               has_annotations, studied_by, annotation_summary,
+               hand_count, copy_notes, has_images_in_project,
+               confidence, review_status
+        FROM hp_copies ORDER BY edition, shelfmark
+    """)
+    copies = cur.fetchall()
+
+    # Get hands per copy
+    cur.execute("""
+        SELECT manuscript_shelfmark, hand_label, attribution, is_alchemist, school, description
+        FROM annotator_hands ORDER BY manuscript_shelfmark, hand_label
+    """)
+    hands_by_ms = {}
+    for row in cur.fetchall():
+        hands_by_ms.setdefault(row[0], []).append(row)
+
+    # Get ref counts per copy
+    cur.execute("""
+        SELECT manuscript_shelfmark, COUNT(*) FROM dissertation_refs
+        WHERE manuscript_shelfmark IS NOT NULL
+        GROUP BY manuscript_shelfmark
+    """)
+    refs_by_ms = {row[0]: row[1] for row in cur.fetchall()}
+
+    # Get match counts per copy
+    cur.execute("""
+        SELECT m.shelfmark, mat.confidence, COUNT(*)
+        FROM matches mat
+        JOIN images i ON mat.image_id = i.id
+        JOIN manuscripts m ON i.manuscript_id = m.id
+        GROUP BY m.shelfmark, mat.confidence
+    """)
+    matches_by_ms = {}
+    for row in cur.fetchall():
+        matches_by_ms.setdefault(row[0], {})[row[1]] = row[2]
+
+    manu_css = '<style>' + """
+        .manuscripts-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+        .manuscripts-page h2 { color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        .manuscripts-page h3 { margin-top: 2rem; }
+        .manuscripts-page p { line-height: 1.8; }
+        .copy-card { padding: 1.5rem; margin-bottom: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
+        .copy-card h3 { margin-top: 0; color: var(--accent); }
+        .copy-card .copy-meta { font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-sans); margin-bottom: 0.5rem; }
+        .copy-card .copy-notes { font-size: 0.9rem; line-height: 1.7; }
+        .copy-detail { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .copy-detail h2 { color: var(--accent); }
+        .copy-detail h3 { margin-top: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
+        .copy-detail p { line-height: 1.8; }
+        .copy-detail table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        .copy-detail th, .copy-detail td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+        .copy-detail th { background: var(--bg); font-weight: 600; }
+        .copy-detail .provisional { background: #fff3cd; padding: 0.5rem 1rem; border-left: 3px solid #ffc107; margin: 1rem 0; font-size: 0.9rem; }
+        .copy-detail .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .copy-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .copy-detail .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+    """ + '</style>'
+
+    # Build detail pages
+    annotated_cards = ''
+    for copy in copies:
+        (cid, shelfmark, inst, city, country, edition, has_annot,
+         studied_by, annot_summary, hand_count, notes,
+         has_images, confidence, status) = copy
+
+        slug = slugify(shelfmark)
+        hands = hands_by_ms.get(shelfmark, [])
+        ref_count = refs_by_ms.get(shelfmark, 0)
+        match_data = matches_by_ms.get(shelfmark, {})
+
+        # Confidence badge
+        conf_badge = confidence_badge_html(confidence) if confidence else ''
+
+        # Card for index
+        meta_parts = [f'{escape(inst)}, {escape(city or "")}']
+        if edition:
+            meta_parts.append(f'{edition} edition')
+        if hand_count:
+            meta_parts.append(f'{hand_count} annotator hand{"s" if hand_count != 1 else ""}')
+        if ref_count:
+            meta_parts.append(f'{ref_count} dissertation refs')
+
+        annotated_cards += f"""
+        <div class="copy-card">
+            <h3><a href="{slug}.html">{escape(shelfmark)}</a> {conf_badge}</h3>
+            <div class="copy-meta">{" | ".join(meta_parts)}</div>
+            <div class="copy-notes">{escape(notes or '')}</div>
+        </div>"""
+
+        # Detail page
+        # Hands table
+        hands_html = ''
+        if hands:
+            rows = ''
+            for h in hands:
+                alch = ' (alchemist)' if h[3] else ''
+                school = f' [{escape(h[4])}]' if h[4] else ''
+                rows += f'<tr><td>{escape(h[1])}</td><td>{escape(h[2] or "Anonymous")}{alch}{school}</td><td>{escape((h[5] or "")[:200])}</td></tr>'
+            hands_html = f"""
+            <h3>Annotator Hands</h3>
+            <table>
+                <thead><tr><th>Hand</th><th>Attribution</th><th>Description</th></tr></thead>
+                <tbody>{rows}</tbody>
+            </table>"""
+
+        # Match stats
+        match_html = ''
+        if match_data:
+            total = sum(match_data.values())
+            match_html = f"""
+            <h3>Image Matches</h3>
+            <p>{total} images matched to dissertation references.</p>
+            <ul>
+                <li>HIGH confidence: {match_data.get('HIGH', 0)}</li>
+                <li>MEDIUM confidence: {match_data.get('MEDIUM', 0)}</li>
+                <li>LOW confidence: {match_data.get('LOW', 0)}</li>
+            </ul>"""
+
+        # Provisional warning for BL
+        prov_html = ''
+        if confidence == 'LOW':
+            prov_html = '<div class="provisional">All image matches for this copy are LOW confidence. The photograph numbering does not directly encode folio information. Manual verification is required.</div>'
+
+        # Cross links
+        cross_links = ['<a href="../dictionary/annotator-hand.html">Annotator Hand</a>',
+                       '<a href="../dictionary/marginalia.html">Marginalia</a>',
+                       '<a href="../concordance-method.html">Concordance Method</a>']
+        if any(h[3] for h in hands):
+            cross_links.append('<a href="../russell-alchemical-hands.html">Alchemical Hands Essay</a>')
+            cross_links.append('<a href="../dictionary/alchemical-allegory.html">Alchemical Allegory</a>')
+
+        detail_body = f"""
+        <div class="copy-detail">
+            <p><a href="index.html">&larr; All Manuscripts</a></p>
+            <h2>{escape(shelfmark)} {conf_badge}</h2>
+            <p><strong>{escape(inst)}</strong>, {escape(city or '')} ({escape(country or '')})</p>
+            <p>Edition: {escape(edition or 'unknown')} | Studied by: {escape(studied_by or 'not studied')} |
+               Dissertation references: {ref_count} | Images in project: {'Yes' if has_images else 'No'}</p>
+            <h3>Description</h3>
+            <p>{escape(notes or 'No description available.')}</p>
+            {hands_html}
+            {match_html}
+            {prov_html}
+            <div class="cross-links">
+                <h4>Related Pages</h4>
+                {''.join(cross_links)}
+            </div>
+        </div>"""
+
+        detail_page = page_shell(shelfmark, detail_body, active_nav='manuscripts',
+                                  extra_css=manu_css, depth=1)
+        (manu_dir / f'{slug}.html').write_text(detail_page, encoding='utf-8')
+
+    # Index page
+    index_body = f"""
+    <div class="manuscripts-page">
+        <h2>Manuscripts of the <em>Hypnerotomachia Poliphili</em></h2>
+        <p>The 1499 <em>Hypnerotomachia Poliphili</em> survives in approximately 200 copies
+        worldwide. Russell's PhD thesis (2014) studied six annotated copies in detail,
+        identifying eleven distinct annotator hands. This section presents those copies
+        with their annotation profiles, hand attributions, and links to the project's
+        marginalia and concordance data.</p>
+        <p>Each copy page shows the annotator hands identified by Russell, the number of
+        dissertation references attributed to that copy, and any matched images. Where
+        matching confidence is low, that status is marked explicitly.</p>
+
+        <h3>Annotated Copies Studied by Russell (2014)</h3>
+        {annotated_cards}
+    </div>"""
+
+    index_page = page_shell('Manuscripts', index_body, active_nav='manuscripts',
+                             extra_css=manu_css, depth=1)
+    (manu_dir / 'index.html').write_text(index_page, encoding='utf-8')
+    print(f"  manuscripts/index.html + {len(copies)} copy pages")
+
+
+# ============================================================
 # Digital Edition stub page
 # ============================================================
 
@@ -2396,6 +2721,8 @@ def main():
     build_russell_essay_page(conn)
     build_concordance_essay_page(conn)
     build_digital_edition_page(conn)
+    build_timeline_page(conn)
+    build_manuscripts_pages(conn)
 
     conn.close()
     print("\n=== Build Complete ===")

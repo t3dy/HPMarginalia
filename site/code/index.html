@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../timeline.html">Timeline</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,7 +24,7 @@
             <div class="intro">
                 <h2>Pipeline Scripts</h2>
                 <p>This section exposes the deterministic pipeline behind the site.
-                Rather than hiding the build logic, it presents these 23 Python
+                Rather than hiding the build logic, it presents these 31 Python
                 scripts that initialize the database, parse filenames, extract references,
                 match folios to images, seed and enrich metadata, validate assumptions,
                 and generate the static pages. The aim is transparency and reproducibility.</p>
@@ -82,7 +82,7 @@
                 <td><a href="build-site.html">build_site.py</a></td>
                 <td>Build Site</td>
                 <td class="code-summary">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2405</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2732</td>
             </tr>
             <tr>
                 <td><a href="catalog-images.html">catalog_images.py</a></td>
@@ -127,6 +127,18 @@
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">176</td>
             </tr>
             <tr>
+                <td><a href="generate-dictionary-significance.html">generate_dictionary_significance.py</a></td>
+                <td>Generate Significance</td>
+                <td class="code-summary">Generates significance_to_hp and significance_to_scholarship prose for all 80+ dictionary terms.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">447</td>
+            </tr>
+            <tr>
+                <td><a href="generate-scholar-overviews.html">generate_scholar_overviews.py</a></td>
+                <td>Generate Scholar Overviews</td>
+                <td class="code-summary">Generates 2-3 paragraph overview prose for modern scholars and role descriptions for historical figures.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">347</td>
+            </tr>
+            <tr>
                 <td><a href="ingest-perplexity.html">ingest_perplexity.py</a></td>
                 <td>Ingest Perplexity Research</td>
                 <td class="code-summary">Adds 9 bibliography entries and 3 timeline events from HPPERPLEXITY.txt web research.</td>
@@ -137,6 +149,12 @@
                 <td>Initialize Database</td>
                 <td class="code-summary">Creates SQLite schema (7 core tables) and catalogs PDFs/documents from the filesystem.</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">191</td>
+            </tr>
+            <tr>
+                <td><a href="link-scholars.html">link_scholars.py</a></td>
+                <td>Link Scholars</td>
+                <td class="code-summary">Links scholars to bibliography, tags historical figures, matches summaries.json to bibliography entries.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">205</td>
             </tr>
             <tr>
                 <td><a href="match-refs-to-images.html">match_refs_to_images.py</a></td>
@@ -151,6 +169,12 @@
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">55</td>
             </tr>
             <tr>
+                <td><a href="migrate-timeline.html">migrate_timeline.py</a></td>
+                <td>Timeline Migration</td>
+                <td class="code-summary">Adds category, medium, location, image_ref, confidence columns to timeline_events table.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">41</td>
+            </tr>
+            <tr>
                 <td><a href="migrate-v2.html">migrate_v2.py</a></td>
                 <td>Schema Migration V2</td>
                 <td class="code-summary">Adds annotations, annotators, doc_folio_refs, dictionary tables, review/provenance columns. Downgrades BL confidence.</td>
@@ -163,10 +187,34 @@
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">373</td>
             </tr>
             <tr>
+                <td><a href="seed-copies.html">seed_copies.py</a></td>
+                <td>Seed Copies</td>
+                <td class="code-summary">Creates hp_copies table and seeds six annotated copies with full metadata from Russell 2014.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">146</td>
+            </tr>
+            <tr>
                 <td><a href="seed-dictionary.html">seed_dictionary.py</a></td>
                 <td>Seed Dictionary</td>
                 <td class="code-summary">Inserts 37 dictionary terms across 6 categories with 76 bidirectional cross-reference links.</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">429</td>
+            </tr>
+            <tr>
+                <td><a href="seed-dictionary-v2.html">seed_dictionary_v2.py</a></td>
+                <td>Seed Dictionary V2</td>
+                <td class="code-summary">Seeds 43 HP entity terms: characters, places, architecture, gardens, processions, aesthetics, materials.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">543</td>
+            </tr>
+            <tr>
+                <td><a href="seed-dictionary-v3.html">seed_dictionary_v3.py</a></td>
+                <td>Seed Dictionary V3</td>
+                <td class="code-summary">Seeds 14 additional terms: narrative form, built form, aesthetics, alchemy, material culture.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">260</td>
+            </tr>
+            <tr>
+                <td><a href="seed-timeline-v2.html">seed_timeline_v2.py</a></td>
+                <td>Seed Timeline V2</td>
+                <td class="code-summary">Seeds ~30 new timeline events: art, literary influence, scholarly milestones, garden design.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">249</td>
             </tr>
             <tr>
                 <td><a href="validate.html">validate.py</a></td>

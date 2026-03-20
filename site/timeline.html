@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scholars.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        .timeline-page { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+        .timeline-page h2 { color: var(--accent); }
+        .timeline-page p { line-height: 1.8; }
+        .timeline-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
+        .timeline-filters label { display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; font-family: var(--font-sans); cursor: pointer; padding: 0.3rem 0.6rem; border: 1px solid var(--border); border-radius: 3px; }
+        .timeline-filters input { margin: 0; }
+        .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-year { margin-bottom: 2rem; position: relative; }
+        .year-marker { position: sticky; top: 4rem; font-size: 1.3rem; font-weight: 700; color: var(--accent); font-family: var(--font-sans); margin-bottom: 0.5rem; padding-left: 0; margin-left: -2rem; background: var(--bg-main, #fff); z-index: 1; }
+        .timeline-card { padding: 0.75rem 1rem; margin-bottom: 0.75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; position: relative; }
+        .timeline-card::before { content: ''; position: absolute; left: -1.55rem; top: 1rem; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+        .card-type-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.1rem 0.4rem; border-radius: 2px; color: white; margin-bottom: 0.3rem; font-family: var(--font-sans); }
+        .timeline-card h4 { margin: 0 0 0.3rem 0; font-size: 0.95rem; }
+        .timeline-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
+        .timeline-card .card-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); margin-top: 0.3rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="timeline.html" class="active">Timeline</a><a href="manuscripts/index.html">Manuscripts</a><a href="digital-edition.html">Edition</a><a href="russell-alchemical-hands.html">Alchemical Hands</a><a href="concordance-method.html">Concordance</a><a href="about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+    <div class="timeline-page">
+        <h2>Timeline of the <em>Hypnerotomachia Poliphili</em></h2>
+        <p>A chronological view of the HP's five-century reception: editions, translations,
+        annotations, scholarship, and art inspired by the book. 71 events spanning
+        1499&ndash;2024.</p>
+        <p style="font-size:0.85rem; color:var(--text-muted)">Filter by category:</p>
+        <div class="timeline-filters"><label><input type="checkbox" checked data-filter=""> <span style="color:#6b7280">Other</span></label><label><input type="checkbox" checked data-filter="art"> <span style="color:#8b5cf6">Art &amp; Design</span></label><label><input type="checkbox" checked data-filter="edition"> <span style="color:#10b981">Edition</span></label><label><input type="checkbox" checked data-filter="literary"> <span style="color:#f59e0b">Literary Influence</span></label><label><input type="checkbox" checked data-filter="scholarship"> <span style="color:#3b82f6">Scholarship</span></label></div>
+        <div class="timeline">
+            <div class="timeline-year">
+                <div class="year-marker">1499</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Hypnerotomachia Poliphili published</h4>
+                    <p>Aldus Manutius publishes the HP in Venice. 172 woodcuts. Author identified by acrostic as POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1500-1545</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Giovio brothers annotate Modena and Como copies</h4>
+                    <p>Benedetto Giovio applies Plinian encyclopedic reading to two copies.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1520</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>Garofalo painting with HP scene</h4>
+                    <p>The Ferrarese painter Garofalo (Benvenuto Tisi) produced a painting incorporating a scene from the HP, identified by Fritz Saxl in his 1937 study. This is among the earliest documented visual adaptations of the HP outside the book itself.</p>
+                    <div class="card-meta">painting | Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1534</div>
+                
+                <div class="timeline-card" data-category="literary">
+                    <span class="card-type-badge" style="background:#f59e0b">Literary Influence</span>
+                    <h4>Rabelais, Abbey of Theleme in Gargantua</h4>
+                    <p>Francois Rabelais included the Abbey of Theleme (&#x27;Do what thou wilt&#x27;) in Gargantua, almost certainly drawing on the HP&#x27;s portal of Thelemia where Poliphilo chooses among three life paths. The name and concept of free will connect the two works directly.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1545</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Second Aldine edition published</h4>
+                    <p>Aldus&#x27; sons reprint the HP with recast woodcuts.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1546</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>French translation by Jean Martin</h4>
+                    <p>Published by Jacques Kerver in Paris with modified and additional woodcuts.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1550</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>HP influence on Italian Renaissance gardens</h4>
+                    <p>The sleeping nymph fountain and other HP motifs began appearing in Italian villa gardens by mid-sixteenth century. The HP&#x27;s detailed garden descriptions provided a sourcebook for designers combining classical forms with living landscapes.</p>
+                    <div class="card-meta">garden design | Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1552</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>Sacro Bosco at Bomarzo begun</h4>
+                    <p>Pier Francesco Orsini began the Sacro Bosco (Sacred Grove) at Bomarzo, a garden of monstrous sculptures that Fabiani Giannetto (2015) connects to the HP&#x27;s cultivation of meraviglia (wonder).</p>
+                    <div class="card-meta">garden/sculpture | Bomarzo, Italy | Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1554</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Second French edition</h4>
+                    <p>Kerver reprints Martin translation.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1561</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Third French edition with Gohorry notice</h4>
+                    <p>Jacques Gohorry adds prefatory notice.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1592</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>English translation: The Strife of Love in a Dreame</h4>
+                    <p>R.D. (Robert Dallington) publishes partial English translation for Simon Waterston.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="edition">
+                    <span class="card-type-badge" style="background:#10b981">Edition</span>
+                    <h4>Robert Dallington&#x27;s English adaptation</h4>
+                    <p>Robert Dallington published The Strife of Love in a Dreame, the first English version of the HP. Semler (2006) reframes this not as failed translation but as deliberate cultural appropriation for Protestant antiquarian interests in Elizabethan England.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1600</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Beroalde de Verville&#x27;s alchemical edition</h4>
+                    <p>Le Tableau des riches Inventions includes tableau steganographique of alchemical symbols.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Ben Jonson annotates BL copy</h4>
+                    <p>Jonson mines the 1545 HP for stage design imagery and linguistic material.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1641</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Thomas Bourne purchases BL copy</h4>
+                    <p>Recorded purchase date of May 6, 1641. Anonymous alchemist (Hand B) annotates after this date.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Anonymous alchemist annotates BL copy (d&#x27;Espagnet school)</h4>
+                    <p>Hand B applies alchemical reading centering on &#x27;Master Mercury&#x27; following d&#x27;Espagnet&#x27;s framework.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1650-1700</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Anonymous alchemist annotates Buffalo copy (pseudo-Geber school)</h4>
+                    <p>Hand E applies Geberian alchemical reading emphasizing Sol/Luna and sulphur.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1655-1667</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Pope Alexander VII annotates Vatican copy</h4>
+                    <p>Fabio Chigi combs text for acutezze (verbal wit) and architectural parallels with Rome.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1667</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>Bernini&#x27;s Elephant and Obelisk unveiled</h4>
+                    <p>Gian Lorenzo Bernini completed the elephant bearing an obelisk in Piazza della Minerva, Rome, commissioned by Pope Alexander VII. The sculpture draws on the HP&#x27;s woodcut of the elephant-obelisk (b6v-b7r). Alexander VII himself annotated his copy of the HP.</p>
+                    <div class="card-meta">sculpture | Piazza della Minerva, Rome</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1717</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>Watteau, L&#x27;Embarquement pour Cythere</h4>
+                    <p>Antoine Watteau painted L&#x27;Embarquement pour Cythere, depicting a departure for Venus&#x27;s island. While direct influence from the HP is not confirmed, the painting belongs to the same cultural tradition of Cythera as the destination of erotic pilgrimage.</p>
+                    <div class="card-meta">painting | Louvre, Paris | Confidence: LOW</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1804</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Legrand edition (Paris)</h4>
+                    <p>J.G. Legrand publishes new French edition.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="edition">
+                    <span class="card-type-badge" style="background:#10b981">Edition</span>
+                    <h4>Italian reprint edition</h4>
+                    <p>An Italian reprint of the HP appeared in 1804, part of the early nineteenth-century revival of interest in the book as a bibliophilic and aesthetic object.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1844</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Nodier&#x27;s Franciscus Columna</h4>
+                    <p>Charles Nodier publishes romanticized biography of Colonna.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1883</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Popelin French translation</h4>
+                    <p>Claudius Popelin publishes new French translation.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1893</div>
+                
+                <div class="timeline-card" data-category="art">
+                    <span class="card-type-badge" style="background:#8b5cf6">Art &amp; Design</span>
+                    <h4>Beardsley and the HP aesthetic</h4>
+                    <p>Aubrey Beardsley&#x27;s illustration style of the 1890s shows affinities with the HP&#x27;s woodcuts. Praz (1947) documents the HP&#x27;s influence on the Aesthetic Movement and its visual culture, including Beardsley&#x27;s decorative line work.</p>
+                    <div class="card-meta">illustration | Confidence: LOW</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1899</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Gnoli&#x27;s Il Sogno di Polifilo</h4>
+                    <p>Domenico Gnoli publishes foundational study.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Gnoli, Il Sogno di Polifilo</h4>
+                    <p>Domenico Gnoli published one of the earliest modern scholarly studies of the HP, helping to inaugurate the twentieth-century revival of HP scholarship.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1904</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Methuen facsimile edition</h4>
+                    <p>London facsimile of 1499 edition.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1910</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Huelsen&#x27;s study of HP woodcut illustrations</h4>
+                    <p>Christian Huelsen publishes analysis of woodcuts and their architectural sources.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Huelsen, Le illustrazioni della Hypnerotomachia Poliphili</h4>
+                    <p>Christian Huelsen published the first systematic study of the HP&#x27;s woodcut illustrations, identifying their classical architectural sources and establishing the foundation for all subsequent architectural analysis.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1929</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Leidinger discovers Dürer&#x27;s ownership inscription</h4>
+                    <p>Georg Leidinger finds proof that Albrecht Dürer owned a copy of the HP, purchased by Erasmus Hock in 1555.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1935</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Khomentovskaia proposes Felice Feliciano as author</h4>
+                    <p>Alternative attribution beyond Francesco Colonna.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Khomentovskaia proposes Feliciano as author</h4>
+                    <p>A. Khomentovskaia proposed Felice Feliciano as the HP&#x27;s author, adding another candidate to the authorship debate alongside the two Francesco Colonnas.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1937</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Blunt&#x27;s HP in 17th Century France</h4>
+                    <p>Anthony Blunt traces French reception. Saxl publishes on Garofalo painting.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Blunt, The HP in 17th Century France</h4>
+                    <p>Anthony Blunt documented the HP&#x27;s influence on seventeenth-century French art, garden design, and festival culture. His article remains the standard reference for French HP reception.</p>
+                    
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Saxl identifies HP scene in Garofalo painting</h4>
+                    <p>Fritz Saxl identified a scene from the HP in a painting by the Ferrarese artist Garofalo, demonstrating the book&#x27;s direct influence on Italian Renaissance painting.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1947</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Praz&#x27;s Foreign Imitators + Heckscher on Bernini&#x27;s Elephant</h4>
+                    <p>Praz traces HP influence on Swinburne, Beardsley, de Mandiargues. Heckscher publishes on Bernini&#x27;s elephant and obelisk.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Praz, Foreign Imitators of the HP</h4>
+                    <p>Mario Praz documented foreign imitations of the HP across English, French, and German literature, establishing the breadth of the book&#x27;s European reception from Swinburne to Beardsley.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1950</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Croce&#x27;s La Hypnerotomachia; Fierz-David&#x27;s Jungian reading</h4>
+                    <p>Croce publishes study. Fierz-David publishes Jungian interpretation (expanded 1987).</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Fierz-David, Jungian reading of the HP</h4>
+                    <p>Linda Fierz-David published The Dream of Poliphilo, interpreting Poliphilo&#x27;s journey as a process of Jungian individuation. This established a psychoanalytic strand of HP interpretation distinct from art-historical approaches.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1959</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Casella &amp; Pozzi: Francesco Colonna. Biografia e opere</h4>
+                    <p>Foundational biographical study establishing the Venetian Dominican attribution.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Casella &amp; Pozzi establish canonical authorship</h4>
+                    <p>Maria Teresa Casella and Giovanni Pozzi published Francesco Colonna. Biografia e opere, establishing the Venetian Dominican friar (d. 1527) as the canonical author through philological and archival evidence.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1964</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Pozzi &amp; Ciapponi critical edition</h4>
+                    <p>Giovanni Pozzi and Lucia Ciapponi publish critical edition with Antenore.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1966</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Billanovich &amp; Menegazzo: archival discoveries</h4>
+                    <p>Major archival work on Francesco Colonna and the Lelli family in Padua and Venice.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1972</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Gombrich&#x27;s Hypnerotomachiana</h4>
+                    <p>E.H. Gombrich publishes study in Symbolic Images.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Gombrich, Hypnerotomachiana</h4>
+                    <p>Ernst Gombrich analyzed the HP&#x27;s hieroglyphic woodcuts within the context of Renaissance symbolic imagery, demonstrating the book&#x27;s role in the emblem tradition and the transmission of pseudo-Egyptian visual culture.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1976</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Kretzulesco-Quaranta&#x27;s Les Jardins du Songe</h4>
+                    <p>Major study of HP garden symbolism.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1994</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Stichel&#x27;s study of Modena marginalia; Perez-Gomez&#x27;s Dark Forest</h4>
+                    <p>First study of an annotated copy. Perez-Gomez publishes architectural reading.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Stichel, first study of Modena marginalia</h4>
+                    <p>Dorothea Stichel published the first study of the Modena copy&#x27;s marginalia, helping to establish the field of HP annotation studies that Russell would later expand.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1996</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Calvesi&#x27;s La pugna d&#x27;amore in sogno</h4>
+                    <p>Major study arguing for a Roman Francesco Colonna rather than the Venetian Dominican.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Calvesi, Roman Colonna attribution</h4>
+                    <p>Maurizio Calvesi argued in La pugna d&#x27;amore in sogno that the HP was written by a Roman nobleman named Francesco Colonna, not the Venetian Dominican. This represents the most sustained challenge to the Casella-Pozzi consensus.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1997</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Lefaivre&#x27;s Alberti attribution</h4>
+                    <p>Liane Lefaivre proposes Leon Battista Alberti as author.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Lefaivre, Alberti attribution</h4>
+                    <p>Liane Lefaivre proposed Leon Battista Alberti as the HP&#x27;s true author, introducing the concept of the &#x27;architectural body&#x27; and shifting HP scholarship toward phenomenological and architectural analysis.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1998</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Word &amp; Image special issue on HP</h4>
+                    <p>Major scholarly collection: Hunt, Leslie, Bury, Curran, Griggs, Segre, Stewering, Temple.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Word &amp; Image special issue on the HP</h4>
+                    <p>The journal Word &amp; Image published a special issue on the HP featuring studies by Hunt, Segre, Griggs, Curran, and others. This issue consolidated the late-1990s revival of HP scholarship across multiple disciplines.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">1999</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Godwin&#x27;s English translation; Ariani &amp; Gabriele critical edition</h4>
+                    <p>Joscelyn Godwin publishes full English translation (Thames &amp; Hudson). Adelphi publishes Italian critical edition.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="edition">
+                    <span class="card-type-badge" style="background:#10b981">Edition</span>
+                    <h4>Godwin English translation (Thames &amp; Hudson)</h4>
+                    <p>Joscelyn Godwin published the first complete modern English translation of the HP with Thames &amp; Hudson, providing the most accessible English-language scholarly apparatus.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2002</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Trippe&#x27;s Image, Text, and Vernacular Poetics</h4>
+                    <p>Rosemary Trippe recovers HP as vernacular literature.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Trippe, HP as vernacular poetics</h4>
+                    <p>Rosemary Trippe argued in Renaissance Quarterly that the HP has been understudied as literature, demonstrating how the author adapted Petrarchan conventions into a text-image interplay.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2004</div>
+                
+                <div class="timeline-card" data-category="edition">
+                    <span class="card-type-badge" style="background:#10b981">Edition</span>
+                    <h4>Ariani &amp; Gabriele Adelphi critical edition</h4>
+                    <p>Marco Ariani and Mino Gabriele published a new Italian critical edition through Adelphi, providing the most recent scholarly apparatus complementing the Pozzi-Ciapponi edition.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2006</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Semler on Dallington&#x27;s English HP</h4>
+                    <p>L.E. Semler rehabilitates 1592 English adaptation.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Semler, Dallington&#x27;s Protestant HP</h4>
+                    <p>L. E. Semler reframed Robert Dallington&#x27;s 1592 English translation as deliberate cultural appropriation for Protestant antiquarian interests, not a failed translation.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2014</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Russell&#x27;s world census of annotated copies</h4>
+                    <p>James Russell&#x27;s PhD thesis documents marginalia across six copies.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Russell PhD thesis on HP annotators</h4>
+                    <p>James Russell submitted his Durham PhD thesis documenting marginalia in six HP copies, identifying eleven annotator hands and establishing the concept of the HP as a &#x27;humanistic activity book.&#x27; This thesis is the primary evidence base for this project.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2015</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Word &amp; Image special issue (2015)</h4>
+                    <p>Second major scholarly collection: Farrington, Nygren, Fabiani Giannetto, Pumroy, Keller.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="scholarship">
+                    <span class="card-type-badge" style="background:#3b82f6">Scholarship</span>
+                    <h4>Second Word &amp; Image special issue</h4>
+                    <p>A second Word &amp; Image special issue on the HP appeared, including Farrington on Aldus&#x27;s career and new contributions to reception studies.</p>
+                    
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2016</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Botanical content study published</h4>
+                    <p>Study cataloguing 285 plant entities referenced in the HP text.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2020</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>O&#x27;Neill&#x27;s Self-Transformation thesis</h4>
+                    <p>James O&#x27;Neill&#x27;s PhD thesis on Poliphilo&#x27;s inner transformation.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Music and its powers study published</h4>
+                    <p>Musicological analysis of musical episodes and Ficinian spiritus in the HP.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2021</div>
+                
+                <div class="timeline-card" data-category="">
+                    <span class="card-type-badge" style="background:#6b7280">Other</span>
+                    <h4>Moosbrugger&#x27;s opera Wind premieres</h4>
+                    <p>German composer Alexander Moosbrugger uses HP translations as libretto for opera Wind.</p>
+                    <div class="card-meta">Confidence: MEDIUM</div>
+                </div>
+            </div>
+            <div class="timeline-year">
+                <div class="year-marker">2024</div>
+                
+                <div class="timeline-card" data-category="edition">
+                    <span class="card-type-badge" style="background:#10b981">Edition</span>
+                    <h4>Young, new English translation</h4>
+                    <p>Paul Summers Young published a new English translation of the HP, supplementing Godwin&#x27;s 1999 version with a contemporary rendering of the macaronic language.</p>
+                    
+                </div>
+            </div></div>
+    </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+    document.querySelectorAll('.timeline-filters input').forEach(cb => {
+        cb.addEventListener('change', () => {
+            const cat = cb.dataset.filter;
+            const show = cb.checked;
+            document.querySelectorAll(`.timeline-card[data-category="${cat}"]`).forEach(card => {
+                card.style.display = show ? '' : 'none';
+            });
+            // Hide empty year markers
+            document.querySelectorAll('.timeline-year').forEach(yr => {
+                const visible = yr.querySelectorAll('.timeline-card:not([style*="display: none"])');
+                yr.style.display = visible.length ? '' : 'none';
+            });
+        });
+    });
+    </script>
+</body>
+</html>
