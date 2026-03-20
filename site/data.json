@@ -929,9 +929,9 @@
       "quire": "a",
       "leaf_in_quire": 6,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
-      "is_alchemist": false
+      "hand_label": "E",
+      "hand_attribution": "Anonymous",
+      "is_alchemist": true
     },
     {
       "ref_id": 155,
@@ -951,9 +951,9 @@
       "quire": "a",
       "leaf_in_quire": 6,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
-      "is_alchemist": false
+      "hand_label": "E",
+      "hand_attribution": "Anonymous",
+      "is_alchemist": true
     },
     {
       "ref_id": 96,
@@ -3864,8 +3864,8 @@
       "quire": "g",
       "leaf_in_quire": 8,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
+      "hand_label": "D",
+      "hand_attribution": "Anonymous",
       "is_alchemist": false
     },
     {
@@ -3886,8 +3886,8 @@
       "quire": "g",
       "leaf_in_quire": 8,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
+      "hand_label": "D",
+      "hand_attribution": "Anonymous",
       "is_alchemist": false
     },
     {
@@ -3908,8 +3908,8 @@
       "quire": "g",
       "leaf_in_quire": 8,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
+      "hand_label": "D",
+      "hand_attribution": "Anonymous",
       "is_alchemist": false
     },
     {
@@ -4788,8 +4788,8 @@
       "quire": "k",
       "leaf_in_quire": 3,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
+      "hand_label": "A",
+      "hand_attribution": "Ben Jonson",
       "is_alchemist": false
     },
     {
@@ -6262,8 +6262,8 @@
       "quire": "s",
       "leaf_in_quire": 6,
       "needs_review": true,
-      "hand_label": null,
-      "hand_attribution": null,
+      "hand_label": "A",
+      "hand_attribution": "Ben Jonson",
       "is_alchemist": false
     },
     {
