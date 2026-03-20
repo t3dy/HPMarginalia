@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Critique - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>System Critique</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                docs/archive/ISIDORE4.md &mdash; 1,226 words</p>
+            <h2>ISIDORE4: Critique of the Concordance System, Environment, and Design Documents</h2>
+
+<blockquote>Jack Isidore forces scrutiny. This critique examines whether the concordance</blockquote>
+<blockquote>system actually works as claimed, whether the environment is maintainable,</blockquote>
+<blockquote>and whether the design documents match reality.</blockquote>
+
+<hr>
+
+<h3>CRITIQUE: The HP Concordance System (as of 2026-03-20)</h3>
+
+<h4>STRONGEST PASSAGE</h4>
+
+<p>The BL offset discovery and fix. Reading 69 manuscript photographs,</p>
+<p>discovering that every BL match was wrong by 13 positions, correcting</p>
+<p>the folio numbers, deleting 257 junk matches, and rebuilding 39 clean</p>
+<p>ones — this is the single best piece of work in the project. It solved</p>
+<p>a problem that no amount of schema design could have caught. It required</p>
+<p>looking at the actual evidence. And it was done in a single session with</p>
+<p>zero external cost.</p>
+
+<hr>
+
+<h4>ISSUES (by priority)</h4>
+
+<p><strong>1. UNSUPPORTED CLAIM: &quot;431 matches&quot; inflates the real picture.</strong></p>
+
+<p>The site reports 431 matches. But look at the distribution:</p>
+<ul>
+<li>Siena: 392 matches (91%)</li>
+<li>BL: 39 matches (9%)</li>
+<li>Buffalo, Vatican, Cambridge, Modena: 0 matches (0%)</li>
+</ul>
+
+<p>Russell studied 6 copies. The concordance covers 2 of them photographically,</p>
+<p>and 4 copies have zero image matches. Claiming &quot;431 matches&quot; without</p>
+<p>qualifying that 4 of 6 studied copies have no visual evidence is misleading.</p>
+
+<p>The Siena matches are mostly cross-manuscript: Russell discusses a folio</p>
+<p>in the Buffalo or Vatican copy, and the concordance matches it to a Siena</p>
+<p>photograph of the same folio in a different copy. This is useful but it is</p>
+<p>NOT the same as seeing the actual annotation Russell describes.</p>
+
+<p><strong>FIX:</strong> The about page, concordance essay, and manuscript pages should</p>
+<p>state clearly: &quot;Image matches are available for 2 of 6 studied copies.</p>
+<p>For the other 4, textual evidence exists but no photographs.&quot;</p>
+
+<hr>
+
+<p><strong>2. LOGICAL GAP: The &quot;flyleaf&quot; folio description has 0 matching annotations.</strong></p>
+
+<p>The folio_descriptions table has 13 entries for alchemist-annotated folios.</p>
+<p>One of them is &quot;flyleaf&quot; (C.60.o.12) — the Master Mercury declaration.</p>
+<p>But the annotations table has 0 annotations with signature_ref = &quot;flyleaf.&quot;</p>
+<p>This is because the regex extraction only captured signature-format</p>
+<p>references (a1r, b6v, etc.), not &quot;flyleaf.&quot;</p>
+
+<p>The Master Mercury declaration — the single most important alchemical</p>
+<p>annotation in the project — has a folio description but no annotation</p>
+<p>record. It exists in the database as a description without evidence.</p>
+
+<p><strong>FIX:</strong> Add a manual annotation record for the flyleaf with the Master</p>
+<p>Mercury text. This is not a regex job; it&#x27;s a one-row insert.</p>
+
+<hr>
+
+<p><strong>3. UNSUPPORTED CLAIM: &quot;4 unmapped signatures&quot; are actually design errors.</strong></p>
+
+<p>Four signatures in dissertation_refs are not in the signature map:</p>
+<p>z5v, z6r, u3r, z5r. The signature map omits &#x27;u&#x27; from the alphabet</p>
+<p>(a-z skipping j, u, w) because the 1499 collation uses that convention.</p>
+<p>But &#x27;u3r&#x27; appears in Russell&#x27;s refs — either Russell uses &#x27;u&#x27; where the</p>
+<p>collation uses a different letter, or this is a valid signature that the</p>
+<p>map doesn&#x27;t cover.</p>
+
+<p>For z5v and z5r: quire z has only 4 leaves in some collation formulas</p>
+<p>(G has 4, z may vary). If z has 4 leaves, then z5 doesn&#x27;t exist.</p>
+
+<p>These aren&#x27;t bugs — they&#x27;re genuine collation ambiguities that the</p>
+<p>deterministic pipeline cannot resolve without consulting the physical book.</p>
+
+<p><strong>FIX:</strong> Document these 4 as KNOWN UNRESOLVABLE in the concordance status.</p>
+<p>Don&#x27;t silently skip them.</p>
+
+<hr>
+
+<p><strong>4. REDUNDANCY: The project has 33 root .md files.</strong></p>
+
+<p>Thirty-three markdown files in the project root. Six more in docs/.</p>
+<p>This is documentation overload. A new collaborator would need to read</p>
+<p>39 markdown files before understanding the project. Some are actionable</p>
+<p>specs (SCHOLAR_SPEC.md), some are historical artifacts (HPEMPTYOUTPUTFILES.md),</p>
+<p>some are plans (TIMELINEPLAN.md), some are critiques (ISIDORE3.md), and</p>
+<p>some are research reports (WOODCUTRESEARCHREPORT.md). They are not</p>
+<p>organized by type, status, or priority.</p>
+
+<p>The CLAUDE.md file points to 5 spec files but not to the other 34 documents.</p>
+
+<p><strong>FIX:</strong> Either organize the .md files into subdirectories (docs/specs/,</p>
+<p>docs/critiques/, docs/plans/, docs/research/, docs/postmortems/) or add</p>
+<p>a DOCUMENTATION_INDEX.md that categorizes them. The current flat pile</p>
+<p>is not navigable.</p>
+
+<hr>
+
+<p><strong>5. AUDIENCE ASSUMPTION: 41 scripts with no dependency graph.</strong></p>
+
+<p>The project has 41 Python scripts. The BUILDINGTHECONCORDANCEENVIRONMENT.md</p>
+<p>lists a 13-step rebuild sequence, but many scripts added later are not</p>
+<p>in that sequence. If someone ran all 41 scripts in alphabetical order,</p>
+<p>some would fail (they depend on tables created by earlier scripts).</p>
+
+<p>No script documents its dependencies. No script checks whether its</p>
+<p>prerequisites have been run. The SCRIPT_METADATA dict in build_site.py</p>
+<p>describes each script&#x27;s purpose but not its execution order or dependencies.</p>
+
+<p><strong>FIX:</strong> Add a <code>scripts/README.md</code> with a dependency graph, or add</p>
+<p>prerequisite checks at the top of each script (e.g., &quot;if signature_map</p>
+<p>is empty, print &#x27;Run build_signature_map.py first&#x27; and exit&quot;).</p>
+
+<hr>
+
+<p><strong>6. WEAK TRANSITION: The annotations table was consolidated but not used.</strong></p>
+
+<p>The annotations table now has 282 rows. But build_site.py still queries</p>
+<p>dissertation_refs for the marginalia pages, not annotations. The</p>
+<p>consolidation was done (the data is there) but the page generator was</p>
+<p>never updated to use it. This means the annotation_type field (MARGINAL_NOTE,</p>
+<p>CROSS_REFERENCE, SYMBOL, etc.) is never displayed on the site.</p>
+
+<p>The annotation types are one of the most interesting classification results</p>
+<p>from this session — 126 MARGINAL_NOTE, 68 CROSS_REFERENCE, 50 INDEX_ENTRY,</p>
+<p>21 SYMBOL — but they are invisible to site visitors.</p>
+
+<p><strong>FIX:</strong> Update build_marginalia_pages() to query annotations instead of</p>
+<p>dissertation_refs, and display the annotation_type on folio pages.</p>
+
+<hr>
+
+<p><strong>7. BURIED LEDE: The woodcut findings are spectacular but unbuilt.</strong></p>
+
+<p>18 woodcuts detected, 7 alchemical sites found, the dark forest and</p>
+<p>elephant-obelisk visually confirmed, triumphal processions documented.</p>
+<p>There is a complete ontology (WOODCUTONTOLOGY.md), a template</p>
+<p>(WOODCUTTEMPLATE.md), and a research report (WOODCUTRESEARCHREPORT.md).</p>
+
+<p>None of it is in the database. None of it is on the site. No woodcuts</p>
+<p>table exists. No woodcuts page exists. The research was done; the</p>
+<p>infrastructure was designed; the implementation was skipped.</p>
+
+<p>This is the project&#x27;s recurring pattern: research and design outpace</p>
+<p>execution. The woodcut data should be seeded and built before any new</p>
+<p>research is started.</p>
+
+<hr>
+
+<h4>REVISION PRIORITY</h4>
+
+<p>Fix Issue #7 first — build the woodcuts. The research is done, the schema</p>
+<p>is designed, the template exists. Seeding 18 woodcuts into a database table</p>
+<p>and generating a page takes 30 minutes. It would be the most visible</p>
+<p>improvement to the site since the timeline and manuscripts tabs were added.</p>
+
+<p>Then fix Issue #6 — make the annotation types visible on the site. The</p>
+<p>classification work was done; the site doesn&#x27;t show it.</p>
+
+<p>Then fix Issue #2 — add the flyleaf annotation record. One row insert.</p>
+
+<h4>OVERALL</h4>
+
+<p>The concordance system is structurally sound. The audit found zero orphan</p>
+<p>records, zero referential integrity violations, zero nav errors across 335</p>
+<p>pages, and zero LOW confidence matches. The BL offset fix was the most</p>
+<p>important correction in the project&#x27;s history and it was done correctly.</p>
+
+<p>The problems are all on the &quot;last mile&quot; side: research done but not built</p>
+<p>into the site, classifications computed but not displayed, documentation</p>
+<p>accumulated but not organized. The system&#x27;s data is clean. What it lacks is</p>
+<p>the final step of surfacing that data to the reader.</p>
+
+<p>The environment works — SQLite is solid, the scripts run, the static site</p>
+<p>deploys. But the 41-script ecosystem has grown beyond what any single</p>
+<p>document describes, and a new collaborator would struggle to understand the</p>
+<p>execution order without reading 39 markdown files first.</p>
+
+<p>The project is 90% infrastructure and 10% presentation. The next phase</p>
+<p>should invert that ratio: stop building infrastructure, start finishing pages.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

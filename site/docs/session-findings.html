@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Findings - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Session Findings</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                docs/archive/OUTWARDNOTDEEPER.md &mdash; 983 words</p>
+            <h2>OUTWARDNOTDEEPER: Session Findings and the Shift to Presentation</h2>
+
+<blockquote>This document records what was discovered, built, and learned across</blockquote>
+<blockquote>a marathon session, and why the project&#x27;s next move is surfacing</blockquote>
+<blockquote>existing data rather than generating more.</blockquote>
+
+<hr>
+
+<h3>What Was Discovered</h3>
+
+<h4>The BL Offset (the session&#x27;s defining finding)</h4>
+
+<p>Every BL manuscript match in the database was wrong. The concordance</p>
+<p>pipeline assumed photo number = folio number. By reading 69 actual</p>
+<p>photographs, the offset was found: the first 13 photos are covers,</p>
+<p>flyleaves, and front matter. Photo 014 = page 1 = a1r.</p>
+
+<p>This was verified at 27 independent data points across the full range</p>
+<p>of the book, never wrong once. The fix was trivial (subtract 13) but</p>
+<p>the discovery required looking at the images — no schema design or</p>
+<p>script engineering would have caught this.</p>
+
+<p>257 junk matches were deleted. 39 correct matches were rebuilt. The</p>
+<p>system went from 218 LOW confidence matches to zero.</p>
+
+<h4>What the Photographs Show</h4>
+
+<table class="doc-table">
+<tr><th>Finding</th><th>Detail</th></tr>
+<tr><td>Title page confirms 1545 edition</td><td>&quot;RISTAMPATO DI NOVO... M.D.XXXXV&quot;</td></tr>
+<tr><td>Ben Jonson&#x27;s ownership</td><td>&quot;Sum Ben: Ionsonij&quot; on title page</td></tr>
+<tr><td>Master Mercury declaration visible</td><td>Flyleaf verso, Hand B&#x27;s Latin text readable</td></tr>
+<tr><td>18 woodcuts detected</td><td>Dark forest, elephant-obelisk, triumphal processions, etc.</td></tr>
+<tr><td>7 alchemical annotation sites</td><td>Including 2 new (c5v, h8r) not in Russell&#x27;s extracted refs</td></tr>
+<tr><td>5 quire signatures confirmed</td><td>a iii, c ii, c iii, g ii, K iii</td></tr>
+<tr><td>Annotation density mapped</td><td>31 HEAVY, 22 MODERATE, 8 LIGHT across 69 pages</td></tr>
+<tr><td>BL photos cover pages 1-176</td><td>38% of the book; later Russell refs are beyond range</td></tr>
+</table>
+
+<h4>What Was Built This Session</h4>
+
+<table class="doc-table">
+<tr><th>Component</th><th>Before</th><th>After</th></tr>
+<tr><td>Site pages</td><td>300</td><td>**335**</td></tr>
+<tr><td>Dictionary terms</td><td>80</td><td>**94** (15 categories)</td></tr>
+<tr><td>Terms with significance prose</td><td>0</td><td>**94**</td></tr>
+<tr><td>Scholar pages</td><td>30 (no overviews)</td><td>**60** (59 with overviews)</td></tr>
+<tr><td>Timeline tab</td><td>Did not exist</td><td>**71 events**</td></tr>
+<tr><td>Manuscripts tab</td><td>Did not exist</td><td>**6 copy pages**</td></tr>
+<tr><td>Annotations table</td><td>0 rows</td><td>**282 rows, 6 types**</td></tr>
+<tr><td>Alchemical symbols</td><td>Did not exist</td><td>**10 symbols, 26 occurrences**</td></tr>
+<tr><td>Match confidence: LOW</td><td>218</td><td>**0**</td></tr>
+<tr><td>Match confidence: HIGH</td><td>26</td><td>**48**</td></tr>
+<tr><td>Nav tabs</td><td>11</td><td>**13**</td></tr>
+<tr><td>Woodcuts detected</td><td>0</td><td>**18** (not yet built into site)</td></tr>
+<tr><td>BL pages verified</td><td>0</td><td>**69**</td></tr>
+<tr><td>Design docs written</td><td>6</td><td>**12**</td></tr>
+</table>
+
+<h4>What Was Fixed</h4>
+
+<ul>
+<li>BL photo-to-folio offset corrected (=13)</li>
+<li>257 wrong matches deleted, 39 correct matches created</li>
+<li>Annotation types classified (was all MARGINALIA, now 6 distinct types)</li>
+<li>Hand attribution improved (193 → 204 of 282)</li>
+<li>Bibliography &quot;Unknown&quot; authors fixed (Priki identified, Routledge volume attributed to O&#x27;Neill)</li>
+<li>HPONTOLOGY.md rewritten to describe actual 22-table system</li>
+<li>WRITING_TEMPLATES.md updated for educated lay reader voice</li>
+<li>hp_copies confidence for BL updated from LOW to MEDIUM</li>
+</ul>
+
+<hr>
+
+<h3>What the Isidore Critique Found</h3>
+
+<p>The concordance is structurally sound: zero orphan records, zero integrity</p>
+<p>violations, zero nav errors, zero LOW matches. The problems are all</p>
+<p>presentation gaps:</p>
+
+<p>1. <strong>Woodcut research done but not built into the site</strong> — 18 woodcuts</p>
+<p>detected, ontology designed, template written, nothing rendered</p>
+<p>2. <strong>Annotation types computed but invisible</strong> — 282 annotations classified</p>
+<p>into 6 types, none shown on folio pages</p>
+<p>3. <strong>Flyleaf has no annotation record</strong> — the Master Mercury declaration</p>
+<p>has a folio description but no annotation row</p>
+<p>4. <strong>33 .md files unorganized</strong> — documentation overload without an index</p>
+<p>5. <strong>41 scripts without a dependency graph</strong> — no one knows the execution order</p>
+<p>6. <strong>Match count overstates coverage</strong> — 431 matches sounds comprehensive</p>
+<p>but 4 of 6 studied copies have zero photographs</p>
+
+<hr>
+
+<h3>Why &quot;Outward Not Deeper&quot;</h3>
+
+<p>The project&#x27;s chronic pattern is: research a topic, design the schema,</p>
+<p>write the spec, generate the data — then move on to the next topic before</p>
+<p>building the pages. The result is a rich database with a thin website.</p>
+
+<p>The database has:</p>
+<ul>
+<li>94 dictionary terms with significance prose (not all shown on site)</li>
+<li>282 classified annotations (types not displayed)</li>
+<li>26 symbol occurrences (shown on some folio pages but not all)</li>
+<li>18 detected woodcuts (not in the database at all)</li>
+<li>71 timeline events (page built)</li>
+<li>6 manuscript copy descriptions (pages built)</li>
+<li>59 scholar overviews (shown on pages)</li>
+</ul>
+
+<p>The site has 335 pages but many of the enrichments from this session</p>
+<p>are invisible to visitors. The next phase should make them visible.</p>
+
+<hr>
+
+<h3>The Plan (from NEXTPHASE.md)</h3>
+
+<h4>Phase 1: Woodcuts Tab (1 hour)</h4>
+<p>Seed 18 woodcuts into the database. Build index + detail pages. Add to nav.</p>
+<p>This is the highest-impact unbuilt content.</p>
+
+<h4>Phase 2: Annotation Types on Pages (30 min)</h4>
+<p>Update marginalia pages to show annotation_type badges and query the</p>
+<p>annotations table instead of dissertation_refs.</p>
+
+<h4>Phase 3: Data Fixes (30 min)</h4>
+<p>Add flyleaf annotation record. Document 4 unmapped signatures. Update</p>
+<p>concordance status numbers.</p>
+
+<h4>Phase 4: Documentation Organization (30 min)</h4>
+<p>Create DOCUMENTATION_INDEX.md categorizing all 39 .md files. Create</p>
+<p>scripts/README.md with dependency graph. Update CLAUDE.md.</p>
+
+<h4>Phase 5: README Update (15 min)</h4>
+<p>Current numbers, architecture, build instructions.</p>
+
+<h4>Phase 6: More BL Reading (2 hours, optional)</h4>
+<p>Read remaining ~120 text pages for complete woodcut inventory and</p>
+<p>annotation density map.</p>
+
+<hr>
+
+<h3>What Not To Do Next</h3>
+
+<ul>
+<li>Do not design another database table</li>
+<li>Do not write another specification document</li>
+<li>Do not start another research investigation</li>
+<li>Do not expand the dictionary further</li>
+<li>Do not add more scholar overviews</li>
+</ul>
+
+<p>Instead: build the pages, display the data, fix the gaps, organize</p>
+<p>the documentation. Then deploy and let the site speak for itself.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

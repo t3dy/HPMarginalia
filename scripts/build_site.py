@@ -1320,29 +1320,23 @@ python scripts/add_bibliography.py  # Add bibliography and timeline
 
 # Document metadata: (filename, title, one-line summary)
 DOC_METADATA = {
-    'README.md': ('README', 'Project overview, architecture, rebuild instructions, and data provenance table.'),
-    'HPCONCORD.md': ('Concordance Methodology', 'How we built the 6-step folio-to-image concordance from Russell\'s thesis to manuscript photographs.'),
-    'HPDECKARD.md': ('Boundary Audit v1', 'Deckard boundary map distinguishing deterministic tasks from probabilistic (LLM) tasks across 11 scripts.'),
-    'HPDECKARD2.md': ('Boundary Audit v2', 'Second Deckard audit covering bibliography expansion, web research ingestion, and the hybrid verification pipeline.'),
-    'HPMIT.md': ('MIT Site Analysis', 'Reverse-engineering of the MIT Electronic Hypnerotomachia (1997): strengths, weaknesses, and lessons for our digital edition.'),
-    'HPMULTIMODAL.md': ('Multimodal RAG Study', 'How vision models and multimodal retrieval could read our 674 manuscript images to solve the BL confidence problem.'),
-    'HPproposals.md': ('Content Quality Proposals', 'Six proposals for improving dictionary, bibliography, scholar, and summary pages through templating and LLM reading.'),
-    'HPAGENTS.md': ('Agent Usage Analysis', 'Why and how Claude agents were used: what worked (foreground batches), what failed (background web tasks).'),
-    'HPEMPTYOUTPUTFILES.md': ('Empty Output Files Post-Mortem', 'Root cause analysis of 0-byte agent output files and lessons for background agent reliability.'),
-    'MISTAKESTOAVOID.md': ('Mistakes to Avoid', 'Twelve hard-won lessons from this project: provenance tagging, confidence scoring, name matching, and more.'),
-    'AUDIT_REPORT.md': ('Audit Report', 'Validation results: what changed in V2 migration, what remains provisional, what still needs human review.'),
-    'HPONTOLOGY.md': ('Ontology Design', 'Data model and entity relationships for the HP knowledge base: manuscripts, folios, hands, scholars, terms.'),
-    'HPSCHOLARS.md': ('Scholars Analysis', 'Strategy for building scholar profiles and article summaries from our PDF corpus.'),
-    'HPWEB.md': ('Web Architecture', 'Design decisions for the static site: why no framework, how SQLite drives page generation, URL structure.'),
-    'HPONTOCRIT.md': ('Ontology Critique', 'Isidore critique of HPONTOLOGY.md: where the ontology logic breaks down, what was actually built vs claimed.'),
-    'HPWEBAESTHETICS.md': ('Visual Design Audit', 'Rachael visual design logic audit: whether the site design communicates the right things at the right trust level.'),
-    'HPengCRIT.md': ('Prompt Engineering Critique', 'Isidore critique of user prompting patterns: what worked, what failed, what the prompts reveal about assumptions.'),
-    'HPGPTWEBWRITING.txt': ('Orientation Copy', 'Ready-to-use orientation blurbs for all site tabs and page types, grounded in project architecture and editorial goals.'),
-    'CONCORDANCESTATUS.md': ('Concordance Status', 'Full audit of the concordance pipeline: 282 refs, 610 matches, confidence distribution, attribution gaps, and 7 prioritized next actions.'),
-    'ISIDORE3.md': ('Isidore Critique 3', 'Critique of the next-phases plan: identifies over-specification pattern, annotation classification noise, and verification gaps.'),
-    'READINGIMAGES.md': ('Image Reading Methods', 'Deckard boundary critique of manuscript image reading: what vision can verify, the BL offset discovery, and a 4-phase batch pipeline.'),
-    'TIMELINEPLAN.md': ('Timeline Execution Plan', 'Detailed plan for the Timeline tab: schema migration, content seeding, page builder, cross-linking.'),
-    'MANUSCRIPTSPLAN.md': ('Manuscripts Execution Plan', 'Detailed plan for the Manuscripts tab: hp_copies table, 6 per-copy essays, page builder.'),
+    # Core docs (root level)
+    'SYSTEM.md': ('System Architecture', 'Architecture, data flow, operating modes, and constraints for the HP platform.'),
+    'ONTOLOGY.md': ('Data Ontology', 'All 22 tables: canonical entities, deprecated tables, relationships, coverage, and confidence.'),
+    'PIPELINE.md': ('Build Pipeline', 'Every script in execution order, from PDF ingestion through site generation.'),
+    'INTERFACE.md': ('Interface Design', 'How data becomes pages: navigation, surfacing audit, page builders, design language.'),
+    'ROADMAP.md': ('Execution Roadmap', 'What is BUILT, READY, BLOCKED, and SPECULATIVE. No hypothetical features.'),
+    'README.md': ('README', 'Project overview for GitHub.'),
+    # Archived docs (still published on the site for reference)
+    'docs/archive/HPCONCORD.md': ('Concordance Methodology', 'How the 6-step folio-to-image concordance was built from Russell\'s thesis.'),
+    'docs/archive/HPMIT.md': ('MIT Site Analysis', 'Reverse-engineering of the MIT Electronic Hypnerotomachia (1997).'),
+    'docs/archive/HPMULTIMODAL.md': ('Multimodal RAG Study', 'Vision model proposal for reading 674 manuscript images.'),
+    'docs/archive/MISTAKESTOAVOID.md': ('Mistakes to Avoid', 'Twelve hard-won lessons from this project.'),
+    'docs/archive/IMAGEIDENTIFICATION.md': ('Image Identification', 'What Claude saw reading 69 BL manuscript photographs.'),
+    'docs/archive/CONCORDANCEHACKING.md': ('Concordance Progress', 'How the concordance problem-solving progressed and metrics.'),
+    'docs/archive/WOODCUTRESEARCHREPORT.md': ('Woodcut Research', '18 woodcuts: subjects, attribution, scholarly context.'),
+    'docs/archive/ISIDORE4.md': ('System Critique', 'Concordance system audit: 7 issues, 0 integrity errors.'),
+    'docs/archive/OUTWARDNOTDEEPER.md': ('Session Findings', 'Build outward not deeper: session discoveries and philosophy.'),
 }
 
 # Script metadata: (filename, title, one-line summary)

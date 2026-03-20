@@ -24,7 +24,7 @@
             <div class="intro">
                 <h2>Project Documents</h2>
                 <p>This section makes the project legible as a research build
-                rather than a black box. It gathers 23 internal methodological
+                rather than a black box. It gathers 15 internal methodological
                 and reflective documents&mdash;ontology notes, concordance method,
                 boundary audits, proposals, mistakes, aesthetic reviews, and related
                 planning texts&mdash;that explain what the project thinks it is doing
@@ -38,119 +38,79 @@
                 <thead><tr><th>Document</th><th>Description</th><th>Words</th></tr></thead>
                 <tbody>
             <tr>
-                <td><a href="audit-report.html">Audit Report</a></td>
-                <td class="doc-summary">Validation results: what changed in V2 migration, what remains provisional, what still needs human review.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">508</td>
+                <td><a href="interface-design.html">Interface Design</a></td>
+                <td class="doc-summary">How data becomes pages: navigation, surfacing audit, page builders, design language.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">694</td>
             </tr>
             <tr>
-                <td><a href="concordance-status.html">Concordance Status</a></td>
-                <td class="doc-summary">Full audit of the concordance pipeline: 282 refs, 610 matches, confidence distribution, attribution gaps, and 7 prioritized next actions.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,633</td>
+                <td><a href="data-ontology.html">Data Ontology</a></td>
+                <td class="doc-summary">All 22 tables: canonical entities, deprecated tables, relationships, coverage, and confidence.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">630</td>
             </tr>
             <tr>
-                <td><a href="agent-usage-analysis.html">Agent Usage Analysis</a></td>
-                <td class="doc-summary">Why and how Claude agents were used: what worked (foreground batches), what failed (background web tasks).</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">807</td>
+                <td><a href="build-pipeline.html">Build Pipeline</a></td>
+                <td class="doc-summary">Every script in execution order, from PDF ingestion through site generation.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">493</td>
+            </tr>
+            <tr>
+                <td><a href="readme.html">README</a></td>
+                <td class="doc-summary">Project overview for GitHub.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,415</td>
+            </tr>
+            <tr>
+                <td><a href="execution-roadmap.html">Execution Roadmap</a></td>
+                <td class="doc-summary">What is BUILT, READY, BLOCKED, and SPECULATIVE. No hypothetical features.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">498</td>
+            </tr>
+            <tr>
+                <td><a href="system-architecture.html">System Architecture</a></td>
+                <td class="doc-summary">Architecture, data flow, operating modes, and constraints for the HP platform.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">368</td>
+            </tr>
+            <tr>
+                <td><a href="concordance-progress.html">Concordance Progress</a></td>
+                <td class="doc-summary">How the concordance problem-solving progressed and metrics.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,439</td>
             </tr>
             <tr>
                 <td><a href="concordance-methodology.html">Concordance Methodology</a></td>
-                <td class="doc-summary">How we built the 6-step folio-to-image concordance from Russell&#x27;s thesis to manuscript photographs.</td>
+                <td class="doc-summary">How the 6-step folio-to-image concordance was built from Russell&#x27;s thesis.</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,027</td>
             </tr>
             <tr>
-                <td><a href="boundary-audit-v1.html">Boundary Audit v1</a></td>
-                <td class="doc-summary">Deckard boundary map distinguishing deterministic tasks from probabilistic (LLM) tasks across 11 scripts.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,259</td>
-            </tr>
-            <tr>
-                <td><a href="boundary-audit-v2.html">Boundary Audit v2</a></td>
-                <td class="doc-summary">Second Deckard audit covering bibliography expansion, web research ingestion, and the hybrid verification pipeline.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,596</td>
-            </tr>
-            <tr>
-                <td><a href="empty-output-files-post-mortem.html">Empty Output Files Post-Mortem</a></td>
-                <td class="doc-summary">Root cause analysis of 0-byte agent output files and lessons for background agent reliability.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">763</td>
-            </tr>
-            <tr>
-                <td><a href="orientation-copy.html">Orientation Copy</a></td>
-                <td class="doc-summary">Ready-to-use orientation blurbs for all site tabs and page types, grounded in project architecture and editorial goals.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,918</td>
-            </tr>
-            <tr>
                 <td><a href="mit-site-analysis.html">MIT Site Analysis</a></td>
-                <td class="doc-summary">Reverse-engineering of the MIT Electronic Hypnerotomachia (1997): strengths, weaknesses, and lessons for our digital edition.</td>
+                <td class="doc-summary">Reverse-engineering of the MIT Electronic Hypnerotomachia (1997).</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">3,228</td>
             </tr>
             <tr>
                 <td><a href="multimodal-rag-study.html">Multimodal RAG Study</a></td>
-                <td class="doc-summary">How vision models and multimodal retrieval could read our 674 manuscript images to solve the BL confidence problem.</td>
+                <td class="doc-summary">Vision model proposal for reading 674 manuscript images.</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2,157</td>
             </tr>
             <tr>
-                <td><a href="ontology-critique.html">Ontology Critique</a></td>
-                <td class="doc-summary">Isidore critique of HPONTOLOGY.md: where the ontology logic breaks down, what was actually built vs claimed.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2,046</td>
+                <td><a href="image-identification.html">Image Identification</a></td>
+                <td class="doc-summary">What Claude saw reading 69 BL manuscript photographs.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,405</td>
             </tr>
             <tr>
-                <td><a href="ontology-design.html">Ontology Design</a></td>
-                <td class="doc-summary">Data model and entity relationships for the HP knowledge base: manuscripts, folios, hands, scholars, terms.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,260</td>
-            </tr>
-            <tr>
-                <td><a href="scholars-analysis.html">Scholars Analysis</a></td>
-                <td class="doc-summary">Strategy for building scholar profiles and article summaries from our PDF corpus.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,470</td>
-            </tr>
-            <tr>
-                <td><a href="web-architecture.html">Web Architecture</a></td>
-                <td class="doc-summary">Design decisions for the static site: why no framework, how SQLite drives page generation, URL structure.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,584</td>
-            </tr>
-            <tr>
-                <td><a href="visual-design-audit.html">Visual Design Audit</a></td>
-                <td class="doc-summary">Rachael visual design logic audit: whether the site design communicates the right things at the right trust level.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,211</td>
-            </tr>
-            <tr>
-                <td><a href="prompt-engineering-critique.html">Prompt Engineering Critique</a></td>
-                <td class="doc-summary">Isidore critique of user prompting patterns: what worked, what failed, what the prompts reveal about assumptions.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,956</td>
-            </tr>
-            <tr>
-                <td><a href="content-quality-proposals.html">Content Quality Proposals</a></td>
-                <td class="doc-summary">Six proposals for improving dictionary, bibliography, scholar, and summary pages through templating and LLM reading.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">2,158</td>
-            </tr>
-            <tr>
-                <td><a href="isidore-critique-3.html">Isidore Critique 3</a></td>
-                <td class="doc-summary">Critique of the next-phases plan: identifies over-specification pattern, annotation classification noise, and verification gaps.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,227</td>
-            </tr>
-            <tr>
-                <td><a href="manuscripts-execution-plan.html">Manuscripts Execution Plan</a></td>
-                <td class="doc-summary">Detailed plan for the Manuscripts tab: hp_copies table, 6 per-copy essays, page builder.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">724</td>
+                <td><a href="system-critique.html">System Critique</a></td>
+                <td class="doc-summary">Concordance system audit: 7 issues, 0 integrity errors.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,226</td>
             </tr>
             <tr>
                 <td><a href="mistakes-to-avoid.html">Mistakes to Avoid</a></td>
-                <td class="doc-summary">Twelve hard-won lessons from this project: provenance tagging, confidence scoring, name matching, and more.</td>
+                <td class="doc-summary">Twelve hard-won lessons from this project.</td>
                 <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,627</td>
             </tr>
             <tr>
-                <td><a href="image-reading-methods.html">Image Reading Methods</a></td>
-                <td class="doc-summary">Deckard boundary critique of manuscript image reading: what vision can verify, the BL offset discovery, and a 4-phase batch pipeline.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,422</td>
+                <td><a href="session-findings.html">Session Findings</a></td>
+                <td class="doc-summary">Build outward not deeper: session discoveries and philosophy.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">983</td>
             </tr>
             <tr>
-                <td><a href="readme.html">README</a></td>
-                <td class="doc-summary">Project overview, architecture, rebuild instructions, and data provenance table.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,415</td>
-            </tr>
-            <tr>
-                <td><a href="timeline-execution-plan.html">Timeline Execution Plan</a></td>
-                <td class="doc-summary">Detailed plan for the Timeline tab: schema migration, content seeding, page builder, cross-linking.</td>
-                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">495</td>
+                <td><a href="woodcut-research.html">Woodcut Research</a></td>
+                <td class="doc-summary">18 woodcuts: subjects, attribution, scholarly context.</td>
+                <td style="font-family:var(--font-sans); font-size:0.85rem; white-space:nowrap">1,787</td>
             </tr></tbody>
             </table>
         </div>

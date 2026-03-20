@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concordance Progress - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Concordance Progress</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                docs/archive/CONCORDANCEHACKING.md &mdash; 1,439 words</p>
+            <h2>CONCORDANCEHACKING: How the Concordance Problem-Solving Is Going</h2>
+
+<blockquote>A Deckard boundary analysis of where the concordance stands,</blockquote>
+<blockquote>what&#x27;s been solved, what&#x27;s still broken, and what the next moves are.</blockquote>
+
+<hr>
+
+<h3>The Original Problem</h3>
+
+<p>Russell&#x27;s thesis references folios by signature (b6v, h1r, etc.). Our</p>
+<p>photograph collections use different naming schemes. The concordance</p>
+<p>pipeline must translate between these systems to connect scholarly claims</p>
+<p>to visual evidence.</p>
+
+<p><strong>Three manuscript photograph sets:</strong></p>
+<ul>
+<li>Siena O.III.38: 478 photos, filenames encode folio+side (O.III.38_0014r.jpg)</li>
+<li>BL C.60.o.12: 189 photos, sequentially numbered (C_60_o_12-001.jpg)</li>
+<li>Buffalo, Vatican, Cambridge, Modena: no photos available</li>
+</ul>
+
+<hr>
+
+<h3>What&#x27;s Been Solved</h3>
+
+<h4>Siena: SOLVED (HIGH/MEDIUM confidence)</h4>
+<p>The Siena filenames directly encode folio numbers. The matching pipeline</p>
+<p>joins via folio number and side. 392 matches: 26 HIGH (exact signature+side),</p>
+<p>366 MEDIUM (folio number matched, side sometimes ambiguous). This has been</p>
+<p>stable from the beginning.</p>
+
+<h4>BL Offset: SOLVED (photo 014 = page 1)</h4>
+<p>The sequential numbering assumption was wrong. Visual inspection of 27</p>
+<p>photographs proved that photos 001-013 are front matter. The HP text</p>
+<p>begins at photo 014. The offset is exactly 13.</p>
+
+<p><strong>Before:</strong> Photo 41 was assumed to be folio 41. It was actually page 28 = b6v</p>
+<p>(the elephant and obelisk).</p>
+
+<p><strong>After:</strong> Corrected folio numbers for all 189 BL photos. 39 new MEDIUM</p>
+<p>matches created where the corrected folio aligns with a signature reference.</p>
+
+<h4>1545 Edition Confirmed</h4>
+<p>Photo 004 (title page) clearly reads &quot;RISTAMPATO DI NOVO... M.D.XXXXV.&quot;</p>
+<p>This is definitively the 1545 second Aldine edition. The 1499 signature map</p>
+<p>applies because quire signature &quot;g ii&quot; is visible at photo 110 (page 97),</p>
+<p>confirming the same collation structure.</p>
+
+<h4>BL Photo Range Established</h4>
+<p>189 sequential photos covering pages 1-176 (approximately quires a through k).</p>
+<p>This is the first 38% of the book. The later signatures Russell discusses</p>
+<p>(E8v at page 432, y7r at page 333) are beyond the photographic coverage.</p>
+
+<h4>Annotation Classification</h4>
+<p>282 annotations classified into 6 types from the canonical annotations table:</p>
+<ul>
+<li>MARGINAL_NOTE: 126 (the default scholarly annotation)</li>
+<li>CROSS_REFERENCE: 68 (identifying classical sources)</li>
+<li>INDEX_ENTRY: 50 (keyword labels, short notes)</li>
+<li>SYMBOL: 21 (alchemical ideograms)</li>
+<li>EMENDATION: 16 (textual corrections)</li>
+<li>UNDERLINE: 1</li>
+</ul>
+
+<h4>Hand Attribution</h4>
+<p>204 of 282 refs now attributed (72%, up from 68%). The improvement came</p>
+<p>from chapter-based inference (Ch. 4 = Modena/Giovio, Ch. 5 = Cambridge/Giovio,</p>
+<p>Ch. 8 = Vatican/Chigi, Ch. 9 = Siena/anonymous) and regex matching of</p>
+<p>&quot;Hand [A-E]&quot; patterns in thesis text.</p>
+
+<hr>
+
+<h3>What&#x27;s Still Broken</h3>
+
+<h4>BL Matches Still LOW Confidence (218 matches)</h4>
+<p>The offset fix corrected the folio numbers, but most BL matches remain LOW</p>
+<p>because the match pipeline originally assigned LOW to all BL data and the</p>
+<p>ground-truth verification created 39 new MEDIUM matches rather than</p>
+<p>upgrading the original 218. The 218 original matches need to be re-run</p>
+<p>against the corrected folio numbers — many may now align correctly and</p>
+<p>deserve MEDIUM or even HIGH confidence.</p>
+
+<p><strong>This is a scripting task, not a research problem.</strong> The data exists to</p>
+<p>fix it. A re-matching pass using the corrected folio numbers would upgrade</p>
+<p>many LOW matches.</p>
+
+<h4>78 Unattributed Annotations</h4>
+<p>78 of 282 annotations still have NULL hand_id. Most are from Russell&#x27;s</p>
+<p>introductory chapters (Ch. 1-3) where he discusses the HP generally rather</p>
+<p>than attributing specific annotations to specific hands. Some may be</p>
+<p>genuinely multi-copy references that can&#x27;t be attributed to a single hand.</p>
+
+<h4>Photos Cover Only 38% of the Book</h4>
+<p>The 189 BL photos cover pages 1-176. Russell discusses annotations on later</p>
+<p>pages (e.g., E8v at page 432 for the alchemist, y7r at page 333 for the</p>
+<p>fons heptagonis). These folios have no photographic evidence in our</p>
+<p>collection.</p>
+
+<h4>Two New Alchemical Sites Unverified</h4>
+<p>Image reading discovered alchemical annotations on c5v (page 42) and h8r</p>
+<p>(page 127) that aren&#x27;t in the symbol_occurrences table. These need</p>
+<p>verification against Russell&#x27;s thesis text to determine whether he discusses</p>
+<p>them and which hand he attributes them to.</p>
+
+<h4>No Buffalo, Vatican, Cambridge, or Modena Images</h4>
+<p>Four of Russell&#x27;s six annotated copies have no photographs in the project.</p>
+<p>All references to these copies are text-only, with no visual verification</p>
+<p>possible.</p>
+
+<hr>
+
+<h3>Deckard Boundary Map: What&#x27;s Deterministic vs What Needs Judgment</h3>
+
+<h4>DETERMINISTIC (can be scripted right now)</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Status</th><th>Effort</th></tr>
+<tr><td>Re-run BL matching with corrected folios</td><td>NOT DONE</td><td>30 min</td></tr>
+<tr><td>Complete page-number extraction (all 189 photos)</td><td>PARTIALLY DONE (27/189)</td><td>2 hours</td></tr>
+<tr><td>Woodcut inventory (all photos)</td><td>PARTIALLY DONE (7 detected)</td><td>2 hours</td></tr>
+<tr><td>Annotation density map (all photos)</td><td>PARTIALLY DONE (27 pages)</td><td>2 hours</td></tr>
+<tr><td>Build lookup: signature -&gt; photo number</td><td>DONE</td><td>(in build_bl_ground_truth.py)</td></tr>
+</table>
+
+<h4>NEEDS JUDGMENT (LLM-assisted, DRAFT provenance)</h4>
+
+<table class="doc-table">
+<tr><th>Task</th><th>Status</th><th>Effort</th></tr>
+<tr><td>Verify new alchemical sites (c5v, h8r) against thesis</td><td>NOT DONE</td><td>30 min</td></tr>
+<tr><td>Transcribe visible marginal text</td><td>NOT DONE</td><td>Full-book: 8+ hours</td></tr>
+<tr><td>Identify which hand wrote which annotation</td><td>NOT DONE</td><td>Requires paleographic expertise</td></tr>
+<tr><td>Compare BL annotations to Buffalo/Vatican equivalents</td><td>BLOCKED</td><td>No photos for comparison copies</td></tr>
+</table>
+
+<hr>
+
+<h3>The Story So Far</h3>
+
+<h4>Phase 1: The Naive Pipeline (original build)</h4>
+<p>Extracted 282 references from Russell&#x27;s thesis by regex. Built a signature</p>
+<p>map from the 1499 collation formula. Cataloged 674 images. Joined via folio</p>
+<p>number. Result: 610 matches, but 218 were LOW confidence because the BL</p>
+<p>photo-to-folio assumption was unverified.</p>
+
+<h4>Phase 2: The Schema Enrichment (V2 migration)</h4>
+<p>Added review_status, confidence, needs_review, source_method columns.</p>
+<p>Created the annotations, annotator_hands, and folio_descriptions tables.</p>
+<p>Added alchemical framework tracking.</p>
+
+<h4>Phase 3: The Image Reading (this session)</h4>
+<p>Read 27 BL photographs directly. Discovered the offset of 13. Found the</p>
+<p>title page confirming 1545 edition. Found Jonson&#x27;s ownership inscription.</p>
+<p>Verified the elephant-obelisk woodcut. Detected 7 woodcuts. Found 2 new</p>
+<p>alchemical annotation sites. Confirmed the quire structure.</p>
+
+<h4>Phase 4: The Ground Truth Fix (this session)</h4>
+<p>Corrected all BL image folio numbers. Created 39 new MEDIUM-confidence</p>
+<p>matches. Consolidated the annotations table (282 rows, up from 0).</p>
+<p>Classified annotation types. Improved hand attribution to 72%.</p>
+
+<hr>
+
+<h3>What Comes Next</h3>
+
+<h4>Immediate (can do now, deterministic)</h4>
+
+<p>1. <strong>Re-matching pass.</strong> The 218 original LOW BL matches need to be</p>
+<p>re-evaluated against corrected folio numbers. Many are probably</p>
+<p>pointing at the wrong images entirely (they were 13 positions off).</p>
+<p>The matches should be dropped and rebuilt from scratch using the</p>
+<p>corrected folio data.</p>
+
+<p>2. <strong>Complete page-number reading.</strong> Read remaining 162 BL photographs</p>
+<p>to build a complete page-number verification table. This replaces</p>
+<p>the offset formula with verified data for every page and catches</p>
+<p>any irregularities.</p>
+
+<p>3. <strong>Woodcut detection pass.</strong> Every page that contains a woodcut should</p>
+<p>be flagged. This builds a BL-specific woodcut inventory that can be</p>
+<p>compared against the 172 known woodcuts of the 1499 edition.</p>
+
+<h4>Medium-term (needs some judgment)</h4>
+
+<p>4. <strong>Verify new alchemical sites.</strong> Search thesis chunks for Russell&#x27;s</p>
+<p>discussion of c5v (page 42) and h8r (page 127). Determine whether</p>
+<p>these are Hand B annotations he discusses, or annotations by another</p>
+<p>hand that he doesn&#x27;t attribute to the alchemist.</p>
+
+<p>5. <strong>Annotation transcription for key folios.</strong> For the 13 folios with</p>
+<p>folio_descriptions (the alchemical analyses), attempt to read and</p>
+<p>transcribe the visible marginal text from the photographs. Compare</p>
+<p>against Russell&#x27;s quotations.</p>
+
+<h4>Long-term (requires external resources)</h4>
+
+<p>6. <strong>Acquire remaining photos.</strong> Buffalo, Vatican, Cambridge, and Modena</p>
+<p>copies need photographs for visual verification. Without them, all</p>
+<p>references to these copies remain text-only.</p>
+
+<p>7. <strong>High-resolution BL images.</strong> The current photographs are adequate</p>
+<p>for page-number reading and woodcut detection, but too low-resolution</p>
+<p>for reliable handwriting transcription or symbol identification.</p>
+<p>Higher-resolution scans would enable more detailed analysis.</p>
+
+<hr>
+
+<h3>Metrics</h3>
+
+<table class="doc-table">
+<tr><th>Metric</th><th>Start of Session</th><th>End of Session</th><th>Change</th></tr>
+<tr><td>BL offset known</td><td>No</td><td>Yes (=13)</td><td>SOLVED</td></tr>
+<tr><td>Verified page numbers</td><td>0</td><td>27</td><td>+27</td></tr>
+<tr><td>Woodcuts detected</td><td>0</td><td>7</td><td>+7</td></tr>
+<tr><td>Alchemical sites known</td><td>13 folios</td><td>15 folios</td><td>+2</td></tr>
+<tr><td>Annotations in table</td><td>0</td><td>282</td><td>+282</td></tr>
+<tr><td>Hand attribution</td><td>193/282 (68%)</td><td>204/282 (72%)</td><td>+11</td></tr>
+<tr><td>Annotation types</td><td>1 (all MARGINALIA)</td><td>6 types</td><td>+5</td></tr>
+<tr><td>Match confidence: MEDIUM+</td><td>392</td><td>431</td><td>+39</td></tr>
+<tr><td>Total matches</td><td>610</td><td>649</td><td>+39</td></tr>
+<tr><td>Site pages</td><td>300</td><td>335</td><td>+35</td></tr>
+<tr><td>Dictionary terms</td><td>80</td><td>94</td><td>+14</td></tr>
+<tr><td>Scholar overviews</td><td>38</td><td>59</td><td>+21</td></tr>
+<tr><td>Timeline events</td><td>42</td><td>71</td><td>+29</td></tr>
+<tr><td>Manuscript copy pages</td><td>0</td><td>6</td><td>+6</td></tr>
+</table>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

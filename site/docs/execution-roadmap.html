@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution Roadmap - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Execution Roadmap</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                ROADMAP.md &mdash; 498 words</p>
+            <h2>ROADMAP: Execution Tasks Only</h2>
+
+<blockquote>No speculative features. Every item is either BUILT, READY (can execute</blockquote>
+<blockquote>now from existing data), or BLOCKED (requires external resources).</blockquote>
+<blockquote>Tagged per the Antigravity constraint: surface before ingest.</blockquote>
+
+<h3>BUILT (completed, deployed)</h3>
+
+<ul>
+<li>[x] Concordance pipeline (282 refs → 431 matches, 0 LOW)</li>
+<li>[x] BL offset correction (=13, verified at 27 points)</li>
+<li>[x] Dictionary (94 terms, 15 categories, all with significance prose)</li>
+<li>[x] Scholars (60 pages, 59 overviews, 11 historical figures)</li>
+<li>[x] Bibliography (109 entries)</li>
+<li>[x] Timeline (71 events, filterable)</li>
+<li>[x] Manuscripts (6 copies with hand profiles)</li>
+<li>[x] Woodcuts (18 pages with descriptions)</li>
+<li>[x] Alchemical symbols (10 symbols, 26 occurrences)</li>
+<li>[x] Annotation classification (282 annotations, 6 types)</li>
+<li>[x] Russell essay + Concordance essay</li>
+<li>[x] Digital edition stub</li>
+<li>[x] 14-tab navigation across 354 pages</li>
+<li>[x] Documentation consolidation (5 core docs)</li>
+</ul>
+
+<h3>READY (can execute now, no new research needed)</h3>
+
+<h4>Priority 1: Switch marginalia pages to annotations table</h4>
+<p><strong>What:</strong> Update <code>build_marginalia_pages()</code> to query <code>annotations</code> instead of</p>
+<p><code>dissertation_refs</code>. Display annotation_type as primary classification.</p>
+<p><strong>Why:</strong> The annotations table has richer data (6 types, consolidated hand attribution)</p>
+<p>but the page builder still uses the deprecated table.</p>
+<p><strong>Effort:</strong> 30 minutes.</p>
+
+<h4>Priority 2: Add coverage caveats to site</h4>
+<p><strong>What:</strong> Update about.html and concordance-method.html to state clearly that</p>
+<p>image matches exist for 2 of 6 copies, and that 4 copies have text-only evidence.</p>
+<p><strong>Effort:</strong> 15 minutes.</p>
+
+<h4>Priority 3: Read remaining BL photographs</h4>
+<p><strong>What:</strong> Read ~120 unread BL text pages to complete woodcut inventory and</p>
+<p>annotation density map. Expand from 18 to ~45 detected woodcuts.</p>
+<p><strong>Why:</strong> The 18 woodcuts found from 69 pages represent a 26% detection rate.</p>
+<p>Full coverage would roughly triple the woodcut inventory.</p>
+<p><strong>Effort:</strong> 2 hours of image reading.</p>
+
+<h4>Priority 4: Add annotation type filtering to marginalia index</h4>
+<p><strong>What:</strong> Add filter buttons (like timeline) to marginalia/index.html so</p>
+<p>visitors can filter by MARGINAL_NOTE, CROSS_REFERENCE, SYMBOL, etc.</p>
+<p><strong>Effort:</strong> 30 minutes.</p>
+
+<h3>BLOCKED (requires external resources)</h3>
+
+<h4>Acquire photographs of 4 remaining copies</h4>
+<p>Buffalo RBR, Vatican Chig.II.610, Cambridge INCUN A.5.13, Modena (Panini)</p>
+<p>have no photographs. All 163 dissertation references for these copies</p>
+<p>are text-only. <strong>Blocked by:</strong> institutional access.</p>
+
+<h4>High-resolution BL images</h4>
+<p>Current BL photos are adequate for page numbers and woodcut detection</p>
+<p>but insufficient for handwriting transcription or ideogram identification.</p>
+<p><strong>Blocked by:</strong> BL digital services.</p>
+
+<h4>Full 172-woodcut inventory from 1499 facsimile</h4>
+<p>The complete inventory requires a digitized 1499 edition (available at</p>
+<p>Carnegie Mellon Posner Center or Internet Archive). Our BL photos cover</p>
+<p>only pages 1-176 (38% of the book). <strong>Blocked by:</strong> systematic facsimile reading.</p>
+
+<h3>SPECULATIVE (ideas, not commitments)</h3>
+
+<p>These are documented in archived docs but are NOT execution commitments:</p>
+
+<ul>
+<li>Multi-panel manuscript viewer with deep zoom (from HPMIT.md)</li>
+<li>Parallel translation interface (from HPMIT.md)</li>
+<li>Citation network graph (from HPSCHOLARS.md)</li>
+<li>IIIF manifest generation (from HPMULTIMODAL.md)</li>
+<li>Full HP text transcription</li>
+<li>Cross-copy annotation comparison tool</li>
+</ul>
+
+<p><strong>Rule:</strong> None of these should be started until all READY items are complete.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

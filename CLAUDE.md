@@ -1,60 +1,55 @@
-# HP Marginalia Project Instructions
+# HP Marginalia: Project Instructions
 
-## Architecture
+## What This Is
 
-- SQLite (`db/hp.db`) is the source of truth (22 tables)
-- Python scripts in `scripts/` (41 scripts) generate static HTML/CSS/JS in `site/`
-- No framework. No build tools. No JavaScript dependencies.
-- GitHub Pages deploys from `site/`
+A static website presenting the marginalia, scholarship, and reception
+history of the 1499 *Hypnerotomachia Poliphili*. SQLite database →
+Python scripts → static HTML. Deployed to GitHub Pages.
 
-## Current State (as of 2026-03-20)
+## 5 Core Documents
 
-- **354 pages** across 14 nav tabs
-- **94 dictionary terms** across 15 categories, all with significance prose
-- **60 scholar pages** (59 with overviews, 11 historical figures tagged)
-- **109 bibliography entries**, **113 marginalia folio pages**
-- **18 woodcut pages** with descriptions and scholarly context
-- **71 timeline events**, **6 manuscript copy pages**
-- **2 essay pages** (Russell Alchemical Hands, Concordance Methodology)
+| Doc | What It Covers |
+|-----|---------------|
+| **SYSTEM.md** | Architecture, data flow, operating modes, constraints |
+| **ONTOLOGY.md** | All 22 tables (canonical + deprecated), relationships, coverage |
+| **PIPELINE.md** | Every script in execution order, rebuild sequence |
+| **INTERFACE.md** | What's surfaced on the site, what's hidden, page builders |
+| **ROADMAP.md** | What's BUILT, what's READY, what's BLOCKED, what's SPECULATIVE |
+
+Read SYSTEM.md first. It has everything you need to start working.
+
+## Quick Reference
+
+- **354 pages**, 14 nav tabs
+- **22 tables**, 3 deprecated (dissertation_refs, doc_folio_refs, annotators)
+- **42 scripts** in scripts/
 - **431 matches** (48 HIGH, 383 MEDIUM, 0 LOW)
-- **282 annotations** classified into 6 types
-- **10 alchemical symbols**, **26 symbol occurrences**
-- BL offset verified (=13) across 27 data points
+- BL offset = 13 (photo 014 = page 1)
 
-## Documentation
+## Canonical Tables
 
-Read **DOCUMENTATION_INDEX.md** for a categorized guide to all 40+ project documents.
+Use `annotations` (not dissertation_refs). Use `annotator_hands` (not annotators).
+Use `hp_copies` (not manuscripts for copy-level data).
 
-## Key Specs (read before executing)
+## Constraints
 
-| Spec | Purpose | Status |
-|------|---------|--------|
-| `docs/WRITING_TEMPLATES.md` | Prose templates for all page types | **Active** |
-| `docs/DECKARD_MARGINALIA_SPEC.md` | Alchemical symbol system | **Executed** |
-| `WOODCUTONTOLOGY.md` | Woodcut data model | **Executed** |
-| `NEXTPHASE.md` | Current priority plan | **Active** |
+1. **Outward not deeper.** Surface existing data before adding more.
+2. **Reality over design.** Database beats documentation. Always.
+3. **No new specs without execution.** Build what's designed before designing more.
 
-## Canonical Tables (use these, not the deprecated ones)
+## Build
 
-| Canonical | Deprecated | Why |
-|-----------|-----------|-----|
-| `annotations` | `dissertation_refs`, `doc_folio_refs` | annotations has types + consolidated data |
-| `annotator_hands` | `annotators` | annotator_hands has alchemical_framework |
-| `hp_copies` | `manuscripts` (for copy-level data) | hp_copies covers all 6 copies |
-
-## Provenance Model
-
-Every generated datum must carry:
-- `source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED
-- `review_status`: DRAFT | REVIEWED | VERIFIED | PROVISIONAL
-- `confidence`: HIGH | MEDIUM | LOW | PROVISIONAL
-
-Never overwrite VERIFIED content. Never present DRAFT as VERIFIED.
-
-## Build Commands
-
+```bash
+python scripts/build_site.py   # All 354 pages
 ```
-python scripts/build_site.py        # Rebuild all 354 pages
-python scripts/dictionary_audit.py  # Check dictionary coverage
-python scripts/validate.py          # Full QA
-```
+
+## Spec Files (in docs/)
+
+Detailed specs for writing templates, scholar pipeline, timeline, manuscripts,
+marginalia symbols. Read these before modifying those subsystems.
+
+## Archived Documents
+
+36 design docs, critiques, plans, and research reports in `docs/archive/`.
+These are project history — readable but not authoritative. The 5 core
+docs above supersede them.

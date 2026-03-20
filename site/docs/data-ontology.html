@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Ontology - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Data Ontology</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                ONTOLOGY.md &mdash; 630 words</p>
+            <h2>ONTOLOGY: The Actual Database Schema</h2>
+
+<blockquote>This describes what EXISTS in db/hp.db. Nothing aspirational.</blockquote>
+<blockquote>Last verified: 2026-03-20. 22 tables, ~2800 total rows.</blockquote>
+
+<h3>Canonical Tables</h3>
+
+<h4>The Book and Its Copies</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**hp_copies**</td><td>6</td><td>All known annotated copies (Russell&#x27;s 6). Shelfmark, institution, edition, hand count, confidence.</td></tr>
+<tr><td>**manuscripts**</td><td>2</td><td>Copies with local photographs (BL, Siena). Contains image directory paths.</td></tr>
+<tr><td>**images**</td><td>674</td><td>Individual photographs. 196 BL (offset-corrected, folio=photo-13), 478 Siena (folio in filename).</td></tr>
+<tr><td>**signature_map**</td><td>448</td><td>Deterministic lookup: signature (b6v) → folio number. From 1499 collation a-z8 A-F8 G4.</td></tr>
+</table>
+
+<h4>Annotations and Hands</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**annotations**</td><td>282</td><td>CANONICAL. Migrated from dissertation_refs. Has annotation_type (6 types), hand_id, confidence.</td></tr>
+<tr><td>**annotator_hands**</td><td>11</td><td>CANONICAL. 11 hands across 6 copies. Has alchemical_framework for Hand B and E.</td></tr>
+<tr><td>**matches**</td><td>431</td><td>Ref-to-image links. 48 HIGH + 383 MEDIUM + 0 LOW.</td></tr>
+<tr><td>**folio_descriptions**</td><td>13</td><td>Detailed analyses of alchemist-annotated folios.</td></tr>
+<tr><td>**woodcuts**</td><td>18</td><td>Detected woodcuts with subjects, categories, annotation data.</td></tr>
+</table>
+
+<h4>Alchemical System</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**alchemical_symbols**</td><td>10</td><td>7 planetary metals + cinnabar, sulphur, hermaphrodite.</td></tr>
+<tr><td>**symbol_occurrences**</td><td>26</td><td>Which symbols on which folios, attributed to which hand.</td></tr>
+</table>
+
+<h4>Scholarly Apparatus</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**dictionary_terms**</td><td>94</td><td>15 categories. Has significance_to_hp, significance_to_scholarship.</td></tr>
+<tr><td>**dictionary_term_links**</td><td>247</td><td>Bidirectional cross-references (RELATED, SEE_ALSO, PARENT).</td></tr>
+<tr><td>**bibliography**</td><td>109</td><td>Works grouped by hp_relevance (PRIMARY/DIRECT/INDIRECT/TANGENTIAL).</td></tr>
+<tr><td>**scholars**</td><td>60</td><td>59 with overviews. 11 tagged is_historical_subject.</td></tr>
+<tr><td>**scholar_works**</td><td>72</td><td>Junction: scholars ↔ bibliography. has_summary flag.</td></tr>
+<tr><td>**timeline_events**</td><td>71</td><td>1499-2024. Editions, annotations, scholarship, art, literary influence.</td></tr>
+</table>
+
+<h4>Corpus</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**documents**</td><td>38</td><td>PDFs/PPTXs cataloged from filesystem.</td></tr>
+<tr><td>**document_topics**</td><td>34</td><td>Topic assignments (6-cluster taxonomy).</td></tr>
+</table>
+
+<h4>System</h4>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
+<tr><td>**schema_version**</td><td>2</td><td>Migration tracking.</td></tr>
+</table>
+
+<h3>Deprecated Tables (DO NOT QUERY)</h3>
+
+<table class="doc-table">
+<tr><th>Table</th><th>Rows</th><th>Replaced By</th><th>Why Kept</th></tr>
+<tr><td>**dissertation_refs**</td><td>282</td><td>annotations</td><td>Original extraction. Some scripts still reference.</td></tr>
+<tr><td>**doc_folio_refs**</td><td>282</td><td>annotations</td><td>V2 duplicate with provenance columns. Not queried.</td></tr>
+<tr><td>**annotators**</td><td>11</td><td>annotator_hands</td><td>V2 duplicate with different column names.</td></tr>
+</table>
+
+<p><strong>Rule:</strong> New code MUST query canonical tables. Deprecated tables exist</p>
+<p>only for backward compatibility and will not be updated.</p>
+
+<h3>Relationships</h3>
+
+<pre><code class="lang-">
+hp_copies.shelfmark ←→ manuscripts.shelfmark (for image-holding copies)
+images.manuscript_id → manuscripts.id
+matches.ref_id → dissertation_refs.id (LEGACY — should migrate to annotations.id)
+matches.image_id → images.id
+annotations.hand_id → annotator_hands.id
+annotations.manuscript_id → manuscripts.id
+symbol_occurrences.symbol_id → alchemical_symbols.id
+symbol_occurrences.hand_id → annotator_hands.id
+scholar_works.scholar_id → scholars.id
+scholar_works.bib_id → bibliography.id
+dictionary_term_links.term_id → dictionary_terms.id
+woodcuts.signature_1499 ←→ signature_map.signature
+</code></pre>
+
+<h3>Coverage and Confidence</h3>
+
+<table class="doc-table">
+<tr><th>Data</th><th>Coverage</th><th>Confidence</th></tr>
+<tr><td>Siena matches</td><td>392/478 images matched</td><td>HIGH/MEDIUM</td></tr>
+<tr><td>BL matches</td><td>39/50 refs matched (11 beyond photo range)</td><td>MEDIUM (27 visually verified as HIGH)</td></tr>
+<tr><td>Buffalo/Vatican/Cambridge/Modena</td><td>0 matches (no photographs)</td><td>N/A</td></tr>
+<tr><td>Hand attribution</td><td>204/282 annotations (72%)</td><td>MEDIUM</td></tr>
+<tr><td>Dictionary significance</td><td>94/94 terms</td><td>DRAFT (LLM-assisted)</td></tr>
+<tr><td>Scholar overviews</td><td>59/60 scholars</td><td>DRAFT (LLM-assisted)</td></tr>
+<tr><td>Woodcut inventory</td><td>18/~172 (BL photos cover pages 1-176 only)</td><td>MEDIUM</td></tr>
+</table>
+
+<h3>4 Unmapped Signatures</h3>
+
+<p>z5v, z6r, u3r, z5r — collation ambiguities. The signature map omits &#x27;u&#x27;</p>
+<p>per the 1499 convention; Russell may use it differently. z5 may exceed</p>
+<p>quire z&#x27;s leaf count. These are KNOWN UNRESOLVABLE without physical book access.</p>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

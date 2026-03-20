@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Design - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>Interface Design</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                INTERFACE.md &mdash; 694 words</p>
+            <h2>INTERFACE: How Data Becomes Pages</h2>
+
+<blockquote>What the site shows, what it hides, and what needs fixing.</blockquote>
+
+<h3>Navigation (14 tabs)</h3>
+
+<table class="doc-table">
+<tr><th>Tab</th><th>Page(s)</th><th>Source Table(s)</th><th>Status</th></tr>
+<tr><td>Home</td><td>index.html</td><td>matches, images, dissertation_refs</td><td>BUILT</td></tr>
+<tr><td>Marginalia</td><td>marginalia/index.html + 113 folios</td><td>matches, images, annotations, folio_descriptions, symbol_occurrences</td><td>BUILT</td></tr>
+<tr><td>Scholars</td><td>scholars.html + 60 detail</td><td>scholars, scholar_works, bibliography, summaries.json</td><td>BUILT</td></tr>
+<tr><td>Bibliography</td><td>bibliography.html</td><td>bibliography</td><td>BUILT</td></tr>
+<tr><td>Dictionary</td><td>dictionary/index.html + 94 terms</td><td>dictionary_terms, dictionary_term_links</td><td>BUILT</td></tr>
+<tr><td>Docs</td><td>docs/index.html + 23 docs</td><td>filesystem .md files via DOC_METADATA</td><td>BUILT</td></tr>
+<tr><td>Code</td><td>code/index.html + 31 scripts</td><td>filesystem .py files via SCRIPT_METADATA</td><td>BUILT</td></tr>
+<tr><td>Timeline</td><td>timeline.html</td><td>timeline_events</td><td>BUILT</td></tr>
+<tr><td>Woodcuts</td><td>woodcuts/index.html + 18 detail</td><td>woodcuts</td><td>BUILT</td></tr>
+<tr><td>Manuscripts</td><td>manuscripts/index.html + 6 copies</td><td>hp_copies, annotator_hands, matches</td><td>BUILT</td></tr>
+<tr><td>Edition</td><td>digital-edition.html</td><td>— (static stub)</td><td>BUILT (stub)</td></tr>
+<tr><td>Alchemical Hands</td><td>russell-alchemical-hands.html</td><td>annotator_hands, matches, folio_descriptions</td><td>BUILT</td></tr>
+<tr><td>Concordance</td><td>concordance-method.html</td><td>matches, signature_map, images</td><td>BUILT</td></tr>
+<tr><td>About</td><td>about.html</td><td>aggregate stats from all tables</td><td>BUILT</td></tr>
+</table>
+
+<h3>UI Surfacing Audit</h3>
+
+<h4>FULLY SURFACED (data visible on site)</h4>
+
+<table class="doc-table">
+<tr><th>Data</th><th>Where Shown</th></tr>
+<tr><td>431 matches (48 HIGH, 383 MEDIUM)</td><td>Gallery + folio pages</td></tr>
+<tr><td>674 images</td><td>Gallery + folio pages</td></tr>
+<tr><td>94 dictionary terms + significance</td><td>Dictionary term pages</td></tr>
+<tr><td>247 term cross-links</td><td>Related Terms sections</td></tr>
+<tr><td>60 scholars + 59 overviews</td><td>Scholar pages</td></tr>
+<tr><td>109 bibliography entries</td><td>Bibliography page</td></tr>
+<tr><td>71 timeline events</td><td>Timeline page (filterable)</td></tr>
+<tr><td>18 woodcuts</td><td>Woodcut pages</td></tr>
+<tr><td>6 manuscript copies</td><td>Manuscripts pages</td></tr>
+<tr><td>11 annotator hands</td><td>Marginalia + manuscripts pages</td></tr>
+<tr><td>13 folio descriptions</td><td>Alchemical Analysis sections</td></tr>
+<tr><td>10 alchemical symbols + 26 occurrences</td><td>Symbol tables on folio pages</td></tr>
+<tr><td>282 annotation type badges</td><td>Folio pages (6 types)</td></tr>
+</table>
+
+<h4>PARTIALLY SURFACED</h4>
+
+<table class="doc-table">
+<tr><th>Data</th><th>Issue</th><th>Fix</th></tr>
+<tr><td>annotations table (282)</td><td>build_site.py still queries dissertation_refs, not annotations</td><td>Switch query source in build_marginalia_pages()</td></tr>
+<tr><td>annotation types</td><td>Shown as badges but no filtering capability</td><td>Add type filter to marginalia index</td></tr>
+<tr><td>scholar_works (72)</td><td>Used internally but &quot;Works in Archive&quot; vs &quot;Other&quot; split could be clearer</td><td>Minor template improvement</td></tr>
+</table>
+
+<h4>NOT SURFACED</h4>
+
+<table class="doc-table">
+<tr><th>Data</th><th>Rows</th><th>What&#x27;s Missing</th></tr>
+<tr><td>document_topics</td><td>34</td><td>Topic tags not shown on docs pages</td></tr>
+<tr><td>4 unmapped signatures</td><td>—</td><td>No error page or note on site</td></tr>
+</table>
+
+<h4>MISLEADING PRESENTATION</h4>
+
+<table class="doc-table">
+<tr><th>Claim on Site</th><th>Reality</th><th>Fix Needed</th></tr>
+<tr><td>&quot;431 matches&quot;</td><td>Only 2 of 6 Russell copies have photographs</td><td>Add caveat: &quot;Image matches available for BL and Siena copies. 4 copies studied by Russell have no photographs in this project.&quot;</td></tr>
+<tr><td>About page stats</td><td>May show stale numbers</td><td>Regenerated from DB on each build — should be current</td></tr>
+</table>
+
+<h3>Page Generation Architecture</h3>
+
+<p><code>build_site.py</code> contains all page builders as functions:</p>
+
+<pre><code class="lang-python">
+main():
+    export_data_json()           # Gallery data
+    update_styles()              # CSS injection
+    update_index_nav()           # Home page nav
+    build_scholars_pages()       # 60 scholar pages
+    build_dictionary_pages()     # 94 term pages
+    build_marginalia_pages()     # 113 folio pages
+    build_bibliography_page()    # 1 page
+    build_docs_pages()           # 23 doc pages
+    build_code_pages()           # 31 script pages
+    build_about_page()           # 1 page
+    build_russell_essay_page()   # 1 essay
+    build_concordance_essay_page() # 1 essay
+    build_digital_edition_page() # 1 stub
+    build_timeline_page()        # 1 page
+    build_woodcuts_pages()       # 18 woodcut pages
+    build_manuscripts_pages()    # 6 copy pages
+</code></pre>
+
+<p>All pages use <code>page_shell()</code> for consistent header/nav/footer and</p>
+<p><code>nav_html()</code> for the 14-tab navigation with depth-aware relative paths.</p>
+
+<h3>Design Language</h3>
+
+<ul>
+<li>Warm scholarly palette (parchment, leather tones)</li>
+<li>Serif for body text, sans-serif for metadata/badges</li>
+<li>Confidence badges: GREEN (HIGH), AMBER (MEDIUM), RED (LOW)</li>
+<li>Review badges: AMBER (Draft), BLUE (Reviewed), GREEN (Verified)</li>
+<li>Alchemist tags: dark red background</li>
+<li>All CSS in style.css, scholars.css, components.css (inline styles in page builders)</li>
+</ul>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

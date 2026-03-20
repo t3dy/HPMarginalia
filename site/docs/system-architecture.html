@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture - Hypnerotomachia Poliphili</title>
+    <meta name="description" content="Digital scholarship and marginalia of the Hypnerotomachia Poliphili (Venice, 1499)">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../scholars.css">
+    <link rel="stylesheet" href="../components.css">
+    
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="../index.html" style="color:inherit;text-decoration:none"><em>Hypnerotomachia Poliphili</em></a></h1>
+            <p class="subtitle">Digital Scholarship &amp; Marginalia</p>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+        </div>
+    </header>
+    <main>
+
+        <div class="doc-content">
+            <p><a href="index.html">&larr; All Documents</a></p>
+            <h2>System Architecture</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
+                SYSTEM.md &mdash; 368 words</p>
+            <h2>SYSTEM: HP Marginalia Platform Architecture</h2>
+
+<h3>Purpose</h3>
+
+<p>A static website presenting the marginalia, scholarship, and reception</p>
+<p>history of the 1499 <em>Hypnerotomachia Poliphili</em>, built from a SQLite</p>
+<p>database via Python scripts. No framework. No server. No dependencies</p>
+<p>beyond Python standard library.</p>
+
+<h3>Architecture</h3>
+
+<pre><code class="lang-">
+db/hp.db (SQLite, 22 tables)
+    ↓
+scripts/ (42 Python scripts)
+    ↓
+site/ (354 static HTML pages, deployed to GitHub Pages)
+</code></pre>
+
+<h4>Data Flow</h4>
+
+<pre><code class="lang-">
+PDFs → pdf_to_markdown.py → md/ → chunk_documents.py → chunks/
+Russell thesis → extract_references.py → dissertation_refs (282)
+                                        → consolidate_annotations.py → annotations (282)
+Image folders → catalog_images.py → images (674)
+Collation formula → build_signature_map.py → signature_map (448)
+References + Images + Map → match_refs_to_images.py + rebuild_bl_matches.py → matches (431)
+All tables → build_site.py → site/ (354 pages)
+</code></pre>
+
+<h4>Provenance Model</h4>
+
+<p>Every generated datum carries:</p>
+<ul>
+<li>`source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED</li>
+<li>`review_status`: DRAFT | REVIEWED | VERIFIED | PROVISIONAL</li>
+<li>`confidence`: HIGH | MEDIUM | LOW | PROVISIONAL</li>
+</ul>
+
+<p>Rule: never overwrite VERIFIED content. Never present DRAFT as VERIFIED.</p>
+
+<h3>Operating Modes</h3>
+
+<p>When working on this project, operate in one of these modes:</p>
+
+<h4>1. Ontology Mode</h4>
+<p>Owns the schema. Prevents table duplication. Enforces canonical tables.</p>
+<p>Forbidden: creating new tables without deprecating old equivalents.</p>
+
+<h4>2. Pipeline Mode</h4>
+<p>Owns scripts. Handles ingestion, matching, enrichment.</p>
+<p>Forbidden: modifying site HTML directly.</p>
+
+<h4>3. Verification Mode</h4>
+<p>Validates matches against images. Handles confidence upgrades.</p>
+<p>Reads manuscript photographs. Produces structured evidence.</p>
+<p>Forbidden: generating prose without evidence.</p>
+
+<h4>4. Presentation Mode</h4>
+<p>Builds site pages. Ensures all DB entities are visible.</p>
+<p>Forbidden: adding new data — only rendering what exists.</p>
+
+<h4>5. Research Mode</h4>
+<p>Reads PDFs, images, and web sources. Produces structured outputs</p>
+<p>(JSON packets, evidence files). Forbidden: writing directly to DB</p>
+<p>without staging.</p>
+
+<h3>Constraints</h3>
+
+<p>1. <strong>Outward not deeper.</strong> Do not add data layers if existing layers are incomplete.</p>
+<p>2. <strong>Reality over design.</strong> If a document conflicts with the database, the document is wrong.</p>
+<p>3. <strong>5 core docs.</strong> SYSTEM.md, ONTOLOGY.md, PIPELINE.md, INTERFACE.md, ROADMAP.md.</p>
+<p>Everything else is in docs/archive/ for reference.</p>
+<p>4. <strong>Canonical tables only.</strong> Use <code>annotations</code> not <code>dissertation_refs</code>.</p>
+<p>Use <code>annotator_hands</code> not <code>annotators</code>. Use <code>hp_copies</code> not <code>manuscripts</code> for copy data.</p>
+
+<h3>Build</h3>
+
+<pre><code class="lang-bash">
+python scripts/build_site.py     # Rebuild all 354 pages
+python scripts/validate.py       # Full QA
+</code></pre>
+
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About This Project</h4>
+                <p>A digital humanities project documenting the readership
+                and marginalia of the 1499 Aldine <em>Hypnerotomachia Poliphili</em>,
+                based on James Russell's PhD thesis (Durham, 2014).</p>
+            </div>
+            <div class="footer-section">
+                <h4>Data Provenance</h4>
+                <p>Content marked with <span class="review-badge" style="font-size:0.7rem">Unreviewed</span>
+                has been generated with LLM assistance and has not been
+                verified by a human expert.</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
