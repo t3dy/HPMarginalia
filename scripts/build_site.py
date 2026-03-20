@@ -1766,22 +1766,52 @@ def build_russell_essay_page(conn):
 
         <h2 id="bl-alchemist">The BL Alchemical Hand (Hand B)
             <a class="section-anchor" href="#bl-alchemist">#</a></h2>
-        <p>The BL alchemist (Hand B in C.60.o.12) is the more extensively documented of the two alchemical
-        readers. Russell devotes Chapter 6 of his thesis primarily to this hand. On the flyleaf verso,
-        Hand B wrote a Latin summary of the HP's perceived true meaning:</p>
+        <p>The BL alchemist (Hand B in C.60.o.12) is the more extensively documented of the two
+        alchemical readers. Russell devotes Chapter 6 of his thesis to this hand, situating it within
+        the broader tradition of seventeenth-century alchemical theory. The animating purpose of
+        that theory was the recovery of <em>prisca sapientia</em>&mdash;an original wisdom, beginning
+        with Hermes Trismegistus, that had been progressively obscured over the centuries. A text
+        as complicated and linguistically obscure as the HP would have drawn much attention from
+        an alchemist steeped in this tradition: the more recondite the text, the more ancient
+        wisdom it was presumed to contain (Russell 2014, pp. 154&ndash;156).</p>
+
+        <h3>The Master Mercury Declaration</h3>
+        <p>On the flyleaf verso, Hand B wrote a Latin summary declaring what the HP truly means:</p>
         <blockquote>"verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae
         &amp; operationum Magisteri Mercurii Descriptio elegans, ampla"</blockquote>
-        <p>This annotation declares the HP's "true sense" to be the "full and elegant description of
-        the energy and spirit of the whole nature, and of the operations of Master Mercury." This
-        reading positions mercury (quicksilver) as the catalytic principle uniting all elements,
-        consistent with d'Espagnet's <em>Enchiridion Physicae Restitutae</em> (published 1623).</p>
-        <p>Hand B used an extensive vocabulary of alchemical ideograms&mdash;compact symbols for gold,
-        silver, mercury, Venus, Jupiter, and other elements&mdash;within the syntax of Latin annotations.
-        These signs sometimes had Latin inflections appended (e.g., the sun symbol + "-ra" for "aurata").
-        Russell notes that B's ideographic vocabulary shows consistency with Newton's Keynes MSS,
-        suggesting a possible connection to the Royal Society or Cambridge circle.</p>
+        <p><em>The true sense of the intention of this book is threefold: the full and elegant
+        description of the energy and spirit of the whole nature, and of the operations of
+        Master Mercury.</em></p>
+        <p>This declaration positions mercury (quicksilver) as the central principle. In the
+        alchemical framework of Jean d'Espagnet (1564&ndash;1637), whose <em>Enchiridion Physicae
+        Restitutae</em> was available in English from 1651, mercury is the vehicle of the
+        <em>spiritus mundi</em>&mdash;the world spirit emanating from the sun. Mercury was understood
+        to be the primal metal, always liquid at room temperature, while all other metals achieved
+        liquidity only through heat. It was, as Russell puts it, "all things to all people" in the
+        alchemical tradition (Russell 2014, pp. 159&ndash;161).</p>
+        <p>The annotator also twice praises the HP as "ingeniosissimo," recognizing it as exemplifying
+        the <em>ingegno</em>&mdash;the improvisational intelligence&mdash;that early modern readers
+        cultivated through annotation.</p>
+
+        <h3>The Ideographic Vocabulary</h3>
+        <p>Hand B used an extensive vocabulary of alchemical ideograms&mdash;compact symbols for
+        gold, silver, mercury, Venus, Jupiter, and other elements&mdash;embedded within the syntax
+        of Latin sentences. A particularly distinctive feature is the way B appended Latin case
+        inflections to these symbols: "aurum" would be written as the gold symbol + "-um," and
+        "Veneris" as the Venus symbol + "-eris." This creates a hybrid semiotic system where
+        chemical signs function as Latin nouns within grammatical sentences
+        (Russell 2014, pp. 149&ndash;152).</p>
+        <p>Russell notes that B's ideographic vocabulary shows striking consistency with Isaac
+        Newton's manuscripts in the Keynes collection at Cambridge. Although the BL hand is
+        certainly not Newton's, this consistency "may suggest that B was attached to the Royal
+        Society, from the environs of Cambridge, or was otherwise connected to the figure of
+        Newton" (Russell 2014, pp. 158&ndash;159). A careful comparison of B's annotations with
+        Newton's remains, Russell notes, a productive avenue for future research.</p>
+
         <p class="evidence-note">Source: Russell 2014, Ch. 6, pp. 154&ndash;168. This project has
-        {len(bl_refs)} dissertation references attributed to Hand B in our database.</p>
+        {len(bl_refs)} dissertation references attributed to Hand B, and has visually confirmed
+        the Master Mercury declaration and ideographic annotations on BL photographs 003 (flyleaf)
+        and 041 (b6v, elephant and obelisk).</p>
 
         <h3>BL Alchemist: Referenced Folios</h3>
         <table>
@@ -1797,15 +1827,38 @@ def build_russell_essay_page(conn):
             <a class="section-anchor" href="#buffalo-alchemist">#</a></h2>
         <p>Hand E in the Buffalo copy is the latest of five interleaved hands, overwriting Hand D.
         Like the BL alchemist, Hand E labels passages and woodcuts with the element or stage of
-        the alchemical process they were presumed to allegorize. However, Hand E follows a different
-        alchemical school: the pseudo-Geber tradition, emphasizing sulphur and the Sol/Luna (Sun/Moon)
-        duality rather than d'Espagnet's mercury-centered framework.</p>
-        <p>Hand E identified the king and queen statues in the HP as Sol and Luna, and read the
-        chess match passage (h1r) as an allegory of silver/gold transmutation. The chemical
-        wedding&mdash;the union of Sol and Luna&mdash;maps onto Poliphilo and Polia's love story
-        in this reading.</p>
+        the alchemical process they were presumed to allegorize. But Hand E follows a fundamentally
+        different alchemical school: the pseudo-Geber tradition (from Jabir ibn Hayyan), which
+        emphasizes sulphur and the Sol/Luna (Sun/Moon) duality rather than mercury
+        (Russell 2014, pp. 170&ndash;186).</p>
+        <p>In the Geberian framework, the masculine principle is represented by Sol (gold) and the
+        feminine by Luna (silver). What makes Geber's thought distinctive is that these are understood
+        as creative inverses: gold is masculine "in its height" and feminine "in its depth," while
+        silver is feminine "in its height" and masculine "in its depth." It is the variance in these
+        proportions that differentiates elements (Russell 2014, p. 187).</p>
+
+        <h3>The Chess Match as Alchemical Distillation</h3>
+        <p>Hand E's most remarkable annotation is a sustained alchemical reading of the human chess
+        match at Queen Eleuterylida's palace (g8r&ndash;h1r). Thirty-two maidens play, one side
+        dressed in silver and the other in gold. But the queens of both sides wear gold, and the
+        kings of both wear silver&mdash;the inverse of the Geberian ideal, signaling that transmutation
+        has yet to occur.</p>
+        <p>The annotator recorded the results of each of three rounds. Silver wins the first match;
+        Hand E writes "Argentum" and draws a small crescent moon (Luna). Silver wins again in the
+        second round. Gold finally triumphs in the third, and E initially writes "Rex ex auro factus
+        victoriam ultimam"&mdash;then hesitates, corrects "Rex" to "[Re]gina," "auro" to "aura,"
+        "factus" to the solar symbol + "uestita," and "victor" to "victrix." E then cancels "Regina"
+        and places "Auru(m)" as the culmination. The king of gold wins only after multiple rounds of
+        play, each round representing a distillation (Russell 2014, pp. 188&ndash;189).</p>
+        <p>The outcome of this alchemical marriage is a hermaphrodite&mdash;the <em>coincidentia
+        oppositorum</em>, the union of opposite qualities. Hand E found this principle encoded in
+        the epigram D.AMBIG.D.D. ("dedicated to the ambiguous gods") on a statue base (b5r),
+        which E reads as "diis ambiguis id est metallis hermafroditis"&mdash;"to the ambiguous gods,
+        that is, to the metallic hermaphrodites" (Russell 2014, pp. 189&ndash;190).</p>
+
         <p class="evidence-note">Source: Russell 2014, Ch. 7, pp. 170&ndash;191. This project has
-        {len(buf_refs)} dissertation references attributed to Hand E.</p>
+        {len(buf_refs)} dissertation references attributed to Hand E. The Buffalo copy has no
+        photographs in this project; all evidence is textual.</p>
 
         <h3>Buffalo Alchemist: Referenced Folios</h3>
         <table>
