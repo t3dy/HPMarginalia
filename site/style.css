@@ -200,14 +200,34 @@ header h1 em {
     margin-bottom: 0.5rem;
 }
 
+.card-hand {
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.card-desc {
+    font-size: 0.82rem;
+    color: #5a4e42;
+    line-height: 1.55;
+    margin-bottom: 0.4rem;
+    max-height: 4.7em;
+    overflow: hidden;
+}
+
 .card-marginal {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-style: italic;
     color: var(--text);
     line-height: 1.5;
     max-height: 3em;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-top: 1px solid var(--border);
+    padding-top: 0.3rem;
+    margin-top: 0.3rem;
 }
 
 .card-ms .badge {

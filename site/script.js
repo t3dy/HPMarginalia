@@ -40,8 +40,21 @@ function renderGallery(entries) {
 
         const description = entry.card_description || entry.desc_title || '';
         const descHtml = description
-            ? `<div class="card-desc" style="font-size:0.82rem;color:#6b5b4b;line-height:1.5;margin-top:0.3rem">${escapeHtml(description.substring(0, 160))}${description.length > 160 ? '...' : ''}</div>`
+            ? `<div class="card-desc">${escapeHtml(description.substring(0, 200))}${description.length > 200 ? '...' : ''}</div>`
             : '';
+
+        // Build hand info line
+        let handHtml = '';
+        if (entry.hand_label) {
+            let handText = `Hand ${entry.hand_label}`;
+            if (entry.hand_attribution && entry.hand_attribution !== 'Anonymous') {
+                handText += ` (${entry.hand_attribution})`;
+            }
+            if (entry.is_alchemist) {
+                handText += ' <span style="background:#e8d4d4;color:#6b2323;padding:0.1rem 0.4rem;border-radius:2px;font-size:0.65rem;font-weight:600;text-transform:uppercase">Alchemist</span>';
+            }
+            handHtml = `<div class="card-hand">${handText}</div>`;
+        }
 
         card.innerHTML = `
             <img class="card-image"
@@ -54,6 +67,7 @@ function renderGallery(entries) {
                     <span class="badge ${badgeClass}">${badgeText}</span>
                     ${entry.manuscript} &mdash; folio ${entry.folio_number || '?'}${entry.side || ''}
                 </div>
+                ${handHtml}
                 ${descHtml}
                 ${entry.marginal_text
                     ? `<div class="card-marginal">&ldquo;${escapeHtml(entry.marginal_text)}&rdquo;</div>`
