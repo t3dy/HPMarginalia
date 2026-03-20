@@ -1776,6 +1776,14 @@ def build_russell_essay_page(conn):
         an alchemist steeped in this tradition: the more recondite the text, the more ancient
         wisdom it was presumed to contain (Russell 2014, pp. 154&ndash;156).</p>
 
+        <div style="margin:1.5rem 0; text-align:center">
+            <img src="images/bl/C_60_o_12-003.jpg" alt="BL flyleaf verso: Master Mercury declaration"
+                 style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                BL C.60.o.12, flyleaf verso (photo 003). Hand B's Master Mercury declaration.
+                The shelfmark "C.60.o.12" and the date "1641" are visible below.</p>
+        </div>
+
         <h3>The <a href="dictionary/master-mercury.html" style="color:inherit">Master Mercury</a> Declaration</h3>
         <p>On the flyleaf verso, Hand B wrote a Latin summary declaring what the HP truly means:</p>
         <blockquote>"verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae
@@ -1793,6 +1801,15 @@ def build_russell_essay_page(conn):
         <p>The annotator also twice praises the HP as "ingeniosissimo," recognizing it as exemplifying
         the <a href="dictionary/ingegno.html"><em>ingegno</em></a>&mdash;the improvisational
         intelligence&mdash;that early modern readers cultivated through annotation.</p>
+
+        <div style="margin:1.5rem 0; text-align:center">
+            <img src="images/bl/C_60_o_12-041.jpg" alt="BL b6v: Elephant and Obelisk with alchemical annotations"
+                 style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                BL C.60.o.12, signature b6v (photo 041). The elephant and obelisk woodcut,
+                densely annotated by Hand B with alchemical ideograms. This image later
+                inspired Bernini's 1667 sculpture in Piazza della Minerva, Rome.</p>
+        </div>
 
         <h3>The Ideographic Vocabulary</h3>
         <p>Hand B used an extensive vocabulary of alchemical ideograms&mdash;compact symbols for
@@ -1813,6 +1830,23 @@ def build_russell_essay_page(conn):
         {len(bl_refs)} dissertation references attributed to Hand B, and has visually confirmed
         the Master Mercury declaration and ideographic annotations on BL photographs 003 (flyleaf)
         and 041 (b6v, elephant and obelisk).</p>
+
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin:1.5rem 0">
+            <div style="flex:1; min-width:250px; text-align:center">
+                <img src="images/bl/C_60_o_12-014.jpg" alt="BL a1r: opening page with annotations"
+                     style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                    a1r (photo 014). The HP's opening page: "POLIPHILO INCOMINCIA."
+                    Marginal annotations from both Hand A (Jonson) and Hand B (alchemist).</p>
+            </div>
+            <div style="flex:1; min-width:250px; text-align:center">
+                <img src="images/bl/C_60_o_12-004.jpg" alt="BL title page with Jonson ownership"
+                     style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                    Title page (photo 004). "RISTAMPATO DI NOVO... M.D.XXXXV" (1545).
+                    Ben Jonson's ownership inscription "Sum Ben: Ionsonij" at bottom.</p>
+            </div>
+        </div>
 
         <h3>BL Alchemist: Referenced Folios</h3>
         <table>
@@ -1857,9 +1891,28 @@ def build_russell_essay_page(conn):
         which E reads as "diis ambiguis id est metallis hermafroditis"&mdash;"to the ambiguous gods,
         that is, to the metallic hermaphrodites" (Russell 2014, pp. 189&ndash;190).</p>
 
+        <div style="margin:1.5rem 0; text-align:center">
+            <img src="images/bl/C_60_o_12-036.jpg" alt="BL b4r: Twin inscribed monuments with D.AMBIG.D.D."
+                 style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                BL C.60.o.12, signature b4r (photo 036). The twin inscribed monuments bearing
+                "D.AMBIG.D.D." &mdash; which Hand E in the Buffalo copy reads as "dedicated to
+                the ambiguous gods, that is, to the metallic hermaphrodites." The BL copy
+                shows this same passage heavily annotated by both hands.</p>
+        </div>
+
         <p class="evidence-note">Source: Russell 2014, Ch. 7, pp. 170&ndash;191. This project has
         {len(buf_refs)} dissertation references attributed to Hand E. The Buffalo copy has no
-        photographs in this project; all evidence is textual.</p>
+        photographs; images above show the same folios in the BL copy.</p>
+
+        <div style="margin:1.5rem 0; text-align:center">
+            <img src="images/bl/C_60_o_12-033.jpg" alt="BL page 20: alchemical ideograms visible in left margin"
+                 style="max-width:100%; border:1px solid var(--border); border-radius:4px" loading="lazy">
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">
+                BL C.60.o.12, page 20 (photo 033). Alchemical ideograms visible in the left
+                margin, showing Hand B's characteristic practice of embedding planetary
+                symbols within Latin syntax. The pyramid passage is densely annotated.</p>
+        </div>
 
         <h3>Buffalo Alchemist: Referenced Folios</h3>
         <table>
