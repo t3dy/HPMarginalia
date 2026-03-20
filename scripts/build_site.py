@@ -46,6 +46,7 @@ def nav_html(active='', prefix=''):
         (f'{prefix}dictionary/index.html', 'Dictionary', 'dictionary'),
         (f'{prefix}docs/index.html', 'Docs', 'docs'),
         (f'{prefix}code/index.html', 'Code', 'code'),
+        (f'{prefix}the-book.html', 'The Book', 'thebook'),
         (f'{prefix}timeline.html', 'Timeline', 'timeline'),
         (f'{prefix}woodcuts/index.html', 'Woodcuts', 'woodcuts'),
         (f'{prefix}manuscripts/index.html', 'Manuscripts', 'manuscripts'),
@@ -1769,13 +1770,13 @@ def build_russell_essay_page(conn):
         <p>The BL alchemist (Hand B in C.60.o.12) is the more extensively documented of the two
         alchemical readers. Russell devotes Chapter 6 of his thesis to this hand, situating it within
         the broader tradition of seventeenth-century alchemical theory. The animating purpose of
-        that theory was the recovery of <em>prisca sapientia</em>&mdash;an original wisdom, beginning
+        that theory was the recovery of <a href="dictionary/prisca-sapientia.html"><em>prisca sapientia</em></a>&mdash;an original wisdom, beginning
         with Hermes Trismegistus, that had been progressively obscured over the centuries. A text
         as complicated and linguistically obscure as the HP would have drawn much attention from
         an alchemist steeped in this tradition: the more recondite the text, the more ancient
         wisdom it was presumed to contain (Russell 2014, pp. 154&ndash;156).</p>
 
-        <h3>The Master Mercury Declaration</h3>
+        <h3>The <a href="dictionary/master-mercury.html" style="color:inherit">Master Mercury</a> Declaration</h3>
         <p>On the flyleaf verso, Hand B wrote a Latin summary declaring what the HP truly means:</p>
         <blockquote>"verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae
         &amp; operationum Magisteri Mercurii Descriptio elegans, ampla"</blockquote>
@@ -1790,8 +1791,8 @@ def build_russell_essay_page(conn):
         liquidity only through heat. It was, as Russell puts it, "all things to all people" in the
         alchemical tradition (Russell 2014, pp. 159&ndash;161).</p>
         <p>The annotator also twice praises the HP as "ingeniosissimo," recognizing it as exemplifying
-        the <em>ingegno</em>&mdash;the improvisational intelligence&mdash;that early modern readers
-        cultivated through annotation.</p>
+        the <a href="dictionary/ingegno.html"><em>ingegno</em></a>&mdash;the improvisational
+        intelligence&mdash;that early modern readers cultivated through annotation.</p>
 
         <h3>The Ideographic Vocabulary</h3>
         <p>Hand B used an extensive vocabulary of alchemical ideograms&mdash;compact symbols for
@@ -1829,8 +1830,8 @@ def build_russell_essay_page(conn):
         Like the BL alchemist, Hand E labels passages and woodcuts with the element or stage of
         the alchemical process they were presumed to allegorize. But Hand E follows a fundamentally
         different alchemical school: the pseudo-Geber tradition (from Jabir ibn Hayyan), which
-        emphasizes sulphur and the Sol/Luna (Sun/Moon) duality rather than mercury
-        (Russell 2014, pp. 170&ndash;186).</p>
+        emphasizes sulphur and the <a href="dictionary/sol-luna.html">Sol/Luna</a> (Sun/Moon)
+        duality rather than mercury (Russell 2014, pp. 170&ndash;186).</p>
         <p>In the Geberian framework, the masculine principle is represented by Sol (gold) and the
         feminine by Luna (silver). What makes Geber's thought distinctive is that these are understood
         as creative inverses: gold is masculine "in its height" and feminine "in its depth," while
@@ -2642,6 +2643,213 @@ def build_woodcuts_pages(conn):
 
 
 # ============================================================
+# "The Book" page — narrative summary of the HP
+# ============================================================
+
+def build_the_book_page():
+    """Generate the-book.html: a narrative walkthrough of the HP for non-specialists."""
+
+    book_css = '<style>' + """
+        .book-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .book-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        .book-page h3 { margin: 1.5rem 0 0.5rem; }
+        .book-page p { line-height: 1.9; margin-bottom: 1rem; }
+        .book-page .book-note { background: var(--bg-card); padding: 0.75rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.9rem; color: var(--text-muted); }
+        .book-page .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .book-page .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .book-page .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+    """ + '</style>'
+
+    body = """
+    <div class="book-page">
+        <h1>The Book</h1>
+
+        <p class="book-note">This page summarizes the narrative of the <em>Hypnerotomachia
+        Poliphili</em> for readers who have not encountered it before. It is not a scholarly
+        analysis but a walkthrough &mdash; a map of the journey Poliphilo takes through
+        his dream, with pointers to the woodcuts, places, and characters you will encounter
+        on other pages of this site.</p>
+
+        <h2>What the <em>Hypnerotomachia</em> Is</h2>
+
+        <p>The <em>Hypnerotomachia Poliphili</em> &mdash; the title means roughly
+        "Poliphilo's struggle of love in a dream" &mdash; was published in Venice in 1499
+        by <a href="dictionary/aldus-manutius.html">Aldus Manutius</a>, the most
+        celebrated printer of the Renaissance. It is a large folio volume of 234 leaves,
+        illustrated with <a href="woodcuts/index.html">172 woodcut illustrations</a>
+        of extraordinary refinement. The text is written in a
+        <a href="dictionary/macaronic-language.html">macaronic language</a> that mixes
+        Italian syntax with Latin vocabulary, Greek loanwords, and invented words &mdash;
+        a hybrid tongue that has baffled and delighted readers for five centuries.</p>
+
+        <p>The book tells the story of a young man named
+        <a href="dictionary/poliphilo.html">Poliphilo</a> who falls asleep and dreams.
+        In his dream, he journeys through ruined classical buildings, elaborate gardens,
+        and allegorical landscapes in search of his beloved,
+        <a href="dictionary/polia.html">Polia</a>. Along the way he encounters
+        queens, nymphs, processions, sacrifices, inscriptions, and monuments &mdash;
+        each described in painstaking visual and architectural detail. The dream is
+        also a dream within a dream: partway through his journey, Poliphilo falls
+        asleep again and enters a deeper vision.</p>
+
+        <p>The author's identity is concealed in an <a href="dictionary/acrostic.html">acrostic</a>
+        formed by the chapter initials: POLIAM FRATER FRANCISCVS COLVMNA PERAMAVIT
+        ("Brother Francesco Colonna loved Polia greatly"). Which Francesco Colonna &mdash;
+        a Venetian Dominican friar, a Roman nobleman, or someone else entirely &mdash;
+        remains the subject of a long-running
+        <a href="dictionary/authorship-debate.html">authorship debate</a>.</p>
+
+        <h2>The Journey</h2>
+
+        <h3>The Dark Forest</h3>
+        <p>The narrative opens with Poliphilo lost in a
+        <a href="dictionary/dark-forest.html">dark, terrifying forest</a> &mdash; a
+        deliberate echo of Dante's <em>selva oscura</em> at the beginning of the
+        <em>Inferno</em>. He is alone, frightened, and disoriented. The
+        <a href="woodcuts/dark-forest.html">woodcut of the dark forest</a> establishes
+        the visual register that will govern the entire book: dense, precise, and
+        atmospheric.</p>
+
+        <p>Poliphilo emerges from the forest into an open landscape and, exhausted,
+        falls asleep &mdash; entering the
+        <a href="dictionary/dream-within-dream.html">dream within the dream</a>
+        that contains the main narrative.</p>
+
+        <h3>The Ruins and the Pyramid</h3>
+        <p>In his inner dream, Poliphilo encounters a vast ruined classical complex:
+        a <a href="dictionary/ruined-temple.html">great temple</a>, a colossal
+        <a href="dictionary/pyramid.html">pyramid</a> surmounted by an
+        <a href="dictionary/obelisk.html">obelisk</a>, and monumental gates decorated
+        with reliefs and inscriptions. He describes their
+        <a href="dictionary/column-orders.html">column orders</a>,
+        proportions, and materials with the precision of an architectural treatise.
+        This is where the book's reputation as an encyclopedia of classical design
+        originates: the ruins are not mere scenery but occasions for sustained
+        <a href="dictionary/ekphrasis.html">ekphrasis</a> &mdash; verbal descriptions
+        so vivid they rival the woodcut illustrations.</p>
+
+        <p>The most famous image in the book appears here: the
+        <a href="woodcuts/elephant-obelisk.html">elephant bearing an obelisk</a>
+        (signature b6v), decorated with pseudo-<a href="dictionary/hieroglyph.html">hieroglyphic</a>
+        carvings. This image later inspired Bernini's 1667 sculpture in the Piazza della
+        Minerva in Rome, commissioned by Pope Alexander VII &mdash; who himself annotated
+        his own copy of the HP.</p>
+
+        <h3>Queen Eleuterylida and the Three Gates</h3>
+        <p>Poliphilo arrives at the court of <a href="dictionary/eleuterylida.html">Queen
+        Eleuterylida</a>, whose name derives from the Greek word for freedom.
+        At the <a href="dictionary/thelemia.html">gate of Thelemia</a> (free will),
+        he must choose among three doors representing three ways of life: pleasure,
+        action, and contemplation. He chooses the middle path.</p>
+
+        <p>The queen's court introduces the
+        <a href="dictionary/nymphs-five-senses.html">five nymphs</a> who represent
+        the bodily senses: sight, hearing, smell, taste, and touch. They will guide
+        Poliphilo through the next stage of his journey.</p>
+
+        <h3>The Nymphs and the Bath</h3>
+        <p>The five nymphs bathe Poliphilo in elaborate
+        <a href="dictionary/bath-thermae.html">classical thermae</a>, dress him in fine
+        garments, and lead him through the queen's palace. These passages combine
+        sensory education with erotic initiation &mdash; the nymphs awaken Poliphilo's
+        body and mind simultaneously. The architecture of the bath is described with
+        attention to water systems, marble surfaces, and spatial arrangement, embodying
+        what Liane Lefaivre called the
+        <a href="dictionary/architectural-body.html">"architectural body"</a>:
+        architecture experienced through the flesh, not through abstract geometry.</p>
+
+        <h3>The Triumphal Processions</h3>
+        <p>Poliphilo witnesses a series of elaborate
+        <a href="dictionary/triumphal-procession.html">triumphal processions</a>
+        featuring chariots drawn by exotic animals, musicians, dancers, and allegorical
+        personifications. The <a href="woodcuts/triumphal-procession-soldiers.html">procession
+        woodcuts</a> are among the most complex in the book. These passages connect the HP
+        to Renaissance festival culture and to the classical literary tradition of the
+        <em>triumphus</em>. The alchemical annotators later read them as encoding stages
+        of the <a href="dictionary/great-work.html">Great Work</a> of transmutation.</p>
+
+        <h3>The Sacrifice to Priapus</h3>
+        <p>One of the HP's most explicitly pagan scenes: a
+        <a href="dictionary/sacrifice-priapus.html">ritual sacrifice</a> at the altar
+        of Priapus, the garden god of fertility. A donkey is offered in a ceremony that
+        combines classical sacrificial practice with frank fertility symbolism. Scholarship
+        has called this "perhaps the most censored woodcut of the Renaissance."</p>
+
+        <h3>The Voyage to Cythera</h3>
+        <p>Poliphilo and Polia travel by boat to
+        <a href="dictionary/cythera.html">Cythera</a>, the island sacred to
+        <a href="dictionary/venus-aphrodite.html">Venus</a>. The sea crossing represents
+        the passage from earthly desire to divine love. On the island, they encounter
+        an elaborate <a href="dictionary/circular-garden.html">circular garden</a> with
+        concentric rings of planting surrounding Venus's temple &mdash; a cosmological
+        design radiating from the goddess at the center outward through successive levels
+        of material existence.</p>
+
+        <p>At the temple, <a href="dictionary/cupid-eros.html">Cupid</a> presides over
+        the union of Poliphilo and Polia. The consummation of their love is the narrative
+        climax of Book I.</p>
+
+        <h3>Book II: Polia Speaks</h3>
+        <p>In a remarkable structural move, the HP gives Polia her own voice. Book II
+        is narrated by Polia herself, who tells the story of her initial rejection of
+        Poliphilo, her resistance to love, and her eventual conversion by Venus. This
+        reframing of the love story from the beloved's perspective makes the HP unusual
+        among Renaissance love narratives, which typically silence the beloved or reduce
+        her to a visual object.</p>
+
+        <h3>The Awakening</h3>
+        <p>Poliphilo wakes. Polia dissolves. The dream ends. The reader is returned
+        to the waking world that framed the narrative from the beginning. What remains
+        is the book itself &mdash; the woodcuts, the language, the architecture, the
+        gardens &mdash; and five centuries of readers who have left their marks in its
+        margins.</p>
+
+        <h2>The Readers</h2>
+        <p>James Russell's 2014 PhD thesis documented the
+        <a href="dictionary/marginalia.html">marginalia</a> in six copies of the HP,
+        identifying eleven distinct <a href="dictionary/annotator-hand.html">annotator
+        hands</a>. What he found overturns the idea that the HP was an unread curiosity.
+        The Giovio brothers read it as a botanical compendium. Ben Jonson mined it for
+        stage design imagery. Pope Alexander VII collected examples of verbal
+        <a href="dictionary/acutezze.html">wit</a>. And two anonymous alchemists,
+        working independently in different copies, decoded the love story as an
+        <a href="dictionary/alchemical-allegory.html">alchemical allegory</a> &mdash;
+        but they disagreed about which kind.</p>
+
+        <p>The BL alchemist (Hand B) followed the framework of Jean d'Espagnet,
+        reading the HP as encoding the operations of
+        <a href="dictionary/master-mercury.html">Master Mercury</a>. The Buffalo
+        alchemist (Hand E) followed pseudo-Geber, reading it through the lens of
+        <a href="dictionary/sol-luna.html">Sol and Luna</a> and the
+        <a href="dictionary/chemical-wedding.html">chemical wedding</a>. Their
+        competing readings are explored in the
+        <a href="russell-alchemical-hands.html">Alchemical Hands essay</a>.</p>
+
+        <p>Russell's concept of the HP as a
+        <a href="dictionary/activity-book.html">"humanistic activity book"</a> &mdash;
+        a text whose puzzles, obscure language, and visual-textual interplay invited
+        readers to cultivate <a href="dictionary/ingegno.html"><em>ingegno</em></a>
+        (improvisational intelligence) through creative annotation &mdash; is the
+        central argument of his thesis and the intellectual foundation of this site.</p>
+
+        <div class="cross-links">
+            <h4>Explore Further</h4>
+            <a href="marginalia/index.html">Browse the Marginalia</a>
+            <a href="woodcuts/index.html">See the Woodcuts</a>
+            <a href="dictionary/index.html">Dictionary of Terms</a>
+            <a href="russell-alchemical-hands.html">The Alchemical Hands</a>
+            <a href="timeline.html">500 Years of Reception</a>
+            <a href="scholars.html">The Scholars</a>
+            <a href="manuscripts/index.html">The Copies</a>
+        </div>
+    </div>"""
+
+    page = page_shell('The Book', body, active_nav='thebook', extra_css=book_css)
+    (SITE_DIR / 'the-book.html').write_text(page, encoding='utf-8')
+    print("  the-book.html")
+
+
+# ============================================================
 # Digital Edition stub page
 # ============================================================
 
@@ -3003,6 +3211,7 @@ def main():
     build_docs_pages()
     build_code_pages()
     build_about_page(conn)
+    build_the_book_page()
     build_russell_essay_page(conn)
     build_concordance_essay_page(conn)
     build_digital_edition_page(conn)
