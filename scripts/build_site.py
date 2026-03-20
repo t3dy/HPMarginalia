@@ -47,6 +47,7 @@ def nav_html(active='', prefix=''):
         (f'{prefix}docs/index.html', 'Docs', 'docs'),
         (f'{prefix}code/index.html', 'Code', 'code'),
         (f'{prefix}timeline.html', 'Timeline', 'timeline'),
+        (f'{prefix}woodcuts/index.html', 'Woodcuts', 'woodcuts'),
         (f'{prefix}manuscripts/index.html', 'Manuscripts', 'manuscripts'),
         (f'{prefix}digital-edition.html', 'Edition', 'edition'),
         (f'{prefix}russell-alchemical-hands.html', 'Alchemical Hands', 'russell'),
@@ -816,6 +817,22 @@ def build_marginalia_pages(conn):
     except:
         pass
 
+    # Load annotation types by signature
+    ann_types_by_sig = {}
+    try:
+        cur_at = conn.cursor()
+        cur_at.execute("""
+            SELECT signature_ref, annotation_type, COUNT(*) FROM annotations
+            WHERE annotation_type IS NOT NULL
+            GROUP BY signature_ref, annotation_type
+        """)
+        for row in cur_at.fetchall():
+            ann_types_by_sig.setdefault(row[0], []).append({
+                'type': row[1], 'count': row[2]
+            })
+    except:
+        pass
+
     # Load symbol occurrences by signature
     symbol_by_sig = {}
     try:
@@ -973,7 +990,23 @@ def build_marginalia_pages(conn):
             {f'<h3 style="margin:1.5rem 0 1rem">Alchemical Analysis</h3>' + desc_html if desc_html else ''}
             {symbols_html}
             {alchem_cross}
-            <h3 style="margin:1.5rem 0 1rem">Annotations</h3>
+            <h3 style="margin:1.5rem 0 1rem">Annotations</h3>"""
+
+        # Add annotation type badges
+        ann_types = ann_types_by_sig.get(sig, [])
+        if ann_types:
+            type_badges = ''
+            for at in ann_types:
+                type_badges += (
+                    f'<span style="display:inline-block;padding:0.15rem 0.5rem;'
+                    f'margin:0.1rem;border-radius:3px;font-size:0.7rem;font-weight:600;'
+                    f'font-family:var(--font-sans);background:var(--bg);'
+                    f'border:1px solid var(--border)">'
+                    f'{escape(at["type"])} ({at["count"]})</span>'
+                )
+            detail_body += f'\n            <div style="margin-bottom:0.75rem">{type_badges}</div>'
+
+        detail_body += f"""
             {annotations_html}
         </div>"""
 
@@ -2435,6 +2468,133 @@ def build_manuscripts_pages(conn):
 
 
 # ============================================================
+# Woodcuts pages
+# ============================================================
+
+def build_woodcuts_pages(conn):
+    """Generate woodcuts/index.html and woodcuts/*.html from woodcuts table."""
+    cur = conn.cursor()
+    wc_dir = SITE_DIR / 'woodcuts'
+    wc_dir.mkdir(exist_ok=True)
+
+    cur.execute("""
+        SELECT id, slug, title, signature_1499, page_1499, bl_photo_number,
+               subject_category, woodcut_type, description, chapter_context,
+               depicted_elements, has_annotation, alchemical_annotation,
+               annotation_density, dictionary_terms, scholarly_discussion,
+               influence, source_basis, confidence, notes
+        FROM woodcuts ORDER BY page_1499
+    """)
+    woodcuts = cur.fetchall()
+
+    if not woodcuts:
+        print("  woodcuts: no data")
+        return
+
+    cat_colors = {
+        'ARCHITECTURAL': '#8b5cf6', 'LANDSCAPE': '#10b981', 'NARRATIVE': '#3b82f6',
+        'HIEROGLYPHIC': '#f59e0b', 'PROCESSION': '#ef4444', 'DECORATIVE': '#6366f1',
+        'PORTRAIT': '#ec4899', 'DIAGRAM': '#14b8a6',
+    }
+
+    wc_css = '<style>' + """
+        .woodcuts-page { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcuts-page h2 { color: var(--accent); }
+        .woodcut-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .woodcut-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+        .woodcut-card .wc-info { padding: 0.75rem 1rem; }
+        .woodcut-card h4 { margin: 0 0 0.3rem; font-size: 0.95rem; }
+        .woodcut-card h4 a { color: var(--text); text-decoration: none; }
+        .woodcut-card h4 a:hover { color: var(--accent); }
+        .woodcut-card .wc-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); }
+        .wc-cat-badge { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 2px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: white; margin-right: 0.3rem; }
+        .woodcut-detail { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcut-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
+        .woodcut-detail h3 { margin-top: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
+        .woodcut-detail p { line-height: 1.8; }
+        .woodcut-detail .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .woodcut-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .woodcut-detail .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+    """ + '</style>'
+
+    # Build detail pages
+    cards_html = ''
+    for wc in woodcuts:
+        (wid, slug, title, sig, page, photo, cat, wtype, desc, context,
+         elements, has_ann, has_alch, ann_density, dict_terms,
+         scholarly, influence, source, conf, notes) = wc
+
+        color = cat_colors.get(cat, '#6b7280')
+        cat_badge = f'<span class="wc-cat-badge" style="background:{color}">{escape(cat or "")}</span>'
+        alch_badge = ' <span class="alchemist-tag">Alchemist</span>' if has_alch else ''
+        ann_badge = f' <span class="review-badge">{escape(ann_density or "")}</span>' if has_ann else ''
+
+        # Card for index
+        cards_html += f"""
+        <div class="woodcut-card">
+            <div class="wc-info">
+                <h4><a href="{slug}.html">{escape(title)}</a></h4>
+                <div class="wc-meta">{cat_badge}{escape(sig or '')} | p.{page or '?'}{alch_badge}{ann_badge}</div>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin:0.3rem 0 0; line-height:1.5">{escape((desc or '')[:150])}{'...' if desc and len(desc) > 150 else ''}</p>
+            </div>
+        </div>"""
+
+        # Detail page
+        desc_html = f'<p>{escape(desc or "")}</p>' if desc else ''
+        context_html = f'<h3>In the Narrative</h3><p>{escape(context or "")}</p>' if context else ''
+        scholarly_html = f'<h3>In Scholarship</h3><p>{escape(scholarly or "")}</p>' if scholarly else ''
+        influence_html = f'<h3>Influence</h3><p>{escape(influence or "")}</p>' if influence else ''
+
+        # Cross links from dictionary_terms field
+        cross_html = ''
+        if dict_terms:
+            term_links = ''.join(f'<a href="../dictionary/{t.strip()}.html">{t.strip().replace("-", " ").title()}</a>'
+                                  for t in dict_terms.split(',') if t.strip())
+            cross_html = f'<div class="cross-links"><h4>Related Dictionary Terms</h4>{term_links}'
+            if sig:
+                cross_html += f'<h4>Related Pages</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a>'
+            cross_html += '</div>'
+        elif sig:
+            cross_html = f'<div class="cross-links"><h4>Related Pages</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a></div>'
+
+        source_html = f'<p style="font-size:0.85rem; color:var(--text-muted); margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.5rem"><strong>Source:</strong> {escape(source or "")} | {review_status_badge("DRAFT")}</p>'
+
+        detail_body = f"""
+        <div class="woodcut-detail">
+            <p><a href="index.html">&larr; All Woodcuts</a></p>
+            <h2>{escape(title)}</h2>
+            <div style="margin-bottom:1rem">{cat_badge} {escape(wtype or '')} | {escape(sig or '')} | p.{page or '?'}{alch_badge}</div>
+            {desc_html}
+            {context_html}
+            {scholarly_html}
+            {influence_html}
+            {cross_html}
+            {source_html}
+        </div>"""
+
+        detail_page = page_shell(title, detail_body, active_nav='woodcuts',
+                                  extra_css=wc_css, depth=1)
+        (wc_dir / f'{slug}.html').write_text(detail_page, encoding='utf-8')
+
+    # Index page
+    index_body = f"""
+    <div class="woodcuts-page">
+        <h2>Woodcuts of the <em>Hypnerotomachia Poliphili</em></h2>
+        <p>The 1499 HP contains approximately 172 woodcut illustrations, the most
+        ambitious visual program of any incunabulum. Their designer remains
+        unidentified, though Benedetto Bordon is the most widely proposed candidate.
+        This index presents the {len(woodcuts)} woodcuts detected in the project's
+        BL manuscript photographs (pages 1&ndash;176).</p>
+        <div class="woodcut-grid">{cards_html}</div>
+    </div>"""
+
+    index_page = page_shell('Woodcuts', index_body, active_nav='woodcuts',
+                             extra_css=wc_css, depth=1)
+    (wc_dir / 'index.html').write_text(index_page, encoding='utf-8')
+    print(f"  woodcuts/index.html + {len(woodcuts)} woodcut pages")
+
+
+# ============================================================
 # Digital Edition stub page
 # ============================================================
 
@@ -2800,6 +2960,7 @@ def main():
     build_concordance_essay_page(conn)
     build_digital_edition_page(conn)
     build_timeline_page(conn)
+    build_woodcuts_pages(conn)
     build_manuscripts_pages(conn)
 
     conn.close()

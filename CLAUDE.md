@@ -2,40 +2,45 @@
 
 ## Architecture
 
-- SQLite (`db/hp.db`) is the source of truth
-- Python scripts in `scripts/` generate static HTML/CSS/JS in `site/`
+- SQLite (`db/hp.db`) is the source of truth (22 tables)
+- Python scripts in `scripts/` (41 scripts) generate static HTML/CSS/JS in `site/`
 - No framework. No build tools. No JavaScript dependencies.
 - GitHub Pages deploys from `site/`
 
 ## Current State (as of 2026-03-20)
 
-- **314 pages** across 11 nav tabs
+- **354 pages** across 14 nav tabs
 - **94 dictionary terms** across 15 categories, all with significance prose
 - **60 scholar pages** (59 with overviews, 11 historical figures tagged)
-- **109 bibliography entries**, **118 marginalia folio pages**
+- **109 bibliography entries**, **113 marginalia folio pages**
+- **18 woodcut pages** with descriptions and scholarly context
+- **71 timeline events**, **6 manuscript copy pages**
 - **2 essay pages** (Russell Alchemical Hands, Concordance Methodology)
-- **1 digital edition stub**
+- **431 matches** (48 HIGH, 383 MEDIUM, 0 LOW)
+- **282 annotations** classified into 6 types
+- **10 alchemical symbols**, **26 symbol occurrences**
+- BL offset verified (=13) across 27 data points
 
-## Spec Files (read these before executing)
+## Documentation
+
+Read **DOCUMENTATION_INDEX.md** for a categorized guide to all 40+ project documents.
+
+## Key Specs (read before executing)
 
 | Spec | Purpose | Status |
 |------|---------|--------|
-| `docs/WRITING_TEMPLATES.md` | Prose templates for all 10 page types: voice, length, structure, provenance | **Active** — governs all content generation |
-| `docs/SCHOLAR_SPEC.md` | Scholar data model, page templates, pipeline | **Executed** |
-| `docs/SCHOLAR_PIPELINE.md` | Step-by-step scholar execution guide | **Executed** |
-| `docs/TIMELINE_SPEC.md` | Timeline tab: reception history, art, music | **Ready to execute** |
-| `docs/MANUSCRIPTS_SPEC.md` | Manuscripts tab: HP copies worldwide, per-copy essays | **Ready to execute** |
+| `docs/WRITING_TEMPLATES.md` | Prose templates for all page types | **Active** |
+| `docs/DECKARD_MARGINALIA_SPEC.md` | Alchemical symbol system | **Executed** |
+| `WOODCUTONTOLOGY.md` | Woodcut data model | **Executed** |
+| `NEXTPHASE.md` | Current priority plan | **Active** |
 
-## Key Scripts
+## Canonical Tables (use these, not the deprecated ones)
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/build_site.py` | Master builder — generates all 314 pages |
-| `scripts/corpus_search.py` | Search across /chunks/ and /md/ corpus |
-| `scripts/build_reading_packets.py` | Build evidence packets for dictionary terms |
-| `scripts/enrich_dictionary.py` | Populate dictionary fields from packets |
-| `scripts/link_scholars.py` | Link scholars to bibliography + tag historical figures |
-| `scripts/dictionary_audit.py` | Coverage audit for dictionary terms |
+| Canonical | Deprecated | Why |
+|-----------|-----------|-----|
+| `annotations` | `dissertation_refs`, `doc_folio_refs` | annotations has types + consolidated data |
+| `annotator_hands` | `annotators` | annotator_hands has alchemical_framework |
+| `hp_copies` | `manuscripts` (for copy-level data) | hp_copies covers all 6 copies |
 
 ## Provenance Model
 
@@ -49,13 +54,7 @@ Never overwrite VERIFIED content. Never present DRAFT as VERIFIED.
 ## Build Commands
 
 ```
-python scripts/build_site.py        # Rebuild all pages
+python scripts/build_site.py        # Rebuild all 354 pages
 python scripts/dictionary_audit.py  # Check dictionary coverage
 python scripts/validate.py          # Full QA
 ```
-
-## Next Phases (execute from specs)
-
-1. **Timeline tab** — read `docs/TIMELINE_SPEC.md`, then execute
-2. **Manuscripts tab** — read `docs/MANUSCRIPTS_SPEC.md`, then execute
-3. **Dictionary expansion** — more HP entity terms can be added via `seed_dictionary_v*.py` pattern
