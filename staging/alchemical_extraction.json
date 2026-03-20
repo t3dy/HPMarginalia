@@ -1,0 +1,466 @@
+{
+  "symbol_occurrences": [
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "flyleaf",
+      "context": "Flyleaf verso: 'verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla'",
+      "thesis_page": 159,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "flyleaf",
+      "context": "Flyleaf verso: 'verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla'",
+      "thesis_page": 159,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Luna",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "flyleaf",
+      "context": "Flyleaf verso: 'verus sensus intentionis huius libri est 3um: Geni et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla'",
+      "thesis_page": 159,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "a1r",
+      "context": "Aurora description: Hand B labels the dawn passage with solar ideograms, reading the rising sun as albedo (whitening) stage",
+      "thesis_page": 165,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "a3r",
+      "context": "Hand B marks mercury-related passages in the early narrative",
+      "thesis_page": 155,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Jupiter",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "a4r",
+      "context": "Jupiter hierarchy passage: Hand B maps Jupiter to tin in the planetary-metal correspondence, noting the god's position in the elemental hierarchy",
+      "thesis_page": 164,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "b6v",
+      "context": "Elephant and Obelisk woodcut: densely annotated with alchemical ideograms using Latin inflections (-ra, -eris). Multiple symbols embedded in Latin syntax.",
+      "thesis_page": 156,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "b6v",
+      "context": "Elephant and Obelisk woodcut: densely annotated with alchemical ideograms using Latin inflections (-ra, -eris). Multiple symbols embedded in Latin syntax.",
+      "thesis_page": 156,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Luna",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "b6v",
+      "context": "Elephant and Obelisk woodcut: densely annotated with alchemical ideograms using Latin inflections (-ra, -eris). Multiple symbols embedded in Latin syntax.",
+      "thesis_page": 156,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Venus",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "b6v",
+      "context": "Elephant and Obelisk woodcut: densely annotated with alchemical ideograms using Latin inflections (-ra, -eris). Multiple symbols embedded in Latin syntax.",
+      "thesis_page": 156,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Jupiter",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "b6v",
+      "context": "Elephant and Obelisk woodcut: densely annotated with alchemical ideograms using Latin inflections (-ra, -eris). Multiple symbols embedded in Latin syntax.",
+      "thesis_page": 156,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "d8v",
+      "context": "Hand B writes 'Mother' and 'vessel' — mercury as the maternal vessel containing the seed of transmutation",
+      "thesis_page": 164,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "e1r",
+      "context": "Continuation of mercury-solar annotations from preceding verso",
+      "thesis_page": 163,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "e1r",
+      "context": "Continuation of mercury-solar annotations from preceding verso",
+      "thesis_page": 163,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "E8v",
+      "context": "Hand B appends '-ra' (aurata) suffix to solar symbol, creating hybrid ideographic-Latin word",
+      "thesis_page": 157,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Mercury",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "y7r",
+      "context": "Late passage with mercury and cinnabar annotations, near the climactic union scenes",
+      "thesis_page": 167,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Cinnabar",
+      "hand": "B",
+      "manuscript": "C.60.o.12",
+      "signature": "y7r",
+      "context": "Late passage with mercury and cinnabar annotations, near the climactic union scenes",
+      "thesis_page": 167,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sulphur",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "b5r",
+      "context": "Hand E labels with sulphur principle, identifying narrative elements with the combustible masculine agent",
+      "thesis_page": 186,
+      "confidence": "MEDIUM",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "b7r",
+      "context": "Hand E identifies statues as Sol and Luna, mapping king/queen figures to gold/silver gender duality",
+      "thesis_page": 187,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Luna",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "b7r",
+      "context": "Hand E identifies statues as Sol and Luna, mapping king/queen figures to gold/silver gender duality",
+      "thesis_page": 187,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "c6v",
+      "context": "Hand E reads Bacchus/Ceres as Sol/Luna: 'Baccho era creduto dagli antichi esser quella virtu occulta che aiuta le piante'",
+      "thesis_page": 188,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Luna",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "c6v",
+      "context": "Hand E reads Bacchus/Ceres as Sol/Luna: 'Baccho era creduto dagli antichi esser quella virtu occulta che aiuta le piante'",
+      "thesis_page": 188,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sulphur",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "c6v",
+      "context": "Hand E reads Bacchus/Ceres as Sol/Luna: 'Baccho era creduto dagli antichi esser quella virtu occulta che aiuta le piante'",
+      "thesis_page": 188,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Sol",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "h1r",
+      "context": "Chess match passage: three rounds of distillation with silver/gold role reversal. The hermaphroditic outcome represents coincidentia oppositorum. 'D.AMBIG.DD' = ambiguous gods = metallic hermaphrodites.",
+      "thesis_page": 189,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Luna",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "h1r",
+      "context": "Chess match passage: three rounds of distillation with silver/gold role reversal. The hermaphroditic outcome represents coincidentia oppositorum. 'D.AMBIG.DD' = ambiguous gods = metallic hermaphrodites.",
+      "thesis_page": 189,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    },
+    {
+      "symbol": "Hermaphrodite",
+      "hand": "E",
+      "manuscript": "Buffalo RBR",
+      "signature": "h1r",
+      "context": "Chess match passage: three rounds of distillation with silver/gold role reversal. The hermaphroditic outcome represents coincidentia oppositorum. 'D.AMBIG.DD' = ambiguous gods = metallic hermaphrodites.",
+      "thesis_page": 189,
+      "confidence": "HIGH",
+      "source_method": "CORPUS_EXTRACTION"
+    }
+  ],
+  "corpus_evidence": [
+    {
+      "query": "nigredo blackening",
+      "label": "nigredo",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 158-161",
+      "page_refs": [
+        "158",
+        "159",
+        "160"
+      ],
+      "text": "... elements \nwould then be reunited in a process often represented as an alchemical wedding, whose \nprogeny would be symbolized by a hermaphrodite harmonizing the two elements.  This \nreunified substance would then be ‘sublimed’ to its purest state.  In laboratory procedure, the \nbreakdown stage (nigredo, or ‘blackening’) could be accomplished by burning a substance, \nwith the sublimation occurring over multiple iterations of heating and evaporation of the \nresidue in an alembic.  Though follow",
+      "score": 2
+    },
+    {
+      "query": "nigredo blackening",
+      "label": "nigredo",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 198-201",
+      "page_refs": [
+        "198",
+        "199",
+        "200"
+      ],
+      "text": "... Poliphile.’20  This interpretation \nof the page as symbolising the resurrection of the body was shared by Maurizio Calvesi.  He \nhowever interpreted the two figures according to alchemical symbolism.  The union of male \nand female are instances of coniunctio oppositorum, the stage following the nigredo stage of \nthe alchemical process in which broken elements are reunified. 21 \nThe fourth individual, to my knowledge, who has approached the present copy is Anna \nPartini, who notes that the co",
+      "score": 1
+    },
+    {
+      "query": "albedo whitening dawn",
+      "label": "albedo",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 165-170",
+      "page_refs": [
+        "165",
+        "166",
+        "167",
+        "168",
+        "169"
+      ],
+      "text": "... for the name of the \ngoddess.  Pozzi and Ciapponi concur, identifying the term as deriving from Nonius \nMarcellinus.54 \n \nB also takes note of the sequence of events, or at least the time of day at which they took \nplace.  This chapter is labelled ‘AURORAE DESCRIPTIO’ (Description of the dawn).  \n \nEt corruscante già sopra le cerulee et inquiete undule, le sue irradiante come crispulavano. Dal quale \nadventicio in quel puncto occidua davase la non cornuta Cynthia, solicitando gli dui caballi",
+      "score": 4
+    },
+    {
+      "query": "rubedo reddening",
+      "label": "rubedo",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 93-97",
+      "page_refs": [
+        "93",
+        "94",
+        "95",
+        "96"
+      ],
+      "text": "... Greek and \nthen decompiling the word into its component parts.  \nIn addition to disassembling compound words, Benedetto employs other methods of \nteasing a meaning out of Poliphilesque terms.  In the following locus, he infers that an \nadjectival form for ‘red’ is derived from the participle ‘reddening’.  \n \n4. \n \nz6r: ‘Erythreo, rosso, dal uerbo Έρυθραιμα rubefacio, Έρυθροσ rubens’ \n \nErythreo, ‘red’, from the verb Erythraima, reddening, Eruthros, red. \n \nEt quivi ad gli rotundi candici deg",
+      "score": 2
+    },
+    {
+      "query": "calcination distillation sublimation",
+      "label": "process_stages",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 186-191",
+      "page_refs": [
+        "186",
+        "187",
+        "188",
+        "189",
+        "190"
+      ],
+      "text": "... writing ‘Argentum,’ and draws in a small sketch of a moon’s crescent, \nrepresenting Luna.  Below he writes ‘Rex ex argento factus victor remanet.’  One would \nexpect Gold to be the initial victor, but the highest of elements wins out only after multiple \nrounds of play, presumably symbolizing distillations.   \nSilver wins the second round as well (g8v-h1r), and B writes ‘argentum rex ex argento \nfactus victor secunda vice remanet.’  The King of Gold finally wins in the third and final \nround",
+      "score": 2
+    },
+    {
+      "query": "calcination distillation sublimation",
+      "label": "process_stages",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 141-145",
+      "page_refs": [
+        "141",
+        "142",
+        "143",
+        "144"
+      ],
+      "text": "... contain few soliloquies, but \nextended accounts of disputes.  Characters are constantly cross-referencing – annotating and \nchallenging – each other’s statements.25  The performance of masque is then a form of \ndramatized annotation in itself.   \n \n \nJonson’s Summary \n \nSummarization necessitates distillation. To abridge a text requires dispensing with material \nthat is not of interest to the reader, while arranging what remains according to a rationalized \nscheme.  From the choices made in ",
+      "score": 1
+    },
+    {
+      "query": "calcination distillation sublimation",
+      "label": "process_stages",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 158-161",
+      "page_refs": [
+        "158",
+        "159",
+        "160"
+      ],
+      "text": "... wedding, whose \nprogeny would be symbolized by a hermaphrodite harmonizing the two elements.  This \nreunified substance would then be ‘sublimed’ to its purest state.  In laboratory procedure, the \nbreakdown stage (nigredo, or ‘blackening’) could be accomplished by burning a substance, \nwith the sublimation occurring over multiple iterations of heating and evaporation of the \nresidue in an alembic.  Though following these same general contours, alchemical schools of \nthought were distinguishe",
+      "score": 1
+    },
+    {
+      "query": "Emerald Tablet Hermes",
+      "label": "emerald_tablet",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 154-158",
+      "page_refs": [
+        "154",
+        "155",
+        "156",
+        "157"
+      ],
+      "text": "... the text, by this logic, \nthe more of the prisca sapientia it was understood to contain.  For this reason, scholars such \nas Isaac Newton deliberately sought out arcane obscure texts from which the originary \nwisdom could be reconstructed.  Foremost among these texts was the Tabula Smaragdina \n(Emerald Tablet), a recitation held to be of great antiquity. \n \nThis fixation with obscurantism-as-authenticity persisted into early modern practice. \nWriters of the sixteenth- and seventeenth-centuri",
+      "score": 6
+    },
+    {
+      "query": "Emerald Tablet Hermes",
+      "label": "emerald_tablet",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 101-104",
+      "page_refs": [
+        "101",
+        "102",
+        "103"
+      ],
+      "text": "... ‘Hermetico, cioè di Mercurio, il quale da Greci è detto hermete. Il diuino medico, cioè \nEsculapio, nella cui tutella è il serpente, come scriue Lilio Gregorio “de diis gentium”, et pero i serpi \ngli sono attribuiti circa il suo bastone.’ \n \nHermetic, that is, ‘of Mercury’, whom the Greeks called Hermes. The divine physician, that is, \nAesculapius, whose wardship is the serpent, as Lilio Gregorio wrote in De diis gentium, and therefore \nthe serpents are the attributes around his staff [i.e. ",
+      "score": 4
+    },
+    {
+      "query": "Newton Keynes alchemical",
+      "label": "newton_connection",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 158-161",
+      "page_refs": [
+        "158",
+        "159",
+        "160"
+      ],
+      "text": "... is most certainly not that of Newton, the consistency \nbetween Newton’s ideographic vocabulary and that of the present annotator may suggest that \nB was attached to the Royal Society, from the environs of Cambridge, or was otherwise \nconnected to the figure of Newton.  A careful comparison of B’s alchemical annotations with \nthose of Newton is beyond the scope of this project, but would be a productive avenue for \nfurther research.    \n \nIn order to contextualize these symbols, one must firs",
+      "score": 18
+    },
+    {
+      "query": "Newton Keynes alchemical",
+      "label": "newton_connection",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 186-191",
+      "page_refs": [
+        "186",
+        "187",
+        "188",
+        "189",
+        "190"
+      ],
+      "text": "... indicate that this alchemist \napproached the text from within the school of pseudo-Geber.   \nThis identification of the framework within which this particular alchemist interpreted \nthe HP is intended to be a prompt for future study.  As with the BL annotator, the potential \ncommentary on alchemical themes in this copy is vast, and exceeds that which could be \ncomprehended into a single chapter.  The vocabulary of alchemical symbolism is also beyond \nthe scope of this dissertation.18  Here I",
+      "score": 17
+    },
+    {
+      "query": "Newton Keynes alchemical",
+      "label": "newton_connection",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 149-154",
+      "page_refs": [
+        "149",
+        "150",
+        "151",
+        "152",
+        "153"
+      ],
+      "text": "... followed with \n‘& l’altro fusco’, in which the word ‘fusco’ and its accompanying conjunction, article, and \nadjective are all placed in the same clause.  \n \n \nModified Woodcuts \n \nBoth hands also made modifications to the woodcuts. While B restricted his changes to the \nlabelling of objects with alchemical signs, A made stylistic modifications.  A added hatching \nto images of monuments in order to provide a sense of depth.  For example, in the \n‘GELOIASTOS’, the annotator envisions light fal",
+      "score": 16
+    },
+    {
+      "query": "Newton Keynes alchemical",
+      "label": "newton_connection",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 154-158",
+      "page_refs": [
+        "154",
+        "155",
+        "156",
+        "157"
+      ],
+      "text": "... be presented in its greatest integrity in the most ancient texts, and the mark of antiquity is \nincomprehensibility in comparison to modern texts, the more recondite the text, by this logic, \nthe more of the prisca sapientia it was understood to contain.  For this reason, scholars such \nas Isaac Newton deliberately sought out arcane obscure texts from which the originary \nwisdom could be reconstructed.  Foremost among these texts was the Tabula Smaragdina \n(Emerald Tablet), a recitation held",
+      "score": 14
+    },
+    {
+      "query": "Newton Keynes alchemical",
+      "label": "newton_connection",
+      "source": "md/PhD_Thesis_James_Russell_Hypnerotomachia_Polyphili.md",
+      "section": "Pages 133-138",
+      "page_refs": [
+        "133",
+        "134",
+        "135",
+        "136",
+        "137"
+      ],
+      "text": "... in narrative form.  A comparison of marginalia between the two copies offers \ndivergent models of what genre of text the annotators envisioned the HP to be. The following \nchapters will present annotators who approached the HP from a very different foundational \npremise, viz. that the HP was an alchemical allegory. \n \n \n \n\n\n---\n\n<!-- Page 134 -->\n\n \n \n6 \n \nLondon, British Library – C.60.o.12 \n \n \nThe preceding studies of the ‘Encyclopedic’ annotators documented readers who used the \nprocess ",
+      "score": 9
+    }
+  ],
+  "stats": {
+    "symbols_inserted": 26,
+    "corpus_passages": 14
+  }
+}

@@ -816,6 +816,29 @@ def build_marginalia_pages(conn):
     except:
         pass
 
+    # Load symbol occurrences by signature
+    symbol_by_sig = {}
+    try:
+        cur3 = conn.cursor()
+        cur3.execute("""
+            SELECT so.signature_ref, s.symbol_name, s.metal, s.planet, s.gender,
+                   so.context_text, so.latin_inflection, so.thesis_page, so.confidence,
+                   h.hand_label, h.manuscript_shelfmark
+            FROM symbol_occurrences so
+            JOIN alchemical_symbols s ON so.symbol_id = s.id
+            JOIN annotator_hands h ON so.hand_id = h.id
+            ORDER BY so.signature_ref, s.symbol_name
+        """)
+        for row in cur3.fetchall():
+            symbol_by_sig.setdefault(row[0], []).append({
+                'symbol': row[1], 'metal': row[2], 'planet': row[3],
+                'gender': row[4], 'context': row[5], 'inflection': row[6],
+                'thesis_page': row[7], 'confidence': row[8],
+                'hand': row[9], 'ms': row[10],
+            })
+    except:
+        pass
+
     # Build individual folio pages
     for sig, rows in by_sig.items():
         sig_slug = sig.lower().replace(' ', '')
@@ -892,6 +915,54 @@ def build_marginalia_pages(conn):
                     <div class="hand-info" style="margin-top:0.5rem"><span class="review-badge">LLM-assisted synthesis from Russell</span></div>
                 </div>"""
 
+        # Symbol occurrences for this folio
+        symbols_html = ''
+        sig_symbols = symbol_by_sig.get(sig, [])
+        if sig_symbols:
+            sym_rows = ''
+            for s in sig_symbols:
+                conf = confidence_badge_html(s['confidence'])
+                infl = f' <code>{escape(s["inflection"])}</code>' if s.get('inflection') else ''
+                sym_rows += f"""<tr>
+                    <td><strong>{escape(s['symbol'])}</strong></td>
+                    <td>{escape(s.get('metal') or '')}</td>
+                    <td>{escape(s.get('planet') or '')}</td>
+                    <td>{escape(s.get('gender') or '')}</td>
+                    <td>Hand {escape(s['hand'])}{infl}</td>
+                    <td>{conf}</td>
+                </tr>"""
+            symbols_html = f"""
+            <h3 style="margin:1.5rem 0 1rem">Alchemical Symbols Present</h3>
+            <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:1rem">
+                <thead><tr style="background:var(--bg)">
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Symbol</th>
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Metal</th>
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Planet</th>
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Gender</th>
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Hand</th>
+                    <th style="padding:0.5rem; border:1px solid var(--border)">Conf.</th>
+                </tr></thead>
+                <tbody>{sym_rows}</tbody>
+            </table>"""
+
+        # Cross-links for alchemical folios
+        alchem_cross = ''
+        if desc_html or sig_symbols:
+            links = ['<a href="../dictionary/alchemical-allegory.html">Alchemical Allegory</a>',
+                     '<a href="../russell-alchemical-hands.html">Alchemical Hands Essay</a>']
+            for s in sig_symbols:
+                slug = slugify(s['symbol'])
+                if slug in ('sol', 'mercury', 'hermaphrodite', 'sulphur'):
+                    term_slugs = {'sol': 'sol-luna', 'mercury': 'master-mercury',
+                                  'hermaphrodite': 'chemical-wedding', 'sulphur': 'great-work'}
+                    ts = term_slugs.get(slug)
+                    if ts:
+                        links.append(f'<a href="../dictionary/{ts}.html">{escape(s["symbol"])}</a>')
+            alchem_cross = f"""
+            <div style="margin-top:1rem; padding-top:0.5rem; border-top:1px solid var(--border)">
+                <strong style="font-size:0.85rem">Related:</strong> {''.join(set(links))}
+            </div>"""
+
         detail_body = f"""
         <div class="marg-detail">
             <p><a href="index.html">&larr; All Folios</a></p>
@@ -900,6 +971,8 @@ def build_marginalia_pages(conn):
                 {folio_info}{quire_info}</p>
             <div class="marg-images">{images_html}</div>
             {f'<h3 style="margin:1.5rem 0 1rem">Alchemical Analysis</h3>' + desc_html if desc_html else ''}
+            {symbols_html}
+            {alchem_cross}
             <h3 style="margin:1.5rem 0 1rem">Annotations</h3>
             {annotations_html}
         </div>"""
