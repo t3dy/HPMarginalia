@@ -12,7 +12,7 @@ These rules apply to every written asset on the site regardless of page type.
 **Voice:** Active, third-person scholarly. "The HP presents" not "we see" or "I argue."
 **Tense:** Present tense for descriptions and current state. Past tense for historical events and what scholars argued. "Russell documents" (present: his thesis still documents). "Bernini completed the sculpture in 1667" (past: historical event).
 **Person:** Third person throughout. "The project" or "this site" — never "we" or "I."
-**Formality:** High scholarly but not jargon-heavy. Clear, direct, specific. No hedging unless the hedge carries information ("provisionally identified" is informative; "it might perhaps be" is not).
+**Formality:** Scholarly but accessible to educated non-specialists. Clear, direct, specific. The target reader is someone who visits exhibitions, reads long-form journalism, and is curious about Renaissance books — not necessarily an academic. Avoid jargon unless defined. No hedging unless the hedge carries information ("provisionally identified" is informative; "it might perhaps be" is not).
 **Terminology:**
 - "HP" after first use of italicized *Hypnerotomachia Poliphili* on each page
 - "folio" not "page" for manuscript references
