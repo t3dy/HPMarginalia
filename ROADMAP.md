@@ -7,40 +7,46 @@
 ## BUILT (completed, deployed)
 
 - [x] Concordance pipeline (282 refs → 431 matches, 0 LOW)
-- [x] BL offset correction (=13, verified at 27 points)
+- [x] BL offset correction (=13, verified at 174/174 readable pages by Phase 1)
 - [x] Dictionary (94 terms, 15 categories, all with significance prose)
 - [x] Scholars (60 pages, 59 overviews, 11 historical figures)
 - [x] Bibliography (109 entries)
 - [x] Timeline (71 events, filterable)
 - [x] Manuscripts (6 copies with hand profiles)
-- [x] Woodcuts (18 pages with descriptions)
+- [x] Woodcuts (18 in canonical table; 60 detected by Phase 1 vision reading)
 - [x] Alchemical symbols (10 symbols, 26 occurrences)
 - [x] Annotation classification (282 annotations, 6 types)
 - [x] Russell essay + Concordance essay
 - [x] Digital edition stub
-- [x] 14-tab navigation across 354 pages
+- [x] 14-tab navigation across 365 pages
+- [x] Annotations migration (build_site.py uses annotations, not dissertation_refs)
+- [x] Image path correction (master_path + web_path on all 674 images)
+- [x] Phase 0 infrastructure (image_readings table, schema v3, image_utils.py)
+- [x] Phase 1 BL ground truth (189/189 photos read, 60 woodcuts, offset confirmed)
 - [x] Documentation consolidation (5 core docs)
 
 ## READY (can execute now, no new research needed)
 
-### Priority 1: Switch marginalia pages to annotations table
-**What:** Update `build_marginalia_pages()` to query `annotations` instead of
-`dissertation_refs`. Display annotation_type as primary classification.
-**Why:** The annotations table has richer data (6 types, consolidated hand attribution)
-but the page builder still uses the deprecated table.
-**Effort:** 30 minutes.
+### ~~Priority 1: Switch marginalia pages to annotations table~~ DONE (HP320a)
 
-### Priority 2: Add coverage caveats to site
+### Priority 1 (new): Add coverage caveats to site
 **What:** Update about.html and concordance-method.html to state clearly that
 image matches exist for 2 of 6 copies, and that 4 copies have text-only evidence.
 **Effort:** 15 minutes.
 
-### Priority 3: Read remaining BL photographs
-**What:** Read ~120 unread BL text pages to complete woodcut inventory and
-annotation density map. Expand from 18 to ~45 detected woodcuts.
-**Why:** The 18 woodcuts found from 69 pages represent a 26% detection rate.
-Full coverage would roughly triple the woodcut inventory.
-**Effort:** 2 hours of image reading.
+### ~~Priority 3: Read remaining BL photographs~~ DONE (Phase 1)
+All 189 sequential BL photos read. 60 woodcuts detected. See PHASESTATUS.md.
+
+### Priority 2 (new): Phase 2 Coverage Mapping
+**What:** Classify annotation density (LIGHT/MODERATE/HEAVY) for all 189 BL
+photos. Map annotation locations and languages.
+**Why:** Identifies targets for Phase 3 deep reading.
+**Effort:** ~2 hours (same Claude Code vision workflow as Phase 1).
+
+### Priority 3 (new): Woodcut Promotion
+**What:** Review 60 detected woodcuts, promote qualifying entries to canonical
+`woodcuts` table via promote_reading.py (to be built).
+**Effort:** 1 hour (build script) + review time.
 
 ### Priority 4: Add annotation type filtering to marginalia index
 **What:** Add filter buttons (like timeline) to marginalia/index.html so

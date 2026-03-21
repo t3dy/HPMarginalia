@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,7 +24,7 @@
             <p><a href="index.html">&larr; All Documents</a></p>
             <h2>README</h2>
             <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
-                README.md &mdash; 1,415 words</p>
+                README.md &mdash; 1,416 words</p>
             <h2>Hypnerotomachia Poliphili -- Digital Marginalia &amp; Scholarship</h2>
 
 <p>A digital humanities project documenting the readership, marginalia, and scholarship of the <em>Hypnerotomachia Poliphili</em> (Venice: Aldus Manutius, 1499), based on James Russell&#x27;s PhD thesis <em>Many Other Things Worthy of Knowledge and Memory</em> (Durham University, 2014).</p>
@@ -35,15 +35,15 @@
 
 <table class="doc-table">
 <tr><th>Section</th><th>Content</th></tr>
-<tr><td>**Home**</td><td>Marginalia gallery -- 305 annotated folio images with lightbox viewer, filters by manuscript</td></tr>
-<tr><td>**Marginalia**</td><td>118 individual folio pages with images, hand attributions, alchemist tags, and Russell&#x27;s commentary</td></tr>
+<tr><td>**Home**</td><td>Marginalia gallery -- annotated folio images with lightbox viewer, filters by manuscript</td></tr>
+<tr><td>**Marginalia**</td><td>109 individual folio pages with images, hand attributions, annotation type badges, and Russell&#x27;s commentary</td></tr>
 <tr><td>**Scholars**</td><td>60 scholar profiles (59 with overviews, 11 historical figures) spanning 1899-2024</td></tr>
 <tr><td>**Bibliography**</td><td>109 entries grouped by relevance (Primary, Direct, Indirect), with collection/review badges</td></tr>
 <tr><td>**Dictionary**</td><td>94 terms across 15 categories with significance prose, cross-links, and provenance badges</td></tr>
 <tr><td>**Timeline**</td><td>71 events spanning 1499-2024: editions, annotations, scholarship, art inspired by the HP</td></tr>
 <tr><td>**Manuscripts**</td><td>6 annotated copies studied by Russell, with hand profiles and concordance data</td></tr>
-<tr><td>**Docs**</td><td>18 project documents (methodology, architecture, audits, critiques, planning)</td></tr>
-<tr><td>**Code**</td><td>31 Python pipeline scripts with full source and descriptions</td></tr>
+<tr><td>**Docs**</td><td>Project documents (methodology, architecture, audits, critiques, planning)</td></tr>
+<tr><td>**Code**</td><td>47 Python pipeline scripts with full source and descriptions</td></tr>
 <tr><td>**Edition**</td><td>Digital edition prospectus with phased roadmap</td></tr>
 <tr><td>**Essays**</td><td>Russell&#x27;s Alchemical Hands + Concordance Methodology, grounded in DB evidence</td></tr>
 <tr><td>**About**</td><td>Database statistics, data provenance, and rebuild instructions</td></tr>
@@ -54,8 +54,8 @@
 <p>SQLite is the source of truth. Python scripts generate JSON and static HTML pages. No framework, no build tools, no JavaScript dependencies.</p>
 
 <pre><code class="lang-">
-db/hp.db                    SQLite database (20 tables)
-scripts/                    Python pipeline (31 scripts)
+db/hp.db                    SQLite database (24 tables, schema v3)
+scripts/                    Python pipeline (47 scripts)
   build_site.py             Unified site generator (all pages + JSON)
   migrate_v2.py             Schema migration (idempotent)
   seed_dictionary.py        Dictionary terms (idempotent)
@@ -79,7 +79,7 @@ site/                       Generated static site
   dictionary/index.html     Dictionary landing (15 categories)
   dictionary/*.html         94 individual term pages
   marginalia/index.html     Folio grid index
-  marginalia/*.html         118 individual folio pages
+  marginalia/*.html         109 individual folio pages
   timeline.html             Chronological reception history (71 events)
   manuscripts/index.html    Annotated copies landing
   manuscripts/*.html        6 individual copy pages

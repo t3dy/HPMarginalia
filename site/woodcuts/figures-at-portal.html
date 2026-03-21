@@ -9,23 +9,49 @@
     <link rel="stylesheet" href="../scholars.css">
     <link rel="stylesheet" href="../components.css">
     <style>
-        .woodcuts-page { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
-        .woodcuts-page h2 { color: var(--accent); }
-        .woodcut-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .woodcut-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+        .woodcuts-page { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcuts-page h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .woodcuts-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-muted); }
+        .wc-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+        .wc-filter-btn { padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 3px;
+                         font-size: 0.75rem; font-weight: 600; text-transform: uppercase; cursor: pointer;
+                         background: var(--bg); color: var(--text-muted); transition: all 0.15s; }
+        .wc-filter-btn:hover, .wc-filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .woodcut-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .woodcut-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+                        overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+        .woodcut-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .woodcut-card img { width: 100%; height: 320px; object-fit: cover; object-position: top;
+                            border-bottom: 1px solid var(--border); background: #f5f0e8; }
         .woodcut-card .wc-info { padding: 0.75rem 1rem; }
         .woodcut-card h4 { margin: 0 0 0.3rem; font-size: 0.95rem; }
         .woodcut-card h4 a { color: var(--text); text-decoration: none; }
         .woodcut-card h4 a:hover { color: var(--accent); }
         .woodcut-card .wc-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); }
-        .wc-cat-badge { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 2px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: white; margin-right: 0.3rem; }
-        .woodcut-detail { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcut-card .wc-desc { font-size: 0.82rem; color: var(--text-muted); margin: 0.3rem 0 0; line-height: 1.5; }
+        .wc-cat-badge { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 2px;
+                        font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: white; margin-right: 0.3rem; }
+        .woodcut-detail { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
         .woodcut-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
         .woodcut-detail h3 { margin-top: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
         .woodcut-detail p { line-height: 1.8; }
+        .woodcut-detail .wc-image-frame { text-align: center; margin: 1.5rem 0; }
+        .woodcut-detail .wc-image-frame img { max-width: 100%; max-height: 700px; border: 1px solid var(--border);
+                                               box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #f5f0e8; }
+        .woodcut-detail .wc-image-caption { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
         .woodcut-detail .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .woodcut-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .woodcut-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem;
+                                          background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+                                          font-size: 0.85rem; color: var(--text); text-decoration: none; }
         .woodcut-detail .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+        .wc-nav-strip { display: flex; justify-content: space-between; margin: 1.5rem 0; font-size: 0.85rem; }
+        .wc-nav-strip a { color: var(--accent); text-decoration: none; }
+        .wc-annotation-note { background: var(--bg-card); border-left: 3px solid var(--accent);
+                               padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .woodcut-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .woodcut-card img { height: 240px; }
+        }
     </style>
 </head>
 <body>
@@ -33,7 +59,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html" class="active">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html" class="active">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -41,13 +67,21 @@
         <div class="woodcut-detail">
             <p><a href="index.html">&larr; All Woodcuts</a></p>
             <h2>Figures at a Portal or Doorway</h2>
-            <div style="margin-bottom:1rem"><span class="wc-cat-badge" style="background:#3b82f6">NARRATIVE</span> IN_TEXT | h8r | p.127 <span class="alchemist-tag">Alchemist</span></div>
+            <div style="margin-bottom:1rem"><span class="wc-cat-badge" style="background:#3b82f6">NARRATIVE</span> h8r &middot; p.127</div>
+            
+            <div class="wc-image-frame">
+                <img src="../images/woodcuts_1499/hp1499_p127.jpg" alt="Figures at a Portal or Doorway">
+                <div class="wc-image-caption">From the 1499 Aldine first edition (University of Seville copy, via Internet Archive)</div>
+            </div>
             <p>Multiple figures at an architectural portal or doorway, in a scene that may depict a greeting, a departure, or a ceremonial encounter. The composition uses the portal as a framing device.</p>
             <h3>In the Narrative</h3><p>A scene at an architectural portal. Above the woodcut, a hand has written &#x27;Synostra Gloria mundi&#x27; — a possible alchemical annotation, since &#x27;Gloria mundi&#x27; is standard alchemical phraseology.</p>
+            <div class="wc-annotation-note"><strong>In the BL copy (C.60.o.12):</strong> This page has alchemical annotations by Hand B, heavy annotation density, BL photograph #140. <a href="../marginalia/h8r.html">View folio &rarr;</a></div>
             
             
-            <div class="cross-links"><h4>Related Dictionary Terms</h4><a href="../dictionary/portal.html">Portal</a><a href="../dictionary/great-work.html">Great Work</a><h4>Related Pages</h4><a href="../marginalia/h8r.html">Folio h8r</a></div>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.5rem"><strong>Source:</strong> BL photo 140 direct observation | <span class="review-status-badge review-badge-draft">Draft</span></p>
+            <div class="cross-links"><h4>Related Dictionary Terms</h4><a href="../dictionary/portal.html">Portal</a><a href="../dictionary/great-work.html">Great Work</a><h4>Related Folio</h4><a href="../marginalia/h8r.html">Folio h8r</a></div>
+            <div class="wc-nav-strip"><a href="poliphilo-at-the-temple-entrance.html">&larr; Poliphilo at the Temple Entran</a><a href="nymphs-and-figures-among-trees.html">Nymphs and Figures Among Trees &rarr;</a></div>
+            <p style="font-size:0.8rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:0.5rem; margin-top:1rem">
+                Source: CORPUS_EXTRACTION &middot; MEDIUM</p>
         </div>
     </main>
     <footer>

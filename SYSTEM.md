@@ -10,11 +10,11 @@ beyond Python standard library.
 ## Architecture
 
 ```
-db/hp.db (SQLite, 22 tables)
+db/hp.db (SQLite, 24 tables, schema v3)
     ↓
-scripts/ (42 Python scripts)
+scripts/ (47 Python scripts)
     ↓
-site/ (354 static HTML pages, deployed to GitHub Pages)
+site/ (365 static HTML pages, deployed to GitHub Pages)
 ```
 
 ### Data Flow
@@ -23,16 +23,17 @@ site/ (354 static HTML pages, deployed to GitHub Pages)
 PDFs → pdf_to_markdown.py → md/ → chunk_documents.py → chunks/
 Russell thesis → extract_references.py → dissertation_refs (282)
                                         → consolidate_annotations.py → annotations (282)
-Image folders → catalog_images.py → images (674)
+Image folders → catalog_images.py → images (674, with master_path + web_path)
 Collation formula → build_signature_map.py → signature_map (448)
 References + Images + Map → match_refs_to_images.py + rebuild_bl_matches.py → matches (431)
-All tables → build_site.py → site/ (354 pages)
+Master images → read_images.py (Claude Code vision) → image_readings (219)
+All tables → build_site.py → site/ (365 pages)
 ```
 
 ### Provenance Model
 
 Every generated datum carries:
-- `source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED
+- `source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED | VISION_MODEL
 - `review_status`: DRAFT | REVIEWED | VERIFIED | PROVISIONAL
 - `confidence`: HIGH | MEDIUM | LOW | PROVISIONAL
 
@@ -76,6 +77,6 @@ without staging.
 ## Build
 
 ```bash
-python scripts/build_site.py     # Rebuild all 354 pages
+python scripts/build_site.py     # Rebuild all 365 pages
 python scripts/validate.py       # Full QA
 ```

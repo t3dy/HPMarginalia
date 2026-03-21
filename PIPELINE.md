@@ -6,8 +6,8 @@
 
 ```
 STAGE 1: INGEST
-  init_db.py              → Creates schema (22 tables)
-  catalog_images.py       → Parses 674 image filenames → images table
+  init_db.py              → Creates schema (24 tables incl. image_readings)
+  catalog_images.py       → Parses 674 image filenames → images table (with master_path + web_path)
   build_signature_map.py  → 1499 collation formula → 448 signature_map entries
 
 STAGE 2: EXTRACT
@@ -44,8 +44,20 @@ STAGE 4: ENRICH
   seed_copies.py           → 6 hp_copies entries
   seed_woodcuts.py         → 18 woodcut entries
 
+STAGE 4.5: IMAGE READING INFRASTRUCTURE
+  migrate_v3_image_reading.py → Schema v3: image_readings table + expanded CHECKs
+  image_utils.py              → Shared path validation (master vs web enforcement)
+  backfill_previous_readings.py → 30 historical readings into image_readings
+
+STAGE 4.6: VISUAL GROUND TRUTH (Phase 1)
+  read_images.py --phase 1    → 189 BL photos read via Claude Code vision
+                              → 189 image_readings rows (phase=1)
+                              → 189 raw JSON files in staging/image_readings/bl/phase1/
+                              → BL offset confirmed at 174/174 points
+                              → 60 woodcuts detected
+
 STAGE 5: BUILD
-  build_site.py            → Generates all 354 HTML pages + data.json
+  build_site.py            → Generates all 365 HTML pages + data.json
 ```
 
 ## Script Dependencies
@@ -92,6 +104,9 @@ python scripts/extract_alchemical_data.py
 python scripts/add_alchemist_descriptions.py
 python scripts/seed_copies.py
 python scripts/seed_woodcuts.py
+python scripts/migrate_v3_image_reading.py
+python scripts/backfill_previous_readings.py
+# Phase 1 readings: run read_images.py --ingest with pre-computed results
 python scripts/build_site.py
 ```
 
@@ -103,4 +118,6 @@ python scripts/build_site.py
 | Extract | PDFs | md/ (37 files), chunks/ (~200), dissertation_refs (282) | 282 |
 | Match | Refs + images + map | matches (431) | 431 |
 | Enrich | All above + corpus | annotations, dictionary, scholars, bibliography, timeline, symbols, woodcuts | ~1000 |
-| Build | All tables | 354 HTML pages + data.json | — |
+| Image Infra | Schema v3 migration | image_readings table, expanded CHECKs | 30 (backfill) |
+| Phase 1 | Master BL images (via Claude Code vision) | 189 image_readings rows, 189 staging JSONs | 189 |
+| Build | All tables | 365 HTML pages + data.json | — |

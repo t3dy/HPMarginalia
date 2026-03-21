@@ -1,7 +1,7 @@
 # ONTOLOGY: The Actual Database Schema
 
 > This describes what EXISTS in db/hp.db. Nothing aspirational.
-> Last verified: 2026-03-20. 22 tables, ~2800 total rows.
+> Last verified: 2026-03-20. 24 tables, ~3500 total rows. Schema version 3.
 
 ## Canonical Tables
 
@@ -11,7 +11,7 @@
 |-------|------|---------|
 | **hp_copies** | 6 | All known annotated copies (Russell's 6). Shelfmark, institution, edition, hand count, confidence. |
 | **manuscripts** | 2 | Copies with local photographs (BL, Siena). Contains image directory paths. |
-| **images** | 674 | Individual photographs. 196 BL (offset-corrected, folio=photo-13), 478 Siena (folio in filename). |
+| **images** | 674 | Individual photographs. 196 BL (offset-corrected, folio=photo-13), 478 Siena (folio in filename). Has master_path (originals) and web_path (compressed). |
 | **signature_map** | 448 | Deterministic lookup: signature (b6v) → folio number. From 1499 collation a-z8 A-F8 G4. |
 
 ### Annotations and Hands
@@ -22,7 +22,8 @@
 | **annotator_hands** | 11 | CANONICAL. 11 hands across 6 copies. Has alchemical_framework for Hand B and E. |
 | **matches** | 431 | Ref-to-image links. 48 HIGH + 383 MEDIUM + 0 LOW. |
 | **folio_descriptions** | 13 | Detailed analyses of alchemist-annotated folios. |
-| **woodcuts** | 18 | Detected woodcuts with subjects, categories, annotation data. |
+| **woodcuts** | 18 | Detected woodcuts with subjects, categories, annotation data. (60 more detected in image_readings, pending promotion.) |
+| **image_readings** | 219 | Vision model readings of manuscript photographs. 30 phase-0 (historical) + 189 phase-1 (BL ground truth). Stores raw JSON, page number verification, woodcut detection. |
 
 ### Alchemical System
 
@@ -53,7 +54,7 @@
 
 | Table | Rows | Purpose |
 |-------|------|---------|
-| **schema_version** | 2 | Migration tracking. |
+| **schema_version** | 3 | Migration tracking. v3 = image_readings + expanded CHECK constraints. |
 
 ## Deprecated Tables (DO NOT QUERY)
 
@@ -81,6 +82,7 @@ scholar_works.scholar_id → scholars.id
 scholar_works.bib_id → bibliography.id
 dictionary_term_links.term_id → dictionary_terms.id
 woodcuts.signature_1499 ←→ signature_map.signature
+image_readings.image_id → images.id
 ```
 
 ## Coverage and Confidence
@@ -88,12 +90,12 @@ woodcuts.signature_1499 ←→ signature_map.signature
 | Data | Coverage | Confidence |
 |------|----------|------------|
 | Siena matches | 392/478 images matched | HIGH/MEDIUM |
-| BL matches | 39/50 refs matched (11 beyond photo range) | MEDIUM (27 visually verified as HIGH) |
+| BL matches | 39/50 refs matched (11 beyond photo range) | MEDIUM (174 offset-confirmed by Phase 1 vision reading) |
 | Buffalo/Vatican/Cambridge/Modena | 0 matches (no photographs) | N/A |
 | Hand attribution | 204/282 annotations (72%) | MEDIUM |
 | Dictionary significance | 94/94 terms | DRAFT (LLM-assisted) |
 | Scholar overviews | 59/60 scholars | DRAFT (LLM-assisted) |
-| Woodcut inventory | 18/~172 (BL photos cover pages 1-176 only) | MEDIUM |
+| Woodcut inventory | 18 cataloged + 60 detected in image_readings / ~172 total in 1499 edition | MEDIUM (detected woodcuts are PROVISIONAL) |
 
 ## 4 Unmapped Signatures
 

@@ -1,11 +1,24 @@
-"""Catalog all manuscript images into the database."""
+"""Catalog all manuscript images into the database.
+
+Reads from the HIGH-QUALITY original image directories (referenced in
+manuscripts.image_dir), NOT from the compressed site/images/ copies.
+Stores both master_path (original) and web_path (compressed) for each image.
+"""
 
 import sqlite3
 import re
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DB_PATH = BASE_DIR / "db" / "hp.db"
+SITE_DIR = BASE_DIR / "site"
+
+# Web image directory mapping: shelfmark -> site/images/ subfolder
+WEB_IMAGE_DIRS = {
+    'C.60.o.12': 'images/bl',
+    'O.III.38': 'images/siena',
+}
 
 
 def parse_bl_filename(filename):
@@ -118,32 +131,57 @@ def parse_siena_filename(filename):
 
 
 def catalog_manuscript(conn, shelfmark, parser_fn):
-    """Catalog all images for a manuscript."""
+    """Catalog all images for a manuscript.
+
+    Reads from the original high-quality image directory (manuscripts.image_dir).
+    Sets master_path to the original and web_path to the compressed site copy.
+    """
     cur = conn.cursor()
     cur.execute("SELECT id, image_dir FROM manuscripts WHERE shelfmark = ?", (shelfmark,))
     row = cur.fetchone()
     if not row:
-        print(f"  WARNING: Manuscript {shelfmark} not found in database")
+        print(f"  ERROR: Manuscript {shelfmark} not found in database")
         return 0
 
     ms_id, image_dir = row
     img_path = BASE_DIR / image_dir
     if not img_path.exists():
-        print(f"  WARNING: Image directory not found: {img_path}")
-        return 0
+        print(f"  ERROR: Master image directory not found: {img_path}")
+        print(f"         The original high-quality images must be present.")
+        sys.exit(1)
+
+    web_dir = WEB_IMAGE_DIRS.get(shelfmark)
+    if not web_dir:
+        print(f"  WARNING: No web image directory configured for {shelfmark}")
 
     count = 0
+    missing_web = 0
     for f in sorted(img_path.glob('*.jpg')):
         parsed = parser_fn(f.name)
-        relative = f"{image_dir}/{f.name}"
+        master = f"{image_dir}/{f.name}"
+        web = f"{web_dir}/{f.name}" if web_dir else None
+
+        # Check web copy exists
+        if web and not (SITE_DIR / f.name).parent.parent.joinpath(web).exists():
+            # Try site dir directly
+            if not (BASE_DIR / "site" / web_dir / f.name).exists():
+                missing_web += 1
+
+        # relative_path kept as web_path for backward compatibility
         cur.execute(
             """INSERT OR IGNORE INTO images
-               (manuscript_id, filename, folio_number, side, page_type, sort_order, relative_path)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+               (manuscript_id, filename, folio_number, side, page_type,
+                sort_order, relative_path, master_path, web_path)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (ms_id, f.name, parsed['folio_number'], parsed['side'],
-             parsed['page_type'], parsed['sort_order'], relative)
+             parsed['page_type'], parsed['sort_order'],
+             web or master, master, web)
         )
         count += 1
+
+    if missing_web:
+        print(f"  WARNING: {missing_web} images lack compressed web copies in site/{web_dir}/")
+        print(f"           Run compress_images.py to generate them.")
 
     conn.commit()
     return count
@@ -152,19 +190,31 @@ def catalog_manuscript(conn, shelfmark, parser_fn):
 def main():
     conn = sqlite3.connect(DB_PATH)
 
-    print("Cataloging BL C.60.o.12 images...")
+    print("Cataloging BL C.60.o.12 images (from originals)...")
     bl_count = catalog_manuscript(conn, 'C.60.o.12', parse_bl_filename)
-    print(f"  {bl_count} images cataloged")
+    print(f"  {bl_count} master images cataloged")
 
-    print("Cataloging Siena O.III.38 images...")
+    print("Cataloging Siena O.III.38 images (from originals)...")
     siena_count = catalog_manuscript(conn, 'O.III.38', parse_siena_filename)
-    print(f"  {siena_count} images cataloged")
+    print(f"  {siena_count} master images cataloged")
 
     # Summary stats
     cur = conn.cursor()
+    print("\nPage type breakdown:")
     for page_type in ['PAGE', 'MARGINALIA_DETAIL', 'COVER', 'GUARD', 'OTHER']:
         cur.execute("SELECT COUNT(*) FROM images WHERE page_type = ?", (page_type,))
         print(f"  {page_type}: {cur.fetchone()[0]}")
+
+    # Path coverage
+    cur.execute("SELECT COUNT(*) FROM images WHERE master_path IS NOT NULL")
+    master_count = cur.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM images WHERE web_path IS NOT NULL")
+    web_count = cur.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM images")
+    total = cur.fetchone()[0]
+    print(f"\nPath coverage:")
+    print(f"  {master_count}/{total} images have master_path (high-quality originals)")
+    print(f"  {web_count}/{total} images have web_path (compressed for site)")
 
     conn.close()
     print("Done.")

@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,7 +24,7 @@
             <p><a href="index.html">&larr; All Documents</a></p>
             <h2>System Architecture</h2>
             <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
-                SYSTEM.md &mdash; 368 words</p>
+                SYSTEM.md &mdash; 386 words</p>
             <h2>SYSTEM: HP Marginalia Platform Architecture</h2>
 
 <h3>Purpose</h3>
@@ -37,11 +37,11 @@
 <h3>Architecture</h3>
 
 <pre><code class="lang-">
-db/hp.db (SQLite, 22 tables)
+db/hp.db (SQLite, 24 tables, schema v3)
     ↓
-scripts/ (42 Python scripts)
+scripts/ (47 Python scripts)
     ↓
-site/ (354 static HTML pages, deployed to GitHub Pages)
+site/ (365 static HTML pages, deployed to GitHub Pages)
 </code></pre>
 
 <h4>Data Flow</h4>
@@ -50,17 +50,18 @@ site/ (354 static HTML pages, deployed to GitHub Pages)
 PDFs → pdf_to_markdown.py → md/ → chunk_documents.py → chunks/
 Russell thesis → extract_references.py → dissertation_refs (282)
                                         → consolidate_annotations.py → annotations (282)
-Image folders → catalog_images.py → images (674)
+Image folders → catalog_images.py → images (674, with master_path + web_path)
 Collation formula → build_signature_map.py → signature_map (448)
 References + Images + Map → match_refs_to_images.py + rebuild_bl_matches.py → matches (431)
-All tables → build_site.py → site/ (354 pages)
+Master images → read_images.py (Claude Code vision) → image_readings (219)
+All tables → build_site.py → site/ (365 pages)
 </code></pre>
 
 <h4>Provenance Model</h4>
 
 <p>Every generated datum carries:</p>
 <ul>
-<li>`source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED</li>
+<li>`source_method`: DETERMINISTIC | CORPUS_EXTRACTION | LLM_ASSISTED | HUMAN_VERIFIED | VISION_MODEL</li>
 <li>`review_status`: DRAFT | REVIEWED | VERIFIED | PROVISIONAL</li>
 <li>`confidence`: HIGH | MEDIUM | LOW | PROVISIONAL</li>
 </ul>
@@ -105,7 +106,7 @@ All tables → build_site.py → site/ (354 pages)
 <h3>Build</h3>
 
 <pre><code class="lang-bash">
-python scripts/build_site.py     # Rebuild all 354 pages
+python scripts/build_site.py     # Rebuild all 365 pages
 python scripts/validate.py       # Full QA
 </code></pre>
 

@@ -50,7 +50,7 @@ def nav_html(active='', prefix=''):
         (f'{prefix}timeline.html', 'Timeline', 'timeline'),
         (f'{prefix}woodcuts/index.html', 'Woodcuts', 'woodcuts'),
         (f'{prefix}manuscripts/index.html', 'Manuscripts', 'manuscripts'),
-        (f'{prefix}digital-edition.html', 'Edition', 'edition'),
+        (f'{prefix}digital-edition.html', 'Editions', 'edition'),
         (f'{prefix}russell-alchemical-hands.html', 'Alchemical Hands', 'russell'),
         (f'{prefix}concordance-method.html', 'Concordance', 'concordance'),
         (f'{prefix}about.html', 'About', 'about'),
@@ -157,22 +157,24 @@ def export_data_json(conn):
     cur = conn.cursor()
     cur.execute("""
         SELECT
-            r.id, r.thesis_page, r.signature_ref, m.shelfmark,
-            m.institution, m.city, r.context_text, r.marginal_text,
-            r.chapter_num, i.filename, i.relative_path,
+            a.id, a.thesis_page, a.signature_ref, m.shelfmark,
+            m.institution, m.city, dr.context_text, a.annotation_text,
+            a.thesis_chapter, i.filename, COALESCE(i.web_path, i.relative_path),
             i.folio_number, i.side, mat.confidence,
             sm.quire, sm.leaf_in_quire,
             mat.needs_review as match_needs_review,
-            h.hand_label, h.attribution, h.is_alchemist
+            h.hand_label, h.attribution, h.is_alchemist,
+            a.annotation_type
         FROM matches mat
-        JOIN dissertation_refs r ON mat.ref_id = r.id
+        JOIN annotations a ON mat.ref_id = a.id
         JOIN images i ON mat.image_id = i.id
         JOIN manuscripts m ON i.manuscript_id = m.id
-        LEFT JOIN signature_map sm ON LOWER(r.signature_ref) = LOWER(sm.signature)
-        LEFT JOIN annotator_hands h ON r.hand_id = h.id
+        LEFT JOIN dissertation_refs dr ON a.id = dr.id
+        LEFT JOIN signature_map sm ON LOWER(a.signature_ref) = LOWER(sm.signature)
+        LEFT JOIN annotator_hands h ON a.hand_id = h.id
         WHERE i.page_type = 'PAGE'
-        GROUP BY r.signature_ref, i.filename
-        ORDER BY COALESCE(sm.folio_number, 999), r.thesis_page
+        GROUP BY a.signature_ref, i.filename
+        ORDER BY COALESCE(sm.folio_number, 999), a.thesis_page
     """)
 
     # Load folio descriptions for alchemist annotations
@@ -214,6 +216,7 @@ def export_data_json(conn):
             'needs_review': bool(row[16]),
             'hand_label': row[17], 'hand_attribution': row[18],
             'is_alchemist': bool(row[19]) if row[19] is not None else False,
+            'annotation_type': row[20],
         }
         # Add folio description if available
         fd = folio_descs.get((sig, ms)) or folio_descs.get((sig, None))
@@ -783,18 +786,20 @@ def build_marginalia_pages(conn):
     # Get all matched signatures with their images and annotations
     cur.execute("""
         SELECT
-            r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
-            r.chapter_num, m.shelfmark, m.institution, m.city,
-            i.filename, i.relative_path, i.folio_number, i.side,
+            a.signature_ref, a.thesis_page, dr.context_text, a.annotation_text,
+            a.thesis_chapter, m.shelfmark, m.institution, m.city,
+            i.filename, COALESCE(i.web_path, i.relative_path), i.folio_number, i.side,
             mat.confidence, mat.needs_review,
             h.hand_label, h.attribution, h.is_alchemist, h.school,
-            sm.quire, sm.leaf_in_quire
+            sm.quire, sm.leaf_in_quire,
+            a.annotation_type
         FROM matches mat
-        JOIN dissertation_refs r ON mat.ref_id = r.id
+        JOIN annotations a ON mat.ref_id = a.id
         JOIN images i ON mat.image_id = i.id
         JOIN manuscripts m ON i.manuscript_id = m.id
-        LEFT JOIN signature_map sm ON LOWER(r.signature_ref) = LOWER(sm.signature)
-        LEFT JOIN annotator_hands h ON r.hand_id = h.id
+        LEFT JOIN dissertation_refs dr ON a.id = dr.id
+        LEFT JOIN signature_map sm ON LOWER(a.signature_ref) = LOWER(sm.signature)
+        LEFT JOIN annotator_hands h ON a.hand_id = h.id
         WHERE i.page_type = 'PAGE'
         ORDER BY COALESCE(sm.folio_number, 999), m.shelfmark
     """)
@@ -896,7 +901,7 @@ def build_marginalia_pages(conn):
              shelfmark, institution, city, img_file, img_path,
              folio_num, side, confidence, needs_rev,
              hand_label, attribution, is_alchemist, school,
-             quire, leaf) = row
+             quire, leaf, annotation_type) = row
 
             # Image card (deduplicate)
             if img_file not in seen_images:
@@ -919,6 +924,11 @@ def build_marginalia_pages(conn):
                 school_info = f' ({escape(school)})' if school else ''
                 hand_html = f'<div class="hand-info">Hand {escape(hand_label)}: {escape(attribution or "Anonymous")}{school_info}{alch_tag}</div>'
 
+            type_html = ''
+            if annotation_type:
+                type_label = annotation_type.replace('_', ' ').title()
+                type_html = f'<span style="display:inline-block;padding:0.1rem 0.5rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;font-size:0.7rem;font-weight:600;text-transform:uppercase;margin-left:0.5rem;color:var(--text-muted)">{type_label}</span>'
+
             marginal_html = ''
             if marginal:
                 marginal_html = f'<div class="marginal-text">&ldquo;{escape(marginal)}&rdquo;</div>'
@@ -930,7 +940,7 @@ def build_marginalia_pages(conn):
 
             annotations_html += f"""
                 <div class="marg-annotation">
-                    {hand_html}
+                    {hand_html}{type_html}
                     {marginal_html}
                     {context_html}
                     <div class="hand-info">Russell, PhD Thesis, p. {thesis_page} (Ch. {chapter})</div>
@@ -1228,8 +1238,8 @@ def build_about_page(conn):
 
     # Get stats
     stats = {}
-    for table in ['documents', 'images', 'dissertation_refs', 'matches',
-                   'annotators', 'bibliography', 'scholars', 'dictionary_terms',
+    for table in ['documents', 'images', 'annotations', 'matches',
+                   'annotator_hands', 'bibliography', 'scholars', 'dictionary_terms',
                    'timeline_events']:
         try:
             cur.execute(f"SELECT COUNT(*) FROM {table}")
@@ -1277,10 +1287,10 @@ def build_about_page(conn):
                 <div class="paper-summary-full">
                 <ul style="list-style:none; padding:0;">
                     <li><strong>{stats['images']}</strong> manuscript images catalogued</li>
-                    <li><strong>{stats['dissertation_refs']}</strong> folio references extracted from Russell's thesis</li>
+                    <li><strong>{stats['annotations']}</strong> annotations extracted from Russell's thesis</li>
                     <li><strong>{stats['matches']}</strong> image-reference matches
                         ({stats['high_conf']} high confidence, {stats['low_conf']} low/provisional)</li>
-                    <li><strong>{stats['annotators']}</strong> annotator hands identified</li>
+                    <li><strong>{stats['annotator_hands']}</strong> annotator hands identified</li>
                     <li><strong>{stats['bibliography']}</strong> works in bibliography
                         ({stats['in_collection']} in our collection)</li>
                     <li><strong>{stats['scholars']}</strong> scholar profiles</li>
@@ -1708,12 +1718,13 @@ def build_russell_essay_page(conn):
 
     # Get alchemist refs with signatures
     cur.execute("""
-        SELECT r.signature_ref, r.thesis_page, r.context_text, r.marginal_text,
-               r.chapter_num, r.manuscript_shelfmark, h.hand_label, h.school
-        FROM dissertation_refs r
-        JOIN annotator_hands h ON r.hand_id = h.id
+        SELECT a.signature_ref, a.thesis_page, dr.context_text, a.annotation_text,
+               a.thesis_chapter, h.manuscript_shelfmark, h.hand_label, h.school
+        FROM annotations a
+        JOIN annotator_hands h ON a.hand_id = h.id
+        LEFT JOIN dissertation_refs dr ON a.id = dr.id
         WHERE h.is_alchemist = 1
-        ORDER BY r.thesis_page
+        ORDER BY a.thesis_page
     """)
     alch_refs = cur.fetchall()
 
@@ -1721,8 +1732,8 @@ def build_russell_essay_page(conn):
     cur.execute("""
         SELECT mat.confidence, COUNT(*)
         FROM matches mat
-        JOIN dissertation_refs r ON mat.ref_id = r.id
-        JOIN annotator_hands h ON r.hand_id = h.id
+        JOIN annotations a ON mat.ref_id = a.id
+        JOIN annotator_hands h ON a.hand_id = h.id
         WHERE h.is_alchemist = 1
         GROUP BY mat.confidence
     """)
@@ -2047,7 +2058,7 @@ def build_concordance_essay_page(conn):
     # Gather stats
     cur.execute("SELECT COUNT(*) FROM signature_map")
     sig_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM dissertation_refs")
+    cur.execute("SELECT COUNT(*) FROM annotations")
     ref_count = cur.fetchone()[0]
     cur.execute("SELECT COUNT(*) FROM images")
     img_count = cur.fetchone()[0]
@@ -2434,7 +2445,8 @@ def build_manuscripts_pages(conn):
     for row in cur.fetchall():
         hands_by_ms.setdefault(row[0], []).append(row)
 
-    # Get ref counts per copy
+    # Get ref counts per copy (uses dissertation_refs because 51 annotations
+    # lack manuscript_id linkage — TODO: backfill manuscript_id in annotations)
     cur.execute("""
         SELECT manuscript_shelfmark, COUNT(*) FROM dissertation_refs
         WHERE manuscript_shelfmark IS NOT NULL
@@ -2599,18 +2611,28 @@ def build_manuscripts_pages(conn):
 # ============================================================
 
 def build_woodcuts_pages(conn):
-    """Generate woodcuts/index.html and woodcuts/*.html from woodcuts table."""
+    """Generate woodcuts/index.html and woodcuts/*.html — 1499 edition gallery.
+
+    Sources woodcut images from Internet Archive facsimile (A336080v1,
+    University of Seville copy, 600ppi). Falls back to BL photographs
+    where IA images are not yet cached.
+    """
     cur = conn.cursor()
     wc_dir = SITE_DIR / 'woodcuts'
     wc_dir.mkdir(exist_ok=True)
+    ia_img_dir = SITE_DIR / 'images' / 'woodcuts_1499'
 
     cur.execute("""
-        SELECT id, slug, title, signature_1499, page_1499, bl_photo_number,
-               subject_category, woodcut_type, description, chapter_context,
+        SELECT id, slug, title, signature_1499, page_1499, page_1499_ia,
+               bl_photo_number, subject_category, woodcut_type,
+               description, narrative_context, chapter_context,
                depicted_elements, has_annotation, alchemical_annotation,
                annotation_density, dictionary_terms, scholarly_discussion,
-               influence, source_basis, confidence, notes
-        FROM woodcuts ORDER BY page_1499
+               influence, source_method, confidence, notes,
+               ia_image_cached
+        FROM woodcuts
+        WHERE page_1499 IS NOT NULL
+        ORDER BY page_1499
     """)
     woodcuts = cur.fetchall()
 
@@ -2625,100 +2647,208 @@ def build_woodcuts_pages(conn):
     }
 
     wc_css = '<style>' + """
-        .woodcuts-page { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
-        .woodcuts-page h2 { color: var(--accent); }
-        .woodcut-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .woodcut-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+        .woodcuts-page { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcuts-page h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .woodcuts-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-muted); }
+        .wc-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+        .wc-filter-btn { padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 3px;
+                         font-size: 0.75rem; font-weight: 600; text-transform: uppercase; cursor: pointer;
+                         background: var(--bg); color: var(--text-muted); transition: all 0.15s; }
+        .wc-filter-btn:hover, .wc-filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .woodcut-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .woodcut-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+                        overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+        .woodcut-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .woodcut-card img { width: 100%; height: 320px; object-fit: cover; object-position: top;
+                            border-bottom: 1px solid var(--border); background: #f5f0e8; }
         .woodcut-card .wc-info { padding: 0.75rem 1rem; }
         .woodcut-card h4 { margin: 0 0 0.3rem; font-size: 0.95rem; }
         .woodcut-card h4 a { color: var(--text); text-decoration: none; }
         .woodcut-card h4 a:hover { color: var(--accent); }
         .woodcut-card .wc-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); }
-        .wc-cat-badge { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 2px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: white; margin-right: 0.3rem; }
-        .woodcut-detail { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
+        .woodcut-card .wc-desc { font-size: 0.82rem; color: var(--text-muted); margin: 0.3rem 0 0; line-height: 1.5; }
+        .wc-cat-badge { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 2px;
+                        font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: white; margin-right: 0.3rem; }
+        .woodcut-detail { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
         .woodcut-detail h2 { color: var(--accent); margin-bottom: 0.5rem; }
         .woodcut-detail h3 { margin-top: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
         .woodcut-detail p { line-height: 1.8; }
+        .woodcut-detail .wc-image-frame { text-align: center; margin: 1.5rem 0; }
+        .woodcut-detail .wc-image-frame img { max-width: 100%; max-height: 700px; border: 1px solid var(--border);
+                                               box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #f5f0e8; }
+        .woodcut-detail .wc-image-caption { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
         .woodcut-detail .cross-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .woodcut-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem; color: var(--text); text-decoration: none; }
+        .woodcut-detail .cross-links a { display: inline-block; margin: 0.2rem 0.3rem; padding: 0.2rem 0.6rem;
+                                          background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+                                          font-size: 0.85rem; color: var(--text); text-decoration: none; }
         .woodcut-detail .cross-links a:hover { border-color: var(--accent); color: var(--accent); }
+        .wc-nav-strip { display: flex; justify-content: space-between; margin: 1.5rem 0; font-size: 0.85rem; }
+        .wc-nav-strip a { color: var(--accent); text-decoration: none; }
+        .wc-annotation-note { background: var(--bg-card); border-left: 3px solid var(--accent);
+                               padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .woodcut-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .woodcut-card img { height: 240px; }
+        }
     """ + '</style>'
 
-    # Build detail pages
+    # Build detail pages and collect card HTML
     cards_html = ''
+    slugs = []  # For prev/next navigation
+
     for wc in woodcuts:
-        (wid, slug, title, sig, page, photo, cat, wtype, desc, context,
-         elements, has_ann, has_alch, ann_density, dict_terms,
-         scholarly, influence, source, conf, notes) = wc
+        (wid, slug, title, sig, page, ia_page, photo, cat, wtype,
+         desc, narrative, context, elements, has_ann, has_alch,
+         ann_density, dict_terms, scholarly, influence, source,
+         conf, notes, ia_cached) = wc
+        slugs.append((slug, title, page))
+
+    for idx, wc in enumerate(woodcuts):
+        (wid, slug, title, sig, page, ia_page, photo, cat, wtype,
+         desc, narrative, context, elements, has_ann, has_alch,
+         ann_density, dict_terms, scholarly, influence, source,
+         conf, notes, ia_cached) = wc
 
         color = cat_colors.get(cat, '#6b7280')
         cat_badge = f'<span class="wc-cat-badge" style="background:{color}">{escape(cat or "")}</span>'
         alch_badge = ' <span class="alchemist-tag">Alchemist</span>' if has_alch else ''
-        ann_badge = f' <span class="review-badge">{escape(ann_density or "")}</span>' if has_ann else ''
+
+        # Determine image path
+        img_filename = f'hp1499_p{page:03d}.jpg'
+        img_exists = (ia_img_dir / img_filename).exists()
+        img_path = f'../images/woodcuts_1499/{img_filename}' if img_exists else ''
 
         # Card for index
+        img_tag = f'<img src="../images/woodcuts_1499/{img_filename}" alt="{escape(title)}" loading="lazy">' if img_exists else '<div style="height:320px;background:#e8e0d0;display:flex;align-items:center;justify-content:center;color:#999;font-style:italic">Image pending</div>'
         cards_html += f"""
-        <div class="woodcut-card">
+        <div class="woodcut-card" data-category="{escape(cat or '')}">
+            <a href="{slug}.html">{img_tag}</a>
             <div class="wc-info">
                 <h4><a href="{slug}.html">{escape(title)}</a></h4>
-                <div class="wc-meta">{cat_badge}{escape(sig or '')} | p.{page or '?'}{alch_badge}{ann_badge}</div>
-                <p style="font-size:0.85rem; color:var(--text-muted); margin:0.3rem 0 0; line-height:1.5">{escape((desc or '')[:150])}{'...' if desc and len(desc) > 150 else ''}</p>
+                <div class="wc-meta">{cat_badge} p.{page}{alch_badge}</div>
+                <p class="wc-desc">{escape((desc or '')[:120])}{'...' if desc and len(desc) > 120 else ''}</p>
             </div>
         </div>"""
 
         # Detail page
-        desc_html = f'<p>{escape(desc or "")}</p>' if desc else ''
-        context_html = f'<h3>In the Narrative</h3><p>{escape(context or "")}</p>' if context else ''
-        scholarly_html = f'<h3>In Scholarship</h3><p>{escape(scholarly or "")}</p>' if scholarly else ''
-        influence_html = f'<h3>Influence</h3><p>{escape(influence or "")}</p>' if influence else ''
+        # Image
+        if img_exists:
+            img_html = f"""
+            <div class="wc-image-frame">
+                <img src="../images/woodcuts_1499/{img_filename}" alt="{escape(title)}">
+                <div class="wc-image-caption">From the 1499 Aldine first edition (University of Seville copy, via Internet Archive)</div>
+            </div>"""
+        else:
+            img_html = ''
 
-        # Cross links from dictionary_terms field
+        # Narrative context (prefer narrative_context, fall back to chapter_context)
+        narr = narrative or context or ''
+        narr_html = f'<h3>In the Narrative</h3><p>{escape(narr)}</p>' if narr else ''
+
+        desc_html = f'<p>{escape(desc or "")}</p>' if desc else ''
+        scholarly_html = f'<h3>In Scholarship</h3><p>{escape(scholarly or "")}</p>' if scholarly else ''
+        influence_html = f'<h3>Influence &amp; Reception</h3><p>{escape(influence or "")}</p>' if influence else ''
+
+        # Annotation note (if this page has BL annotations)
+        ann_html = ''
+        if has_ann or has_alch:
+            ann_parts = []
+            if has_alch:
+                ann_parts.append('alchemical annotations by Hand B')
+            if ann_density:
+                ann_parts.append(f'{ann_density.lower()} annotation density')
+            if photo:
+                ann_parts.append(f'BL photograph #{photo}')
+            ann_html = f'<div class="wc-annotation-note"><strong>In the BL copy (C.60.o.12):</strong> This page has {", ".join(ann_parts)}. <a href="../marginalia/{(sig or "").lower()}.html">View folio &rarr;</a></div>'
+
+        # Cross links
         cross_html = ''
+        cross_parts = []
         if dict_terms:
             term_links = ''.join(f'<a href="../dictionary/{t.strip()}.html">{t.strip().replace("-", " ").title()}</a>'
                                   for t in dict_terms.split(',') if t.strip())
-            cross_html = f'<div class="cross-links"><h4>Related Dictionary Terms</h4>{term_links}'
-            if sig:
-                cross_html += f'<h4>Related Pages</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a>'
-            cross_html += '</div>'
-        elif sig:
-            cross_html = f'<div class="cross-links"><h4>Related Pages</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a></div>'
+            cross_parts.append(f'<h4>Related Dictionary Terms</h4>{term_links}')
+        if sig:
+            cross_parts.append(f'<h4>Related Folio</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a>')
+        if cross_parts:
+            cross_html = f'<div class="cross-links">{"".join(cross_parts)}</div>'
 
-        source_html = f'<p style="font-size:0.85rem; color:var(--text-muted); margin-top:1.5rem; border-top:1px solid var(--border); padding-top:0.5rem"><strong>Source:</strong> {escape(source or "")} | {review_status_badge("DRAFT")}</p>'
+        # Prev/next navigation
+        prev_link = f'<a href="{slugs[idx-1][0]}.html">&larr; {escape(slugs[idx-1][1][:30])}</a>' if idx > 0 else '<span></span>'
+        next_link = f'<a href="{slugs[idx+1][0]}.html">{escape(slugs[idx+1][1][:30])} &rarr;</a>' if idx < len(slugs) - 1 else '<span></span>'
 
+        source_label = source or 'unknown'
         detail_body = f"""
         <div class="woodcut-detail">
             <p><a href="index.html">&larr; All Woodcuts</a></p>
             <h2>{escape(title)}</h2>
-            <div style="margin-bottom:1rem">{cat_badge} {escape(wtype or '')} | {escape(sig or '')} | p.{page or '?'}{alch_badge}</div>
+            <div style="margin-bottom:1rem">{cat_badge} {escape(sig or '')} &middot; p.{page}</div>
+            {img_html}
             {desc_html}
-            {context_html}
+            {narr_html}
+            {ann_html}
             {scholarly_html}
             {influence_html}
             {cross_html}
-            {source_html}
+            <div class="wc-nav-strip">{prev_link}{next_link}</div>
+            <p style="font-size:0.8rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:0.5rem; margin-top:1rem">
+                Source: {escape(source_label)} &middot; {escape(conf or 'DRAFT')}</p>
         </div>"""
 
         detail_page = page_shell(title, detail_body, active_nav='woodcuts',
                                   extra_css=wc_css, depth=1)
         (wc_dir / f'{slug}.html').write_text(detail_page, encoding='utf-8')
 
-    # Index page
+    # Count categories for filter buttons
+    cat_counts = {}
+    for wc in woodcuts:
+        cat = wc[7] or 'UNCATEGORIZED'
+        cat_counts[cat] = cat_counts.get(cat, 0) + 1
+
+    filter_buttons = '<button class="wc-filter-btn active" onclick="filterWoodcuts(\'ALL\')">All</button>'
+    for cat in sorted(cat_counts.keys()):
+        color = cat_colors.get(cat, '#6b7280')
+        filter_buttons += f'<button class="wc-filter-btn" onclick="filterWoodcuts(\'{cat}\')" style="border-color:{color}">{cat} ({cat_counts[cat]})</button>'
+
+    filter_js = """
+    <script>
+    function filterWoodcuts(cat) {
+        document.querySelectorAll('.wc-filter-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.querySelectorAll('.woodcut-card').forEach(card => {
+            if (cat === 'ALL' || card.dataset.category === cat) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    </script>"""
+
+    with_images = sum(1 for wc in woodcuts if (ia_img_dir / f'hp1499_p{wc[4]:03d}.jpg').exists())
+
     index_body = f"""
     <div class="woodcuts-page">
-        <h2>Woodcuts of the <em>Hypnerotomachia Poliphili</em></h2>
-        <p>The 1499 HP contains approximately 172 woodcut illustrations, the most
-        ambitious visual program of any incunabulum. Their designer remains
-        unidentified, though Benedetto Bordon is the most widely proposed candidate.
-        This index presents the {len(woodcuts)} woodcuts detected in the project's
-        BL manuscript photographs (pages 1&ndash;176).</p>
+        <h1>Woodcuts of the <em>Hypnerotomachia Poliphili</em></h1>
+        <p class="intro">The 1499 Aldine first edition contains approximately 172 woodcut illustrations &mdash;
+        the most ambitious visual program of any incunabulum. Their designer remains unidentified,
+        though Benedetto Bordon is the most widely proposed candidate. The woodcuts integrate text and
+        image with unprecedented sophistication, each composition calibrated to its surrounding typography.
+        Images are from the 1499 first edition (University of Seville copy, via Internet Archive).</p>
+
+        <div class="wc-filters">{filter_buttons}</div>
+
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem">
+            Showing {len(woodcuts)} woodcuts &middot; {with_images} with facsimile images</p>
+
         <div class="woodcut-grid">{cards_html}</div>
     </div>"""
 
-    index_page = page_shell('Woodcuts', index_body, active_nav='woodcuts',
-                             extra_css=wc_css, depth=1)
+    index_page = page_shell('Woodcuts &mdash; Hypnerotomachia Poliphili', index_body,
+                             active_nav='woodcuts', extra_css=wc_css,
+                             extra_js=filter_js, depth=1)
     (wc_dir / 'index.html').write_text(index_page, encoding='utf-8')
-    print(f"  woodcuts/index.html + {len(woodcuts)} woodcut pages")
+    print(f"  woodcuts/index.html + {len(woodcuts)} woodcut pages ({with_images} with images)")
 
 
 # ============================================================
@@ -2933,177 +3063,133 @@ def build_the_book_page():
 # ============================================================
 
 def build_digital_edition_page(conn):
-    """Generate digital-edition.html as an honest editorial prospectus."""
+    """Generate digital-edition.html — editions of the Hypnerotomachia Poliphili."""
     cur = conn.cursor()
 
-    # Gather current state stats
-    cur.execute("SELECT COUNT(*) FROM dictionary_terms")
-    dict_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM bibliography")
-    bib_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM scholars")
-    scholar_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM matches")
-    match_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM images")
-    img_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM signature_map")
-    sig_count = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM annotator_hands")
-    hand_count = cur.fetchone()[0]
+    # Load editions data
+    cur.execute("""
+        SELECT id, title, year, city, printer_publisher, translator,
+               language, edition_type, description, significance,
+               woodcut_info, digital_facsimile_url, worldcat_url,
+               extant_copies, slug
+        FROM editions ORDER BY year
+    """)
+    editions = cur.fetchall()
+
+    type_labels = {
+        'FIRST_EDITION': 'First Edition',
+        'REPRINT': 'Reprint',
+        'TRANSLATION': 'Translation',
+        'ADAPTATION': 'Adaptation',
+        'FACSIMILE': 'Facsimile',
+        'CRITICAL_EDITION': 'Critical Edition',
+        'MODERN_TRANSLATION': 'Modern Translation',
+    }
+    type_colors = {
+        'FIRST_EDITION': '#8b5cf6',
+        'REPRINT': '#6366f1',
+        'TRANSLATION': '#3b82f6',
+        'ADAPTATION': '#ef4444',
+        'CRITICAL_EDITION': '#10b981',
+        'MODERN_TRANSLATION': '#f59e0b',
+    }
 
     edition_css = '<style>' + """
-        .edition-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
-        .edition-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-        .edition-page h3 { margin: 1.5rem 0 0.5rem; }
-        .edition-page p { line-height: 1.8; margin-bottom: 1rem; }
-        .edition-page .status-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0; font-size: 0.9rem; }
-        .edition-page .status-icon { font-weight: bold; }
-        .edition-page .status-done { color: #155724; }
-        .edition-page .status-partial { color: #856404; }
-        .edition-page .status-planned { color: var(--text-muted); }
-        .edition-page .status-blocked { color: #721c24; }
-        .edition-page .roadmap-phase { margin: 1rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
-        .edition-page .roadmap-phase h4 { margin: 0 0 0.5rem 0; }
-        .edition-page .roadmap-phase p { margin: 0; font-size: 0.9rem; }
-        .edition-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+        .editions-page { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+        .editions-page h1 { color: var(--accent); font-size: 1.8rem; }
+        .editions-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 2rem; color: var(--text-muted); }
+        .edition-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+                        padding: 1.5rem; margin-bottom: 1.5rem; transition: box-shadow 0.2s; }
+        .edition-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .edition-card h3 { margin: 0 0 0.5rem; color: var(--text); font-size: 1.1rem; }
+        .edition-card .ed-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;
+                                  font-family: var(--font-sans); }
+        .edition-card .ed-type { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px;
+                                  font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+                                  color: white; margin-right: 0.5rem; }
+        .edition-card p { line-height: 1.7; margin: 0.5rem 0; font-size: 0.92rem; }
+        .edition-card .ed-significance { border-top: 1px solid var(--border); padding-top: 0.75rem;
+                                          margin-top: 0.75rem; }
+        .edition-card .ed-significance strong { color: var(--accent); }
+        .edition-card .ed-woodcuts { font-size: 0.85rem; color: var(--text-muted); font-style: italic;
+                                      margin-top: 0.5rem; }
+        .edition-card .ed-links { margin-top: 0.75rem; }
+        .edition-card .ed-links a { display: inline-block; margin-right: 0.75rem; padding: 0.3rem 0.7rem;
+                                     background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+                                     font-size: 0.8rem; color: var(--accent); text-decoration: none; }
+        .edition-card .ed-links a:hover { border-color: var(--accent); background: var(--accent); color: white; }
+        .editions-timeline { position: relative; padding-left: 2rem; }
+        .editions-timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0;
+                                      width: 2px; background: var(--border); }
+        .edition-card::before { content: ''; position: absolute; left: -1.55rem; top: 1.5rem;
+                                 width: 10px; height: 10px; border-radius: 50%;
+                                 background: var(--accent); border: 2px solid var(--bg); }
+        .edition-card { position: relative; }
     """ + '</style>'
 
+    # Build edition cards
+    cards = ''
+    for ed in editions:
+        (eid, title, year, city, printer, translator, lang, etype,
+         desc, significance, woodcuts_info, facsimile_url, worldcat_url,
+         extant, slug) = ed
+
+        color = type_colors.get(etype, '#6b7280')
+        type_label = type_labels.get(etype, etype or '')
+        type_badge = f'<span class="ed-type" style="background:{color}">{type_label}</span>'
+
+        meta_parts = [str(year)]
+        if city:
+            meta_parts.append(escape(city))
+        if printer:
+            meta_parts.append(escape(printer))
+
+        translator_line = f'<br>Translator: {escape(translator)}' if translator else ''
+        lang_line = f' &middot; {escape(lang)}' if lang else ''
+
+        desc_html = f'<p>{escape(desc)}</p>' if desc else ''
+        sig_html = f'<div class="ed-significance"><strong>Significance:</strong> {escape(significance)}</div>' if significance else ''
+        wc_html = f'<p class="ed-woodcuts">{escape(woodcuts_info)}</p>' if woodcuts_info else ''
+        extant_html = f' &middot; {extant} extant copies' if extant else ''
+
+        links = ''
+        link_parts = []
+        if facsimile_url:
+            link_parts.append(f'<a href="{escape(facsimile_url)}" target="_blank">Digital Facsimile &rarr;</a>')
+        if worldcat_url:
+            link_parts.append(f'<a href="{escape(worldcat_url)}" target="_blank">WorldCat &rarr;</a>')
+        if link_parts:
+            links = f'<div class="ed-links">{"".join(link_parts)}</div>'
+
+        cards += f"""
+        <div class="edition-card">
+            <h3>{escape(title)}</h3>
+            <div class="ed-meta">{type_badge} {" &middot; ".join(meta_parts)}{lang_line}{extant_html}{translator_line}</div>
+            {desc_html}
+            {sig_html}
+            {wc_html}
+            {links}
+        </div>"""
+
     body = f"""
-    <div class="edition-page">
+    <div class="editions-page">
         <p><a href="index.html">&larr; Home</a></p>
+        <h1>Editions of the <em>Hypnerotomachia Poliphili</em></h1>
+        <p class="intro">From its first printing by Aldus Manutius in 1499 to Joscelyn Godwin's
+        complete English translation exactly five centuries later, the <em>Hypnerotomachia Poliphili</em>
+        has been published, translated, adapted, and reinterpreted across languages, centuries, and
+        intellectual traditions. Each edition reflects the concerns of its moment: humanist philology
+        in 1499, Mannerist aesthetics in 1546, alchemical hermeneutics in 1600, and scholarly
+        archaeology from 1980 onward.</p>
 
-        <h1>Digital Edition: Editorial Prospectus</h1>
-        <p class="evidence-note">This page describes the vision, current state, and roadmap for a
-        comprehensive digital edition of the <em>Hypnerotomachia Poliphili</em>. It is not a
-        finished edition. It is a statement of intent, a map of what exists, and an honest
-        accounting of what remains to be built.</p>
-
-        <h2 id="vision">What This Edition Will Include</h2>
-        <p>The eventual digital edition aims to provide:</p>
-        <ul>
-            <li><strong>Facsimile browsing:</strong> Page-by-page viewing of manuscript photographs
-            from multiple copies, with folio-level navigation via the signature map.</li>
-            <li><strong>Transcription:</strong> Diplomatic transcription of the 1499 text, linked
-            to facsimile images at the folio level.</li>
-            <li><strong>Translation witnesses:</strong> Parallel display of the 1499 Italian,
-            Godwin's 1999 English translation, and the 1546 French adaptation.</li>
-            <li><strong>Folio-level commentary:</strong> Annotation layers showing marginalia
-            transcriptions, hand attributions, and interpretive notes.</li>
-            <li><strong>Marginalia overlays:</strong> Visual overlays highlighting annotated
-            passages on manuscript images, linked to the commentary apparatus.</li>
-            <li><strong>Dictionary cross-links:</strong> Inline links from edition text to the
-            dictionary of HP-specific terminology.</li>
-            <li><strong>Bibliography integration:</strong> Citation links from commentary to the
-            bibliography, enabling readers to trace scholarly arguments to their sources.</li>
-            <li><strong>Copy comparison:</strong> Side-by-side viewing of the same folio across
-            different annotated copies, showing how different readers engaged with the same
-            passages.</li>
-        </ul>
-
-        <h2 id="current-state">What Is Already Built</h2>
-        <div class="status-grid">
-            <span class="status-icon status-done">[done]</span>
-            <span>Signature map ({sig_count} entries, deterministic from 1499 collation)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Image catalog ({img_count} photographs from 2 manuscripts)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Dissertation reference extraction ({match_count} matches)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Hand attribution ({hand_count} annotator hands identified)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Dictionary ({dict_count} terms with corpus evidence)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Bibliography ({bib_count} works) and scholar profiles ({scholar_count})</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Marginalia gallery with confidence scoring</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Corpus search infrastructure (PDF-to-markdown, chunking, search)</span>
+        <div class="editions-timeline">
+            {cards}
         </div>
-
-        <h2 id="provisional">What Remains Provisional</h2>
-        <ul>
-            <li>All BL C.60.o.12 image-to-folio matches are LOW confidence (sequential photo numbers
-            assumed to equal folio numbers; unverified)</li>
-            <li>Scholar summaries and dictionary definitions were generated with LLM assistance and
-            are marked DRAFT; they have not been verified by domain experts</li>
-            <li>Hand attributions beyond Russell's thesis data are inferred, not verified</li>
-            <li>No transcription of the HP text itself exists in this project yet</li>
-            <li>No translation texts are integrated</li>
-        </ul>
-
-        <h2 id="roadmap">Phased Roadmap</h2>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-partial">[partial]</span> Phase 1: Data Foundation</h4>
-            <p>Build the concordance pipeline, image catalog, signature map, and reference extraction.
-            <strong>Status:</strong> Complete for Siena; BL matches provisional.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-partial">[partial]</span> Phase 2: Scholarly Apparatus</h4>
-            <p>Dictionary, bibliography, scholar profiles, hand attribution, corpus search.
-            <strong>Status:</strong> Substantially built; entries at DRAFT status pending expert review.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 3: Image Hosting</h4>
-            <p>Host manuscript photographs at sufficient resolution for scholarly use. Requires:
-            institutional permission for BL images; storage solution for 674+ high-resolution photographs;
-            IIIF-compatible image serving if feasible.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 4: Transcription</h4>
-            <p>Create or integrate a diplomatic transcription of the 1499 text. Could begin with
-            OCR of the Da Capo edition, validated against facsimile images. Requires: careful
-            handling of the HP's unusual orthography and embedded hieroglyphs.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 5: Translation Integration</h4>
-            <p>Align existing English translation (Godwin 1999) and French adaptation (1546) at
-            the folio level. Requires: copyright clearance or use of public-domain translations.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-blocked">[blocked]</span> Phase 6: Multimodal Validation</h4>
-            <p>Use computer vision to verify BL photograph-to-folio mappings by reading visible
-            signature marks in images. Requires: high-resolution images and vision model access.
-            See the <a href="docs/multimodal-rag-study.html">Multimodal RAG Study</a> for analysis.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 7: Commentary &amp; Overlays</h4>
-            <p>Build folio-level commentary with marginalia overlays, cross-linked to dictionary
-            and bibliography. Requires: verified image matches, transcribed annotations, and
-            editorial review infrastructure.</p>
-        </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 8: Copy Comparison</h4>
-            <p>Enable side-by-side comparison of the same folio across different annotated copies.
-            Requires: all preceding phases substantially complete, plus a viewer capable of
-            synchronized scrolling across manuscript images.</p>
-        </div>
-
-        <h2 id="limitations">Current Limitations</h2>
-        <ul>
-            <li>This project has no independent transcription of the HP text</li>
-            <li>Manuscript images are stored locally and not hosted for web viewing at scale</li>
-            <li>The editorial review process is informal and has no structured workflow</li>
-            <li>The 1545/1499 edition difference for the BL copy is unresolved</li>
-            <li>No institutional collaboration or peer review is currently in place</li>
-        </ul>
-
-        <div class="evidence-note">This prospectus was generated from the project's SQLite database
-        and reflects the current state of the data as of the most recent build. It will be updated
-        as the project progresses.</div>
     </div>"""
 
-    page = page_shell('Digital Edition', body, active_nav='edition', extra_css=edition_css)
+    page = page_shell('Editions', body, active_nav='edition', extra_css=edition_css)
     (SITE_DIR / 'digital-edition.html').write_text(page, encoding='utf-8')
-    print("  digital-edition.html")
+    print(f"  digital-edition.html ({len(editions)} editions)")
 
 
 # ============================================================

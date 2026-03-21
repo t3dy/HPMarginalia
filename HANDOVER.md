@@ -1,7 +1,8 @@
 # HANDOVER: HP Marginalia Project — Session Continuation Brief
 
 > Paste this at the top of a new Claude Code session to continue work.
-> Generated 2026-03-20. Working tree: clean. All changes pushed to main.
+> Last updated: 2026-03-20 (after Phase 0+1 completion).
+> IMPORTANT: Also read PHASESTATUS.md for current phase status and next steps.
 
 ---
 
@@ -22,11 +23,11 @@ Python scripts → static HTML/CSS/JS. Deployed to GitHub Pages.
 ## Architecture (read SYSTEM.md for full details)
 
 ```
-db/hp.db (23 tables, 3223 rows)
+db/hp.db (24 tables, schema v3, ~3500 rows)
     ↓
-scripts/ (42 Python scripts)
+scripts/ (47 Python scripts)
     ↓
-site/ (9 top-level pages + 223 subpages = 232 total HTML pages)
+site/ (9 top-level pages + 356 subpages = 365 total HTML pages)
     deployed to GitHub Pages via git push
 ```
 
@@ -41,7 +42,8 @@ No frameworks. No server. No dependencies beyond Python standard library.
 | File | What It Covers |
 |------|---------------|
 | **SYSTEM.md** | Architecture, data flow, operating modes, provenance model |
-| **ONTOLOGY.md** | All 23 tables, relationships, canonical vs deprecated |
+| **ONTOLOGY.md** | All 24 tables, relationships, canonical vs deprecated |
+| **PHASESTATUS.md** | Current phase completion, risks, next steps, warning rules |
 | **PIPELINE.md** | Every script in execution order |
 | **INTERFACE.md** | What's on the site, page builders, nav structure |
 | **ROADMAP.md** | What's BUILT, READY, BLOCKED, SPECULATIVE |
@@ -55,12 +57,13 @@ No frameworks. No server. No dependencies beyond Python standard library.
 | annotations | 282 | CANONICAL. 204 attributed to hands (72%). 6 types classified. |
 | annotator_hands | 11 | Complete. All hands documented. |
 | matches | 431 | 48 HIGH + 383 MEDIUM. 0 LOW. 34 refs unmatched (structural). |
-| images | 674 | 196 BL + 478 Siena. All compressed and deployed. |
+| images | 674 | 196 BL + 478 Siena. Has master_path (originals) + web_path (compressed). |
+| image_readings | 219 | 30 historical (phase 0) + 189 Phase 1 BL ground truth. 60 woodcuts detected. BL offset confirmed 174/174. |
 | dictionary_terms | 94 | All DRAFT. All have definitions + significance prose. |
 | bibliography | 109 | All UNREVIEWED. 0 "Unknown" authors. |
 | scholars | 60 | 59 have overview prose. All DRAFT. |
 | timeline_events | 71 | Complete. Filterable on site. |
-| woodcuts | 18 | 18 of ~172 cataloged (BL photos cover 38% of book). |
+| woodcuts | 18 | 18 cataloged. 60 detected by Phase 1 vision reading (pending promotion). |
 | folio_descriptions | 13 | All alchemist-annotated folios described. |
 | alchemical_symbols | 10 | Complete for Russell's documented symbols. |
 | symbol_occurrences | 26 | 9 BL Hand B + 4 Buffalo Hand E + 13 other. |
@@ -72,8 +75,8 @@ No frameworks. No server. No dependencies beyond Python standard library.
 - `doc_folio_refs` (282) → replaced by `annotations`
 - `annotators` (11) → replaced by `annotator_hands`
 
-**Known issue:** `build_site.py` still queries `dissertation_refs` for
-marginalia pages instead of `annotations`. This is ROADMAP Priority 1.
+**RESOLVED:** `build_site.py` now queries `annotations` (not `dissertation_refs`)
+for all display. Annotation type badges show on marginalia pages. (HP320a, 2026-03-20.)
 
 ---
 
@@ -112,12 +115,19 @@ Scholars, Timeline, About, Docs/Code
 
 ---
 
-## What Was Done This Session
+## What Was Done Most Recently (HP320 session, 2026-03-20)
 
-1. Gallery card redesign — added hand attribution labels, folio descriptions,
-   better CSS hierarchy for each card
-2. WEBSITEGLITCHES2.md — documented CSS caching, stale 404s, invisible descriptions
-3. STATEOFTHEONTOLOGIES.md — complete snapshot of all 5 ontological domains
+1. **HP320a: Annotations migration** — build_site.py switched from
+   dissertation_refs to annotations. Annotation type badges on marginalia pages.
+2. **Image path correction** — Added master_path/web_path to images table.
+   Diagnosed in IMAGECONFUSION.md.
+3. **Phase 0: Infrastructure** — image_readings table, schema v3 migration,
+   image_utils.py, staging directories, 30 historical readings backfilled.
+4. **Phase 1: Visual Ground Truth** — All 189 sequential BL photos read
+   via Claude Code native vision. BL offset confirmed 174/174. 60 woodcuts
+   detected. All results in image_readings (phase=1) + staging JSON files.
+5. **Core doc updates** — PHASESTATUS.md created. All 5 core docs + HANDOVER
+   updated to reflect current state.
 
 ---
 
@@ -125,22 +135,12 @@ Scholars, Timeline, About, Docs/Code
 
 ### READY — Priority Order
 
-1. **Switch marginalia pages from dissertation_refs → annotations table**
-   - Update `build_marginalia_pages()` in `build_site.py`
-   - Display `annotation_type` as primary classification
-   - 30 minutes effort
-
-2. **Add coverage caveats** — state that images exist for 2 of 6 copies
-   - Update about.html and concordance-method.html
-   - 15 minutes effort
-
-3. **Read remaining ~120 BL photographs** — expand woodcut inventory from 18 to ~45
-   - 2 hours of image reading
-   - Uses Verification Mode (SYSTEM.md)
-
-4. **Add annotation type filtering** to marginalia index
-   - Filter buttons like timeline page
-   - 30 minutes effort
+1. ~~Switch marginalia pages from dissertation_refs → annotations~~ **DONE (HP320a)**
+2. **Add coverage caveats** — state that images exist for 2 of 6 copies — 15 min
+3. ~~Read remaining BL photographs~~ **DONE (Phase 1: 189/189, 60 woodcuts found)**
+4. **Add annotation type filtering** to marginalia index — 30 min
+5. **Phase 2: Coverage Mapping** — annotation density for all BL photos
+6. **Woodcut promotion** — review 60 detected woodcuts, promote to canonical table
 
 ### From WRITINGPLAN.md — Writing Improvements
 
@@ -169,9 +169,9 @@ The user had a large 8-phase prompt for site hardening. What's been done:
 1. **All 94 dictionary entries are DRAFT** — no human review done
 2. **All 60 scholar overviews are DRAFT** — no human review done
 3. **78 annotations (28%) have no hand attribution**
-4. **2 PROVISIONAL alchemical sites (c5v, h8r)** found by image reading, not yet in symbol_occurrences
+4. **3 PROVISIONAL alchemical sites (c5v, h8r, page 127 "Synostra Gloria mundi")** — found by image reading, not yet in symbol_occurrences
 5. **matches.ref_id points to dissertation_refs.id**, not annotations.id
-6. **~154 woodcuts uncataloged** (BL photos cover only 38% of the book)
+6. **60 woodcuts detected** by Phase 1 but only 18 in canonical woodcuts table — promotion needed
 7. **4 copies have no photographs** (Buffalo, Vatican, Cambridge, Modena)
 8. **bibliography entries all UNREVIEWED**
 9. **The user has writing in progress in another window** — check for updates before modifying content pages
@@ -182,13 +182,16 @@ The user had a large 8-phase prompt for site hardening. What's been done:
 
 | Script | Purpose |
 |--------|---------|
-| `build_site.py` | Main site builder — generates all 232 pages |
+| `build_site.py` | Main site builder — generates all 365 pages |
 | `validate.py` | Runs all validation checks |
+| `read_images.py` | Phase 1 image reading pipeline (--ingest, --status, --list) |
+| `image_utils.py` | Shared path validation (master vs web enforcement) |
+| `migrate_v3_image_reading.py` | Schema v3 migration (image_readings + CHECK expansions) |
+| `backfill_previous_readings.py` | Import 30 historical readings into image_readings |
+| `catalog_images.py` | Catalog images with master_path + web_path |
 | `corpus_search.py` | Search markdown/chunks for evidence passages |
-| `build_reading_packets.py` | Generate structured reading packets for terms |
-| `dictionary_audit.py` | Check dictionary coverage, duplicates, missing fields |
 | `rebuild_bl_matches.py` | Rebuild BL concordance matches (uses offset=13) |
-| `compress_images.py` | Compress images for GitHub Pages deployment |
+| `compress_images.py` | Compress master images → web derivatives |
 | `export_showcase_data.py` | Generate data.json for the gallery |
 
 ---
@@ -202,6 +205,9 @@ The user had a large 8-phase prompt for site hardening. What's been done:
 - No frameworks — keep the static site architecture
 - BL concordance claims default to PROVISIONAL unless evidence is stronger
 - Canonical tables only: annotations (not dissertation_refs), annotator_hands (not annotators)
+- Image analysis uses master_path ONLY — never site/images/ (call assert_not_web_derivative)
+- Vision outputs go to image_readings first, never directly to canonical tables
+- Check PHASESTATUS.md before starting any new phase
 
 ---
 

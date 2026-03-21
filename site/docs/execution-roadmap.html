@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,7 +24,7 @@
             <p><a href="index.html">&larr; All Documents</a></p>
             <h2>Execution Roadmap</h2>
             <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
-                ROADMAP.md &mdash; 498 words</p>
+                ROADMAP.md &mdash; 557 words</p>
             <h2>ROADMAP: Execution Tasks Only</h2>
 
 <blockquote>No speculative features. Every item is either BUILT, READY (can execute</blockquote>
@@ -35,41 +35,47 @@
 
 <ul>
 <li>[x] Concordance pipeline (282 refs → 431 matches, 0 LOW)</li>
-<li>[x] BL offset correction (=13, verified at 27 points)</li>
+<li>[x] BL offset correction (=13, verified at 174/174 readable pages by Phase 1)</li>
 <li>[x] Dictionary (94 terms, 15 categories, all with significance prose)</li>
 <li>[x] Scholars (60 pages, 59 overviews, 11 historical figures)</li>
 <li>[x] Bibliography (109 entries)</li>
 <li>[x] Timeline (71 events, filterable)</li>
 <li>[x] Manuscripts (6 copies with hand profiles)</li>
-<li>[x] Woodcuts (18 pages with descriptions)</li>
+<li>[x] Woodcuts (18 in canonical table; 60 detected by Phase 1 vision reading)</li>
 <li>[x] Alchemical symbols (10 symbols, 26 occurrences)</li>
 <li>[x] Annotation classification (282 annotations, 6 types)</li>
 <li>[x] Russell essay + Concordance essay</li>
 <li>[x] Digital edition stub</li>
-<li>[x] 14-tab navigation across 354 pages</li>
+<li>[x] 14-tab navigation across 365 pages</li>
+<li>[x] Annotations migration (build_site.py uses annotations, not dissertation_refs)</li>
+<li>[x] Image path correction (master_path + web_path on all 674 images)</li>
+<li>[x] Phase 0 infrastructure (image_readings table, schema v3, image_utils.py)</li>
+<li>[x] Phase 1 BL ground truth (189/189 photos read, 60 woodcuts, offset confirmed)</li>
 <li>[x] Documentation consolidation (5 core docs)</li>
 </ul>
 
 <h3>READY (can execute now, no new research needed)</h3>
 
-<h4>Priority 1: Switch marginalia pages to annotations table</h4>
-<p><strong>What:</strong> Update <code>build_marginalia_pages()</code> to query <code>annotations</code> instead of</p>
-<p><code>dissertation_refs</code>. Display annotation_type as primary classification.</p>
-<p><strong>Why:</strong> The annotations table has richer data (6 types, consolidated hand attribution)</p>
-<p>but the page builder still uses the deprecated table.</p>
-<p><strong>Effort:</strong> 30 minutes.</p>
+<h4>~~Priority 1: Switch marginalia pages to annotations table~~ DONE (HP320a)</h4>
 
-<h4>Priority 2: Add coverage caveats to site</h4>
+<h4>Priority 1 (new): Add coverage caveats to site</h4>
 <p><strong>What:</strong> Update about.html and concordance-method.html to state clearly that</p>
 <p>image matches exist for 2 of 6 copies, and that 4 copies have text-only evidence.</p>
 <p><strong>Effort:</strong> 15 minutes.</p>
 
-<h4>Priority 3: Read remaining BL photographs</h4>
-<p><strong>What:</strong> Read ~120 unread BL text pages to complete woodcut inventory and</p>
-<p>annotation density map. Expand from 18 to ~45 detected woodcuts.</p>
-<p><strong>Why:</strong> The 18 woodcuts found from 69 pages represent a 26% detection rate.</p>
-<p>Full coverage would roughly triple the woodcut inventory.</p>
-<p><strong>Effort:</strong> 2 hours of image reading.</p>
+<h4>~~Priority 3: Read remaining BL photographs~~ DONE (Phase 1)</h4>
+<p>All 189 sequential BL photos read. 60 woodcuts detected. See PHASESTATUS.md.</p>
+
+<h4>Priority 2 (new): Phase 2 Coverage Mapping</h4>
+<p><strong>What:</strong> Classify annotation density (LIGHT/MODERATE/HEAVY) for all 189 BL</p>
+<p>photos. Map annotation locations and languages.</p>
+<p><strong>Why:</strong> Identifies targets for Phase 3 deep reading.</p>
+<p><strong>Effort:</strong> ~2 hours (same Claude Code vision workflow as Phase 1).</p>
+
+<h4>Priority 3 (new): Woodcut Promotion</h4>
+<p><strong>What:</strong> Review 60 detected woodcuts, promote qualifying entries to canonical</p>
+<p><code>woodcuts</code> table via promote_reading.py (to be built).</p>
+<p><strong>Effort:</strong> 1 hour (build script) + review time.</p>
 
 <h4>Priority 4: Add annotation type filtering to marginalia index</h4>
 <p><strong>What:</strong> Add filter buttons (like timeline) to marginalia/index.html so</p>

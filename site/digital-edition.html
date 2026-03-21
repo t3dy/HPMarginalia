@@ -3,26 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Edition - Alchemical Hands in the Hypnerotomachia Poliphili</title>
+    <title>Editions - Alchemical Hands in the Hypnerotomachia Poliphili</title>
     <meta name="description" content="Alchemical hands in the marginalia of the Hypnerotomachia Poliphili (Venice, 1499). A digital scholarship platform based on James Russell's PhD thesis.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="scholars.css">
     <link rel="stylesheet" href="components.css">
     <style>
-        .edition-page { max-width: 850px; margin: 2rem auto; padding: 0 2rem; }
-        .edition-page h2 { color: var(--accent); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-        .edition-page h3 { margin: 1.5rem 0 0.5rem; }
-        .edition-page p { line-height: 1.8; margin-bottom: 1rem; }
-        .edition-page .status-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0; font-size: 0.9rem; }
-        .edition-page .status-icon { font-weight: bold; }
-        .edition-page .status-done { color: #155724; }
-        .edition-page .status-partial { color: #856404; }
-        .edition-page .status-planned { color: var(--text-muted); }
-        .edition-page .status-blocked { color: #721c24; }
-        .edition-page .roadmap-phase { margin: 1rem 0; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; }
-        .edition-page .roadmap-phase h4 { margin: 0 0 0.5rem 0; }
-        .edition-page .roadmap-phase p { margin: 0; font-size: 0.9rem; }
-        .edition-page .evidence-note { background: var(--bg-card); padding: 0.5rem 1rem; border-left: 3px solid var(--accent); margin: 1rem 0; font-size: 0.85rem; color: var(--text-muted); }
+        .editions-page { max-width: 1000px; margin: 2rem auto; padding: 0 2rem; }
+        .editions-page h1 { color: var(--accent); font-size: 1.8rem; }
+        .editions-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 2rem; color: var(--text-muted); }
+        .edition-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+                        padding: 1.5rem; margin-bottom: 1.5rem; transition: box-shadow 0.2s; }
+        .edition-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .edition-card h3 { margin: 0 0 0.5rem; color: var(--text); font-size: 1.1rem; }
+        .edition-card .ed-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;
+                                  font-family: var(--font-sans); }
+        .edition-card .ed-type { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px;
+                                  font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+                                  color: white; margin-right: 0.5rem; }
+        .edition-card p { line-height: 1.7; margin: 0.5rem 0; font-size: 0.92rem; }
+        .edition-card .ed-significance { border-top: 1px solid var(--border); padding-top: 0.75rem;
+                                          margin-top: 0.75rem; }
+        .edition-card .ed-significance strong { color: var(--accent); }
+        .edition-card .ed-woodcuts { font-size: 0.85rem; color: var(--text-muted); font-style: italic;
+                                      margin-top: 0.5rem; }
+        .edition-card .ed-links { margin-top: 0.75rem; }
+        .edition-card .ed-links a { display: inline-block; margin-right: 0.75rem; padding: 0.3rem 0.7rem;
+                                     background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+                                     font-size: 0.8rem; color: var(--accent); text-decoration: none; }
+        .edition-card .ed-links a:hover { border-color: var(--accent); background: var(--accent); color: white; }
+        .editions-timeline { position: relative; padding-left: 2rem; }
+        .editions-timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0;
+                                      width: 2px; background: var(--border); }
+        .edition-card::before { content: ''; position: absolute; left: -1.55rem; top: 1.5rem;
+                                 width: 10px; height: 10px; border-radius: 50%;
+                                 background: var(--accent); border: 2px solid var(--bg); }
+        .edition-card { position: relative; }
     </style>
 </head>
 <body>
@@ -30,140 +46,88 @@
         <div class="header-content">
             <h1><a href="index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="the-book.html">The Book</a><a href="timeline.html">Timeline</a><a href="woodcuts/index.html">Woodcuts</a><a href="manuscripts/index.html">Manuscripts</a><a href="digital-edition.html" class="active">Edition</a><a href="russell-alchemical-hands.html">Alchemical Hands</a><a href="concordance-method.html">Concordance</a><a href="about.html">About</a></nav>
+            <nav class="site-nav"><a href="index.html">Home</a><a href="marginalia/index.html">Marginalia</a><a href="scholars.html">Scholars</a><a href="bibliography.html">Bibliography</a><a href="dictionary/index.html">Dictionary</a><a href="docs/index.html">Docs</a><a href="code/index.html">Code</a><a href="the-book.html">The Book</a><a href="timeline.html">Timeline</a><a href="woodcuts/index.html">Woodcuts</a><a href="manuscripts/index.html">Manuscripts</a><a href="digital-edition.html" class="active">Editions</a><a href="russell-alchemical-hands.html">Alchemical Hands</a><a href="concordance-method.html">Concordance</a><a href="about.html">About</a></nav>
         </div>
     </header>
     <main>
 
-    <div class="edition-page">
+    <div class="editions-page">
         <p><a href="index.html">&larr; Home</a></p>
+        <h1>Editions of the <em>Hypnerotomachia Poliphili</em></h1>
+        <p class="intro">From its first printing by Aldus Manutius in 1499 to Joscelyn Godwin's
+        complete English translation exactly five centuries later, the <em>Hypnerotomachia Poliphili</em>
+        has been published, translated, adapted, and reinterpreted across languages, centuries, and
+        intellectual traditions. Each edition reflects the concerns of its moment: humanist philology
+        in 1499, Mannerist aesthetics in 1546, alchemical hermeneutics in 1600, and scholarly
+        archaeology from 1980 onward.</p>
 
-        <h1>Digital Edition: Editorial Prospectus</h1>
-        <p class="evidence-note">This page describes the vision, current state, and roadmap for a
-        comprehensive digital edition of the <em>Hypnerotomachia Poliphili</em>. It is not a
-        finished edition. It is a statement of intent, a map of what exists, and an honest
-        accounting of what remains to be built.</p>
-
-        <h2 id="vision">What This Edition Will Include</h2>
-        <p>The eventual digital edition aims to provide:</p>
-        <ul>
-            <li><strong>Facsimile browsing:</strong> Page-by-page viewing of manuscript photographs
-            from multiple copies, with folio-level navigation via the signature map.</li>
-            <li><strong>Transcription:</strong> Diplomatic transcription of the 1499 text, linked
-            to facsimile images at the folio level.</li>
-            <li><strong>Translation witnesses:</strong> Parallel display of the 1499 Italian,
-            Godwin's 1999 English translation, and the 1546 French adaptation.</li>
-            <li><strong>Folio-level commentary:</strong> Annotation layers showing marginalia
-            transcriptions, hand attributions, and interpretive notes.</li>
-            <li><strong>Marginalia overlays:</strong> Visual overlays highlighting annotated
-            passages on manuscript images, linked to the commentary apparatus.</li>
-            <li><strong>Dictionary cross-links:</strong> Inline links from edition text to the
-            dictionary of HP-specific terminology.</li>
-            <li><strong>Bibliography integration:</strong> Citation links from commentary to the
-            bibliography, enabling readers to trace scholarly arguments to their sources.</li>
-            <li><strong>Copy comparison:</strong> Side-by-side viewing of the same folio across
-            different annotated copies, showing how different readers engaged with the same
-            passages.</li>
-        </ul>
-
-        <h2 id="current-state">What Is Already Built</h2>
-        <div class="status-grid">
-            <span class="status-icon status-done">[done]</span>
-            <span>Signature map (448 entries, deterministic from 1499 collation)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Image catalog (674 photographs from 2 manuscripts)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Dissertation reference extraction (431 matches)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Hand attribution (11 annotator hands identified)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Dictionary (94 terms with corpus evidence)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Bibliography (109 works) and scholar profiles (60)</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Marginalia gallery with confidence scoring</span>
-            <span class="status-icon status-done">[done]</span>
-            <span>Corpus search infrastructure (PDF-to-markdown, chunking, search)</span>
+        <div class="editions-timeline">
+            
+        <div class="edition-card">
+            <h3>Hypnerotomachia Poliphili (Editio Princeps)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#8b5cf6">First Edition</span> 1499 &middot; Venice &middot; Aldus Manutius (Aldine Press) &middot; Italian (macaronic Latin-Italian hybrid) &middot; 267 extant copies</div>
+            <p>The first edition of the Hypnerotomachia Poliphili, published in December 1499 by Aldus Manutius. Commissioned by Leonardo Crasso, a Venetian nobleman. Contains 172 woodcut illustrations by an unidentified artist (Benedetto Bordon most widely proposed). Printed using Francesco Griffo&#x27;s Roman typeface, which set a new standard for Western typography.</p>
+            <div class="ed-significance"><strong>Significance:</strong> The most ambitious illustrated book of the incunable period. Contains the first instances of Arabic type in Europe. The harmonious integration of text and image was unprecedented and has never been surpassed in letterpress printing. 267 extant copies confirmed by James Russell&#x27;s census.</div>
+            <p class="ed-woodcuts">172 woodcut illustrations. Full-page and in-text woodcuts depicting architectural fantasies, allegorical scenes, hieroglyphic friezes, and the triumphal procession. The artist remains unidentified despite centuries of attribution debate.</p>
+            <div class="ed-links"><a href="https://archive.org/details/A336080v1" target="_blank">Digital Facsimile &rarr;</a></div>
         </div>
-
-        <h2 id="provisional">What Remains Provisional</h2>
-        <ul>
-            <li>All BL C.60.o.12 image-to-folio matches are LOW confidence (sequential photo numbers
-            assumed to equal folio numbers; unverified)</li>
-            <li>Scholar summaries and dictionary definitions were generated with LLM assistance and
-            are marked DRAFT; they have not been verified by domain experts</li>
-            <li>Hand attributions beyond Russell's thesis data are inferred, not verified</li>
-            <li>No transcription of the HP text itself exists in this project yet</li>
-            <li>No translation texts are integrated</li>
-        </ul>
-
-        <h2 id="roadmap">Phased Roadmap</h2>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-partial">[partial]</span> Phase 1: Data Foundation</h4>
-            <p>Build the concordance pipeline, image catalog, signature map, and reference extraction.
-            <strong>Status:</strong> Complete for Siena; BL matches provisional.</p>
+        <div class="edition-card">
+            <h3>Hypnerotomachia Poliphili (Second Italian Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#6366f1">Reprint</span> 1545 &middot; Venice &middot; Sons of Aldus (Paolo Manuzio) &middot; Italian</div>
+            <p>The second Italian edition, published by Aldus&#x27;s sons using the original 1499 woodblocks with updated typography. This is the edition owned by the British Library copy C.60.o.12, which contains the alchemical annotations studied by James Russell.</p>
+            <div class="ed-significance"><strong>Significance:</strong> Reuses the original 1499 woodblocks, demonstrating their durability. The BL copy of this edition (C.60.o.12) contains annotations by Ben Jonson (Hand A) and an anonymous alchemist (Hand B), making it one of the most important annotated copies for reception history.</div>
+            <p class="ed-woodcuts">Same 172 woodblocks as the 1499 edition, with some showing signs of wear. Typography updated to mid-16th century Aldine house style.</p>
+            <div class="ed-links"><a href="https://www.worldcat.org/title/hypnerotomachia-poliphili/oclc/58533211" target="_blank">WorldCat &rarr;</a></div>
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-partial">[partial]</span> Phase 2: Scholarly Apparatus</h4>
-            <p>Dictionary, bibliography, scholar profiles, hand attribution, corpus search.
-            <strong>Status:</strong> Substantially built; entries at DRAFT status pending expert review.</p>
+        <div class="edition-card">
+            <h3>Le Songe de Poliphile (First French Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#3b82f6">Translation</span> 1546 &middot; Paris &middot; Jacques Kerver &middot; French<br>Translator: Jean Martin</div>
+            <p>The first French translation by Jean Martin, published by Jacques Kerver in Paris. Features entirely new woodcuts in the Mannerist style, attributed to Jean Cousin the Elder. The translation adapts Colonna&#x27;s macaronic prose into elegant French, making the text accessible to a wider audience.</p>
+            <div class="ed-significance"><strong>Significance:</strong> Crucial for the HP&#x27;s influence on French architecture, garden design, and royal spectacle. The new Mannerist woodcuts by Jean Cousin reinterpret the Italian originals through a French aesthetic lens. Anthony Blunt documented the book&#x27;s influence on 17th-century French royal entries.</div>
+            <p class="ed-woodcuts">Entirely new set of woodcuts in the Mannerist style, attributed to Jean Cousin the Elder. These French woodcuts reinterpret rather than copy the 1499 Italian originals, offering a fascinating comparison between Italian and French visual culture.</p>
+            
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 3: Image Hosting</h4>
-            <p>Host manuscript photographs at sufficient resolution for scholarly use. Requires:
-            institutional permission for BL images; storage solution for 674+ high-resolution photographs;
-            IIIF-compatible image serving if feasible.</p>
+        <div class="edition-card">
+            <h3>The Strife of Love in a Dream (First English Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#3b82f6">Translation</span> 1592 &middot; London &middot; Simon Waterson &middot; English<br>Translator: R.D. (Robert Dallington)</div>
+            <p>The first English translation, published in London by Simon Waterson. A partial translation covering Book I only, attributed to &#x27;R.D.&#x27; (identified as Robert Dallington). The Elizabethan English rendering captures the dreamlike quality of the original.</p>
+            <div class="ed-significance"><strong>Significance:</strong> Made the HP accessible to English readers for the first time. Published during the height of the English Renaissance, when interest in Italian culture and classical antiquity was at its peak. Ben Jonson, who annotated the 1545 Italian edition (BL C.60.o.12), may have known this translation.</div>
+            
+            <div class="ed-links"><a href="https://archive.org/details/hypnerotomachiap00colo" target="_blank">Digital Facsimile &rarr;</a></div>
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 4: Transcription</h4>
-            <p>Create or integrate a diplomatic transcription of the 1499 text. Could begin with
-            OCR of the Da Capo edition, validated against facsimile images. Requires: careful
-            handling of the HP's unusual orthography and embedded hieroglyphs.</p>
+        <div class="edition-card">
+            <h3>Tableau des riches inventions (Alchemical Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#ef4444">Adaptation</span> 1600 &middot; Paris &middot; Matthieu Guillemot &middot; French<br>Translator: Beroalde de Verville</div>
+            <p>A radical reinterpretation by Beroalde de Verville that reads the HP explicitly as an alchemical allegory. Rather than a faithful translation, Beroalde restructures the narrative to foreground the alchemical symbolism, presenting the HP&#x27;s architectural journey as a map of the Great Work (opus magnum).</p>
+            <div class="ed-significance"><strong>Significance:</strong> The most important alchemical reading of the HP before the modern period. Beroalde&#x27;s interpretation established the tradition of reading Poliphilo&#x27;s journey as an alchemical process, a tradition that would continue through Hand B&#x27;s annotations in the BL copy and into modern scholarship. Connects the HP to the broader 17th-century vogue for alchemical emblem books.</div>
+            <p class="ed-woodcuts">Reuses and adapts earlier woodcut designs. The visual program is recontextualized through Beroalde&#x27;s alchemical hermeneutic.</p>
+            <div class="ed-links"><a href="http://architectura.cesr.univ-tours.fr/Traite/Notice/CESR_4023.asp?param=" target="_blank">Digital Facsimile &rarr;</a></div>
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 5: Translation Integration</h4>
-            <p>Align existing English translation (Godwin 1999) and French adaptation (1546) at
-            the folio level. Requires: copyright clearance or use of public-domain translations.</p>
+        <div class="edition-card">
+            <h3>Hypnerotomachia Poliphili (Pozzi &amp; Ciapponi Critical Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#10b981">Critical Edition</span> 1980 &middot; Padua &middot; Antenore &middot; Italian (with critical apparatus)</div>
+            <p>The first modern critical edition, edited by Giovanni Pozzi and Lucia A. Ciapponi. Established the scholarly framework for systematic study of the HP text.</p>
+            <div class="ed-significance"><strong>Significance:</strong> The foundational critical edition that enabled modern HP scholarship. Pozzi&#x27;s philological analysis of Colonna&#x27;s macaronic language remains authoritative.</div>
+            
+            
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-blocked">[blocked]</span> Phase 6: Multimodal Validation</h4>
-            <p>Use computer vision to verify BL photograph-to-folio mappings by reading visible
-            signature marks in images. Requires: high-resolution images and vision model access.
-            See the <a href="docs/multimodal-rag-study.html">Multimodal RAG Study</a> for analysis.</p>
+        <div class="edition-card">
+            <h3>Hypnerotomachia Poliphili (Ariani &amp; Gabriele Critical Edition)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#10b981">Critical Edition</span> 1998 &middot; Milan &middot; Adelphi &middot; Italian (with critical apparatus)</div>
+            <p>The standard modern Italian critical edition, edited by Marco Ariani and Mino Gabriele. Includes the complete original text with extensive philological notes, commentary, and scholarly apparatus.</p>
+            <div class="ed-significance"><strong>Significance:</strong> The definitive scholarly edition for Italian-language research. Supersedes the earlier Pozzi &amp; Ciapponi critical edition (Padua, 1980) in scope and commentary.</div>
+            
+            
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 7: Commentary &amp; Overlays</h4>
-            <p>Build folio-level commentary with marginalia overlays, cross-linked to dictionary
-            and bibliography. Requires: verified image matches, transcribed annotations, and
-            editorial review infrastructure.</p>
+        <div class="edition-card">
+            <h3>Hypnerotomachia Poliphili (Godwin Translation)</h3>
+            <div class="ed-meta"><span class="ed-type" style="background:#f59e0b">Modern Translation</span> 1999 &middot; London / New York &middot; Thames &amp; Hudson &middot; English<br>Translator: Joscelyn Godwin</div>
+            <p>The first complete English translation, published on the 500th anniversary of the original. Translated by Joscelyn Godwin with an introduction by Alberto Perez-Gomez. Set in the Poliphilus typeface (Monotype&#x27;s 1923 revival of Griffo&#x27;s original), creating a visual continuity with the 1499 edition.</p>
+            <div class="ed-significance"><strong>Significance:</strong> Made the complete HP available in English for the first time. Widely used as the standard scholarly reference translation. The Thames &amp; Hudson edition includes all 172 woodcuts and extensive notes. Published simultaneously with the 500th anniversary scholarly conferences.</div>
+            
+            
         </div>
-
-        <div class="roadmap-phase">
-            <h4><span class="status-icon status-planned">[planned]</span> Phase 8: Copy Comparison</h4>
-            <p>Enable side-by-side comparison of the same folio across different annotated copies.
-            Requires: all preceding phases substantially complete, plus a viewer capable of
-            synchronized scrolling across manuscript images.</p>
         </div>
-
-        <h2 id="limitations">Current Limitations</h2>
-        <ul>
-            <li>This project has no independent transcription of the HP text</li>
-            <li>Manuscript images are stored locally and not hosted for web viewing at scale</li>
-            <li>The editorial review process is informal and has no structured workflow</li>
-            <li>The 1545/1499 edition difference for the BL copy is unresolved</li>
-            <li>No institutional collaboration or peer review is currently in place</li>
-        </ul>
-
-        <div class="evidence-note">This prospectus was generated from the project's SQLite database
-        and reflects the current state of the data as of the most recent build. It will be updated
-        as the project progresses.</div>
     </div>
     </main>
     <footer>

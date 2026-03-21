@@ -21,6 +21,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"La narratione di Vlysse ad Alcinoe Omero nella Odysea libro.i. ma non fu Vlysse ...\""
     },
     {
@@ -44,6 +45,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"La narratione di Vlysse ad Alcinoe Omero nella Odysea libro.i. ma non fu Vlysse ...\""
     },
     {
@@ -67,6 +69,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Naturalis historia\""
     },
     {
@@ -90,6 +93,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Naturalis historia\""
     },
     {
@@ -113,6 +117,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"Un laboratorio filologico\""
     },
     {
@@ -136,6 +141,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "desc_title": "Dawn as Albedo: The Sun's First Emanation",
       "desc_text": "At the opening of Poliphilo's narrative, Hand B annotates the dawn scene with careful precision: 'Tempus ergo matutinum erat, sine diluculo, uel crepusculum' (It was the early morning, before dawn, or later in the evening). This is not mere translation. The annotator identifies the exact solar position -- the moment before the sun crests the horizon -- because in d'Espagnet's framework, the sun is the origin of the world spirit whose emanations are most potent at dawn. The passage heading is labeled 'AURORAE DESCRIPTIO' (Description of the Dawn). Hand B also notes the etymology of Leucothea: 'Leucos albus, candidus' -- white, bright -- connecting the dawn goddess to the alchemical stage of Albedo (whitening).",
       "alch_element": "Sol (Sun) and Albedo (whitening stage)",
@@ -162,6 +168,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -185,6 +192,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -208,6 +216,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -231,6 +240,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -254,6 +264,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Poliphilo incomincia Hypnerotomachia\""
     },
     {
@@ -277,6 +288,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Poliphilo incomincia Hypnerotomachia\""
     },
     {
@@ -300,6 +312,7 @@
       "hand_label": "A",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand A (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"Lover of Polia\""
     },
     {
@@ -323,6 +336,7 @@
       "hand_label": "A",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand A (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"Lover of Polia\""
     },
     {
@@ -346,6 +360,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"subderi\""
     },
     {
@@ -369,6 +384,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"subderi\""
     },
     {
@@ -392,6 +408,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "desc_title": "The HP as Alchemical Treatise",
       "desc_text": "Hand B recognized that the HP's own dedicatory letter mirrors the conventions of alchemical texts. The letter claims the book is written so that 'none but the most learned should be able to penetrate the inner sanctum of his teaching' -- language directly paralleling the alchemical tradition of deliberate obscurantism, where knowledge is veiled 'so that it might not come to the attention of the greedy and the insane.' For a reader steeped in the prisca sapientia (ancient wisdom), the HP's extreme linguistic difficulty was not a flaw but a guarantee of hidden knowledge. The more incomprehensible the text, the more ancient wisdom it was understood to contain.",
       "alch_element": "Prisca sapientia (ancient wisdom)",
@@ -418,6 +435,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Timore di Polifilo\""
     },
     {
@@ -441,6 +459,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Timore di Polifilo\""
     },
     {
@@ -464,6 +483,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Diuers coulered stones ¨ so glistering \nand seuerly set of a diligent Xesturgie ...\""
     },
     {
@@ -487,6 +507,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Diuers coulered stones ¨ so glistering \nand seuerly set of a diligent Xesturgie ...\""
     },
     {
@@ -510,6 +531,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Ethiopian woman\""
     },
     {
@@ -533,6 +555,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Ethiopian woman\""
     },
     {
@@ -556,6 +579,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -579,6 +603,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -602,6 +627,7 @@
       "hand_label": "A",
       "hand_attribution": "Ben Jonson",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "desc_title": "Jupiter's Titles: Planetary Hierarchy",
       "desc_text": "Hand B extracts Poliphilo's invocation to Jupiter, transcribing the god's divine titles into a hierarchical list on the flyleaf: 'O Diespiter, Maximo, Optimo, & Omnipotente & Opitulo...' Jupiter rules the higher, middle, and lower realms. In alchemical metals, Jupiter corresponds to tin. The annotator's interest in Jupiter's cosmic hierarchy maps onto the Hermetic principle 'as above, so below' -- the resonance between celestial order and material transformation that underpins all alchemical practice.",
       "alch_element": "Jupiter / Tin",
@@ -628,6 +654,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"buono Hebreo è Moyse, l\""
     },
     {
@@ -651,6 +678,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"buono Hebreo è Moyse, l\""
     },
     {
@@ -674,6 +702,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Leonardo\""
     },
     {
@@ -697,6 +726,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Leonardo\""
     },
     {
@@ -720,6 +750,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"much more agreeable region\""
     },
     {
@@ -743,6 +774,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis."
     },
     {
@@ -766,6 +798,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"Mercuriale Moly\""
     },
     {
@@ -789,6 +822,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"Mercuriale Moly\""
     },
     {
@@ -812,6 +846,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis."
     },
     {
@@ -835,6 +870,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis."
     },
     {
@@ -858,6 +894,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"The Poliphilo Syndrome: Love, Humanism, and the Infatuation of Historiography\""
     },
     {
@@ -881,6 +918,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"The Poliphilo Syndrome: Love, Humanism, and the Infatuation of Historiography\""
     },
     {
@@ -904,6 +942,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -927,6 +966,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -950,6 +990,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Il nobil Rauenate, nouella del Boccac. ottaua della quinta giornata\""
     },
     {
@@ -973,6 +1014,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Il nobil Rauenate, nouella del Boccac. ottaua della quinta giornata\""
     },
     {
@@ -996,6 +1038,7 @@
       "hand_label": "D",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand D in the Siena copy."
     },
     {
@@ -1019,6 +1062,7 @@
       "hand_label": "D",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand D in the Siena copy."
     },
     {
@@ -1042,6 +1086,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"sei stadij, dieci passi,\""
     },
     {
@@ -1065,6 +1110,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"sei stadij, dieci passi,\""
     },
     {
@@ -1088,6 +1134,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"glaceosa\""
     },
     {
@@ -1111,6 +1158,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary in the Siena copy. Russell records the marginal note: \"reverse engineering\""
     },
     {
@@ -1134,6 +1182,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Of Hiram, [mention is made] in the first book of Kings, Chapter 7\""
     },
     {
@@ -1157,6 +1206,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Of Hiram, [mention is made] in the first book of Kings, Chapter 7\""
     },
     {
@@ -1180,6 +1230,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"obsidie\""
     },
     {
@@ -1203,6 +1254,7 @@
       "hand_label": "A",
       "hand_attribution": "Ben Jonson",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand A (Ben Jonson) in the BL copy. Russell records the marginal note: \"Equus \nInfoelicitatis\""
     },
     {
@@ -1226,6 +1278,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary in the Siena copy."
     },
     {
@@ -1249,6 +1302,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -1272,6 +1326,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -1295,6 +1350,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "desc_title": "Elephant and Obelisk: Ideograms in Syntax",
       "desc_text": "The famous woodcut of the elephant bearing an obelisk -- later realized by Bernini in the Piazza della Minerva for Pope Alexander VII -- is densely annotated by Hand B with alchemical ideograms embedded directly in the syntax of Latin sentences. The sun symbol with the suffix '-ra' reads 'scintillata aurata' (shimmering gold). These are not marginal glosses but a complete symbolic language: compact symbols for gold, silver, mercury, Venus, and Jupiter carry Latin case endings, allowing them to function as nouns and adjectives within grammatical sentences. Russell notes the consistency with Newton's Keynes MSS vocabulary, suggesting a possible connection to the Royal Society or Cambridge alchemical circle.",
       "alch_element": "Multiple metals: Gold, Silver, Mercury, Venus, Jupiter",
@@ -1321,6 +1377,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"sepia è un piccolo pesce, il quale quando il pescatore lo \nuuole pigliare, uomit...\""
     },
     {
@@ -1344,6 +1401,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"sepia è un piccolo pesce, il quale quando il pescatore lo \nuuole pigliare, uomit...\""
     },
     {
@@ -1367,6 +1425,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Labor \nand Industry\""
     },
     {
@@ -1390,6 +1449,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Labor \nand Industry\""
     },
     {
@@ -1413,6 +1473,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"Γόνος et Ευφυία\""
     },
     {
@@ -1436,6 +1497,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"Γόνος et Ευφυία\""
     },
     {
@@ -1459,6 +1521,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"etymological\""
     },
     {
@@ -1482,6 +1545,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"etymological\""
     },
     {
@@ -1505,6 +1569,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -1528,6 +1593,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -1551,6 +1617,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Gran Porta\""
     },
     {
@@ -1574,6 +1641,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Gran Porta\""
     },
     {
@@ -1597,6 +1665,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -1620,6 +1689,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -1643,6 +1713,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"gli anni de Nestore, & de Priamo, & gli anni della Sybilla Nestor uisse tre eta ...\""
     },
     {
@@ -1666,6 +1737,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"gli anni de Nestore, & de Priamo, & gli anni della Sybilla Nestor uisse tre eta ...\""
     },
     {
@@ -1689,6 +1761,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -1712,6 +1785,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -1735,6 +1809,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Descrittione di Marte\""
     },
     {
@@ -1758,6 +1833,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Descrittione di Marte\""
     },
     {
@@ -1781,6 +1857,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"of Mercury\""
     },
     {
@@ -1804,6 +1881,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"of Mercury\""
     },
     {
@@ -1827,6 +1905,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Corpora quod tactis inducit marmora rebus \nOvid metamor. Plinius etiam.\""
     },
     {
@@ -1850,6 +1929,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Corpora quod tactis inducit marmora rebus \nOvid metamor. Plinius etiam.\""
     },
     {
@@ -1873,6 +1953,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"lucido et terso\""
     },
     {
@@ -1896,6 +1977,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"lucido et terso\""
     },
     {
@@ -1919,6 +2001,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"to the blessed Mother, \nthe Goddess Venus, and to her Son, Amor, Bacchus and Dem...\""
     },
     {
@@ -1942,6 +2025,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy. Russell records the marginal note: \"to the blessed Mother, \nthe Goddess Venus, and to her Son, Amor, Bacchus and Dem...\""
     },
     {
@@ -1965,6 +2049,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"aedificio antiquario inseme cum molti altri arbusculi murali\""
     },
     {
@@ -1988,6 +2073,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -2011,6 +2097,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -2034,6 +2121,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Gran Porta\""
     },
     {
@@ -2057,6 +2145,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"Gran Porta\""
     },
     {
@@ -2080,6 +2169,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"The Poliphilo Syndrome: Love, Humanism, and the Infatuation of Historiography\""
     },
     {
@@ -2103,6 +2193,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"The Poliphilo Syndrome: Love, Humanism, and the Infatuation of Historiography\""
     },
     {
@@ -2126,6 +2217,7 @@
       "hand_label": "A",
       "hand_attribution": "Ben Jonson",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand A (Ben Jonson) in the BL copy."
     },
     {
@@ -2149,6 +2241,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Timore di Polifilo\""
     },
     {
@@ -2172,6 +2265,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Timore di Polifilo\""
     },
     {
@@ -2195,6 +2289,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Proselyta peregrino, et proselytia peregrinatione\""
     },
     {
@@ -2218,6 +2313,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Proselyta peregrino, et proselytia peregrinatione\""
     },
     {
@@ -2241,6 +2337,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"qui étaint morts, ensevelis [buried] \nrenaissant triomphalement de leurs sepulch...\""
     },
     {
@@ -2264,6 +2361,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"qui étaint morts, ensevelis [buried] \nrenaissant triomphalement de leurs sepulch...\""
     },
     {
@@ -2287,6 +2385,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"qui étaint morts, ensevelis [buried] \nrenaissant triomphalement de leurs sepulch...\""
     },
     {
@@ -2310,6 +2409,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"qui étaint morts, ensevelis [buried] \nrenaissant triomphalement de leurs sepulch...\""
     },
     {
@@ -2333,6 +2433,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -2356,6 +2457,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -2379,6 +2481,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"aedificio antiquario inseme cum molti altri arbusculi murali\""
     },
     {
@@ -2402,6 +2505,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"amnice\""
     },
     {
@@ -2425,6 +2529,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"amnice\""
     },
     {
@@ -2448,6 +2553,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"aedificio antiquario inseme cum molti altri arbusculi murali\""
     },
     {
@@ -2471,6 +2577,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrittione di uena summum bonum di \nPoliphilo\""
     },
     {
@@ -2494,6 +2601,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrittione di uena summum bonum di \nPoliphilo\""
     },
     {
@@ -2517,6 +2625,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΠΑΝΤΑ ΤΟΚΑΔΙ – a discrepancy corrected by Kerver in his edition. 62 \n  \n11. \ni3r...\""
     },
     {
@@ -2540,6 +2649,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΠΑΝΤΑ ΤΟΚΑΔΙ – a discrepancy corrected by Kerver in his edition. 62 \n  \n11. \ni3r...\""
     },
     {
@@ -2563,6 +2673,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "desc_title": "Panta Tokadi: Mercury as Universal Vessel",
       "desc_text": "Facing the Panta Tokadi woodcut, Hand B translates the phrase as 'rerum omnium vas' -- vessel of all things -- rather than 'mother of all,' as Godwin translates it. This deliberate shift from biological generation to instrumental containment equates the Panta Tokadi figure directly with Mercury: not a passive mother but an active vessel through which the world spirit is channeled into matter. The annotation reflects d'Espagnet's concept of the 'magnetick principle' -- the force by which mercury draws the animating spirit of the sun into the vessels of physical matter.",
       "alch_element": "Mercury as universal vessel (vas)",
@@ -2589,6 +2700,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"genetrice\""
     },
     {
@@ -2612,6 +2724,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"genetrice\""
     },
     {
@@ -2635,6 +2748,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"aedificio antiquario inseme cum molti altri arbusculi murali\""
     },
     {
@@ -2658,6 +2772,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "desc_title": "Panta Tokadi: Cinnabar, Digestion, and the World Spirit",
       "desc_text": "The Panto Tokadi woodcut -- a satyr revealing a mother figure flanked by two fauns bearing vessels -- receives Hand B's most elaborate alchemical annotation. The mercury symbol appears on the top frieze and above the right faun's vessel. The left faun bears the cinnabar symbol (mercury sulphide). Below the caption, B writes: 'duae columbae in uno vase bibentes sunt minium & digestione' -- the two doves drinking in one vase represent cinnabar and digestion. The streams of milk from the mother's nipples signify the generation of all things through mercury's magnetick principle. This is the key annotation revealing Hand B's d'Espagnet-based schema at full power.",
       "alch_element": "Mercury, Cinnabar (mercury sulphide), Digestion",
@@ -2684,6 +2799,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary in the Siena copy. Russell records the marginal note: \"licet.\""
     },
     {
@@ -2707,6 +2823,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Chrysocoma\""
     },
     {
@@ -2730,6 +2847,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Chrysocoma\""
     },
     {
@@ -2753,6 +2871,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -2776,6 +2895,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -2799,6 +2919,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"hyperoria\""
     },
     {
@@ -2822,6 +2943,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"hyperoria\""
     },
     {
@@ -2845,6 +2967,7 @@
       "hand_label": "A",
       "hand_attribution": "Ben Jonson",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand A (Ben Jonson) in the BL copy."
     },
     {
@@ -2868,6 +2991,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand B (Anonymous (possibly Royal Society circle)), an alchemist in the Siena copy."
     },
     {
@@ -2891,6 +3015,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Royal Society circle)",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand B (Anonymous (possibly Royal Society circle)), an alchemist in the Siena copy."
     },
     {
@@ -2914,6 +3039,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"xesturgia ξεsτυρΓια arte di polir la pietra\""
     },
     {
@@ -2937,6 +3063,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"xesturgia ξεsτυρΓια arte di polir la pietra\""
     },
     {
@@ -2960,6 +3087,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -2983,6 +3111,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -3006,6 +3135,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"modo bello e bella \nmaniera di parlare\""
     },
     {
@@ -3029,6 +3159,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"modo bello e bella \nmaniera di parlare\""
     },
     {
@@ -3052,6 +3183,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -3075,6 +3207,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis."
     },
     {
@@ -3098,6 +3231,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -3121,6 +3255,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -3144,6 +3279,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy."
     },
     {
@@ -3167,6 +3303,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy."
     },
     {
@@ -3190,6 +3327,7 @@
       "hand_label": "D",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand D in the Siena copy. Russell records the marginal note: \"chorea \nelegantissima\""
     },
     {
@@ -3213,6 +3351,7 @@
       "hand_label": "D",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand D in the Siena copy. Russell records the marginal note: \"chorea \nelegantissima\""
     },
     {
@@ -3236,6 +3375,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy."
     },
     {
@@ -3259,6 +3399,7 @@
       "hand_label": "E",
       "hand_attribution": "Anonymous",
       "is_alchemist": true,
+      "annotation_type": "SYMBOL",
       "card_description": "Annotated by Hand E, an alchemist in the Siena copy."
     },
     {
@@ -3282,6 +3423,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΤΗΣ ΦΥΣΕΩΣ ΟΛΒΟΣ\""
     },
     {
@@ -3305,6 +3447,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΤΗΣ ΦΥΣΕΩΣ ΟΛΒΟΣ\""
     },
     {
@@ -3328,6 +3471,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"lascivia\""
     },
     {
@@ -3351,6 +3495,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"lascivia\""
     },
     {
@@ -3374,6 +3519,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Theophrasta Logistica\""
     },
     {
@@ -3397,6 +3543,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Theophrasta Logistica\""
     },
     {
@@ -3420,6 +3567,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"mullum LXXX librarum in mari Rubro captum Licinius Mucianus prodidit, quanti \nme...\""
     },
     {
@@ -3443,6 +3591,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "A folio from the Siena copy referenced in Russell's thesis. Russell records the marginal note: \"mullum LXXX librarum in mari Rubro captum Licinius Mucianus prodidit, quanti \nme...\""
     },
     {
@@ -3466,6 +3615,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"mullum LXXX librarum in mari Rubro captum Licinius Mucianus prodidit, quanti \nme...\""
     },
     {
@@ -3489,6 +3639,7 @@
       "hand_label": "B",
       "hand_attribution": "Anonymous (possibly Jesuit, St. Omer)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand B (Anonymous (possibly Jesuit, St. Omer)) in the Siena copy. Russell records the marginal note: \"mullum LXXX librarum in mari Rubro captum Licinius Mucianus prodidit, quanti \nme...\""
     },
     {
@@ -3512,6 +3663,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΠΑΝΤΑ ΤΟΚΑΔΙ – a discrepancy corrected by Kerver in his edition. 62 \n  \n11. \ni3r...\""
     },
     {
@@ -3535,6 +3687,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"ΠΑΝΤΑ ΤΟΚΑΔΙ – a discrepancy corrected by Kerver in his edition. 62 \n  \n11. \ni3r...\""
     },
     {
@@ -3558,6 +3711,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3581,6 +3735,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3604,6 +3759,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3627,6 +3783,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3650,6 +3807,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Lilio Gregorio Giraldi de diis \ngentium\""
     },
     {
@@ -3673,6 +3831,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Lilio Gregorio Giraldi de diis \ngentium\""
     },
     {
@@ -3696,6 +3855,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Herbam do, Erasmo ne gli adagi chiliade pa cent. 9 adagio 78.\""
     },
     {
@@ -3719,6 +3879,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Herbam do, Erasmo ne gli adagi chiliade pa cent. 9 adagio 78.\""
     },
     {
@@ -3742,6 +3903,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"comparatione \ndiverse\""
     },
     {
@@ -3765,6 +3927,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"comparatione \ndiverse\""
     },
     {
@@ -3788,6 +3951,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -3811,6 +3975,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -3834,6 +3999,7 @@
       "hand_label": "A",
       "hand_attribution": "Ben Jonson",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand A (Ben Jonson) in the BL copy."
     },
     {
@@ -3857,6 +4023,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary in the Siena copy. Russell records the marginal note: \"poetic\""
     },
     {
@@ -3880,6 +4047,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"Dendrocysto\""
     },
     {
@@ -3903,6 +4071,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3926,6 +4095,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3949,6 +4119,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3972,6 +4143,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -3995,6 +4167,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4018,6 +4191,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4041,6 +4215,7 @@
       "hand_label": null,
       "hand_attribution": null,
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "A folio from the BL copy referenced in Russell's thesis. Russell records the marginal note: \"Un laboratorio filologico di fine Quattrocento: la Naturalis historia\""
     },
     {
@@ -4064,6 +4239,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4087,6 +4263,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4110,6 +4287,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"in alcuni esemplari manca questo foglio\""
     },
     {
@@ -4133,6 +4311,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"in alcuni esemplari manca questo foglio\""
     },
     {
@@ -4156,6 +4335,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrive un altra bella entrata di un \ntheatro.\""
     },
     {
@@ -4179,6 +4359,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrive un altra bella entrata di un \ntheatro.\""
     },
     {
@@ -4202,6 +4383,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"femine\""
     },
     {
@@ -4225,6 +4407,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"femine\""
     },
     {
@@ -4248,6 +4431,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"genitale femin.\""
     },
     {
@@ -4271,6 +4455,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"genitale femin.\""
     },
     {
@@ -4294,6 +4479,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4317,6 +4503,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4340,6 +4527,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Epilepsia da noi detta morbo caduco\""
     },
     {
@@ -4363,6 +4551,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Epilepsia da noi detta morbo caduco\""
     },
     {
@@ -4386,6 +4575,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Poli geniculatione\""
     },
     {
@@ -4409,6 +4599,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "INDEX_ENTRY",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Poli geniculatione\""
     },
     {
@@ -4432,6 +4623,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"comparatione \ndiverse\""
     },
     {
@@ -4455,6 +4647,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"comparatione \ndiverse\""
     },
     {
@@ -4478,6 +4671,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary in the Siena copy. Russell records the marginal note: \"awkward seams\""
     },
     {
@@ -4501,6 +4695,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Acinace\""
     },
     {
@@ -4524,6 +4719,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Acinace\""
     },
     {
@@ -4547,6 +4743,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Aphronito, ouero Baurach in lingua Arabica Baurach, è la spurna del nitro Plin. ...\""
     },
     {
@@ -4570,6 +4767,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Aphronito, ouero Baurach in lingua Arabica Baurach, è la spurna del nitro Plin. ...\""
     },
     {
@@ -4593,6 +4791,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -4616,6 +4815,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -4639,6 +4839,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -4662,6 +4863,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy."
     },
     {
@@ -4685,6 +4887,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4708,6 +4911,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"Parole \ndi Poliphilo da se stesso\""
     },
     {
@@ -4731,6 +4935,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"navarchia\""
     },
     {
@@ -4754,6 +4959,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"navarchia\""
     },
     {
@@ -4777,6 +4983,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Del pelicano et sua natura si ragiona nel libro detto Hortus Sanitatis\""
     },
     {
@@ -4800,6 +5007,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Del pelicano et sua natura si ragiona nel libro detto Hortus Sanitatis\""
     },
     {
@@ -4823,6 +5031,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4846,6 +5055,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4869,6 +5079,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4892,6 +5103,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy."
     },
     {
@@ -4915,6 +5127,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Anonymous",
       "is_alchemist": false,
+      "annotation_type": "EMENDATION",
       "card_description": "Annotated by Hand Primary in the Siena copy. Russell records the marginal note: \"exceeds even\""
     },
     {
@@ -4938,6 +5151,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Elicopidi, Ελικώπις, in se vertes oculos\""
     },
     {
@@ -4961,6 +5175,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "CROSS_REFERENCE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Elicopidi, Ελικώπις, in se vertes oculos\""
     },
     {
@@ -4984,6 +5199,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"in alcuni esemplari \nmanca questo foglio\""
     },
     {
@@ -5007,6 +5223,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"in alcuni esemplari \nmanca questo foglio\""
     },
     {
@@ -5030,6 +5247,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrive un altra bella entrata di un \ntheatro.\""
     },
     {
@@ -5053,6 +5271,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"descrive un altra bella entrata di un \ntheatro.\""
     },
     {
@@ -5076,6 +5295,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"inscrittione di una delle colonne del fonte\""
     },
     {
@@ -5099,6 +5319,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Pope Alexander VII (Fabio Chigi)",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Pope Alexander VII (Fabio Chigi)) in the Siena copy. Russell records the marginal note: \"inscrittione di una delle colonne del fonte\""
     },
     {
@@ -5122,6 +5343,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Acinace\""
     },
     {
@@ -5145,6 +5367,7 @@
       "hand_label": "Primary",
       "hand_attribution": "Benedetto Giovio",
       "is_alchemist": false,
+      "annotation_type": "MARGINAL_NOTE",
       "card_description": "Annotated by Hand Primary (Benedetto Giovio) in the Siena copy. Russell records the marginal note: \"Acinace\""
     }
   ],

@@ -6,8 +6,8 @@
 
 | Tab | Page(s) | Source Table(s) | Status |
 |-----|---------|----------------|--------|
-| Home | index.html | matches, images, dissertation_refs | BUILT |
-| Marginalia | marginalia/index.html + 113 folios | matches, images, annotations, folio_descriptions, symbol_occurrences | BUILT |
+| Home | index.html | matches, images, annotations | BUILT |
+| Marginalia | marginalia/index.html + 109 folios | matches, images, annotations, folio_descriptions, symbol_occurrences | BUILT |
 | Scholars | scholars.html + 60 detail | scholars, scholar_works, bibliography, summaries.json | BUILT |
 | Bibliography | bibliography.html | bibliography | BUILT |
 | Dictionary | dictionary/index.html + 94 terms | dictionary_terms, dictionary_term_links | BUILT |
@@ -34,7 +34,8 @@
 | 60 scholars + 59 overviews | Scholar pages |
 | 109 bibliography entries | Bibliography page |
 | 71 timeline events | Timeline page (filterable) |
-| 18 woodcuts | Woodcut pages |
+| 18 woodcuts (60 more detected, pending promotion) | Woodcut pages |
+| 219 image_readings (Phase 0+1) | NOT YET SURFACED — stored in DB only |
 | 6 manuscript copies | Manuscripts pages |
 | 11 annotator hands | Marginalia + manuscripts pages |
 | 13 folio descriptions | Alchemical Analysis sections |

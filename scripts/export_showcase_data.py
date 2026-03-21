@@ -28,7 +28,7 @@ def main():
             i.folio_number,
             i.side,
             i.page_type,
-            i.relative_path,
+            COALESCE(i.web_path, i.relative_path) as relative_path,
             m.confidence,
             m.match_method,
             ms.shelfmark,

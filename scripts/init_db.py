@@ -39,7 +39,9 @@ CREATE TABLE IF NOT EXISTS images (
     side TEXT CHECK(side IN ('r','v',NULL)),
     page_type TEXT CHECK(page_type IN ('PAGE','MARGINALIA_DETAIL','COVER','GUARD','OTHER')),
     sort_order INTEGER,
-    relative_path TEXT NOT NULL
+    relative_path TEXT NOT NULL,
+    master_path TEXT,
+    web_path TEXT
 );
 
 CREATE TABLE IF NOT EXISTS signature_map (
@@ -67,9 +69,37 @@ CREATE TABLE IF NOT EXISTS matches (
     id INTEGER PRIMARY KEY,
     ref_id INTEGER REFERENCES dissertation_refs(id),
     image_id INTEGER REFERENCES images(id),
-    match_method TEXT CHECK(match_method IN ('SIGNATURE_EXACT','FOLIO_EXACT','MANUAL')),
-    confidence TEXT CHECK(confidence IN ('HIGH','MEDIUM','LOW')),
+    match_method TEXT CHECK(match_method IN ('SIGNATURE_EXACT','FOLIO_EXACT','MANUAL','VISION_VERIFIED')),
+    confidence TEXT CHECK(confidence IN ('HIGH','MEDIUM','LOW','PROVISIONAL')),
     needs_review BOOLEAN DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS image_readings (
+    id INTEGER PRIMARY KEY,
+    image_id INTEGER REFERENCES images(id),
+    phase INTEGER NOT NULL,
+    model TEXT NOT NULL,
+    raw_json TEXT NOT NULL,
+    page_number_read INTEGER,
+    page_number_expected INTEGER,
+    page_number_match BOOLEAN,
+    has_woodcut BOOLEAN,
+    woodcut_description TEXT,
+    has_annotations BOOLEAN,
+    annotation_density TEXT CHECK(annotation_density IN ('LIGHT','MODERATE','HEAVY',NULL)),
+    annotation_locations TEXT,
+    languages_detected TEXT,
+    legible_fragments TEXT,
+    deep_reading_json TEXT,
+    concordance_status TEXT CHECK(concordance_status IN (
+        'CONFIRMED', 'DISCREPANCY', 'UNVERIFIED'
+    )) DEFAULT 'UNVERIFIED',
+    reviewed BOOLEAN DEFAULT 0,
+    reviewed_by TEXT,
+    reviewed_at TEXT,
+    promoted_to TEXT,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS schema_version (

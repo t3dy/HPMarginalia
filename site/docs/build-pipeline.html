@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,7 +24,7 @@
             <p><a href="index.html">&larr; All Documents</a></p>
             <h2>Build Pipeline</h2>
             <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
-                PIPELINE.md &mdash; 493 words</p>
+                PIPELINE.md &mdash; 622 words</p>
             <h2>PIPELINE: How Data Flows from Source to Site</h2>
 
 <blockquote>No abstraction. No speculation. Just the actual scripts and their order.</blockquote>
@@ -33,8 +33,8 @@
 
 <pre><code class="lang-">
 STAGE 1: INGEST
-  init_db.py              → Creates schema (22 tables)
-  catalog_images.py       → Parses 674 image filenames → images table
+  init_db.py              → Creates schema (24 tables incl. image_readings)
+  catalog_images.py       → Parses 674 image filenames → images table (with master_path + web_path)
   build_signature_map.py  → 1499 collation formula → 448 signature_map entries
 
 STAGE 2: EXTRACT
@@ -71,8 +71,20 @@ STAGE 4: ENRICH
   seed_copies.py           → 6 hp_copies entries
   seed_woodcuts.py         → 18 woodcut entries
 
+STAGE 4.5: IMAGE READING INFRASTRUCTURE
+  migrate_v3_image_reading.py → Schema v3: image_readings table + expanded CHECKs
+  image_utils.py              → Shared path validation (master vs web enforcement)
+  backfill_previous_readings.py → 30 historical readings into image_readings
+
+STAGE 4.6: VISUAL GROUND TRUTH (Phase 1)
+  read_images.py --phase 1    → 189 BL photos read via Claude Code vision
+                              → 189 image_readings rows (phase=1)
+                              → 189 raw JSON files in staging/image_readings/bl/phase1/
+                              → BL offset confirmed at 174/174 points
+                              → 60 woodcuts detected
+
 STAGE 5: BUILD
-  build_site.py            → Generates all 354 HTML pages + data.json
+  build_site.py            → Generates all 365 HTML pages + data.json
 </code></pre>
 
 <h3>Script Dependencies</h3>
@@ -119,6 +131,9 @@ python scripts/extract_alchemical_data.py
 python scripts/add_alchemist_descriptions.py
 python scripts/seed_copies.py
 python scripts/seed_woodcuts.py
+python scripts/migrate_v3_image_reading.py
+python scripts/backfill_previous_readings.py
+# Phase 1 readings: run read_images.py --ingest with pre-computed results
 python scripts/build_site.py
 </code></pre>
 
@@ -130,7 +145,9 @@ python scripts/build_site.py
 <tr><td>Extract</td><td>PDFs</td><td>md/ (37 files), chunks/ (~200), dissertation_refs (282)</td><td>282</td></tr>
 <tr><td>Match</td><td>Refs + images + map</td><td>matches (431)</td><td>431</td></tr>
 <tr><td>Enrich</td><td>All above + corpus</td><td>annotations, dictionary, scholars, bibliography, timeline, symbols, woodcuts</td><td>~1000</td></tr>
-<tr><td>Build</td><td>All tables</td><td>354 HTML pages + data.json</td><td>—</td></tr>
+<tr><td>Image Infra</td><td>Schema v3 migration</td><td>image_readings table, expanded CHECKs</td><td>30 (backfill)</td></tr>
+<tr><td>Phase 1</td><td>Master BL images (via Claude Code vision)</td><td>189 image_readings rows, 189 staging JSONs</td><td>189</td></tr>
+<tr><td>Build</td><td>All tables</td><td>365 HTML pages + data.json</td><td>—</td></tr>
 </table>
 
         </div>

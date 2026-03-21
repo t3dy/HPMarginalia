@@ -77,7 +77,7 @@ def build_russell_essay_data():
 
     # 3. Get images matched to alchemist refs
     cur.execute("""
-        SELECT r.signature_ref, i.filename, i.relative_path,
+        SELECT r.signature_ref, i.filename, COALESCE(i.web_path, i.relative_path) as relative_path,
                m.shelfmark, mat.confidence,
                h.hand_label, h.school
         FROM matches mat

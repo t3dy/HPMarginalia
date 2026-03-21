@@ -22,5 +22,8 @@ Thumbs.db
 # Claude
 .claude/
 
+# Staging (intermediate image reading data, regenerable)
+staging/
+
 # Temp
 *.tmp

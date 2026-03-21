@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Edition</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html" class="active">Docs</a><a href="../code/index.html">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -24,11 +24,11 @@
             <p><a href="index.html">&larr; All Documents</a></p>
             <h2>Data Ontology</h2>
             <p style="color:var(--text-muted); font-family:var(--font-sans); font-size:0.85rem; margin-bottom:1.5rem">
-                ONTOLOGY.md &mdash; 630 words</p>
+                ONTOLOGY.md &mdash; 697 words</p>
             <h2>ONTOLOGY: The Actual Database Schema</h2>
 
 <blockquote>This describes what EXISTS in db/hp.db. Nothing aspirational.</blockquote>
-<blockquote>Last verified: 2026-03-20. 22 tables, ~2800 total rows.</blockquote>
+<blockquote>Last verified: 2026-03-20. 24 tables, ~3500 total rows. Schema version 3.</blockquote>
 
 <h3>Canonical Tables</h3>
 
@@ -38,7 +38,7 @@
 <tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
 <tr><td>**hp_copies**</td><td>6</td><td>All known annotated copies (Russell&#x27;s 6). Shelfmark, institution, edition, hand count, confidence.</td></tr>
 <tr><td>**manuscripts**</td><td>2</td><td>Copies with local photographs (BL, Siena). Contains image directory paths.</td></tr>
-<tr><td>**images**</td><td>674</td><td>Individual photographs. 196 BL (offset-corrected, folio=photo-13), 478 Siena (folio in filename).</td></tr>
+<tr><td>**images**</td><td>674</td><td>Individual photographs. 196 BL (offset-corrected, folio=photo-13), 478 Siena (folio in filename). Has master_path (originals) and web_path (compressed).</td></tr>
 <tr><td>**signature_map**</td><td>448</td><td>Deterministic lookup: signature (b6v) → folio number. From 1499 collation a-z8 A-F8 G4.</td></tr>
 </table>
 
@@ -50,7 +50,8 @@
 <tr><td>**annotator_hands**</td><td>11</td><td>CANONICAL. 11 hands across 6 copies. Has alchemical_framework for Hand B and E.</td></tr>
 <tr><td>**matches**</td><td>431</td><td>Ref-to-image links. 48 HIGH + 383 MEDIUM + 0 LOW.</td></tr>
 <tr><td>**folio_descriptions**</td><td>13</td><td>Detailed analyses of alchemist-annotated folios.</td></tr>
-<tr><td>**woodcuts**</td><td>18</td><td>Detected woodcuts with subjects, categories, annotation data.</td></tr>
+<tr><td>**woodcuts**</td><td>18</td><td>Detected woodcuts with subjects, categories, annotation data. (60 more detected in image_readings, pending promotion.)</td></tr>
+<tr><td>**image_readings**</td><td>219</td><td>Vision model readings of manuscript photographs. 30 phase-0 (historical) + 189 phase-1 (BL ground truth). Stores raw JSON, page number verification, woodcut detection.</td></tr>
 </table>
 
 <h4>Alchemical System</h4>
@@ -85,7 +86,7 @@
 
 <table class="doc-table">
 <tr><th>Table</th><th>Rows</th><th>Purpose</th></tr>
-<tr><td>**schema_version**</td><td>2</td><td>Migration tracking.</td></tr>
+<tr><td>**schema_version**</td><td>3</td><td>Migration tracking. v3 = image_readings + expanded CHECK constraints.</td></tr>
 </table>
 
 <h3>Deprecated Tables (DO NOT QUERY)</h3>
@@ -115,6 +116,7 @@ scholar_works.scholar_id → scholars.id
 scholar_works.bib_id → bibliography.id
 dictionary_term_links.term_id → dictionary_terms.id
 woodcuts.signature_1499 ←→ signature_map.signature
+image_readings.image_id → images.id
 </code></pre>
 
 <h3>Coverage and Confidence</h3>
@@ -122,12 +124,12 @@ woodcuts.signature_1499 ←→ signature_map.signature
 <table class="doc-table">
 <tr><th>Data</th><th>Coverage</th><th>Confidence</th></tr>
 <tr><td>Siena matches</td><td>392/478 images matched</td><td>HIGH/MEDIUM</td></tr>
-<tr><td>BL matches</td><td>39/50 refs matched (11 beyond photo range)</td><td>MEDIUM (27 visually verified as HIGH)</td></tr>
+<tr><td>BL matches</td><td>39/50 refs matched (11 beyond photo range)</td><td>MEDIUM (174 offset-confirmed by Phase 1 vision reading)</td></tr>
 <tr><td>Buffalo/Vatican/Cambridge/Modena</td><td>0 matches (no photographs)</td><td>N/A</td></tr>
 <tr><td>Hand attribution</td><td>204/282 annotations (72%)</td><td>MEDIUM</td></tr>
 <tr><td>Dictionary significance</td><td>94/94 terms</td><td>DRAFT (LLM-assisted)</td></tr>
 <tr><td>Scholar overviews</td><td>59/60 scholars</td><td>DRAFT (LLM-assisted)</td></tr>
-<tr><td>Woodcut inventory</td><td>18/~172 (BL photos cover pages 1-176 only)</td><td>MEDIUM</td></tr>
+<tr><td>Woodcut inventory</td><td>18 cataloged + 60 detected in image_readings / ~172 total in 1499 edition</td><td>MEDIUM (detected woodcuts are PROVISIONAL)</td></tr>
 </table>
 
 <h3>4 Unmapped Signatures</h3>
