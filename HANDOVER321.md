@@ -3,7 +3,7 @@
 > Date: 2026-03-21
 > Previous: HANDOVER320.md
 > Live site: https://t3dy.github.io/HPMarginalia/
-> Status: Site rebuilt with 141 woodcut pages (up from 73)
+> Status: Full site audit complete. 129 woodcuts (111 gallery + 18 Alchemical Hands). Concordance browser live. 490 pages, 5 residual link issues.
 
 ---
 
@@ -104,44 +104,62 @@
 | `scan_ia_pages.py` | Downloads IA pages and analyzes for woodcut detection |
 | `update_catalog_pages.py` | Pushes confirmed page assignments to woodcut_catalog |
 | `fix_woodcut_pages.py` | Fixes page errors, merges duplicates, adds missing entries |
+| `fix_polyandrion.py` | Corrects Polyandrion off-by-one page errors, adds 2 new entries |
 | `sync_ref_layer.py` | Consolidation: syncs tables, upgrades confidence, removes orphans |
 | `link_catalog.py` | Maps 1896 catalog to confirmed pages, links to woodcuts table |
+| `check_links.py` | Post-build link validator (run after every build_site.py) |
+
+---
+
+## Afternoon Session (HP321 continued)
+
+### Russell Annotation Woodcuts Relocated
+- 18 CORPUS_EXTRACTION woodcuts moved from Woodcuts gallery to Alchemical Hands page
+- Gallery now shows 111 entries (129 - 18 Russell)
+- Alchemical Hands page has rich gallery: image + description + scholarly discussion + annotation data + dictionary chips + folio links
+
+### Polyandrion + Book II Gap Verification
+- Verified all 7 MEDIUM-risk Polyandrion pages (234, 241, 243, 245, 247, 249, 251)
+- Found systematic off-by-one: all Polyandrion woodcuts are on ODD pages, not even
+- Added 2 new woodcuts: p.234 (Julius Caesar hieroglyphic devices) and p.245 (sacrifice relief)
+- Verified all Book II gaps (pp.394-450): no missing woodcuts found
+- Fixed final woodcut p.449 -> p.448
+- Total woodcuts: 129 (verified end-to-end, all 448 pages inspected)
+
+### Concordance Page Browser
+- Built `concordance/index.html`: all 448 pages browsable
+- Grouped by 14 narrative sections with collapsible headers
+- Woodcut thumbnails inline, M (marginalia) and BL (photo) links
+- Jump-to-page input (by signature or page number)
+- "Woodcut pages only" filter
+
+### Site Audit (Hiro Plantagenet)
+- Fixed concordance `depth=1` bug (all CSS/nav links were broken)
+- Deleted 47 stale ghost pages from previous builds
+- Added existence checks for marginalia/dictionary links (prevents 404s)
+- Fixed concordance to link CORPUS_EXTRACTION woodcuts to Alchemical Hands
+- Built `check_links.py` validator: run after every build
+- Broken links: 113 -> 5 (remaining 5 are BL photo raw-path edge cases)
+- See CORPUSEXTRACTIONSILLINESS.md for full post-mortem
 
 ---
 
 ## What Needs Doing Next
 
-### High Priority (from HANDOVER320, updated)
+### High Priority
 
-1. **Concordance confidence upgrades** — unchanged, still needed
-2. **Surface Phase 3 deep readings** — unchanged, still needed
-3. **Relocate Russell annotation woodcuts** — unchanged, still needed
+1. **Fix 5 remaining BL photo path issues** — 5 marginalia pages reference raw filesystem paths instead of web paths. Needs DB update to fix image path resolution for Phase 3 deep reading pages.
 
 ### Medium Priority
 
-4. **Complete remaining ~40 woodcuts** — PARTIALLY DONE
-   - Pages scanned at 4-page intervals may have missed woodcuts between checked pages
-   - Known gaps: pp.214-218 (temple ceremony), pp.224-232 (transition to Polyandrion)
-   - pp.262-274 (end of Polyandrion), pp.302-306, pp.308-316 (gardens)
-   - pp.320-330 (trophies/nymph), pp.340-348 (amphitheater area)
-   - pp.350-364 (Venus fountain area), pp.370-385 (Book II early)
-   - pp.394-410 (Book II mid), pp.414-420, pp.426-432 (Book II)
-   - pp.437-445 (Book II end)
-   - Approach: Read remaining gap pages via vision, add to seed script
-
-5. **Clean up 42 orphaned VISION_MODEL woodcuts**
-   - These were detected during BL photo reading (Phase 1)
-   - Many have BL photo numbers but no page_1499
-   - Some may be duplicates of entries now in the catalog
-   - Need: map each to page_concordance, merge or delete duplicates
-
-6. **HPDEEPRESEARCH.txt deeper integration** — unchanged
+2. **Concordance confidence upgrades** — 174 BL offset confirmations ready for MEDIUM->HIGH upgrade
+3. **Wire woodcut_catalog -> woodcuts cross-references** — 168 catalog entries, only ~71 linked via woodcut_id
+4. **Tilton ingestion** — Parked. Wait for comparative study on pedagogical/entertainment value of alchemical emblems
 
 ### Low Priority
 
-7. **Update woodcut_catalog.page_seq** for newly confirmed pages
-8. **Link woodcut_catalog.woodcut_id** to woodcuts table entries
-9. Items 7-10 from HANDOVER320
+5. **Siena cross-reference (Phase 4)** — 478 photos to compare against BL baseline
+6. **Vision reading pipeline** — Blind reading of woodcut images, scored against reference descriptions
 
 ---
 
