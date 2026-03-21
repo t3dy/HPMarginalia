@@ -777,6 +777,123 @@ def build_dictionary_pages(conn):
 # Marginalia folio detail pages
 # ============================================================
 
+def _render_deep_reading(dr):
+    """Render a Phase 3 deep reading JSON object as HTML."""
+    parts = []
+    parts.append('<h3 style="margin:1.5rem 0 1rem">Vision Reading <span style="font-size:0.7rem;font-weight:400;color:var(--text-muted)">(Phase 3 deep analysis)</span></h3>')
+
+    # Metadata bar
+    meta_items = []
+    if dr.get('primary_hand'):
+        meta_items.append(f'<strong>Primary hand:</strong> {escape(dr["primary_hand"])}')
+    if dr.get('hands_detected'):
+        meta_items.append(f'<strong>Hands:</strong> {dr["hands_detected"]}')
+    if dr.get('page_type'):
+        meta_items.append(f'<strong>Type:</strong> {escape(dr["page_type"])}')
+    if dr.get('signature'):
+        meta_items.append(f'<strong>Sig:</strong> {escape(dr["signature"])}')
+    if meta_items:
+        parts.append(
+            '<div style="font-size:0.85rem;font-family:var(--font-sans);color:var(--text-muted);'
+            f'margin-bottom:1rem">{" &middot; ".join(meta_items)}</div>'
+        )
+
+    # Woodcut analysis
+    wc = dr.get('woodcut_analysis')
+    if wc:
+        wc_html = f'<div class="marg-annotation" style="border-left:3px solid #6b8e5a">'
+        wc_html += f'<h4 style="color:#6b8e5a;margin-bottom:0.5rem">Woodcut: {escape(wc.get("subject", ""))}</h4>'
+        if wc.get('description'):
+            wc_html += f'<p style="line-height:1.7;margin-bottom:0.5rem">{escape(wc["description"])}</p>'
+        if wc.get('inscription_below'):
+            wc_html += f'<div class="marginal-text" style="border-color:#6b8e5a">{escape(wc["inscription_below"])}</div>'
+        if wc.get('condition'):
+            wc_html += f'<div class="hand-info">Condition: {escape(wc["condition"])}</div>'
+        wc_html += '</div>'
+        parts.append(wc_html)
+
+    # Transcription attempts
+    transcriptions = dr.get('transcription_attempts', [])
+    if transcriptions:
+        parts.append('<h4 style="color:var(--accent);margin:1rem 0 0.5rem;font-size:0.95rem">Transcription Attempts</h4>')
+        for t in transcriptions:
+            conf_color = {'HIGH': '#2d8a4e', 'MEDIUM': '#b8860b', 'LOW': '#c44'}.get(
+                t.get('confidence', ''), '#888')
+            loc = escape(t.get('location', ''))
+            lang = escape(t.get('language', ''))
+            text = escape(t.get('text_partial', t.get('text', '')))
+            notes = escape(t.get('notes', ''))
+            conf = t.get('confidence', '')
+
+            t_html = '<div class="marg-annotation">'
+            t_html += f'<div class="hand-info" style="margin-bottom:0.5rem">'
+            t_html += f'<strong>{loc}</strong>'
+            if lang:
+                t_html += f' &middot; {lang}'
+            if conf:
+                t_html += (f' &middot; <span style="color:{conf_color};font-weight:600">'
+                          f'{conf}</span>')
+            t_html += '</div>'
+            if text:
+                t_html += f'<div class="marginal-text">{text}</div>'
+            if notes:
+                t_html += f'<div class="context">{notes}</div>'
+            t_html += '</div>'
+            parts.append(t_html)
+
+    # Symbols detected
+    symbols = dr.get('symbols_detected', [])
+    if symbols:
+        parts.append('<h4 style="color:var(--accent);margin:1rem 0 0.5rem;font-size:0.95rem">Symbols Detected</h4>')
+        for s in symbols:
+            s_html = '<div class="marg-annotation">'
+            s_html += f'<div class="hand-info"><strong>{escape(s.get("type", ""))}</strong>'
+            if s.get('location'):
+                s_html += f' &middot; {escape(s["location"])}'
+            s_html += '</div>'
+            if s.get('description'):
+                s_html += f'<p style="line-height:1.7;margin:0.5rem 0">{escape(s["description"])}</p>'
+            s_html += '</div>'
+            parts.append(s_html)
+
+    # Scholarly significance
+    if dr.get('scholarly_significance'):
+        parts.append(
+            '<div class="marg-annotation" style="border-left:3px solid var(--accent);background:var(--bg)">'
+            '<h4 style="color:var(--accent);margin-bottom:0.5rem">Scholarly Significance</h4>'
+            f'<p style="line-height:1.7">{escape(dr["scholarly_significance"])}</p>'
+            '</div>'
+        )
+
+    # Cross-references
+    xrefs = dr.get('cross_references', [])
+    if xrefs:
+        refs_html = ', '.join(escape(x) for x in xrefs)
+        parts.append(
+            f'<div class="hand-info" style="margin-top:0.5rem">'
+            f'<strong>Cross-references:</strong> {refs_html}</div>'
+        )
+
+    # Discrepancies
+    discreps = dr.get('discrepancies', [])
+    if discreps:
+        for d in discreps:
+            parts.append(
+                '<div style="background:#fff8e1;border:1px solid #f0e68c;border-radius:4px;'
+                'padding:0.75rem 1rem;margin:0.5rem 0;font-size:0.85rem">'
+                f'<strong>Note ({escape(d.get("type", ""))}):</strong> '
+                f'{escape(d.get("description", ""))}</div>'
+            )
+
+    # Provenance badge
+    parts.append(
+        '<div class="hand-info" style="margin-top:0.75rem">'
+        '<span class="review-badge">Vision reading (Claude Code, Phase 3)</span></div>'
+    )
+
+    return '\n'.join(parts)
+
+
 def build_marginalia_pages(conn):
     """Generate marginalia/index.html and marginalia/[signature].html."""
     cur = conn.cursor()
@@ -887,6 +1004,24 @@ def build_marginalia_pages(conn):
             })
     except:
         pass
+
+    # Load Phase 3 deep readings by signature
+    deep_by_sig = {}
+    try:
+        cur_dr = conn.cursor()
+        cur_dr.execute("""
+            SELECT sm.signature, ir.deep_reading_json
+            FROM image_readings ir
+            JOIN images i ON ir.image_id = i.id
+            JOIN signature_map sm ON (
+                CAST(REPLACE(REPLACE(i.filename, 'C_60_o_12-', ''), '.jpg', '') AS INTEGER) - 13
+            ) = sm.id
+            WHERE ir.phase = 3 AND ir.deep_reading_json IS NOT NULL
+        """)
+        for row in cur_dr.fetchall():
+            deep_by_sig[row[0].lower()] = row[1]
+    except Exception as e:
+        print(f"  Warning: could not load deep readings: {e}")
 
     # Build individual folio pages
     for sig, rows in by_sig.items():
@@ -1026,7 +1161,20 @@ def build_marginalia_pages(conn):
             <div class="marg-images">{images_html}</div>
             {f'<h3 style="margin:1.5rem 0 1rem">Alchemical Analysis</h3>' + desc_html if desc_html else ''}
             {symbols_html}
-            {alchem_cross}
+            {alchem_cross}"""
+
+        # Deep reading section (Phase 3 vision analysis)
+        deep_json = deep_by_sig.get(sig.lower())
+        if deep_json:
+            import json as _json
+            try:
+                dr = _json.loads(deep_json)
+                dr_html = _render_deep_reading(dr)
+                detail_body += dr_html
+            except Exception:
+                pass
+
+        detail_body += """
             <h3 style="margin:1.5rem 0 1rem">Annotations</h3>"""
 
         # Add annotation type badges
@@ -1050,24 +1198,98 @@ def build_marginalia_pages(conn):
         detail_page = page_shell(f'Folio {sig}', detail_body, active_nav='marginalia', depth=1)
         (marg_dir / f'{sig_slug}.html').write_text(detail_page, encoding='utf-8')
 
+    # Build standalone pages for deep readings without Russell annotations
+    standalone_dr = 0
+    for dr_sig, dr_json in deep_by_sig.items():
+        # Skip if already rendered in a marginalia page
+        if any(dr_sig == s.lower() for s in by_sig.keys()):
+            continue
+
+        sig_slug = dr_sig.lower().replace(' ', '')
+        import json as _json
+        try:
+            dr = _json.loads(dr_json)
+        except Exception:
+            continue
+
+        # Look up folio info from signature_map
+        sm_row = cur.execute(
+            "SELECT folio_number, side, quire FROM signature_map WHERE LOWER(signature) = ?",
+            (dr_sig,)
+        ).fetchone()
+        folio_info = f'Folio {sm_row[0]}{sm_row[1]}' if sm_row else ''
+        quire_info = f', Quire {sm_row[2]}' if sm_row and sm_row[2] else ''
+
+        # Get BL image if available
+        page_num = None
+        if sm_row:
+            page_num_row = cur.execute(
+                "SELECT id FROM signature_map WHERE LOWER(signature) = ?", (dr_sig,)
+            ).fetchone()
+            if page_num_row:
+                page_num = page_num_row[0]
+
+        img_html = ''
+        if page_num:
+            bl_photo = page_num + 13
+            img_row = cur.execute(
+                "SELECT COALESCE(web_path, relative_path), filename FROM images WHERE filename LIKE ?",
+                (f'C_60_o_12-{bl_photo:03d}%',)
+            ).fetchone()
+            if img_row:
+                img_html = f"""
+                <div class="marg-images">
+                    <div class="marg-image-card">
+                        <img src="../{img_row[0]}" alt="Folio {dr_sig}" loading="lazy">
+                        <div class="caption">British Library, London &mdash; C.60.o.12</div>
+                    </div>
+                </div>"""
+
+        dr_html = _render_deep_reading(dr)
+
+        detail_body = f"""
+        <div class="marg-detail">
+            <p><a href="index.html">&larr; All Folios</a></p>
+            <h2>Signature {escape(dr_sig)}</h2>
+            <p style="color:var(--text-muted); font-family:var(--font-sans); margin-bottom:1.5rem">
+                {folio_info}{quire_info}</p>
+            {img_html}
+            {dr_html}
+        </div>"""
+
+        detail_page = page_shell(f'Folio {dr_sig}', detail_body, active_nav='marginalia', depth=1)
+        (marg_dir / f'{sig_slug}.html').write_text(detail_page, encoding='utf-8')
+        by_sig[dr_sig] = []  # Add to index
+        standalone_dr += 1
+
     # Build marginalia index
     grid_items = ''
-    for sig in sorted(by_sig.keys(), key=lambda s: (
-        # Sort by quire then leaf
-        by_sig[s][0][18] or 'zzz',
-        by_sig[s][0][10] or 999
-    )):
+    def _sig_sort_key(s):
+        rows = by_sig[s]
+        if rows:
+            return (str(rows[0][18] or 'zzz'), int(rows[0][10] or 999))
+        # Standalone deep-reading pages: sort by signature string
+        return (s[0] if s else 'zzz', int(''.join(c for c in s if c.isdigit()) or '999'))
+
+    for sig in sorted(by_sig.keys(), key=_sig_sort_key):
         rows = by_sig[sig]
         sig_slug = sig.lower().replace(' ', '')
-        n_images = len(set(r[8] for r in rows))
-        n_annotations = len(rows)
-        has_alchemist = any(r[16] for r in rows)
-        alch = ' <span class="alchemist-tag">Alch.</span>' if has_alchemist else ''
+
+        if rows:
+            n_images = len(set(r[8] for r in rows))
+            n_annotations = len(rows)
+            has_alchemist = any(r[16] for r in rows)
+            alch = ' <span class="alchemist-tag">Alch.</span>' if has_alchemist else ''
+            meta = f'{n_images} image{"s" if n_images != 1 else ""}, {n_annotations} ref{"s" if n_annotations != 1 else ""}'
+        else:
+            alch = ''
+            has_dr = sig.lower() in deep_by_sig
+            meta = 'Vision reading only' if has_dr else 'No annotations'
 
         grid_items += f"""
             <a href="{sig_slug}.html">
                 <div class="sig-label">{escape(sig)}{alch}</div>
-                <div class="sig-meta">{n_images} image{'s' if n_images != 1 else ''}, {n_annotations} ref{'s' if n_annotations != 1 else ''}</div>
+                <div class="sig-meta">{meta}</div>
             </a>"""
 
     index_body = f"""

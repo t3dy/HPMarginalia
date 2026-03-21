@@ -312,68 +312,407 @@ WOODCUTS_1499 = [
      "The fourth triumph: a feast on wheels. The combination of food, drink, and movement represents the sensory abundance of the world Eros governs.",
      "PROCESSION"),
 
-    # Post-procession: Venus and the Ritual
-    (170, "l3v", "Poliphilo at the Temple of Venus",
-     "Poliphilo and companions before the temple of Venus. Classical architecture with columns and pediment.",
-     "Poliphilo arrives at the shrine of Venus — the destination the entire procession was leading toward.",
+    # === WORSHIP OF PRIAPUS & TEMPLE OF VENUS (pp. 185-221) ===
+    (185, "m5r", "Worship of Priapus",
+     "Full-page woodcut: nineteen female and five male figures worshipping at a shrine of Priapus. Densely populated ritual scene.",
+     "The Priapus worship scene marks the transition from procession to temple ritual. The explicit nature of this woodcut embodies the HP's frank treatment of fertility and desire.",
      "NARRATIVE"),
 
-    (175, "l6r", "The Sacrifice to Venus",
-     "Ritual sacrifice scene with figures at an altar before the temple. Smoke rises from offerings.",
-     "Poliphilo participates in a ritual sacrifice to Venus, completing his transition from observer to participant in the world of love.",
+    (195, "n2r", "Section and Ground-plan of Rotunda Temple",
+     "Full-page architectural diagram: cross-section and floor plan of the circular Temple of Venus Physizoa. Detailed measurements and proportions.",
+     "The HP's most elaborate architectural diagram. The rotunda temple embodies the mathematical perfection that Colonna sees as analogous to divine love.",
+     "DIAGRAM"),
+
+    (197, "n3r", "Winged Female Half-figure Ornament",
+     "Nude winged female half-figure emerging from acanthus foliage. Decorative architectural element.",
+     "A decorative motif from the temple interior, combining human and vegetal forms in the grotesque tradition.",
+     "DECORATIVE"),
+
+    (198, "n3v", "Globular Lamp Hung in Chains",
+     "Ornate spherical lamp suspended by chains. Detailed metalwork design.",
+     "A lighting fixture from the Temple of Venus, described in meticulous detail as part of the HP's ekphrastic tradition.",
+     "DECORATIVE"),
+
+    (201, "n5r", "Crowning of Lantern in Cupola",
+     "Architectural ornament: the lantern crowning the temple cupola, with bells and decorative finial.",
+     "The crowning element of the temple dome, completing the architectural description from foundation to apex.",
+     "DECORATIVE"),
+
+    (204, "n6v", "Inscribed Tablets in Temple",
+     "Two inscribed cartouches/tablets with Greek and Latin text. Hieroglyphic devices in the Temple of Venus.",
+     "Inscribed tablets within the temple, combining Greek and Latin in the HP's characteristic multilingual epigraphy.",
+     "HIEROGLYPHIC"),
+
+    (205, "n7r", "Procession of Seven Virgins to Altar",
+     "Seven virgins in procession approaching the altar in the Temple of Venus. Ritual scene with priestess.",
+     "The beginning of the Venus temple ceremony. Seven virgins process toward the altar where Poliphilo and Polia will be united.",
      "NARRATIVE"),
 
-    (180, "l8v", "Venus Revealed",
-     "Venus herself appears to Poliphilo, possibly in or near her temple. Divine epiphany scene.",
-     "The climax of Book I: Venus reveals herself. This divine encounter is the reward for Poliphilo's long journey through architecture, allegory, and danger.",
+    (207, "n8r", "Polia's Torch Extinguished in Altar-fountain",
+     "Ceremony scene: Polia extinguishes a torch in the fountain at the altar. Priestess and attendants present.",
+     "Polia's torch-extinguishing symbolizes the surrender of Diana's chastity to Venus's love.",
      "NARRATIVE"),
 
-    # Cythera and the Island
-    (190, "m5v", "The Voyage to Cythera",
-     "A ship or boat scene with figures crossing water toward an island.",
-     "Poliphilo travels by boat to the island of Cythera (Venus's birthplace). The sea voyage represents yet another threshold crossing.",
+    (208, "n8v", "Temple Ceremony at Altar",
+     "Figures gathered around the altar in the Temple of Venus. Ritual scene under classical portico.",
+     "Continuation of the temple ceremony with ritual offerings.",
      "NARRATIVE"),
 
-    (200, "n2v", "The Garden of Venus on Cythera",
-     "Elaborate garden layout on the island of Cythera. Geometric garden design with central feature.",
-     "The ideal garden on Venus's island — a designed paradise combining geometric order with natural abundance. This garden represents the HP's vision of perfect union between art and nature.",
-     "LANDSCAPE"),
+    (210, "o1v", "Two Virgins Offering Swans and Doves",
+     "Two virgins offering swans and doves for sacrifice at the temple altar. Priestess officiates.",
+     "The sacrifice of birds sacred to Venus. Swans and doves are the traditional animals of the love goddess.",
+     "NARRATIVE"),
 
-    (210, "o1r", "The Fountain of Venus",
-     "Central fountain in the garden of Cythera. Elaborate multi-tiered design with Venus figure.",
-     "The culminating fountain of the HP — all previous fountains were preludes to this one. Venus herself presides over the waters of love.",
+    (212, "o2v", "The Altar in the Temple of Venus",
+     "Detailed view of the altar/vessel on its pedestal in the Temple of Venus.",
+     "The altar itself as an object of contemplation. Like all furnishings in the HP, it is described as a work of art.",
      "ARCHITECTURAL"),
 
-    # Book II: Polia's Narrative (pp. 230+)
-    (234, "p1v", "Polia Tells Her Story",
-     "Interior scene: Polia seated, telling her story to a listener. Architectural setting.",
-     "The beginning of Book II, where Polia takes over as narrator. The shift from Poliphilo's dream architecture to Polia's autobiographical narrative marks a fundamental change in the HP's mode.",
+    (213, "o3r", "Temple Ceremony: Miracle of the Roses",
+     "Ceremony scene in the temple. Figures gathered around altar as roses appear.",
+     "The miracle of the roses: a rose-tree rises from the altar as the ceremony reaches its climax.",
      "NARRATIVE"),
 
-    (240, "p4v", "The Temple of Diana",
-     "Classical temple interior dedicated to Diana. Ritual scene with female figures.",
-     "Polia describes her service at the temple of Diana (chastity). Her devotion to Diana represents resistance to Eros — the conflict that drives Book II.",
+    (219, "o6r", "Sacrifice Scene with Swans at Altar",
+     "Ceremony at temple altar: priestess officiates as swans are sacrificed under classical portico.",
+     "The culminating sacrifice in the Temple of Venus. The swans represent Polia's purity offered to love.",
+     "NARRATIVE"),
+
+    (222, "o7v", "Miracle of the Roses",
+     "Rose-tree rising from altar. Priestess on ladder tending the miraculous tree. Figures kneel in worship below.",
+     "The miracle of the roses is the climax of the temple ceremony. A supernatural rose-tree springs from the altar, confirming Venus's blessing on the lovers.",
+     "NARRATIVE"),
+
+    (224, "o8v", "Poliphilus and Polia Receive Fruits from Priestess",
+     "Poliphilus and Polia receive ceremonial fruits from the priestess under the temple portico. Multiple attendant figures.",
+     "The final gift from the priestess seals the lovers' union. The fruits symbolize the consummation of the sacred marriage ceremony.",
+     "NARRATIVE"),
+
+    # NOTE: entry at p.221 likely duplicates p.222/224 ceremony scene — keep for now
+    (221, "o7r", "Poliphilus and Polia Receive Fruits",
+     "Poliphilus and Polia receive fruits from the priestess at the altar. Completion of the temple ceremony.",
+     "The lovers receive the fruits of their devotion. This final gift from the priestess seals their union under Venus's blessing.",
+     "NARRATIVE"),
+
+    # === POLYANDRION / CEMETERY (pp. 228-261) ===
+    (228, "p2v", "Ruins of Temple Polyandrion",
+     "Full-page woodcut: ruined classical temple among trees and vegetation. Obelisk visible. Fallen columns and arches. One of the HP's finest architectural compositions.",
+     "The Polyandrion (cemetery of lovers) appears as a magnificent ruin. This image of classical architecture returning to nature is the HP's most romantic archaeological vision.",
      "ARCHITECTURAL"),
 
-    (250, "q1v", "Poliphilo's Death and Revival",
-     "Dramatic scene: Poliphilo lies as if dead while figures surround him. Polia looks on in distress.",
-     "In Polia's telling, Poliphilo collapsed at her rejection and appeared to die. His revival through Cupid's intervention parallels alchemical death-and-resurrection symbolism.",
+    (233, "p5r", "Obelisk with Hieroglyphic Devices",
+     "Obelisk with hieroglyphic inscriptions plus circular medallion with Latin text. Two woodcuts on one page.",
+     "The Polyandrion (cemetery of lovers) begins with an obelisk covered in hieroglyphics. The HP's sustained engagement with Egyptian symbolism reaches its peak here.",
+     "HIEROGLYPHIC"),
+
+    (235, "p6r", "Two Hieroglyphic Medallion Reliefs",
+     "Two circular medallions with figural scenes and Latin inscriptions: MILITARIS PRVDENTIA and DIVVLII VICTORIAR.",
+     "Paired medallions from the Polyandrion monuments, combining military virtue with love's victory.",
+     "HIEROGLYPHIC"),
+
+    (234, "p5v", "Hieroglyphic Device Strip and Julius Caesar Medallion",
+     "Two woodcuts: strip of small hieroglyphic figures/objects AND circular medallion with DIVO IVLIO CAESARI inscription, ants and elephants.",
+     "The Julius Caesar medallion combines Roman imperial epigraphy with natural history (ants, elephants) in the HP's characteristic fusion of classical learning.",
+     "HIEROGLYPHIC"),
+
+    (236, "p6v", "Polyandrion Architrave Fragment",
+     "Architrave fragment with inscription CADAVERIS AMORE FVRENTIVM MISERABVNDIS POLYANDRION.",
+     "The naming inscription of the Polyandrion: a cemetery for those who died raving from love. This establishes the section's memento mori theme.",
+     "ARCHITECTURAL"),
+
+    (237, "p7r", "Cupola Above Entrance to the Crypt",
+     "Domed cupola structure with columns marking the entrance to the underground crypt.",
+     "The entrance to the crypt beneath the Polyandrion. The descent underground parallels classical katabasis narratives.",
+     "ARCHITECTURAL"),
+
+    (238, "p7v", "Sarcophagus: Interno Plotoni",
+     "Sarcophagus with inscription INTERNO PLOTONI TRICORPORI. Classical funerary monument.",
+     "A sarcophagus dedicated to Pluto (Pluton), ruler of the underworld. The HP connects love's death to mythological underworld geography.",
+     "ARCHITECTURAL"),
+
+    (241, "q1r", "Mosaic of Hell on Crypt Ceiling",
+     "Large arched scene: mosaic depicting Hell on the ceiling of the crypt. Figures in torment among flames and darkness.",
+     "The Hell mosaic, after Dante. Colonna places a vision of infernal punishment within the lovers' cemetery, linking erotic transgression to damnation.",
      "NARRATIVE"),
 
-    (260, "q6v", "Cupid Intervenes",
-     "Cupid appears to Polia, commanding her to love Poliphilo. Divine mandate scene.",
-     "Cupid/Eros compels Polia to abandon Diana and accept love. This divine intervention resolves Book II's central conflict.",
+    (243, "q2r", "Sepulchral Monument: D.M. Annirae",
+     "Architectural monument with urn and inscription D.M. ANNIRAE PVCILLAE. Cherub faces on pedestal.",
+     "A funerary monument for a young girl, combining Roman epigraphic conventions with Renaissance decorative motifs.",
+     "ARCHITECTURAL"),
+
+    (245, "q3r", "Sacrifice Relief: Have Seria Obitum",
+     "Relief panel with figures: old man, youth, faun, and dancers. Inscription HAVE SERIA OBITVM AMANTIS VALE.",
+     "A relief depicting a funerary sacrifice with the farewell inscription to a dead lover.",
      "NARRATIVE"),
 
-    (270, "r3v", "Polia Embraces Poliphilo",
-     "Reunion scene: Polia and Poliphilo embrace. Figures in a garden or architectural setting.",
-     "The lovers united at last. This reunion completes the narrative arc that began with Poliphilo's solitary wandering in the dark forest.",
+    (247, "q4r", "Epitaph Fragments with Urn",
+     "Two epitaph fragments on one page: HEVS INSPECTO FACIO inscription and Greek inscription urn.",
+     "Multiple epitaphs from the Polyandrion, showcasing the HP's multilingual epigraphy (Latin and Greek).",
+     "ARCHITECTURAL"),
+
+    (249, "q5r", "Sepulchral Monument with Latin Inscription",
+     "Tombstone on stepped pedestal with Latin epitaph: INTER.D.DEAR.Q.CVIBVS ADVLESCENS...",
+     "A classical Roman-style funerary monument for a young man who died of intemperate love.",
+     "ARCHITECTURAL"),
+
+    (250, "q5v", "Epitaphs: Greek Urn and D.M. Lyndia",
+     "Two woodcuts: sepulchral urn with Greek inscription AND tombstone with epitaph D.M. LYNDIA.",
+     "Paired epitaphs continuing the Polyandrion sequence. The Greek urn demonstrates Colonna's classical erudition.",
+     "ARCHITECTURAL"),
+
+    (251, "q6r", "Sarcophagus: P. Cornelia Annia",
+     "Elaborate sarcophagus with inscription D.M. P.CORNELIA ANNIA NE INDESOLATA. Tiled roof detail.",
+     "A grand sarcophagus for a Roman noblewoman, with an elaborate architectural frame suggesting a miniature temple.",
+     "ARCHITECTURAL"),
+
+    (252, "q6v", "Sarcophagus with Hieroglyphic Devices",
+     "Sarcophagus decorated with hieroglyphic symbols and devices.",
+     "An Egyptian-themed sarcophagus in the Polyandrion, connecting the funerary arts of Rome and Egypt.",
+     "HIEROGLYPHIC"),
+
+    (253, "q7r", "Large Epitaph: O Lector Infoelix",
+     "Full-page epitaph within ornate architectural frame. Extended Latin inscription beginning O LECTOR INFOEL...",
+     "The longest and most elaborate epitaph in the Polyandrion. The reader is directly addressed as 'unhappy reader' in a meditation on mortality.",
+     "ARCHITECTURAL"),
+
+    (254, "q7v", "Sepulchral Monument with Laurel Wreath",
+     "Large sepulchral monument crowned with laurel wreath. Elaborate Renaissance architectural frame.",
+     "A monument crowned with the laurel of poetic glory, connecting death to artistic immortality.",
+     "ARCHITECTURAL"),
+
+    (257, "r1r", "Monument of Artemisia",
+     "Full-page woodcut: elaborate architectural monument with Queen Artemisia enthroned in central niche. Greek inscription ARTEMISIDOS BASILIDOS ERODON.",
+     "The monument of Artemisia, who drank the ashes of her husband Mausolus. The HP's most elaborate funerary monument, prototype of the historical Mausoleum at Halicarnassus.",
      "NARRATIVE"),
 
-    # Note: the actual 1499 edition has many more woodcuts (total ~172).
-    # The entries above cover the major narrative woodcuts. Many additional
-    # small decorative initials, headpieces, and vignettes exist throughout.
-    # They will be added as the IA scan is systematically cataloged.
+    (258, "r1v", "Sepulchral Monument with Putti",
+     "Elaborate sepulchral monument with two putti holding curtain. Arched niche with figure. Relief panels below.",
+     "A grand funerary monument combining classical architectural framing with the decorative vocabulary of putti and drapery.",
+     "ARCHITECTURAL"),
+
+    (259, "r2r", "Epitaph with Busts of Youth and Woman",
+     "Sepulchral monument with portrait busts of a young man and woman under curtained canopy. Latin epitaph: ASPICE VIATOR...",
+     "A double portrait monument for two lovers, the curtain suggesting both intimacy and the veil between life and death.",
+     "ARCHITECTURAL"),
+
+    (261, "r3r", "Sepulchral Portal: Gates of Life and Death",
+     "Full-page monument: architectural portal with eagle pediment, inscription D.DITI ET PROSER. Two gates below.",
+     "The portal of Dis and Proserpina, with the narrow gates of life and death. This is the Polyandrion's culminating monument.",
+     "ARCHITECTURAL"),
+
+    # === CYTHERA VOYAGE (pp. 275-281) ===
+    (275, "s2r", "Standard of Cupid's Bark",
+     "Decorative banner/standard with AMOR VINCIT OMNIA inscription, plus ornamental initial below.",
+     "The banner of Cupid's ship, proclaiming love conquers all. This Virgilian motto governs the entire HP.",
+     "DECORATIVE"),
+
+    (281, "s5r", "The Bark of the God of Love",
+     "Small boat on waves with ornamental prow and stern. Cupid's vessel for the voyage to Cythera.",
+     "Cupid's bark, carrying Poliphilo and Polia across the sea to Venus's island. The voyage represents the final threshold crossing.",
+     "NARRATIVE"),
+
+    # === CYTHERA GARDENS (pp. 291-341) ===
+    (291, "t2r", "Water-work Fountain with Hydra Heads",
+     "Ornate fountain structure with multiple water spouts, hydra-headed decorations, and peristyle columns.",
+     "A garden fountain on Venus's island, combining hydraulic engineering with mythological ornament.",
+     "ARCHITECTURAL"),
+
+    (295, "t4r", "Tree Clipped in Ring-shape",
+     "Topiary: tree shaped into a ring or circular form on ornamental base with pedestal.",
+     "The first of the HP's remarkable topiary illustrations, showing nature bent to geometric form.",
+     "DECORATIVE"),
+
+    (297, "t5r", "Box-tree Clipped as Mushroom",
+     "Topiary: box-tree clipped into mushroom shape on stepped circular pedestal.",
+     "Another topiary design from Venus's gardens, demonstrating the HP's vision of nature as architectural material.",
+     "DECORATIVE"),
+
+    (298, "t5v", "Peristyle Colonnade with Trellis",
+     "Classical peristyle structure with trellis and garden setting. Columns support an ornamental roof.",
+     "A garden architecture combining classical columns with horticultural trellis work.",
+     "ARCHITECTURAL"),
+
+    (301, "t7r", "Plan of the Island of Venus",
+     "Full-page diagram: circular plan of Venus's island showing concentric garden zones and central temple.",
+     "The plan of Venus's island, with concentric rings of gardens surrounding the central sanctuary. A utopian diagram of the perfect garden-temple.",
+     "DIAGRAM"),
+
+    (307, "x2r", "Ornamental Flower-bed Pattern (Circular)",
+     "Circular ornamental flower-bed design with concentric rings of geometric patterns.",
+     "One of the HP's garden-design diagrams, showing the mathematical basis of Renaissance flower-bed layouts.",
+     "DECORATIVE"),
+
+    (311, "x4r", "Ornamental Flower-bed Pattern (Square)",
+     "Square flower-bed design with geometric interlocking patterns and border elements.",
+     "A square flower-bed design complementing the circular pattern, showing the HP's encyclopedic coverage of garden types.",
+     "DECORATIVE"),
+
+    (312, "x4v", "Peacock Topiary on Pedestal",
+     "Box-tree clipped as three peacocks standing on ornamental altar-vase pedestal.",
+     "A topiary peacock, combining the HP's horticultural imagination with the symbolic associations of the peacock (immortality, vanity).",
+     "DECORATIVE"),
+
+    (313, "x5r", "Flower-bed in Shape of Eagle",
+     "Flower-bed pattern shaped as an eagle with spread wings, inscribed within a rectangular border.",
+     "An eagle-shaped parterre, combining heraldic imagery with horticultural design.",
+     "DECORATIVE"),
+
+    (314, "x5v", "Eagle and Urn Flower-bed Design",
+     "Flower-bed pattern with eagle/urn motif. Latin inscription around border with AEA LIT SENI text.",
+     "An eagle-and-urn parterre design, combining heraldic and funerary motifs in the garden layout.",
+     "DECORATIVE"),
+
+    (317, "x7r", "Two Trophy Standards",
+     "Two vertical trophy standards side by side: Roman arms trophies with ornamental designs.",
+     "Garden trophies combining military and decorative motifs, ornaments of Venus's pleasure-ground.",
+     "DECORATIVE"),
+
+    (318, "x7v", "Trophy Standards: QVIS EVADET and NEMO",
+     "Two vertical trophy standards with winged ornaments. Tablets inscribed QVIS EVADET and NEMO.",
+     "Paired trophies posing the enigmatic question 'Who shall escape?' answered by 'No one.' Love is inescapable.",
+     "DECORATIVE"),
+
+    (319, "x8r", "Trophy Standards with NEMO Tablet",
+     "Two more trophy standards with tablets inscribed NEMO and ornamental winged designs.",
+     "Trophies bearing the enigmatic inscription NEMO (no one), connecting love's triumph to philosophical riddle.",
+     "DECORATIVE"),
+
+    (328, "y4v", "Vase with Dragon-handle Monsters",
+     "Ornate two-handled vase with dragon-form handles. Detailed metalwork with mythological motifs.",
+     "A remarkable vessel in Venus's gardens, combining the HP's obsession with decorative arts and mythological fauna.",
+     "DECORATIVE"),
+
+    (330, "y5v", "Earthenware Amphora with Fumes",
+     "Amphora with odoriferous fumes emerging from orifice. Greek inscription PANTA BAIA BIOY.",
+     "An amphora emitting fragrant smoke, inscribed with the Greek maxim 'All of life is brief.' Perfume and mortality united.",
+     "DECORATIVE"),
+
+    (331, "y6r", "Precious Stone Vase with Fiery Sparks",
+     "Small ornate vase of precious stone emitting fiery sparks or fumes. Detailed metalwork.",
+     "One of the remarkable vessels in Venus's gardens, combining precious materials with alchemical imagery.",
+     "DECORATIVE"),
+
+    (335, "y8r", "Terminal Figure with Serpent",
+     "Terminal figure/trophy with serpent and ornamental elements. Three heads of Cerberus visible.",
+     "A terminal figure combining classical herm tradition with infernal imagery (Cerberus), reminding that love borders death.",
+     "DECORATIVE"),
+
+    (334, "y7v", "Terminal Figure with Three Male Heads",
+     "Classical herm/terminal figure on pedestal. Three male heads facing different directions. Decorative garden element.",
+     "A garden herm in the classical tradition, the three heads perhaps representing past, present, and future — or the three faces of Hecate.",
+     "DECORATIVE"),
+
+    (336, "y8v", "Triumph of Cupid: Nymphs and Satyrs with Chariot",
+     "Procession with nymphs and satyrs pulling chariot bearing Cupid. Captives and trophies.",
+     "A second triumphal procession on Venus's island. Cupid rides in triumph while satyrs and nymphs process before him.",
+     "PROCESSION"),
+
+    (337, "z1r", "Triumph of Cupid",
+     "Large procession: nymphs, satyrs, dragons, and captives in Cupid's triumphal procession.",
+     "A second triumphal procession, this time on Venus's island. Cupid himself rides in triumph over all who love.",
+     "PROCESSION"),
+
+    (339, "z2r", "Column Base with Rams' Heads",
+     "Architectural detail: column base with rams' heads and sacrifice medallion relief.",
+     "A column base from the amphitheater, combining sacrificial rams with architectural ornament.",
+     "DECORATIVE"),
+
+    (341, "z3r", "The Amphitheatre in Island of Venus",
+     "Large architectural section: amphitheater structure with tiered seating, arches, and columns.",
+     "The amphitheater on Venus's island, where the lovers will witness the final ceremonies. Classical architecture at its most monumental.",
+     "ARCHITECTURAL"),
+
+    # === VENUS FOUNTAIN (pp. 349-365) ===
+    (349, "A3r", "Ground-plan of Fountain of Venus",
+     "Geometric diagram: heptagonal/octagonal ground-plan of the fountain of Venus. Detailed measurements.",
+     "The plan of Venus's central fountain, the mathematical heart of the island's design.",
+     "DIAGRAM"),
+
+    (365, "B3r", "Poliphilus and Polia at Fountain of Venus",
+     "Garden scene: Poliphilus and Polia with nymphs at the Fountain of Venus, trellis and columns visible.",
+     "The lovers arrive at the culminating fountain. This reunion at the water's source completes the HP's aquatic symbolism.",
+     "NARRATIVE"),
+
+    # === BOOK II: POLIA'S NARRATIVE (pp. 386-447) ===
+    (386, "C5v", "Polia Drags Prostrate Poliphilus",
+     "Interior scene: Polia drags the prostrate Poliphilus from the sanctuary of Diana. Classical temple columns.",
+     "In Polia's telling, she dragged the collapsed Poliphilus from Diana's temple. Her act of physical rescue precedes her spiritual surrender to love.",
+     "NARRATIVE"),
+
+    (387, "C6r", "Polia in Temple of Diana; Poliphilus Prostrate",
+     "Temple interior: Poliphilus lies prostrate on the floor while Polia stands in the Temple of Diana.",
+     "Poliphilus has collapsed at Polia's feet in Diana's temple. His death-like swoon is the crisis that forces Polia to choose between Diana and Venus.",
+     "NARRATIVE"),
+
+    (390, "C7v", "Cupid Brandishes Sword over Victims",
+     "Cupid brandishes a sword over kneeling women bound to trees. Chariot visible at right.",
+     "Cupid's punishment of those who resist love. The violence of this scene underscores the HP's view of Eros as an irresistible cosmic force.",
+     "NARRATIVE"),
+
+    (391, "C8r", "Lion, Dog, Dragon Devour Victims",
+     "Woodland scene: lion, dog, and dragon devour victims while Cupid flies above with torch and arrows.",
+     "The most violent image in the HP: beasts destroy those who defy love. Cupid oversees from above, combining infantile form with terrible power.",
+     "NARRATIVE"),
+
+    (393, "D1r", "Dream of Polia: Cupid Punishes Two Women",
+     "Two women punished by Cupid in a woodland setting. Figures tied to trees with beasts approaching.",
+     "Polia's vision of Cupid's vengeance. The paired punishment scenes serve as exempla warning against resistance to love.",
+     "NARRATIVE"),
+
+    (411, "E2r", "Poliphilus Dead; Polia Kneels in Grief",
+     "Interior scene: Poliphilus lies dead on tiled floor while Polia kneels beside him in grief.",
+     "The central crisis of Book II. Poliphilus appears to have died from unrequited love, and Polia confronts the consequences of her rejection.",
+     "NARRATIVE"),
+
+    (412, "E2v", "Poliphilus Revived in Polia's Lap",
+     "Interior scene: Polia cradles the revived Poliphilus in her lap. The lovers embrace on tiled floor.",
+     "Poliphilus revives in Polia's arms. This resurrection through love parallels the alchemical solve et coagula.",
+     "NARRATIVE"),
+
+    (413, "E3r", "Priestesses Drive Lovers from Temple",
+     "Figures being driven from a classical temple entrance. Priestesses expel the lovers from Diana's sanctuary.",
+     "The priestesses of Diana expel Poliphilus and Polia from the temple. Their love has profaned Diana's sacred space.",
+     "NARRATIVE"),
+
+    (416, "E4v", "Polia's Bed-chamber Vision",
+     "Two-scene woodcut: landscape with figures above, Polia in bed-chamber below. Diana vs Venus contest in sky.",
+     "Polia's pivotal vision: Diana and Venus contend for her allegiance while she lies in her bed-chamber. The split scene shows outer and inner worlds.",
+     "NARRATIVE"),
+
+    (419, "E6r", "Polia Kneels Before Venus Priestess",
+     "Temple scene: Polia kneels before the Venus priestess with Poliphilus beside her. Altar with flame visible.",
+     "Polia submits to Venus's priestess, formally abandoning Diana. This scene resolves Book II's central conflict.",
+     "NARRATIVE"),
+
+    (421, "E7r", "Enamoured Couple Before Priestess",
+     "Interior scene with columns: the couple kneels before the enthroned priestess at altar.",
+     "Poliphilus and Polia kneel together before the priestess, receiving Venus's formal blessing on their union.",
+     "NARRATIVE"),
+
+    (425, "F1r", "Priestess Enthroned; Lovers Kissing",
+     "Interior scene: priestess enthroned above while the lovers kiss in her presence. Witnesses at sides.",
+     "The lovers' kiss before the priestess of Venus. This public ritual kiss seals their sacred marriage.",
+     "NARRATIVE"),
+
+    (433, "F5r", "Poliphilus Writing at Carved Desk",
+     "Interior scene: Poliphilus seated at an ornately carved desk, writing. Bookshelves and architectural details.",
+     "Poliphilus as author, writing the very text we read. This self-reflexive image frames the HP as a literary artifact produced by a lover's hand.",
+     "NARRATIVE"),
+
+    (436, "F6v", "Polia Reading Letter in Bed-chamber",
+     "Interior scene: Polia reads Poliphilus's letter while seated in her bed-chamber. Small dog at feet.",
+     "Polia receives and reads Poliphilus's love letter. The intimate bed-chamber setting emphasizes the private nature of their correspondence.",
+     "NARRATIVE"),
+
+    (447, "G4r", "Poliphilus Before Venus in Clouds",
+     "Poliphilus before Venus enthroned on clouds. Cupid at left, figure at right. Divine epiphany scene.",
+     "The final narrative woodcut of the HP. Venus appears to Poliphilus in glory, flanked by Cupid. This celestial vision completes the dream before Poliphilus awakens.",
+     "NARRATIVE"),
+
+    (448, "G4v", "Cupid Shoots Arrow at Bust of Polia",
+     "Cupid with bow shoots arrow at bust/figure. Venus seated on clouds at right. The very last woodcut in the HP.",
+     "The final image of the HP: Cupid looses his arrow at Polia's image as the dream dissolves. Venus watches from her celestial throne. The reader is returned to waking life.",
+     "NARRATIVE"),
 ]
 
 
