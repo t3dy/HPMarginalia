@@ -1948,6 +1948,11 @@ def _build_annotated_woodcuts_gallery(conn):
         return ''
 
     ia_img_dir = SITE_DIR / 'images' / 'woodcuts_1499'
+    marg_dir = SITE_DIR / 'marginalia'
+    dict_dir = SITE_DIR / 'dictionary'
+    _ag_marg_sigs = {f.stem for f in marg_dir.glob('*.html') if f.stem != 'index'} if marg_dir.exists() else set()
+    _ag_dict_slugs = {f.stem for f in dict_dir.glob('*.html') if f.stem != 'index'} if dict_dir.exists() else set()
+
     cat_colors = {
         'ARCHITECTURAL': '#8b5cf6', 'LANDSCAPE': '#10b981', 'NARRATIVE': '#3b82f6',
         'HIEROGLYPHIC': '#f59e0b', 'PROCESSION': '#ef4444', 'DECORATIVE': '#6366f1',
@@ -1982,14 +1987,14 @@ def _build_annotated_woodcuts_gallery(conn):
             ann_note = f'<p style="font-size:0.85rem;color:var(--accent);margin:0.5rem 0 0"><strong>BL annotations present</strong>'
             if has_alch:
                 ann_note += ' (alchemical)'
-            if sig:
+            if sig and sig.lower() in _ag_marg_sigs:
                 ann_note += f' &mdash; <a href="marginalia/{sig.lower()}.html">View folio {escape(sig)}</a>'
             ann_note += '</p>'
 
         # Dictionary links
         dict_html = ''
         if dict_terms:
-            terms = [t.strip() for t in dict_terms.split(',') if t.strip()]
+            terms = [t.strip() for t in dict_terms.split(',') if t.strip() and t.strip() in _ag_dict_slugs]
             dict_links = ' '.join(f'<a href="dictionary/{t}.html" style="font-size:0.75rem;padding:0.1rem 0.4rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;text-decoration:none;color:var(--text)">{t.replace("-", " ").title()}</a>' for t in terms)
             dict_html = f'<div style="margin-top:0.5rem">{dict_links}</div>'
 
@@ -2950,6 +2955,27 @@ def build_woodcuts_pages(conn):
     wc_dir.mkdir(exist_ok=True)
     ia_img_dir = SITE_DIR / 'images' / 'woodcuts_1499'
 
+    # Clean up stale pages from previous builds
+    for old_file in wc_dir.glob('*.html'):
+        if old_file.stem != 'index':
+            old_file.unlink()
+
+    # Which signatures have marginalia pages?
+    marg_dir = SITE_DIR / 'marginalia'
+    _wc_marg_sigs = set()
+    if marg_dir.exists():
+        for f in marg_dir.glob('*.html'):
+            if f.stem != 'index':
+                _wc_marg_sigs.add(f.stem)
+
+    # Which dictionary terms exist?
+    dict_dir = SITE_DIR / 'dictionary'
+    _wc_dict_slugs = set()
+    if dict_dir.exists():
+        for f in dict_dir.glob('*.html'):
+            if f.stem != 'index':
+                _wc_dict_slugs.add(f.stem)
+
     cur.execute("""
         SELECT id, slug, title, signature_1499, page_1499, page_1499_ia,
                bl_photo_number, subject_category, woodcut_type,
@@ -3088,16 +3114,18 @@ def build_woodcuts_pages(conn):
                 ann_parts.append(f'{ann_density.lower()} annotation density')
             if photo:
                 ann_parts.append(f'BL photograph #{photo}')
-            ann_html = f'<div class="wc-annotation-note"><strong>In the BL copy (C.60.o.12):</strong> This page has {", ".join(ann_parts)}. <a href="../marginalia/{(sig or "").lower()}.html">View folio &rarr;</a></div>'
+            folio_link = f' <a href="../marginalia/{(sig or "").lower()}.html">View folio &rarr;</a>' if (sig or '').lower() in _wc_marg_sigs else ''
+            ann_html = f'<div class="wc-annotation-note"><strong>In the BL copy (C.60.o.12):</strong> This page has {", ".join(ann_parts)}.{folio_link}</div>'
 
         # Cross links
         cross_html = ''
         cross_parts = []
         if dict_terms:
             term_links = ''.join(f'<a href="../dictionary/{t.strip()}.html">{t.strip().replace("-", " ").title()}</a>'
-                                  for t in dict_terms.split(',') if t.strip())
-            cross_parts.append(f'<h4>Related Dictionary Terms</h4>{term_links}')
-        if sig:
+                                  for t in dict_terms.split(',') if t.strip() and t.strip() in _wc_dict_slugs)
+            if term_links:
+                cross_parts.append(f'<h4>Related Dictionary Terms</h4>{term_links}')
+        if sig and sig.lower() in _wc_marg_sigs:
             cross_parts.append(f'<h4>Related Folio</h4><a href="../marginalia/{sig.lower()}.html">Folio {escape(sig)}</a>')
         if cross_parts:
             cross_html = f'<div class="cross-links">{"".join(cross_parts)}</div>'
@@ -3244,7 +3272,7 @@ def build_the_book_page():
         <a href="dictionary/dark-forest.html">dark, terrifying forest</a> &mdash; a
         deliberate echo of Dante's <em>selva oscura</em> at the beginning of the
         <em>Inferno</em>. He is alone, frightened, and disoriented. The
-        <a href="woodcuts/dark-forest.html">woodcut of the dark forest</a> establishes
+        <a href="russell-alchemical-hands.html#annotated-woodcuts">woodcut of the dark forest</a> establishes
         the visual register that will govern the entire book: dense, precise, and
         atmospheric.</p>
 
@@ -3267,7 +3295,7 @@ def build_the_book_page():
         so vivid they rival the woodcut illustrations.</p>
 
         <p>The most famous image in the book appears here: the
-        <a href="woodcuts/elephant-obelisk.html">elephant bearing an obelisk</a>
+        <a href="russell-alchemical-hands.html#annotated-woodcuts">elephant bearing an obelisk</a>
         (signature b6v), decorated with pseudo-<a href="dictionary/hieroglyph.html">hieroglyphic</a>
         carvings. This image later inspired Bernini's 1667 sculpture in the Piazza della
         Minerva in Rome, commissioned by Pope Alexander VII &mdash; who himself annotated
@@ -3300,7 +3328,7 @@ def build_the_book_page():
         <p>Poliphilo witnesses a series of elaborate
         <a href="dictionary/triumphal-procession.html">triumphal processions</a>
         featuring chariots drawn by exotic animals, musicians, dancers, and allegorical
-        personifications. The <a href="woodcuts/triumphal-procession-soldiers.html">procession
+        personifications. The <a href="russell-alchemical-hands.html#annotated-woodcuts">procession
         woodcuts</a> are among the most complex in the book. These passages connect the HP
         to Renaissance festival culture and to the classical literary tradition of the
         <em>triumphus</em>. The alchemical annotators later read them as encoding stages
@@ -3839,10 +3867,15 @@ def build_concordance_browser(conn):
             # Woodcut info
             wc_html = '<div class="wc-info"></div>'
             if wc_title and wc_slug:
-                cat_badge = f'<span class="wc-cat" style="background:{wc_cat_colors.get(wc_cat, "#6b7280")}">{escape(wc_cat or "")}</span> ' if wc_cat else ''
-                wc_html = f'<div class="wc-info"><span class="wc-title"><a href="../woodcuts/{wc_slug}.html">{cat_badge}{escape(wc_title[:50])}</a></span></div>'
+                # Check if this woodcut's detail page exists (CORPUS_EXTRACTION pages were moved to Alchemical Hands)
+                wc_page_exists = (SITE_DIR / 'woodcuts' / f'{wc_slug}.html').exists()
+                if wc_page_exists:
+                    cat_badge = f'<span class="wc-cat" style="background:{wc_cat_colors.get(wc_cat, "#6b7280")}">{escape(wc_cat or "")}</span> ' if wc_cat else ''
+                    wc_html = f'<div class="wc-info"><span class="wc-title"><a href="../woodcuts/{wc_slug}.html">{cat_badge}{escape(wc_title[:50])}</a></span></div>'
+                else:
+                    # Moved to Alchemical Hands page
+                    wc_html = f'<div class="wc-info"><span class="wc-title"><a href="../russell-alchemical-hands.html#annotated-woodcuts" style="color:var(--accent)">{escape(wc_title[:50])}</a></span></div>'
             elif has_wc and not wc_slug:
-                # Russell woodcut (CORPUS_EXTRACTION, on Alchemical Hands page)
                 wc_html = '<div class="wc-info"><span class="wc-title" style="color:var(--accent)">Annotated woodcut</span></div>'
 
             # Links
@@ -3970,7 +4003,7 @@ def build_concordance_browser(conn):
     </div>"""
 
     page_html = page_shell("Page Concordance", body, active_nav='concordance',
-                            extra_css=conc_css, extra_js=conc_js)
+                            extra_css=conc_css, extra_js=conc_js, depth=1)
     (conc_dir / 'index.html').write_text(page_html, encoding='utf-8')
     print(f"  concordance/index.html ({len(pages)} pages, {total_wc} woodcuts)")
 
