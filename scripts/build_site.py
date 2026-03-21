@@ -1926,6 +1926,110 @@ def build_code_pages():
 # Essay: Russell's Alchemical Hands
 # ============================================================
 
+def _build_annotated_woodcuts_gallery(conn):
+    """Build the annotated woodcuts gallery section for the Alchemical Hands page.
+
+    Shows the 18 CORPUS_EXTRACTION woodcuts with their scholarly apparatus:
+    images, descriptions, annotation notes, dictionary links, and discussion.
+    """
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT slug, title, signature_1499, page_1499,
+               subject_category, description, narrative_context,
+               has_annotation, alchemical_annotation, annotation_density,
+               dictionary_terms, scholarly_discussion, influence,
+               depicted_elements
+        FROM woodcuts
+        WHERE source_method = 'CORPUS_EXTRACTION'
+        ORDER BY page_1499
+    """)
+    woodcuts = cur.fetchall()
+    if not woodcuts:
+        return ''
+
+    ia_img_dir = SITE_DIR / 'images' / 'woodcuts_1499'
+    cat_colors = {
+        'ARCHITECTURAL': '#8b5cf6', 'LANDSCAPE': '#10b981', 'NARRATIVE': '#3b82f6',
+        'HIEROGLYPHIC': '#f59e0b', 'PROCESSION': '#ef4444', 'DECORATIVE': '#6366f1',
+        'PORTRAIT': '#ec4899', 'DIAGRAM': '#14b8a6',
+    }
+
+    cards = ''
+    for (slug, title, sig, page, cat, desc, narrative,
+         has_ann, has_alch, ann_density, dict_terms,
+         scholarly, influence, elements) in woodcuts:
+
+        color = cat_colors.get(cat, '#6b7280')
+        img_filename = f'hp1499_p{page:03d}.jpg'
+        img_exists = (ia_img_dir / img_filename).exists()
+
+        # Image
+        if img_exists:
+            img_tag = f'<img src="images/woodcuts_1499/{img_filename}" alt="{escape(title)}" style="width:100%;max-height:400px;object-fit:contain;border:1px solid var(--border);background:#f5f0e8;">'
+        else:
+            img_tag = '<div style="height:200px;background:#e8e0d0;display:flex;align-items:center;justify-content:center;color:#999">Image pending</div>'
+
+        # Badges
+        badges = f'<span class="wc-cat-badge" style="background:{color}">{escape(cat or "")}</span>'
+        if has_alch:
+            badges += ' <span class="alchemist-tag">Alchemist</span>'
+        if ann_density:
+            badges += f' <span style="font-size:0.7rem;color:var(--text-muted)">{ann_density}</span>'
+
+        # Annotation note
+        ann_note = ''
+        if has_ann:
+            ann_note = f'<p style="font-size:0.85rem;color:var(--accent);margin:0.5rem 0 0"><strong>BL annotations present</strong>'
+            if has_alch:
+                ann_note += ' (alchemical)'
+            if sig:
+                ann_note += f' &mdash; <a href="marginalia/{sig.lower()}.html">View folio {escape(sig)}</a>'
+            ann_note += '</p>'
+
+        # Dictionary links
+        dict_html = ''
+        if dict_terms:
+            terms = [t.strip() for t in dict_terms.split(',') if t.strip()]
+            dict_links = ' '.join(f'<a href="dictionary/{t}.html" style="font-size:0.75rem;padding:0.1rem 0.4rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;text-decoration:none;color:var(--text)">{t.replace("-", " ").title()}</a>' for t in terms)
+            dict_html = f'<div style="margin-top:0.5rem">{dict_links}</div>'
+
+        # Scholarly discussion
+        schol_html = ''
+        if scholarly:
+            schol_html = f'<p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem;font-style:italic">{escape(scholarly[:200])}{"..." if len(scholarly) > 200 else ""}</p>'
+
+        cards += f"""
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-bottom:1.5rem">
+            <div style="display:grid;grid-template-columns:minmax(200px,350px) 1fr;gap:1.5rem;align-items:start">
+                <div>{img_tag}</div>
+                <div>
+                    <h4 style="margin:0 0 0.3rem;font-size:1.05rem;color:var(--text)">{escape(title)}</h4>
+                    <div style="margin-bottom:0.5rem">{badges} <span style="font-size:0.8rem;color:var(--text-muted)">{escape(sig or "")} &middot; p.{page}</span></div>
+                    <p style="line-height:1.7;margin:0">{escape(desc or "")}</p>
+                    {schol_html}
+                    {ann_note}
+                    {dict_html}
+                </div>
+            </div>
+        </div>"""
+
+    alch_count = sum(1 for w in woodcuts if w[8])  # has_alch
+    heavy_count = sum(1 for w in woodcuts if w[9] == 'HEAVY')
+
+    return f"""
+        <h2 id="annotated-woodcuts">Woodcuts with Marginal Annotations
+            <a class="section-anchor" href="#annotated-woodcuts">#</a></h2>
+        <p>Russell's dissertation identified 18 woodcut pages in the BL copy (C.60.o.12) that bear
+        marginal annotations. Of these, {alch_count} have specifically alchemical annotations by Hand B,
+        and {heavy_count} have heavy annotation density. These pages represent the intersection of the
+        HP's visual program with its readers' interpretive activity &mdash; the woodcuts that provoked
+        the most active engagement from the annotating hands.</p>
+        <p class="evidence-note">These woodcuts were extracted from Russell's corpus analysis. Each entry
+        preserves the original scholarly description, annotation data, and dictionary cross-references.
+        Click the folio link to view the full marginalia page with Phase 3 deep readings.</p>
+        {cards}"""
+
+
 def build_russell_essay_page(conn):
     """Generate russell-alchemical-hands.html from DB evidence + corpus data."""
     cur = conn.cursor()
@@ -2238,6 +2342,8 @@ def build_russell_essay_page(conn):
         equivalents for the narrative's symbols. The BL and Buffalo annotations show that this
         tradition persisted into the seventeenth century and took distinct forms depending on
         the alchemical school of the reader.</p>
+
+        {_build_annotated_woodcuts_gallery(conn)}
 
         <div class="cross-links">
             <h4>Related Dictionary Terms</h4>
@@ -2854,6 +2960,7 @@ def build_woodcuts_pages(conn):
                ia_image_cached
         FROM woodcuts
         WHERE page_1499 IS NOT NULL
+          AND source_method != 'CORPUS_EXTRACTION'
         ORDER BY page_1499
     """)
     woodcuts = cur.fetchall()
