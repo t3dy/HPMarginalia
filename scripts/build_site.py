@@ -52,7 +52,7 @@ def nav_html(active='', prefix=''):
         (f'{prefix}manuscripts/index.html', 'Manuscripts', 'manuscripts'),
         (f'{prefix}digital-edition.html', 'Editions', 'edition'),
         (f'{prefix}russell-alchemical-hands.html', 'Alchemical Hands', 'russell'),
-        (f'{prefix}concordance-method.html', 'Concordance', 'concordance'),
+        (f'{prefix}concordance/index.html', 'Concordance', 'concordance'),
         (f'{prefix}about.html', 'About', 'about'),
     ]
     items = []
@@ -3684,6 +3684,298 @@ def update_styles():
 
 
 # ============================================================
+# Concordance Browser
+# ============================================================
+
+def build_concordance_browser(conn):
+    """Generate concordance/index.html — 448-page browser of the 1499 HP."""
+    cur = conn.cursor()
+    conc_dir = SITE_DIR / 'concordance'
+    conc_dir.mkdir(exist_ok=True)
+    ia_img_dir = SITE_DIR / 'images' / 'woodcuts_1499'
+
+    # Which signatures have marginalia pages?
+    marg_dir = SITE_DIR / 'marginalia'
+    marg_sigs = set()
+    if marg_dir.exists():
+        for f in marg_dir.glob('*.html'):
+            if f.stem != 'index':
+                marg_sigs.add(f.stem)
+
+    cur.execute("""
+        SELECT pc.page_seq, pc.signature, pc.folio_number, pc.side, pc.quire,
+               pc.section, pc.has_woodcut, pc.bl_photo_number,
+               pc.ia_page_index, pc.notes,
+               w.slug as woodcut_slug, w.title as woodcut_title,
+               w.subject_category as woodcut_category
+        FROM page_concordance pc
+        LEFT JOIN woodcuts w ON pc.page_seq = w.page_1499
+        ORDER BY pc.page_seq
+    """)
+    pages = cur.fetchall()
+
+    if not pages:
+        print("  concordance: no data")
+        return
+
+    section_colors = {
+        'PRELIMINARIES': '#6b7280', 'DARK_FOREST': '#065f46', 'PYRAMID_RUINS': '#92400e',
+        'DRAGON_PORTAL': '#7c2d12', 'FIVE_SENSES': '#4338ca', 'QUEEN_PALACE': '#7e22ce',
+        'JOURNEY_DOORS': '#0369a1', 'PROCESSION': '#b91c1c', 'VENUS_TEMPLE': '#be185d',
+        'POLYANDRION': '#374151', 'CYTHERA_VOYAGE': '#0891b2', 'CYTHERA_GARDENS': '#15803d',
+        'VENUS_FOUNTAIN': '#9333ea', 'BOOK_II_POLIA': '#78350f', 'COLOPHON': '#6b7280',
+    }
+    section_labels = {
+        'PRELIMINARIES': 'Preliminaries', 'DARK_FOREST': 'Dark Forest',
+        'PYRAMID_RUINS': 'Pyramid & Ruins', 'DRAGON_PORTAL': 'Dragon Portal',
+        'FIVE_SENSES': 'Five Senses', 'QUEEN_PALACE': "Queen's Palace",
+        'JOURNEY_DOORS': 'Journey of the Doors', 'PROCESSION': 'Triumphal Procession',
+        'VENUS_TEMPLE': 'Temple of Venus', 'POLYANDRION': 'Polyandrion',
+        'CYTHERA_VOYAGE': 'Voyage to Cythera', 'CYTHERA_GARDENS': 'Gardens of Cythera',
+        'VENUS_FOUNTAIN': 'Fountain of Venus', 'BOOK_II_POLIA': 'Book II: Polia',
+        'COLOPHON': 'Colophon',
+    }
+
+    conc_css = '<style>' + """
+        .conc-page { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
+        .conc-page h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .conc-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-muted); }
+        .conc-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem;
+                         padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; }
+        .conc-controls label { font-size: 0.8rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+        .conc-controls input[type="checkbox"] { accent-color: var(--accent); }
+        .conc-jump { padding: 0.35rem 0.6rem; border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem;
+                     font-family: var(--font-sans); width: 120px; }
+        .conc-jump:focus { outline: none; border-color: var(--accent); }
+        .conc-stats { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+        .conc-section { margin-bottom: 1rem; }
+        .conc-section-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem;
+                                background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+                                cursor: pointer; position: sticky; top: 0; z-index: 5; user-select: none; }
+        .conc-section-header:hover { background: var(--bg-card); }
+        .conc-section-header .sec-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px;
+                                           font-size: 0.7rem; font-weight: 600; color: white; text-transform: uppercase; }
+        .conc-section-header .sec-label { font-weight: 600; font-size: 0.95rem; }
+        .conc-section-header .sec-count { font-size: 0.75rem; color: var(--text-muted); margin-left: auto; }
+        .conc-section-header .sec-toggle { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+        .conc-section.collapsed .sec-toggle { transform: rotate(-90deg); }
+        .conc-section.collapsed .conc-rows { display: none; }
+        .conc-rows { border: 1px solid var(--border); border-top: none; border-radius: 0 0 4px 4px; }
+        .conc-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.75rem;
+                    border-bottom: 1px solid #eee; font-size: 0.82rem; transition: background 0.1s; }
+        .conc-row:last-child { border-bottom: none; }
+        .conc-row:hover { background: var(--bg); }
+        .conc-row.has-wc { background: rgba(139,69,19,0.04); }
+        .conc-row .pg { width: 45px; font-weight: 600; color: var(--text); font-family: var(--font-sans); }
+        .conc-row .sig { width: 45px; font-family: var(--font-sans); color: var(--accent); }
+        .conc-row .folio { width: 55px; color: var(--text-muted); font-family: var(--font-sans); }
+        .conc-row .quire-col { width: 30px; color: var(--text-muted); font-family: var(--font-sans); text-align: center; }
+        .conc-row .wc-thumb { width: 60px; height: 45px; flex-shrink: 0; }
+        .conc-row .wc-thumb img { width: 60px; height: 45px; object-fit: cover; object-position: top;
+                                   border: 1px solid var(--border); border-radius: 2px; }
+        .conc-row .wc-info { flex: 1; min-width: 0; }
+        .conc-row .wc-title { font-size: 0.8rem; color: var(--text); }
+        .conc-row .wc-title a { color: var(--text); text-decoration: none; }
+        .conc-row .wc-title a:hover { color: var(--accent); }
+        .conc-row .wc-cat { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; padding: 0.1rem 0.3rem;
+                            border-radius: 2px; color: white; }
+        .conc-row .links { display: flex; gap: 0.3rem; flex-shrink: 0; }
+        .conc-row .links a { font-size: 0.7rem; padding: 0.15rem 0.4rem; border: 1px solid var(--border);
+                              border-radius: 2px; text-decoration: none; color: var(--text-muted); background: var(--bg-card); }
+        .conc-row .links a:hover { border-color: var(--accent); color: var(--accent); }
+        .conc-row.hidden { display: none; }
+        .conc-row.highlight { background: #fef3c7 !important; }
+        @media (max-width: 768px) {
+            .conc-row .folio, .conc-row .quire-col { display: none; }
+            .conc-row .wc-thumb { width: 40px; height: 30px; }
+            .conc-row .wc-thumb img { width: 40px; height: 30px; }
+        }
+    """ + '</style>'
+
+    wc_cat_colors = {
+        'ARCHITECTURAL': '#8b5cf6', 'LANDSCAPE': '#10b981', 'NARRATIVE': '#3b82f6',
+        'HIEROGLYPHIC': '#f59e0b', 'PROCESSION': '#ef4444', 'DECORATIVE': '#6366f1',
+        'PORTRAIT': '#ec4899', 'DIAGRAM': '#14b8a6',
+    }
+
+    # Group pages by section
+    from collections import OrderedDict
+    sections = OrderedDict()
+    total_wc = 0
+    for row in pages:
+        (pg, sig, folio, side, quire, section, has_wc, bl_photo,
+         ia_page, notes, wc_slug, wc_title, wc_cat) = row
+        if section not in sections:
+            sections[section] = []
+        sections[section].append(row)
+        if has_wc:
+            total_wc += 1
+
+    # Build section blocks
+    sections_html = ''
+    for section, sec_pages in sections.items():
+        color = section_colors.get(section, '#6b7280')
+        label = section_labels.get(section, section.replace('_', ' ').title())
+        wc_in_sec = sum(1 for p in sec_pages if p[6])
+        pg_range = f'pp.{sec_pages[0][0]}&ndash;{sec_pages[-1][0]}'
+
+        rows_html = ''
+        for (pg, sig, folio, side, quire, sec, has_wc, bl_photo,
+             ia_page, notes, wc_slug, wc_title, wc_cat) in sec_pages:
+
+            row_cls = 'conc-row'
+            data_attrs = f'data-section="{section}" data-page="{pg}" data-sig="{sig}"'
+            if has_wc:
+                row_cls += ' has-wc'
+                data_attrs += ' data-woodcut="1"'
+
+            # Thumbnail
+            thumb_html = '<div class="wc-thumb"></div>'
+            if has_wc:
+                img_file = f'hp1499_p{pg:03d}.jpg'
+                if (ia_img_dir / img_file).exists():
+                    thumb_html = f'<div class="wc-thumb"><img src="../images/woodcuts_1499/{img_file}" alt="" loading="lazy"></div>'
+
+            # Woodcut info
+            wc_html = '<div class="wc-info"></div>'
+            if wc_title and wc_slug:
+                cat_badge = f'<span class="wc-cat" style="background:{wc_cat_colors.get(wc_cat, "#6b7280")}">{escape(wc_cat or "")}</span> ' if wc_cat else ''
+                wc_html = f'<div class="wc-info"><span class="wc-title"><a href="../woodcuts/{wc_slug}.html">{cat_badge}{escape(wc_title[:50])}</a></span></div>'
+            elif has_wc and not wc_slug:
+                # Russell woodcut (CORPUS_EXTRACTION, on Alchemical Hands page)
+                wc_html = '<div class="wc-info"><span class="wc-title" style="color:var(--accent)">Annotated woodcut</span></div>'
+
+            # Links
+            links = []
+            sig_lower = sig.lower() if sig else ''
+            if sig_lower in marg_sigs:
+                links.append(f'<a href="../marginalia/{sig_lower}.html" title="View marginalia">M</a>')
+            if bl_photo:
+                bl_file = f'C_60_o_12-{bl_photo:03d}.jpg'
+                if (SITE_DIR / 'images' / 'bl' / bl_file).exists():
+                    links.append(f'<a href="../images/bl/{bl_file}" title="BL photo #{bl_photo}" target="_blank">BL</a>')
+            links_html = f'<div class="links">{"".join(links)}</div>' if links else ''
+
+            rows_html += f"""
+            <div class="{row_cls}" {data_attrs} id="p{pg}">
+                <span class="pg">p.{pg}</span>
+                <span class="sig">{escape(sig or '')}</span>
+                <span class="folio">f.{folio}{side}</span>
+                <span class="quire-col">{escape(quire or '')}</span>
+                {thumb_html}
+                {wc_html}
+                {links_html}
+            </div>"""
+
+        sections_html += f"""
+        <div class="conc-section" data-section="{section}">
+            <div class="conc-section-header" onclick="toggleSection(this)">
+                <span class="sec-badge" style="background:{color}">{escape(label)}</span>
+                <span class="sec-label">{pg_range}</span>
+                <span class="sec-count">{len(sec_pages)} pages, {wc_in_sec} woodcuts</span>
+                <span class="sec-toggle">&#9660;</span>
+            </div>
+            <div class="conc-rows">{rows_html}</div>
+        </div>"""
+
+    # Filter buttons for sections
+    sec_buttons = ''
+    for section in sections:
+        color = section_colors.get(section, '#6b7280')
+        label = section_labels.get(section, section)
+        sec_buttons += f'<button class="wc-filter-btn" onclick="filterSection(\'{section}\')" style="border-color:{color}">{label}</button> '
+
+    conc_js = """
+    <script>
+    function toggleSection(header) {
+        header.parentElement.classList.toggle('collapsed');
+    }
+    function filterSection(sec) {
+        document.querySelectorAll('.conc-section').forEach(s => {
+            if (sec === 'ALL') { s.style.display = ''; }
+            else { s.style.display = s.dataset.section === sec ? '' : 'none'; }
+        });
+        document.querySelectorAll('.wc-filter-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        updateStats();
+    }
+    function filterWoodcuts(checked) {
+        document.querySelectorAll('.conc-row').forEach(r => {
+            if (checked && !r.dataset.woodcut) { r.classList.add('hidden'); }
+            else { r.classList.remove('hidden'); }
+        });
+        updateStats();
+    }
+    function jumpToPage(val) {
+        val = val.trim().toLowerCase();
+        if (!val) return;
+        // Try as page number
+        let target = document.getElementById('p' + val);
+        // Try as signature
+        if (!target) {
+            const rows = document.querySelectorAll('.conc-row');
+            for (const r of rows) {
+                if (r.dataset.sig && r.dataset.sig.toLowerCase() === val) {
+                    target = r; break;
+                }
+            }
+        }
+        if (target) {
+            // Expand section if collapsed
+            const sec = target.closest('.conc-section');
+            if (sec && sec.classList.contains('collapsed')) {
+                sec.classList.remove('collapsed');
+            }
+            // Show if hidden
+            target.classList.remove('hidden');
+            // Scroll and highlight
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.querySelectorAll('.conc-row.highlight').forEach(r => r.classList.remove('highlight'));
+            target.classList.add('highlight');
+            setTimeout(() => target.classList.remove('highlight'), 3000);
+        }
+    }
+    function updateStats() {
+        const visible = document.querySelectorAll('.conc-row:not(.hidden):not([style*="display: none"])');
+        const total = document.querySelectorAll('.conc-row');
+        const wc = document.querySelectorAll('.conc-row.has-wc:not(.hidden)');
+        const el = document.getElementById('conc-stats');
+        if (el) el.textContent = visible.length + ' of ' + total.length + ' pages shown';
+    }
+    document.getElementById('conc-jump')?.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { jumpToPage(this.value); }
+    });
+    document.getElementById('wc-only')?.addEventListener('change', function() {
+        filterWoodcuts(this.checked);
+    });
+    </script>"""
+
+    body = f"""
+    <div class="conc-page">
+        <p><a href="../concordance-method.html">Methodology &amp; Confidence &rarr;</a></p>
+        <h1>Page Concordance</h1>
+        <p class="intro">All 448 page surfaces of the 1499 Aldine first edition, mapped across three
+        numbering systems: sequential page, bibliographic signature (quire + leaf + recto/verso), and
+        folio number. Pages with woodcut illustrations show thumbnails from the Internet Archive facsimile
+        (University of Seville copy). Links connect to marginalia folios (M) and British Library photographs (BL)
+        where available.</p>
+
+        <div class="conc-controls">
+            <input type="text" class="conc-jump" id="conc-jump" placeholder="Jump to p.123 or b6v">
+            <label><input type="checkbox" id="wc-only"> Woodcut pages only</label>
+            <span class="conc-stats" id="conc-stats">{len(pages)} pages, {total_wc} with woodcuts</span>
+        </div>
+
+        {sections_html}
+    </div>"""
+
+    page_html = page_shell("Page Concordance", body, active_nav='concordance',
+                            extra_css=conc_css, extra_js=conc_js)
+    (conc_dir / 'index.html').write_text(page_html, encoding='utf-8')
+    print(f"  concordance/index.html ({len(pages)} pages, {total_wc} woodcuts)")
+
+
+# ============================================================
 # Main
 # ============================================================
 
@@ -3711,6 +4003,7 @@ def main():
     build_digital_edition_page(conn)
     build_timeline_page(conn)
     build_woodcuts_pages(conn)
+    build_concordance_browser(conn)
     build_manuscripts_pages(conn)
 
     conn.close()

@@ -15,7 +15,7 @@
         <div class="header-content">
             <h1><a href="../index.html" style="color:inherit;text-decoration:none">Alchemical Hands in the <em>Hypnerotomachia Poliphili</em></a></h1>
             <p class="subtitle">Marginalia, Scholarship &amp; Reception</p>
-            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance-method.html">Concordance</a><a href="../about.html">About</a></nav>
+            <nav class="site-nav"><a href="../index.html">Home</a><a href="../marginalia/index.html">Marginalia</a><a href="../scholars.html">Scholars</a><a href="../bibliography.html">Bibliography</a><a href="../dictionary/index.html">Dictionary</a><a href="../docs/index.html">Docs</a><a href="../code/index.html" class="active">Code</a><a href="../the-book.html">The Book</a><a href="../timeline.html">Timeline</a><a href="../woodcuts/index.html">Woodcuts</a><a href="../manuscripts/index.html">Manuscripts</a><a href="../digital-edition.html">Editions</a><a href="../russell-alchemical-hands.html">Alchemical Hands</a><a href="../concordance/index.html">Concordance</a><a href="../about.html">About</a></nav>
         </div>
     </header>
     <main>
@@ -23,7 +23,7 @@
         <div class="code-content">
             <p><a href="index.html">&larr; All Scripts</a></p>
             <h2>Build Site</h2>
-            <div class="code-meta">build_site.py &mdash; 3721 lines</div>
+            <div class="code-meta">build_site.py &mdash; 4014 lines</div>
             <p style="margin-bottom:1rem">Unified site generator: exports data.json, builds all HTML pages (scholars, dictionary, marginalia, bibliography, docs, code, about).</p>
             <pre><span class="line-num">1</span>&quot;&quot;&quot;Unified site builder: generates all static pages from SQLite.
 <span class="line-num">2</span>
@@ -79,7 +79,7 @@
 <span class="line-num">52</span>        (f&#x27;{prefix}manuscripts/index.html&#x27;, &#x27;Manuscripts&#x27;, &#x27;manuscripts&#x27;),
 <span class="line-num">53</span>        (f&#x27;{prefix}digital-edition.html&#x27;, &#x27;Editions&#x27;, &#x27;edition&#x27;),
 <span class="line-num">54</span>        (f&#x27;{prefix}russell-alchemical-hands.html&#x27;, &#x27;Alchemical Hands&#x27;, &#x27;russell&#x27;),
-<span class="line-num">55</span>        (f&#x27;{prefix}concordance-method.html&#x27;, &#x27;Concordance&#x27;, &#x27;concordance&#x27;),
+<span class="line-num">55</span>        (f&#x27;{prefix}concordance/index.html&#x27;, &#x27;Concordance&#x27;, &#x27;concordance&#x27;),
 <span class="line-num">56</span>        (f&#x27;{prefix}about.html&#x27;, &#x27;About&#x27;, &#x27;about&#x27;),
 <span class="line-num">57</span>    ]
 <span class="line-num">58</span>    items = []
@@ -3711,41 +3711,334 @@
 <span class="line-num">3684</span>
 <span class="line-num">3685</span>
 <span class="line-num">3686</span># ============================================================
-<span class="line-num">3687</span># Main
+<span class="line-num">3687</span># Concordance Browser
 <span class="line-num">3688</span># ============================================================
 <span class="line-num">3689</span>
-<span class="line-num">3690</span>def main():
-<span class="line-num">3691</span>    print(&quot;=== Building Site ===\n&quot;)
-<span class="line-num">3692</span>
-<span class="line-num">3693</span>    conn = sqlite3.connect(DB_PATH)
-<span class="line-num">3694</span>
-<span class="line-num">3695</span>    print(&quot;Exporting data...&quot;)
-<span class="line-num">3696</span>    export_data_json(conn)
-<span class="line-num">3697</span>
-<span class="line-num">3698</span>    print(&quot;\nBuilding pages...&quot;)
-<span class="line-num">3699</span>    update_styles()
-<span class="line-num">3700</span>    update_index_nav()
-<span class="line-num">3701</span>    build_scholars_pages(conn)
-<span class="line-num">3702</span>    build_dictionary_pages(conn)
-<span class="line-num">3703</span>    build_marginalia_pages(conn)
-<span class="line-num">3704</span>    build_bibliography_page(conn)
-<span class="line-num">3705</span>    build_docs_pages()
-<span class="line-num">3706</span>    build_code_pages()
-<span class="line-num">3707</span>    build_about_page(conn)
-<span class="line-num">3708</span>    build_the_book_page()
-<span class="line-num">3709</span>    build_russell_essay_page(conn)
-<span class="line-num">3710</span>    build_concordance_essay_page(conn)
-<span class="line-num">3711</span>    build_digital_edition_page(conn)
-<span class="line-num">3712</span>    build_timeline_page(conn)
-<span class="line-num">3713</span>    build_woodcuts_pages(conn)
-<span class="line-num">3714</span>    build_manuscripts_pages(conn)
-<span class="line-num">3715</span>
-<span class="line-num">3716</span>    conn.close()
-<span class="line-num">3717</span>    print(&quot;\n=== Build Complete ===&quot;)
-<span class="line-num">3718</span>
-<span class="line-num">3719</span>
-<span class="line-num">3720</span>if __name__ == &quot;__main__&quot;:
-<span class="line-num">3721</span>    main()</pre>
+<span class="line-num">3690</span>def build_concordance_browser(conn):
+<span class="line-num">3691</span>    &quot;&quot;&quot;Generate concordance/index.html — 448-page browser of the 1499 HP.&quot;&quot;&quot;
+<span class="line-num">3692</span>    cur = conn.cursor()
+<span class="line-num">3693</span>    conc_dir = SITE_DIR / &#x27;concordance&#x27;
+<span class="line-num">3694</span>    conc_dir.mkdir(exist_ok=True)
+<span class="line-num">3695</span>    ia_img_dir = SITE_DIR / &#x27;images&#x27; / &#x27;woodcuts_1499&#x27;
+<span class="line-num">3696</span>
+<span class="line-num">3697</span>    # Which signatures have marginalia pages?
+<span class="line-num">3698</span>    marg_dir = SITE_DIR / &#x27;marginalia&#x27;
+<span class="line-num">3699</span>    marg_sigs = set()
+<span class="line-num">3700</span>    if marg_dir.exists():
+<span class="line-num">3701</span>        for f in marg_dir.glob(&#x27;*.html&#x27;):
+<span class="line-num">3702</span>            if f.stem != &#x27;index&#x27;:
+<span class="line-num">3703</span>                marg_sigs.add(f.stem)
+<span class="line-num">3704</span>
+<span class="line-num">3705</span>    cur.execute(&quot;&quot;&quot;
+<span class="line-num">3706</span>        SELECT pc.page_seq, pc.signature, pc.folio_number, pc.side, pc.quire,
+<span class="line-num">3707</span>               pc.section, pc.has_woodcut, pc.bl_photo_number,
+<span class="line-num">3708</span>               pc.ia_page_index, pc.notes,
+<span class="line-num">3709</span>               w.slug as woodcut_slug, w.title as woodcut_title,
+<span class="line-num">3710</span>               w.subject_category as woodcut_category
+<span class="line-num">3711</span>        FROM page_concordance pc
+<span class="line-num">3712</span>        LEFT JOIN woodcuts w ON pc.page_seq = w.page_1499
+<span class="line-num">3713</span>        ORDER BY pc.page_seq
+<span class="line-num">3714</span>    &quot;&quot;&quot;)
+<span class="line-num">3715</span>    pages = cur.fetchall()
+<span class="line-num">3716</span>
+<span class="line-num">3717</span>    if not pages:
+<span class="line-num">3718</span>        print(&quot;  concordance: no data&quot;)
+<span class="line-num">3719</span>        return
+<span class="line-num">3720</span>
+<span class="line-num">3721</span>    section_colors = {
+<span class="line-num">3722</span>        &#x27;PRELIMINARIES&#x27;: &#x27;#6b7280&#x27;, &#x27;DARK_FOREST&#x27;: &#x27;#065f46&#x27;, &#x27;PYRAMID_RUINS&#x27;: &#x27;#92400e&#x27;,
+<span class="line-num">3723</span>        &#x27;DRAGON_PORTAL&#x27;: &#x27;#7c2d12&#x27;, &#x27;FIVE_SENSES&#x27;: &#x27;#4338ca&#x27;, &#x27;QUEEN_PALACE&#x27;: &#x27;#7e22ce&#x27;,
+<span class="line-num">3724</span>        &#x27;JOURNEY_DOORS&#x27;: &#x27;#0369a1&#x27;, &#x27;PROCESSION&#x27;: &#x27;#b91c1c&#x27;, &#x27;VENUS_TEMPLE&#x27;: &#x27;#be185d&#x27;,
+<span class="line-num">3725</span>        &#x27;POLYANDRION&#x27;: &#x27;#374151&#x27;, &#x27;CYTHERA_VOYAGE&#x27;: &#x27;#0891b2&#x27;, &#x27;CYTHERA_GARDENS&#x27;: &#x27;#15803d&#x27;,
+<span class="line-num">3726</span>        &#x27;VENUS_FOUNTAIN&#x27;: &#x27;#9333ea&#x27;, &#x27;BOOK_II_POLIA&#x27;: &#x27;#78350f&#x27;, &#x27;COLOPHON&#x27;: &#x27;#6b7280&#x27;,
+<span class="line-num">3727</span>    }
+<span class="line-num">3728</span>    section_labels = {
+<span class="line-num">3729</span>        &#x27;PRELIMINARIES&#x27;: &#x27;Preliminaries&#x27;, &#x27;DARK_FOREST&#x27;: &#x27;Dark Forest&#x27;,
+<span class="line-num">3730</span>        &#x27;PYRAMID_RUINS&#x27;: &#x27;Pyramid &amp; Ruins&#x27;, &#x27;DRAGON_PORTAL&#x27;: &#x27;Dragon Portal&#x27;,
+<span class="line-num">3731</span>        &#x27;FIVE_SENSES&#x27;: &#x27;Five Senses&#x27;, &#x27;QUEEN_PALACE&#x27;: &quot;Queen&#x27;s Palace&quot;,
+<span class="line-num">3732</span>        &#x27;JOURNEY_DOORS&#x27;: &#x27;Journey of the Doors&#x27;, &#x27;PROCESSION&#x27;: &#x27;Triumphal Procession&#x27;,
+<span class="line-num">3733</span>        &#x27;VENUS_TEMPLE&#x27;: &#x27;Temple of Venus&#x27;, &#x27;POLYANDRION&#x27;: &#x27;Polyandrion&#x27;,
+<span class="line-num">3734</span>        &#x27;CYTHERA_VOYAGE&#x27;: &#x27;Voyage to Cythera&#x27;, &#x27;CYTHERA_GARDENS&#x27;: &#x27;Gardens of Cythera&#x27;,
+<span class="line-num">3735</span>        &#x27;VENUS_FOUNTAIN&#x27;: &#x27;Fountain of Venus&#x27;, &#x27;BOOK_II_POLIA&#x27;: &#x27;Book II: Polia&#x27;,
+<span class="line-num">3736</span>        &#x27;COLOPHON&#x27;: &#x27;Colophon&#x27;,
+<span class="line-num">3737</span>    }
+<span class="line-num">3738</span>
+<span class="line-num">3739</span>    conc_css = &#x27;&lt;style&gt;&#x27; + &quot;&quot;&quot;
+<span class="line-num">3740</span>        .conc-page { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
+<span class="line-num">3741</span>        .conc-page h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 0.3rem; }
+<span class="line-num">3742</span>        .conc-page .intro { max-width: 800px; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-muted); }
+<span class="line-num">3743</span>        .conc-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 1.5rem;
+<span class="line-num">3744</span>                         padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; }
+<span class="line-num">3745</span>        .conc-controls label { font-size: 0.8rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+<span class="line-num">3746</span>        .conc-controls input[type=&quot;checkbox&quot;] { accent-color: var(--accent); }
+<span class="line-num">3747</span>        .conc-jump { padding: 0.35rem 0.6rem; border: 1px solid var(--border); border-radius: 3px; font-size: 0.85rem;
+<span class="line-num">3748</span>                     font-family: var(--font-sans); width: 120px; }
+<span class="line-num">3749</span>        .conc-jump:focus { outline: none; border-color: var(--accent); }
+<span class="line-num">3750</span>        .conc-stats { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+<span class="line-num">3751</span>        .conc-section { margin-bottom: 1rem; }
+<span class="line-num">3752</span>        .conc-section-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem;
+<span class="line-num">3753</span>                                background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+<span class="line-num">3754</span>                                cursor: pointer; position: sticky; top: 0; z-index: 5; user-select: none; }
+<span class="line-num">3755</span>        .conc-section-header:hover { background: var(--bg-card); }
+<span class="line-num">3756</span>        .conc-section-header .sec-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px;
+<span class="line-num">3757</span>                                           font-size: 0.7rem; font-weight: 600; color: white; text-transform: uppercase; }
+<span class="line-num">3758</span>        .conc-section-header .sec-label { font-weight: 600; font-size: 0.95rem; }
+<span class="line-num">3759</span>        .conc-section-header .sec-count { font-size: 0.75rem; color: var(--text-muted); margin-left: auto; }
+<span class="line-num">3760</span>        .conc-section-header .sec-toggle { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+<span class="line-num">3761</span>        .conc-section.collapsed .sec-toggle { transform: rotate(-90deg); }
+<span class="line-num">3762</span>        .conc-section.collapsed .conc-rows { display: none; }
+<span class="line-num">3763</span>        .conc-rows { border: 1px solid var(--border); border-top: none; border-radius: 0 0 4px 4px; }
+<span class="line-num">3764</span>        .conc-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.75rem;
+<span class="line-num">3765</span>                    border-bottom: 1px solid #eee; font-size: 0.82rem; transition: background 0.1s; }
+<span class="line-num">3766</span>        .conc-row:last-child { border-bottom: none; }
+<span class="line-num">3767</span>        .conc-row:hover { background: var(--bg); }
+<span class="line-num">3768</span>        .conc-row.has-wc { background: rgba(139,69,19,0.04); }
+<span class="line-num">3769</span>        .conc-row .pg { width: 45px; font-weight: 600; color: var(--text); font-family: var(--font-sans); }
+<span class="line-num">3770</span>        .conc-row .sig { width: 45px; font-family: var(--font-sans); color: var(--accent); }
+<span class="line-num">3771</span>        .conc-row .folio { width: 55px; color: var(--text-muted); font-family: var(--font-sans); }
+<span class="line-num">3772</span>        .conc-row .quire-col { width: 30px; color: var(--text-muted); font-family: var(--font-sans); text-align: center; }
+<span class="line-num">3773</span>        .conc-row .wc-thumb { width: 60px; height: 45px; flex-shrink: 0; }
+<span class="line-num">3774</span>        .conc-row .wc-thumb img { width: 60px; height: 45px; object-fit: cover; object-position: top;
+<span class="line-num">3775</span>                                   border: 1px solid var(--border); border-radius: 2px; }
+<span class="line-num">3776</span>        .conc-row .wc-info { flex: 1; min-width: 0; }
+<span class="line-num">3777</span>        .conc-row .wc-title { font-size: 0.8rem; color: var(--text); }
+<span class="line-num">3778</span>        .conc-row .wc-title a { color: var(--text); text-decoration: none; }
+<span class="line-num">3779</span>        .conc-row .wc-title a:hover { color: var(--accent); }
+<span class="line-num">3780</span>        .conc-row .wc-cat { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; padding: 0.1rem 0.3rem;
+<span class="line-num">3781</span>                            border-radius: 2px; color: white; }
+<span class="line-num">3782</span>        .conc-row .links { display: flex; gap: 0.3rem; flex-shrink: 0; }
+<span class="line-num">3783</span>        .conc-row .links a { font-size: 0.7rem; padding: 0.15rem 0.4rem; border: 1px solid var(--border);
+<span class="line-num">3784</span>                              border-radius: 2px; text-decoration: none; color: var(--text-muted); background: var(--bg-card); }
+<span class="line-num">3785</span>        .conc-row .links a:hover { border-color: var(--accent); color: var(--accent); }
+<span class="line-num">3786</span>        .conc-row.hidden { display: none; }
+<span class="line-num">3787</span>        .conc-row.highlight { background: #fef3c7 !important; }
+<span class="line-num">3788</span>        @media (max-width: 768px) {
+<span class="line-num">3789</span>            .conc-row .folio, .conc-row .quire-col { display: none; }
+<span class="line-num">3790</span>            .conc-row .wc-thumb { width: 40px; height: 30px; }
+<span class="line-num">3791</span>            .conc-row .wc-thumb img { width: 40px; height: 30px; }
+<span class="line-num">3792</span>        }
+<span class="line-num">3793</span>    &quot;&quot;&quot; + &#x27;&lt;/style&gt;&#x27;
+<span class="line-num">3794</span>
+<span class="line-num">3795</span>    wc_cat_colors = {
+<span class="line-num">3796</span>        &#x27;ARCHITECTURAL&#x27;: &#x27;#8b5cf6&#x27;, &#x27;LANDSCAPE&#x27;: &#x27;#10b981&#x27;, &#x27;NARRATIVE&#x27;: &#x27;#3b82f6&#x27;,
+<span class="line-num">3797</span>        &#x27;HIEROGLYPHIC&#x27;: &#x27;#f59e0b&#x27;, &#x27;PROCESSION&#x27;: &#x27;#ef4444&#x27;, &#x27;DECORATIVE&#x27;: &#x27;#6366f1&#x27;,
+<span class="line-num">3798</span>        &#x27;PORTRAIT&#x27;: &#x27;#ec4899&#x27;, &#x27;DIAGRAM&#x27;: &#x27;#14b8a6&#x27;,
+<span class="line-num">3799</span>    }
+<span class="line-num">3800</span>
+<span class="line-num">3801</span>    # Group pages by section
+<span class="line-num">3802</span>    from collections import OrderedDict
+<span class="line-num">3803</span>    sections = OrderedDict()
+<span class="line-num">3804</span>    total_wc = 0
+<span class="line-num">3805</span>    for row in pages:
+<span class="line-num">3806</span>        (pg, sig, folio, side, quire, section, has_wc, bl_photo,
+<span class="line-num">3807</span>         ia_page, notes, wc_slug, wc_title, wc_cat) = row
+<span class="line-num">3808</span>        if section not in sections:
+<span class="line-num">3809</span>            sections[section] = []
+<span class="line-num">3810</span>        sections[section].append(row)
+<span class="line-num">3811</span>        if has_wc:
+<span class="line-num">3812</span>            total_wc += 1
+<span class="line-num">3813</span>
+<span class="line-num">3814</span>    # Build section blocks
+<span class="line-num">3815</span>    sections_html = &#x27;&#x27;
+<span class="line-num">3816</span>    for section, sec_pages in sections.items():
+<span class="line-num">3817</span>        color = section_colors.get(section, &#x27;#6b7280&#x27;)
+<span class="line-num">3818</span>        label = section_labels.get(section, section.replace(&#x27;_&#x27;, &#x27; &#x27;).title())
+<span class="line-num">3819</span>        wc_in_sec = sum(1 for p in sec_pages if p[6])
+<span class="line-num">3820</span>        pg_range = f&#x27;pp.{sec_pages[0][0]}&amp;ndash;{sec_pages[-1][0]}&#x27;
+<span class="line-num">3821</span>
+<span class="line-num">3822</span>        rows_html = &#x27;&#x27;
+<span class="line-num">3823</span>        for (pg, sig, folio, side, quire, sec, has_wc, bl_photo,
+<span class="line-num">3824</span>             ia_page, notes, wc_slug, wc_title, wc_cat) in sec_pages:
+<span class="line-num">3825</span>
+<span class="line-num">3826</span>            row_cls = &#x27;conc-row&#x27;
+<span class="line-num">3827</span>            data_attrs = f&#x27;data-section=&quot;{section}&quot; data-page=&quot;{pg}&quot; data-sig=&quot;{sig}&quot;&#x27;
+<span class="line-num">3828</span>            if has_wc:
+<span class="line-num">3829</span>                row_cls += &#x27; has-wc&#x27;
+<span class="line-num">3830</span>                data_attrs += &#x27; data-woodcut=&quot;1&quot;&#x27;
+<span class="line-num">3831</span>
+<span class="line-num">3832</span>            # Thumbnail
+<span class="line-num">3833</span>            thumb_html = &#x27;&lt;div class=&quot;wc-thumb&quot;&gt;&lt;/div&gt;&#x27;
+<span class="line-num">3834</span>            if has_wc:
+<span class="line-num">3835</span>                img_file = f&#x27;hp1499_p{pg:03d}.jpg&#x27;
+<span class="line-num">3836</span>                if (ia_img_dir / img_file).exists():
+<span class="line-num">3837</span>                    thumb_html = f&#x27;&lt;div class=&quot;wc-thumb&quot;&gt;&lt;img src=&quot;../images/woodcuts_1499/{img_file}&quot; alt=&quot;&quot; loading=&quot;lazy&quot;&gt;&lt;/div&gt;&#x27;
+<span class="line-num">3838</span>
+<span class="line-num">3839</span>            # Woodcut info
+<span class="line-num">3840</span>            wc_html = &#x27;&lt;div class=&quot;wc-info&quot;&gt;&lt;/div&gt;&#x27;
+<span class="line-num">3841</span>            if wc_title and wc_slug:
+<span class="line-num">3842</span>                cat_badge = f&#x27;&lt;span class=&quot;wc-cat&quot; style=&quot;background:{wc_cat_colors.get(wc_cat, &quot;#6b7280&quot;)}&quot;&gt;{escape(wc_cat or &quot;&quot;)}&lt;/span&gt; &#x27; if wc_cat else &#x27;&#x27;
+<span class="line-num">3843</span>                wc_html = f&#x27;&lt;div class=&quot;wc-info&quot;&gt;&lt;span class=&quot;wc-title&quot;&gt;&lt;a href=&quot;../woodcuts/{wc_slug}.html&quot;&gt;{cat_badge}{escape(wc_title[:50])}&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&#x27;
+<span class="line-num">3844</span>            elif has_wc and not wc_slug:
+<span class="line-num">3845</span>                # Russell woodcut (CORPUS_EXTRACTION, on Alchemical Hands page)
+<span class="line-num">3846</span>                wc_html = &#x27;&lt;div class=&quot;wc-info&quot;&gt;&lt;span class=&quot;wc-title&quot; style=&quot;color:var(--accent)&quot;&gt;Annotated woodcut&lt;/span&gt;&lt;/div&gt;&#x27;
+<span class="line-num">3847</span>
+<span class="line-num">3848</span>            # Links
+<span class="line-num">3849</span>            links = []
+<span class="line-num">3850</span>            sig_lower = sig.lower() if sig else &#x27;&#x27;
+<span class="line-num">3851</span>            if sig_lower in marg_sigs:
+<span class="line-num">3852</span>                links.append(f&#x27;&lt;a href=&quot;../marginalia/{sig_lower}.html&quot; title=&quot;View marginalia&quot;&gt;M&lt;/a&gt;&#x27;)
+<span class="line-num">3853</span>            if bl_photo:
+<span class="line-num">3854</span>                bl_file = f&#x27;C_60_o_12-{bl_photo:03d}.jpg&#x27;
+<span class="line-num">3855</span>                if (SITE_DIR / &#x27;images&#x27; / &#x27;bl&#x27; / bl_file).exists():
+<span class="line-num">3856</span>                    links.append(f&#x27;&lt;a href=&quot;../images/bl/{bl_file}&quot; title=&quot;BL photo #{bl_photo}&quot; target=&quot;_blank&quot;&gt;BL&lt;/a&gt;&#x27;)
+<span class="line-num">3857</span>            links_html = f&#x27;&lt;div class=&quot;links&quot;&gt;{&quot;&quot;.join(links)}&lt;/div&gt;&#x27; if links else &#x27;&#x27;
+<span class="line-num">3858</span>
+<span class="line-num">3859</span>            rows_html += f&quot;&quot;&quot;
+<span class="line-num">3860</span>            &lt;div class=&quot;{row_cls}&quot; {data_attrs} id=&quot;p{pg}&quot;&gt;
+<span class="line-num">3861</span>                &lt;span class=&quot;pg&quot;&gt;p.{pg}&lt;/span&gt;
+<span class="line-num">3862</span>                &lt;span class=&quot;sig&quot;&gt;{escape(sig or &#x27;&#x27;)}&lt;/span&gt;
+<span class="line-num">3863</span>                &lt;span class=&quot;folio&quot;&gt;f.{folio}{side}&lt;/span&gt;
+<span class="line-num">3864</span>                &lt;span class=&quot;quire-col&quot;&gt;{escape(quire or &#x27;&#x27;)}&lt;/span&gt;
+<span class="line-num">3865</span>                {thumb_html}
+<span class="line-num">3866</span>                {wc_html}
+<span class="line-num">3867</span>                {links_html}
+<span class="line-num">3868</span>            &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">3869</span>
+<span class="line-num">3870</span>        sections_html += f&quot;&quot;&quot;
+<span class="line-num">3871</span>        &lt;div class=&quot;conc-section&quot; data-section=&quot;{section}&quot;&gt;
+<span class="line-num">3872</span>            &lt;div class=&quot;conc-section-header&quot; onclick=&quot;toggleSection(this)&quot;&gt;
+<span class="line-num">3873</span>                &lt;span class=&quot;sec-badge&quot; style=&quot;background:{color}&quot;&gt;{escape(label)}&lt;/span&gt;
+<span class="line-num">3874</span>                &lt;span class=&quot;sec-label&quot;&gt;{pg_range}&lt;/span&gt;
+<span class="line-num">3875</span>                &lt;span class=&quot;sec-count&quot;&gt;{len(sec_pages)} pages, {wc_in_sec} woodcuts&lt;/span&gt;
+<span class="line-num">3876</span>                &lt;span class=&quot;sec-toggle&quot;&gt;&amp;#9660;&lt;/span&gt;
+<span class="line-num">3877</span>            &lt;/div&gt;
+<span class="line-num">3878</span>            &lt;div class=&quot;conc-rows&quot;&gt;{rows_html}&lt;/div&gt;
+<span class="line-num">3879</span>        &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">3880</span>
+<span class="line-num">3881</span>    # Filter buttons for sections
+<span class="line-num">3882</span>    sec_buttons = &#x27;&#x27;
+<span class="line-num">3883</span>    for section in sections:
+<span class="line-num">3884</span>        color = section_colors.get(section, &#x27;#6b7280&#x27;)
+<span class="line-num">3885</span>        label = section_labels.get(section, section)
+<span class="line-num">3886</span>        sec_buttons += f&#x27;&lt;button class=&quot;wc-filter-btn&quot; onclick=&quot;filterSection(\&#x27;{section}\&#x27;)&quot; style=&quot;border-color:{color}&quot;&gt;{label}&lt;/button&gt; &#x27;
+<span class="line-num">3887</span>
+<span class="line-num">3888</span>    conc_js = &quot;&quot;&quot;
+<span class="line-num">3889</span>    &lt;script&gt;
+<span class="line-num">3890</span>    function toggleSection(header) {
+<span class="line-num">3891</span>        header.parentElement.classList.toggle(&#x27;collapsed&#x27;);
+<span class="line-num">3892</span>    }
+<span class="line-num">3893</span>    function filterSection(sec) {
+<span class="line-num">3894</span>        document.querySelectorAll(&#x27;.conc-section&#x27;).forEach(s =&gt; {
+<span class="line-num">3895</span>            if (sec === &#x27;ALL&#x27;) { s.style.display = &#x27;&#x27;; }
+<span class="line-num">3896</span>            else { s.style.display = s.dataset.section === sec ? &#x27;&#x27; : &#x27;none&#x27;; }
+<span class="line-num">3897</span>        });
+<span class="line-num">3898</span>        document.querySelectorAll(&#x27;.wc-filter-btn&#x27;).forEach(b =&gt; b.classList.remove(&#x27;active&#x27;));
+<span class="line-num">3899</span>        event.target.classList.add(&#x27;active&#x27;);
+<span class="line-num">3900</span>        updateStats();
+<span class="line-num">3901</span>    }
+<span class="line-num">3902</span>    function filterWoodcuts(checked) {
+<span class="line-num">3903</span>        document.querySelectorAll(&#x27;.conc-row&#x27;).forEach(r =&gt; {
+<span class="line-num">3904</span>            if (checked &amp;&amp; !r.dataset.woodcut) { r.classList.add(&#x27;hidden&#x27;); }
+<span class="line-num">3905</span>            else { r.classList.remove(&#x27;hidden&#x27;); }
+<span class="line-num">3906</span>        });
+<span class="line-num">3907</span>        updateStats();
+<span class="line-num">3908</span>    }
+<span class="line-num">3909</span>    function jumpToPage(val) {
+<span class="line-num">3910</span>        val = val.trim().toLowerCase();
+<span class="line-num">3911</span>        if (!val) return;
+<span class="line-num">3912</span>        // Try as page number
+<span class="line-num">3913</span>        let target = document.getElementById(&#x27;p&#x27; + val);
+<span class="line-num">3914</span>        // Try as signature
+<span class="line-num">3915</span>        if (!target) {
+<span class="line-num">3916</span>            const rows = document.querySelectorAll(&#x27;.conc-row&#x27;);
+<span class="line-num">3917</span>            for (const r of rows) {
+<span class="line-num">3918</span>                if (r.dataset.sig &amp;&amp; r.dataset.sig.toLowerCase() === val) {
+<span class="line-num">3919</span>                    target = r; break;
+<span class="line-num">3920</span>                }
+<span class="line-num">3921</span>            }
+<span class="line-num">3922</span>        }
+<span class="line-num">3923</span>        if (target) {
+<span class="line-num">3924</span>            // Expand section if collapsed
+<span class="line-num">3925</span>            const sec = target.closest(&#x27;.conc-section&#x27;);
+<span class="line-num">3926</span>            if (sec &amp;&amp; sec.classList.contains(&#x27;collapsed&#x27;)) {
+<span class="line-num">3927</span>                sec.classList.remove(&#x27;collapsed&#x27;);
+<span class="line-num">3928</span>            }
+<span class="line-num">3929</span>            // Show if hidden
+<span class="line-num">3930</span>            target.classList.remove(&#x27;hidden&#x27;);
+<span class="line-num">3931</span>            // Scroll and highlight
+<span class="line-num">3932</span>            target.scrollIntoView({ behavior: &#x27;smooth&#x27;, block: &#x27;center&#x27; });
+<span class="line-num">3933</span>            document.querySelectorAll(&#x27;.conc-row.highlight&#x27;).forEach(r =&gt; r.classList.remove(&#x27;highlight&#x27;));
+<span class="line-num">3934</span>            target.classList.add(&#x27;highlight&#x27;);
+<span class="line-num">3935</span>            setTimeout(() =&gt; target.classList.remove(&#x27;highlight&#x27;), 3000);
+<span class="line-num">3936</span>        }
+<span class="line-num">3937</span>    }
+<span class="line-num">3938</span>    function updateStats() {
+<span class="line-num">3939</span>        const visible = document.querySelectorAll(&#x27;.conc-row:not(.hidden):not([style*=&quot;display: none&quot;])&#x27;);
+<span class="line-num">3940</span>        const total = document.querySelectorAll(&#x27;.conc-row&#x27;);
+<span class="line-num">3941</span>        const wc = document.querySelectorAll(&#x27;.conc-row.has-wc:not(.hidden)&#x27;);
+<span class="line-num">3942</span>        const el = document.getElementById(&#x27;conc-stats&#x27;);
+<span class="line-num">3943</span>        if (el) el.textContent = visible.length + &#x27; of &#x27; + total.length + &#x27; pages shown&#x27;;
+<span class="line-num">3944</span>    }
+<span class="line-num">3945</span>    document.getElementById(&#x27;conc-jump&#x27;)?.addEventListener(&#x27;keydown&#x27;, function(e) {
+<span class="line-num">3946</span>        if (e.key === &#x27;Enter&#x27;) { jumpToPage(this.value); }
+<span class="line-num">3947</span>    });
+<span class="line-num">3948</span>    document.getElementById(&#x27;wc-only&#x27;)?.addEventListener(&#x27;change&#x27;, function() {
+<span class="line-num">3949</span>        filterWoodcuts(this.checked);
+<span class="line-num">3950</span>    });
+<span class="line-num">3951</span>    &lt;/script&gt;&quot;&quot;&quot;
+<span class="line-num">3952</span>
+<span class="line-num">3953</span>    body = f&quot;&quot;&quot;
+<span class="line-num">3954</span>    &lt;div class=&quot;conc-page&quot;&gt;
+<span class="line-num">3955</span>        &lt;p&gt;&lt;a href=&quot;../concordance-method.html&quot;&gt;Methodology &amp;amp; Confidence &amp;rarr;&lt;/a&gt;&lt;/p&gt;
+<span class="line-num">3956</span>        &lt;h1&gt;Page Concordance&lt;/h1&gt;
+<span class="line-num">3957</span>        &lt;p class=&quot;intro&quot;&gt;All 448 page surfaces of the 1499 Aldine first edition, mapped across three
+<span class="line-num">3958</span>        numbering systems: sequential page, bibliographic signature (quire + leaf + recto/verso), and
+<span class="line-num">3959</span>        folio number. Pages with woodcut illustrations show thumbnails from the Internet Archive facsimile
+<span class="line-num">3960</span>        (University of Seville copy). Links connect to marginalia folios (M) and British Library photographs (BL)
+<span class="line-num">3961</span>        where available.&lt;/p&gt;
+<span class="line-num">3962</span>
+<span class="line-num">3963</span>        &lt;div class=&quot;conc-controls&quot;&gt;
+<span class="line-num">3964</span>            &lt;input type=&quot;text&quot; class=&quot;conc-jump&quot; id=&quot;conc-jump&quot; placeholder=&quot;Jump to p.123 or b6v&quot;&gt;
+<span class="line-num">3965</span>            &lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;wc-only&quot;&gt; Woodcut pages only&lt;/label&gt;
+<span class="line-num">3966</span>            &lt;span class=&quot;conc-stats&quot; id=&quot;conc-stats&quot;&gt;{len(pages)} pages, {total_wc} with woodcuts&lt;/span&gt;
+<span class="line-num">3967</span>        &lt;/div&gt;
+<span class="line-num">3968</span>
+<span class="line-num">3969</span>        {sections_html}
+<span class="line-num">3970</span>    &lt;/div&gt;&quot;&quot;&quot;
+<span class="line-num">3971</span>
+<span class="line-num">3972</span>    page_html = page_shell(&quot;Page Concordance&quot;, body, active_nav=&#x27;concordance&#x27;,
+<span class="line-num">3973</span>                            extra_css=conc_css, extra_js=conc_js)
+<span class="line-num">3974</span>    (conc_dir / &#x27;index.html&#x27;).write_text(page_html, encoding=&#x27;utf-8&#x27;)
+<span class="line-num">3975</span>    print(f&quot;  concordance/index.html ({len(pages)} pages, {total_wc} woodcuts)&quot;)
+<span class="line-num">3976</span>
+<span class="line-num">3977</span>
+<span class="line-num">3978</span># ============================================================
+<span class="line-num">3979</span># Main
+<span class="line-num">3980</span># ============================================================
+<span class="line-num">3981</span>
+<span class="line-num">3982</span>def main():
+<span class="line-num">3983</span>    print(&quot;=== Building Site ===\n&quot;)
+<span class="line-num">3984</span>
+<span class="line-num">3985</span>    conn = sqlite3.connect(DB_PATH)
+<span class="line-num">3986</span>
+<span class="line-num">3987</span>    print(&quot;Exporting data...&quot;)
+<span class="line-num">3988</span>    export_data_json(conn)
+<span class="line-num">3989</span>
+<span class="line-num">3990</span>    print(&quot;\nBuilding pages...&quot;)
+<span class="line-num">3991</span>    update_styles()
+<span class="line-num">3992</span>    update_index_nav()
+<span class="line-num">3993</span>    build_scholars_pages(conn)
+<span class="line-num">3994</span>    build_dictionary_pages(conn)
+<span class="line-num">3995</span>    build_marginalia_pages(conn)
+<span class="line-num">3996</span>    build_bibliography_page(conn)
+<span class="line-num">3997</span>    build_docs_pages()
+<span class="line-num">3998</span>    build_code_pages()
+<span class="line-num">3999</span>    build_about_page(conn)
+<span class="line-num">4000</span>    build_the_book_page()
+<span class="line-num">4001</span>    build_russell_essay_page(conn)
+<span class="line-num">4002</span>    build_concordance_essay_page(conn)
+<span class="line-num">4003</span>    build_digital_edition_page(conn)
+<span class="line-num">4004</span>    build_timeline_page(conn)
+<span class="line-num">4005</span>    build_woodcuts_pages(conn)
+<span class="line-num">4006</span>    build_concordance_browser(conn)
+<span class="line-num">4007</span>    build_manuscripts_pages(conn)
+<span class="line-num">4008</span>
+<span class="line-num">4009</span>    conn.close()
+<span class="line-num">4010</span>    print(&quot;\n=== Build Complete ===&quot;)
+<span class="line-num">4011</span>
+<span class="line-num">4012</span>
+<span class="line-num">4013</span>if __name__ == &quot;__main__&quot;:
+<span class="line-num">4014</span>    main()</pre>
         </div>
     </main>
     <footer>
