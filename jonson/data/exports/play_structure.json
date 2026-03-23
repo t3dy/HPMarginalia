@@ -1,0 +1,173 @@
+[
+  {
+    "act": 1, "scene": 1,
+    "title": "The Quarrel",
+    "setting": "A room in Lovewit's house",
+    "characters": ["Face", "Subtle", "Dol Common"],
+    "summary": "Face, Subtle, and Dol quarrel over their shares in the alchemical confidence scheme they have been running from Lovewit's house while the master is away during the plague. Dol forces a truce. They review their upcoming marks.",
+    "alchemical_content": "Establishes the con: Subtle plays the alchemist, Face the front man. References to the 'venter tripartite' (three-way venture). Subtle claims real alchemical knowledge while using it for fraud.",
+    "line_count_approx": 200
+  },
+  {
+    "act": 1, "scene": 2,
+    "title": "Dapper's Fortune",
+    "setting": "The same",
+    "characters": ["Face", "Subtle", "Dapper"],
+    "summary": "Dapper, a lawyer's clerk, arrives seeking a familiar spirit to help him win at gambling. Subtle casts a horoscope and promises Dapper an audience with the Queen of Fairy.",
+    "alchemical_content": "Astrology and cunning-man practices adjacent to alchemy. The 'mercurial finger' reference. Subtle operates as an occult practitioner blending astrology, spirit conjuring, and alchemical mystique.",
+    "line_count_approx": 130
+  },
+  {
+    "act": 1, "scene": 3,
+    "title": "Drugger's Shop",
+    "setting": "The same",
+    "characters": ["Face", "Subtle", "Drugger"],
+    "summary": "Abel Drugger, a tobacconist, consults Subtle about the best astrological arrangement for his new shop. Subtle prescribes a layout based on planetary influences.",
+    "alchemical_content": "Astrological shop arrangement using planetary correspondences. Mercury's sign for the shop front. The blending of commercial astrology with alchemical authority.",
+    "line_count_approx": 90
+  },
+  {
+    "act": 1, "scene": 4,
+    "title": "Enter Mammon",
+    "setting": "The same",
+    "characters": ["Face", "Mammon", "Surly"],
+    "summary": "Sir Epicure Mammon arrives with Surly, who is skeptical. Mammon rhapsodizes about what he will do when the philosopher's stone is achieved. Surly voices doubt.",
+    "alchemical_content": "Mammon's speeches are dense with alchemical reference: the stone, projection, the elixir, transmutation of metals. Surly names specific alchemical frauds and failed practitioners.",
+    "line_count_approx": 170
+  },
+  {
+    "act": 2, "scene": 1,
+    "title": "Mammon's Fantasies",
+    "setting": "The same",
+    "characters": ["Mammon", "Surly"],
+    "summary": "Mammon elaborates his fantasies of wealth, health, and power. Surly continues to mock but Mammon is unmoved.",
+    "alchemical_content": "Extended catalogue of alchemical promises: the elixir of life, curing plague, restoring youth. Mammon's vision of 'the spirit of Sol' and dissolved pearl. The alchemical metals-planets correspondence underpins his imagery.",
+    "line_count_approx": 110
+  },
+  {
+    "act": 2, "scene": 2,
+    "title": "The Laboratory",
+    "setting": "Subtle's laboratory",
+    "characters": ["Subtle", "Mammon", "Surly", "Face"],
+    "summary": "Subtle shows Mammon and Surly the laboratory. He describes the alchemical process in technical detail. Mammon is entranced; Surly recognizes the jargon as empty.",
+    "alchemical_content": "The most technically dense scene: calcination, projection, fixation, the work of the furnace. Subtle names specific alchemical authorities. The sulphur-mercury theory of metals. Philosophical mercury vs common mercury.",
+    "line_count_approx": 200
+  },
+  {
+    "act": 2, "scene": 3,
+    "title": "The Stone Described",
+    "setting": "The same",
+    "characters": ["Subtle", "Mammon", "Face"],
+    "summary": "Subtle describes the philosopher's stone and its powers. Mammon grows more credulous. Face manages the schedule of gulls.",
+    "alchemical_content": "The stone as triple promise: gold-making, universal medicine, long life. The alchemical stages: nigredo, albedo, rubedo implied. Subtle's language draws on real alchemical treatises.",
+    "line_count_approx": 190
+  },
+  {
+    "act": 2, "scene": 4,
+    "title": "Ananias and Tribulation",
+    "setting": "The same",
+    "characters": ["Subtle", "Face", "Ananias"],
+    "summary": "Ananias, a deacon of the Puritans, arrives to check on a commission. He objects to pagan alchemical terminology. Subtle ejects him.",
+    "alchemical_content": "Conflict between Puritan religion and alchemical language. Ananias objects to terms like 'chrysopoeia' and 'spagyrica' as heathen. Subtle defends the art's vocabulary and ancient lineage.",
+    "line_count_approx": 100
+  },
+  {
+    "act": 2, "scene": 5,
+    "title": "The Sulphur-Mercury Lecture",
+    "setting": "The same",
+    "characters": ["Subtle", "Mammon", "Surly"],
+    "summary": "Subtle delivers a lecture on the composition of metals, explaining the sulphur-mercury theory. Surly challenges him on specific claims.",
+    "alchemical_content": "The generation of metals from sulphur and mercury underground. Materia liquida. Concorporation. The remote matter vs the proper matter of gold. This is Jonson's most sustained piece of alchemical exposition.",
+    "line_count_approx": 130
+  },
+  {
+    "act": 2, "scene": 6,
+    "title": "Surly Baited",
+    "setting": "The same",
+    "characters": ["Face", "Subtle", "Surly"],
+    "summary": "Face and Subtle attempt to draw Surly into the scheme despite his skepticism.",
+    "alchemical_content": "Surly names famous alchemical failures. References to alchemical literature: Geber, Arnold of Villanova. The distinction between true adepts and charlatans.",
+    "line_count_approx": 80
+  },
+  {
+    "act": 3, "scene": 1,
+    "title": "Tribulation Wholesale",
+    "setting": "The same",
+    "characters": ["Tribulation", "Ananias"],
+    "summary": "Tribulation Wholesome, the Puritan pastor, persuades the reluctant Ananias that dealing with alchemists is justified if it funds their cause.",
+    "alchemical_content": "The moral economy of alchemy: can sinful means produce godly ends? The Puritans want Subtle to counterfeit Dutch currency using alchemical transmutation. Coining and projection conflated.",
+    "line_count_approx": 80
+  },
+  {
+    "act": 3, "scene": 2,
+    "title": "The Puritans' Commission",
+    "setting": "The same",
+    "characters": ["Subtle", "Tribulation", "Ananias"],
+    "summary": "Subtle negotiates with the Puritans over their commission for transmuted metal. He impresses them with alchemical jargon and exaggerated promises.",
+    "alchemical_content": "Orphan's metals. The tin-copper-iron transmutation sequence. Subtle lists alchemical processes to overwhelm the Puritans: projection, multiplication, calcination. The stone as political tool.",
+    "line_count_approx": 200
+  },
+  {
+    "act": 3, "scene": 3,
+    "title": "Surly in Disguise",
+    "setting": "The same",
+    "characters": ["Face", "Subtle", "Surly (as a Spaniard)"],
+    "summary": "Surly returns disguised as a Spanish count to expose the fraud from within.",
+    "alchemical_content": "Minimal — this scene shifts to the dramatic mechanics of the con. The 'Spanish count' subplot is social rather than alchemical.",
+    "line_count_approx": 100
+  },
+  {
+    "act": 3, "scene": 4,
+    "title": "Dol as Queen of Fairy",
+    "setting": "The same",
+    "characters": ["Dol", "Face", "Dapper"],
+    "summary": "Dol plays the Queen of Fairy for Dapper. He is blindfolded and robbed of his money as 'offerings'.",
+    "alchemical_content": "Fairy lore overlapping with alchemical mystique. The con uses the same apparatus of secrecy and ritual that surrounds genuine alchemical practice.",
+    "line_count_approx": 80
+  },
+  {
+    "act": 4, "scene": 1,
+    "title": "The Explosion",
+    "setting": "The same",
+    "characters": ["Face", "Mammon", "Subtle", "Dol"],
+    "summary": "Subtle stages a laboratory explosion to explain why the projection has failed. Mammon is told his sin (lusting after Dol) has ruined the work.",
+    "alchemical_content": "The 'bolt's-head' (vessel) cracks. The work is 'overthrown'. In alchemical tradition, moral impurity of the operator was a standard explanation for failure — Jonson exploits this doctrine to make the con work. The furnace, retorts, and laboratory equipment are described in detail.",
+    "line_count_approx": 200
+  },
+  {
+    "act": 4, "scene": 2,
+    "title": "Surly Exposed",
+    "setting": "The same",
+    "characters": ["Surly", "Mammon", "Face", "Subtle"],
+    "summary": "Surly reveals his true identity and tries to expose the fraud. But Face and Subtle turn the other gulls against him.",
+    "alchemical_content": "Surly articulates the skeptical case against alchemy as a whole: it has never produced gold, its practitioners are all frauds or deluded. This represents the anti-alchemical position Jonson dramatizes throughout.",
+    "line_count_approx": 150
+  },
+  {
+    "act": 5, "scene": 1,
+    "title": "Lovewit Returns",
+    "setting": "Outside the house",
+    "characters": ["Lovewit", "Neighbours"],
+    "summary": "Lovewit returns from the country. The neighbours report strange goings-on. Face must scramble to cover his tracks.",
+    "alchemical_content": "Minimal — the plot moves to resolution. The alchemical laboratory is being dismantled offstage.",
+    "line_count_approx": 80
+  },
+  {
+    "act": 5, "scene": 2,
+    "title": "Face Confesses",
+    "setting": "Inside the house",
+    "characters": ["Lovewit", "Face"],
+    "summary": "Face confesses to Lovewit and offers him Dame Pliant as a bride in exchange for pardon. Lovewit accepts.",
+    "alchemical_content": "The alchemical apparatus is described as it is packed away: 'all the household stuff' of the laboratory. The material reality of alchemical fraud: furnaces, glasses, vessels.",
+    "line_count_approx": 100
+  },
+  {
+    "act": 5, "scene": 3,
+    "title": "The Reckoning",
+    "setting": "The same",
+    "characters": ["Lovewit", "Face", "Mammon", "Surly", "Tribulation", "Ananias", "Dapper", "Drugger", "Kastril"],
+    "summary": "The gulls return demanding their money and goods. Lovewit denies everything. Face escapes punishment by serving his master. Subtle and Dol have fled.",
+    "alchemical_content": "The final accounting of what the alchemical fraud has produced: nothing material, only lost money and humiliation. Jonson's moral: the stone was always a mirage. The play ends with Face's direct address to the audience about the 'pelf' (stolen goods).",
+    "line_count_approx": 200
+  }
+]

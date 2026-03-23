@@ -1,0 +1,208 @@
+[
+  {
+    "finding_id": "russell-signature",
+    "title": "Jonson's Signature and Motto",
+    "description": "Jonson signed the title page of the 1545 Aldine Hypnerotomachia Poliphili (BL C.60.o.12) with 'sum Ben: Ionsonii' ('I belong to Ben Jonson') in brown ink at the bottom of the page. At the top, he wrote his personal motto 'tanquam explorator' ('as an explorer' or 'as a spy') also in brown ink. This ownership inscription and motto are consistent with Jonson's known practice of marking his books.",
+    "category": "signature",
+    "evidence": "Title page of BL C.60.o.12, brown ink inscriptions",
+    "hp_page_ref": "title page",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 5",
+        "quote": "sum Ben: Ionsonii"
+      }
+    ],
+    "notes": null,
+    "hp_folio_sigs": [
+      "a4r"
+    ]
+  },
+  {
+    "finding_id": "russell-hand-characteristics",
+    "title": "Characteristics of Jonson's Hand in the HP",
+    "description": "Jonson annotated the Hypnerotomachia in black ink text with light brown pencil underlining. His annotations show a particular interest in syntax and sentence structure, circling specific words and writing marginal translations or comments. He circled the word YMHEN (Hymen) with particular focus on p. 361.",
+    "category": "hand_characteristics",
+    "evidence": "Multiple folios in BL C.60.o.12 showing Jonson's black ink and pencil",
+    "hp_page_ref": "multiple folios; p. 361 (Hymen circling)",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slides 6, 9, 11, 12, 16"
+      }
+    ],
+    "hp_folio_sigs": [
+      "a4r",
+      "b4v",
+      "d4r",
+      "e7r",
+      "k3v",
+      "m7v",
+      "s6r",
+      "t7v"
+    ]
+  },
+  {
+    "finding_id": "russell-syntax-interest",
+    "title": "Jonson's Interest in Syntax and Sentence Structure",
+    "description": "Jonson's annotations reveal a consistent interest in the syntactic and grammatical structures of Colonna's elaborate prose. He circled specific words, underlined passages, and wrote marginal notes translating or commenting on the Latin and Italianate constructions. This is consistent with Jonson's known scholarly temperament and his work as a grammarian (author of the English Grammar).",
+    "category": "reading_practices",
+    "evidence": "Pattern of circling and underlining across multiple folios",
+    "hp_page_ref": "multiple folios",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slides 9, 11"
+      }
+    ],
+    "hp_folio_sigs": [
+      "d4r",
+      "s6r",
+      "t7v"
+    ]
+  },
+  {
+    "finding_id": "russell-military-prudence",
+    "title": "Jonson's Marginal Translation of an Epitaph",
+    "description": "Jonson writes 'military prudence, or discipline, is the strongest bond of an emperor' beside the Latin epitaph 'MILITARIS PRUDENTIA SEU DISCIPLINA IMPERII EST TENACISSIMUM VINCULUM'. This shows Jonson actively translating and engaging with the political and moral content of the Hypnerotomachia's inscriptions.",
+    "category": "reading_practices",
+    "evidence": "Marginal note in Jonson's hand translating a Latin epitaph",
+    "hp_page_ref": "folio with epitaph",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 13"
+      }
+    ],
+    "hp_folio_sigs": [
+      "s6r"
+    ]
+  },
+  {
+    "finding_id": "russell-alchemist-parallel",
+    "title": "Parallel Between Jonson's Alchemist and Colonna's Prose",
+    "description": "Russell identifies a striking parallel between the lavish descriptive passages in The Alchemist (particularly Mammon's speeches in 2.2.72-76 about Indian shells, agate dishes, and dissolved pearl) and the elaborate ceremonial descriptions in the Hypnerotomachia (sacrificial scenes with hyacinth urns, ritual knives, and swans). Both deploy extensive catalogues of precious materials and ceremonial detail, suggesting Jonson's reading of Colonna influenced his dramatic prose style.",
+    "category": "alchemist_links",
+    "evidence": "Textual comparison of Alchemist 2.2.72-76 with HP p. 228, 231",
+    "hp_page_ref": "pp. 228, 231",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 15"
+      }
+    ],
+    "notes": "This is a stylistic parallel, not a direct quotation. Russell presents it as suggestive rather than conclusive."
+  },
+  {
+    "finding_id": "russell-panton-tokadi",
+    "title": "Jonson's Translation of 'Panton Tokadi'",
+    "description": "Jonson translated the Greek inscription 'Panton Tokadi' on a woodcut as 'The mother of all things'. This translation differs from the alchemical annotator's rendering as 'rerum omnium vas' ('The vessel of all things'), showing two different readers interpreting the same passage through different intellectual frameworks -- Jonson through humanist philology, the alchemist through chemical philosophy.",
+    "category": "reading_practices",
+    "evidence": "Marginal translations by Jonson and the alchemical hand on the same woodcut",
+    "hp_page_ref": "woodcut page (Panton Tokadi)",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 41"
+      }
+    ]
+  },
+  {
+    "finding_id": "russell-alchemical-hand-characteristics",
+    "title": "The Second (Alchemical) Hand: Key Characteristics",
+    "description": "A second annotator in the BL copy reads the Hypnerotomachia as an alchemical allegory. This hand overwrites both Jonson's and Bourne's annotations, indicating it is later than both. The alchemical annotator is also interested in the etymology of words in Colonna's Polifelesco language. They annotate both images and margins, and use idiosyncratic visual alchemical abbreviations that do not appear in standard reference lists such as Betty Jo Dobbs's Hunting of the Greene Lyon.",
+    "category": "hand_characteristics",
+    "evidence": "Annotations overwriting Jonson's and Bourne's hands; unique alchemical symbols",
+    "hp_page_ref": "multiple folios",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 21"
+      }
+    ],
+    "hp_folio_sigs": [
+      "a1r",
+      "a3r",
+      "b6v",
+      "d8v",
+      "e1r",
+      "E8v"
+    ]
+  },
+  {
+    "finding_id": "russell-magisteri-mercurii",
+    "title": "The 'Magisteri Mercurii' Declaration",
+    "description": "The alchemical annotator inscribed a programmatic statement declaring the true intention of the Hypnerotomachia: 'verus sensus intentionis huius libri est 3um: Gen: et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla & ingeniosissimum' -- 'The true intention of this book is threefold: and of the energy of all nature and the operation of Master Mercury, a description elegant, full and most ingenious.' This identifies the annotator as following the mercury-centered alchemical framework of Jean d'Espagnet.",
+    "category": "reading_practices",
+    "evidence": "Latin inscription in the alchemical hand",
+    "hp_page_ref": "flyleaf or early folio",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 39"
+      }
+    ],
+    "hp_folio_sigs": [
+      "a1r"
+    ]
+  },
+  {
+    "finding_id": "russell-despagnet-influence",
+    "title": "Influence of d'Espagnet's Enchiridion on the Alchemical Marginalia",
+    "description": "The alchemical annotations reflect the specific alchemical framework of Jean d'Espagnet's Enchiridion Physicae Restitutae (1623 Latin, 1651 English). D'Espagnet identified the universal spirit with Mercury and understood it as the condensing energy of the water cycle, emanating from the Sun. The annotator's emphasis on Mercury as 'master element' and the association of alchemical imagery with moisture and the water cycle aligns closely with d'Espagnet's system, dating the annotations to after 1651.",
+    "category": "reading_practices",
+    "evidence": "Conceptual parallels between marginalia and d'Espagnet's Enchiridion",
+    "hp_page_ref": "multiple folios",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slides 40-41"
+      }
+    ],
+    "notes": "This finding is about the alchemical annotator's intellectual framework. Included because it establishes the timeline and context for Jonson's copy after it left his hands."
+  },
+  {
+    "finding_id": "russell-provenance-chain",
+    "title": "Provenance Chain: Jonson to Bourne to the Alchemical Annotator",
+    "description": "The BL copy passed through at least three hands: Jonson signed it; Thomas Bourne dated his ownership to 1641; the alchemical annotator wrote over both. Bourne was a bookseller who joined the Stationers' Company in 1623, and was a recusant Catholic like both Jonson and Digby. The hand of the purchase price inscription matches Digby's handwriting, not Bourne's. If Digby bought the book from Bourne in 1641, he would have had it during his imprisonment at Winchester House in 1642, where he practiced alchemy. The book later entered the collections of Hans Sloane (1660-1753) and from there the British Museum.",
+    "category": "ownership",
+    "evidence": "Ownership inscriptions, Bourne's date (1641), handwriting comparison of price inscription",
+    "hp_page_ref": "title page, flyleaves",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slides 42-43"
+      }
+    ]
+  },
+  {
+    "finding_id": "russell-oberon-barriers",
+    "title": "Jonson's Use of HP Imagery in Court Masques",
+    "description": "The presentation links Jonson's reading of the Hypnerotomachia to the visual design of his court masques, specifically the set design for a palace within a cavern in Oberon (performed 1611) and the Fallen House of Chivalry in Prince Henry's Barriers (1610). The elaborate architectural descriptions in the Hypnerotomachia may have influenced Jonson's stage directions and his collaboration with Inigo Jones on masque scenography.",
+    "category": "alchemist_links",
+    "evidence": "Set designs for Oberon and Prince Henry's Barriers compared with HP architectural descriptions",
+    "hp_page_ref": "architectural folios",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slides 17-18"
+      }
+    ],
+    "notes": "This finding links Jonson's HP reading to his theatrical work beyond The Alchemist. The connection to masque scenography is suggestive rather than proven."
+  },
+  {
+    "finding_id": "russell-frogg-green",
+    "title": "The 'Frogg Green' Inscription: Evidence of an English Annotator",
+    "description": "Among the alchemical annotations, one inscription in English labels a Heptagonal Fountain as 'Frogg Green'. This is significant because the majority of the alchemical hand's notes are in Latin, and this English label suggests the annotator was a native English speaker, which is consistent with the proposed attribution to an English figure.",
+    "category": "hand_characteristics",
+    "evidence": "English inscription 'Frogg Green' amid otherwise Latin annotations",
+    "hp_page_ref": "folio with Heptagonal Fountain",
+    "citations": [
+      {
+        "source_id": "russell-pptx",
+        "page_ref": "slide 28"
+      }
+    ],
+    "hp_folio_sigs": []
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "source_id": "hart-alchemist",
+    "title": "The Alchemist, edited by H.C. Hart",
+    "author": "Ben Jonson; ed. H.C. Hart",
+    "filename": "The_Alchemist_by_Ben_J_Onson_Newly_Edited_by",
+    "md_filename": "The_Alchemist_by_Ben_J_Onson_Newly_Edited_by.md",
+    "doc_type": "pdf",
+    "page_count": 255,
+    "content_focus": [
+      "alchemist_text",
+      "alchemist_notes"
+    ],
+    "notes": "1903 De La More Press edition. OCR has artifacts from scanned original.",
+    "md_exists": true,
+    "md_size": 370675
+  },
+  {
+    "source_id": "arden-critical-reader",
+    "title": "The Alchemist: A Critical Reader (Arden Early Modern Drama)",
+    "author": "ed. Erin Julian and Helen Ostovich",
+    "filename": "Jonson_Ben_Ostovich_Helen_Julian_Erin_-_The_alchemist_a",
+    "md_filename": "Jonson_Ben_Ostovich_Helen_Julian_Erin_-_The_alchemist_a.md",
+    "doc_type": "epub",
+    "page_count": null,
+    "content_focus": [
+      "alchemist_criticism",
+      "alchemist_performance",
+      "alchemist_alchemy"
+    ],
+    "notes": "2013 Bloomsbury/Arden. Critical essays on The Alchemist.",
+    "md_exists": true,
+    "md_size": 604783
+  },
+  {
+    "source_id": "mardock-london",
+    "title": "Our Scene is London: Ben Jonson's City and the Space of the Author",
+    "author": "James D. Mardock",
+    "filename": "Mardock_James_D_Jonson_Ben_-_Our_scene_is",
+    "md_filename": "Mardock_James_D_Jonson_Ben_-_Our_scene_is.md",
+    "doc_type": "pdf",
+    "page_count": 175,
+    "content_focus": [
+      "jonson_biography",
+      "jonson_london",
+      "theatrical_context"
+    ],
+    "notes": "2008 Routledge. Jonson's relationship to London.",
+    "md_exists": true,
+    "md_size": 460142
+  },
+  {
+    "source_id": "linden-darke-hierogliphicks",
+    "title": "Darke Hierogliphicks: Alchemy in English Literature (Maier extract)",
+    "author": "Stanton J. Linden",
+    "filename": "Darke_Hierogliphicks_Alchemy_in_English_Literature_from_Chaucer",
+    "md_filename": "Darke_Hierogliphicks_Alchemy_in_English_Literature_from_Chaucer.md",
+    "doc_type": "txt",
+    "page_count": null,
+    "content_focus": [
+      "alchemy_literature",
+      "alchemist_alchemy",
+      "maier"
+    ],
+    "notes": "University Press of Kentucky. Extract focused on Michael Maier chapter.",
+    "md_exists": true,
+    "md_size": 85587
+  },
+  {
+    "source_id": "russell-pptx",
+    "title": "The HP of Ben Jonson and Kenelm Digby (Russell & O'Neill presentation)",
+    "author": "James Russell and James O'Neill",
+    "filename": "The_HP_of_Ben_Jonson_and_Kenelm_Digby",
+    "md_filename": "The_HP_of_Ben_Jonson_and_Kenelm_Digby.md",
+    "doc_type": "pptx",
+    "page_count": 46,
+    "content_focus": [
+      "jonson_hp_annotations",
+      "alchemical_hand",
+      "digby_attribution",
+      "russell_findings"
+    ],
+    "notes": "Presentation slides. Primary source for Russell findings on Jonson's HP copy.",
+    "md_exists": true,
+    "md_size": 14114
+  }
+]

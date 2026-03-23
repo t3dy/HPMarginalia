@@ -1,0 +1,212 @@
+[
+  {
+    "annotation_id": "ann-alch-1.1.argument",
+    "passage_id": "alch-1.1.argument",
+    "passage": {
+      "passage_id": "alch-1.1.argument",
+      "act": 1,
+      "scene": 1,
+      "line_start": 1,
+      "line_end": 8,
+      "text": "The sickness hot, a master quit, for fear, / His house in town, and left one servant there. / Ease him corrupted, and gave means to know / A cheater and his punk; who, now brought low, / Leaving their narrow practice, were become / Coz'ners at large; and only wanting some / House to set up, with him they here contract, / Each for a share, and all begin to act",
+      "speaker": "The Argument",
+      "source_id": "hart-alchemist",
+      "source_page": "Argument"
+    },
+    "title": "The Argument: Alchemy as Confidence Game",
+    "explanation": "Jonson's verse Argument frames the entire play as a study of alchemical fraud. The 'sickness hot' is the plague that empties London and creates the conditions for the con. The three tricksters -- Face (the servant), Subtle (the alchemist), and Dol Common -- set up an alchemical laboratory as a front for confidence schemes. The word 'Coz'ners' (cozeners, cheaters) is the key: from the outset, Jonson signals that his alchemist is a fraud, not a philosopher.",
+    "alchemical_concept": "fraud",
+    "alchemical_category": "fraud",
+    "cultural_context": "Alchemical fraud was a recognized social problem in early modern Europe. Statutes against fraudulent gold-making existed in England from Henry IV. The 1571 Act against multipliers was only repealed in 1689.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "introduction"},
+      {"source_id": "arden-critical-reader", "page_ref": "ch. 1"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. 5"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-2.1.projection",
+    "passage_id": "alch-2.1.51-56",
+    "passage": {
+      "passage_id": "alch-2.1.51-56",
+      "act": 2,
+      "scene": 1,
+      "line_start": 51,
+      "line_end": 56,
+      "text": "But when you see th' effects of the Great Medicine, / Of which one part projected on a hundred / Of Mercury, or Venus, or the moon, / Shall turn it to as many of the sun; / Nay, to a thousand, so ad infinitum: / You will believe me.",
+      "speaker": "Mammon",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "Projection and the Great Medicine",
+    "explanation": "Mammon describes the central alchemical operation of projection: casting a small quantity of the philosopher's stone (the 'Great Medicine') onto a mass of base metal to transmute it into gold. The metals are named by their planetary correspondences: Mercury (quicksilver), Venus (copper), the Moon/Luna (silver), the Sun/Sol (gold). The claim of 'ad infinitum' multiplication -- that each projection multiplies the stone's power -- comes from the alchemical doctrine of multiplication found in pseudo-Geber and Ripley.",
+    "alchemical_concept": "projection",
+    "alchemical_category": "transmutation",
+    "cultural_context": "Projection was the final, most dramatic stage of the alchemical Great Work. Real alchemists claimed to have witnessed projection, and accounts of successful transmutations circulated widely in early modern Europe. The astronomical multiplication ratios Mammon cites (1:100, 1:1000) echo specific claims in alchemical literature.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. 1"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-2.1.dragon",
+    "passage_id": "alch-2.1.141-147",
+    "passage": {
+      "passage_id": "alch-2.1.141-147",
+      "act": 2,
+      "scene": 1,
+      "line_start": 141,
+      "line_end": 147,
+      "text": "The manner of our work; the bulls, our furnace, / Still breathing fire; our argent-vive, the dragon: / The dragon's teeth, mercury sublimate, / That keeps the whiteness, hardness, and the biting; / And they are gathered into Jason's helm, / The alembic, and then sow'd in Mars his field, / And thence sublimed so often, till they're fixed.",
+      "speaker": "Mammon",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "The Golden Fleece as Alchemical Allegory",
+    "explanation": "Mammon decodes the myth of Jason and the Golden Fleece as an alchemical allegory -- a common move in Renaissance alchemical hermeneutics. The fire-breathing bulls are the furnace; the dragon is argent-vive (quicksilver/mercury); the dragon's teeth are mercury sublimate (mercuric chloride, valued for its whiteness and corrosive 'biting'); Jason's helm is the alembic (distillation vessel); Mars's field is the iron vessel or martial stage of the work. 'Sublimed so often, till they're fixed' describes the repeated sublimation that transforms volatile mercury into a fixed (stable) substance -- the goal of much practical alchemy.",
+    "alchemical_concept": "sublimation",
+    "alchemical_category": "processes",
+    "cultural_context": "Reading classical myths as encoded alchemical recipes was a widespread practice. Michael Maier's Atalanta Fugiens (1617) and Arcana Arcanissima (1614) systematically decoded Greek mythology as alchemy. Jonson's audience would have recognized this as a real tradition, not an invention of Mammon's.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. 3"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-2.1.sol",
+    "passage_id": "alch-2.1.72-76",
+    "passage": {
+      "passage_id": "alch-2.1.72-76",
+      "act": 2,
+      "scene": 1,
+      "line_start": 72,
+      "line_end": 76,
+      "text": "My meat shall all come in in Indian shells, / Dishes of agate, set in gold, and studded / With emeralds, sapphires, hyacinths, and rubies. / The tongues of carps, dormice, and camels' heels, / Boil'd i' the spirit of Sol, and dissolv'd pearl,",
+      "speaker": "Mammon",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "Mammon's Vision of Alchemical Wealth",
+    "explanation": "Mammon fantasizes about the material rewards of successful transmutation. 'The spirit of Sol' is a tincture or essence derived from gold -- Sol being the alchemical name for gold, corresponding to the Sun in planetary-metal correspondences. 'Dissolved pearl' alludes to dissolving pearls in acid, but also echoes alchemical dissolution. Mammon's speech conflates the alchemist's philosophical goal with crude material greed -- precisely Jonson's satirical point.",
+    "alchemical_concept": "projection",
+    "alchemical_category": "transmutation",
+    "cultural_context": "The promise of the philosopher's stone included transmuting base metals to gold and producing the elixir of life. Mammon represents credulous investors who funded real alchemical laboratories in early modern London.",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 15", "note": "Russell cites this as showing similarity between Jonson and Colonna"},
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. on Jonson"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL",
+    "notes": "Russell cites this passage as evidence of parallel between Jonson's descriptive style and Colonna's prose in the Hypnerotomachia."
+  },
+  {
+    "annotation_id": "ann-alch-2.1.sulphur-mercury",
+    "passage_id": "alch-2.1.381-385",
+    "passage": {
+      "passage_id": "alch-2.1.381-385",
+      "act": 2,
+      "scene": 1,
+      "line_start": 381,
+      "line_end": 385,
+      "text": "I have another work, you never saw, son, / That three days since past the philosopher's wheel, / In the lent heat of Athanor; and's become / Sulphur of Nature.",
+      "speaker": "Subtle",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "The Athanor and Sulphur of Nature",
+    "explanation": "Subtle describes a work passing through the 'philosopher's wheel' -- the circular process of repeated operations (dissolution, coagulation, sublimation) that alchemists believed would gradually perfect matter. The Athanor is a self-feeding furnace designed to maintain a steady, low heat ('lent heat') over long periods, essential for the slow work of transmutation. 'Sulphur of Nature' is the pure, philosophical sulphur (as opposed to common brimstone) -- one of the two principles from which all metals were believed to be generated.",
+    "alchemical_concept": "sulphur-mercury theory",
+    "alchemical_category": "laboratory",
+    "cultural_context": "The Athanor was one of the most recognizable pieces of alchemical apparatus. Its name derives from Arabic al-tannur (oven). The concept of a 'gentle' or 'lent' heat was central to alchemical practice -- too much heat would destroy the work.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. 1"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-2.1.lac-virginis",
+    "passage_id": "alch-2.1.426-431",
+    "passage": {
+      "passage_id": "alch-2.1.426-431",
+      "act": 2,
+      "scene": 1,
+      "line_start": 426,
+      "line_end": 431,
+      "text": "And shews lac virginis. Blessed be heaven! / I sent you of his faeces there calcined: / Out of that calx, I have won the salt of mercury. / ... / Yes, and reverberating in Athanor.",
+      "speaker": "Subtle",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "Lac Virginis, Calcination, and the Salt of Mercury",
+    "explanation": "This passage is dense with technical alchemical vocabulary. 'Lac virginis' (virgin's milk) is a white precipitate produced by adding alkali to a mercury solution -- its appearance was taken as a sign of progress in the work. 'Faeces calcined' refers to the residue left after calcination (heating a substance to powder). 'Calx' is the powder produced by calcination. 'The salt of mercury' is the purified, crystalline form of a mercury compound. 'Reverberating' means heating in a reverberatory furnace where the flame is reflected back onto the substance. Every term here corresponds to a real alchemical operation.",
+    "alchemical_concept": "calcination",
+    "alchemical_category": "processes",
+    "cultural_context": "Jonson's technical precision in these passages is remarkable. He likely drew on specific alchemical manuals -- Hart notes parallels with Martin Ruland's Lexicon Alchemiae (1612) and the pseudo-Geber corpus. This level of detail convinced some early critics that Jonson had actually practiced alchemy.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-2.1.philosopher-stone",
+    "passage_id": "alch-2.1.stone",
+    "passage": {
+      "passage_id": "alch-2.1.stone",
+      "act": 2,
+      "scene": 1,
+      "line_start": 119,
+      "line_end": 122,
+      "text": "Of the philosopher's stone, and in High Dutch. / ... / Did Adam write, sir, in High Dutch? / He did;",
+      "speaker": "Mammon / Surly",
+      "source_id": "hart-alchemist",
+      "source_page": "Act II"
+    },
+    "title": "The Philosopher's Stone and Adamic Knowledge",
+    "explanation": "Mammon claims that Adam himself wrote about the philosopher's stone 'in High Dutch' (German). This alludes to the alchemical tradition that the art was primordial -- taught by God to Adam, transmitted through Hermes Trismegistus, and preserved in a chain of adepts. The claim that the original language of alchemy was German reflects the Paracelsian movement, which promoted vernacular German over Latin and claimed German-speaking lands as the true home of the art. Surly's incredulous response voices the skeptic's position.",
+    "alchemical_concept": "prisca sapientia",
+    "alchemical_category": "symbolic",
+    "cultural_context": "The idea that alchemy was the oldest art, predating even writing, was central to its claim of authority. The Hermetic tradition traced alchemy to ancient Egypt via Hermes Trismegistus. Paracelsus and his followers shifted the geographic center of the tradition to Germany.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act II notes"},
+      {"source_id": "linden-darke-hierogliphicks", "page_ref": "ch. 2"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  },
+  {
+    "annotation_id": "ann-alch-4.1.explosion",
+    "passage_id": "alch-4.1.explosion",
+    "passage": {
+      "passage_id": "alch-4.1.explosion",
+      "act": 4,
+      "scene": 1,
+      "line_start": 1,
+      "line_end": 10,
+      "text": "[An explosion is heard within.] ... O sir, we are defeated! All the works / Are flown in fumo, every glass is burst; / Furnace, and all rent down!",
+      "speaker": "Face / Subtle",
+      "source_id": "hart-alchemist",
+      "source_page": "Act IV"
+    },
+    "title": "The Staged Explosion: Moral Impurity Ruins the Work",
+    "explanation": "Subtle stages a laboratory explosion to explain why the projection has failed. He blames Mammon's lust (for Dol Common) -- in alchemical tradition, the moral impurity of the operator was a standard explanation for failure. The 'bolt's-head' (a round-bottomed flask) cracks, the glasses burst, the furnace is destroyed. 'Flown in fumo' means gone up in smoke. This scene brilliantly exploits a real alchemical doctrine -- that the Great Work required spiritual as well as material purity -- to make the con work dramatically.",
+    "alchemical_concept": "moral purity",
+    "alchemical_category": "symbolic",
+    "cultural_context": "Many alchemical texts insisted that the operator must be morally and spiritually pure for the work to succeed. This requirement conveniently explained every failure without discrediting the art itself. Jonson recognizes this as both a genuine belief and a built-in excuse for charlatans.",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Act IV notes"},
+      {"source_id": "arden-critical-reader", "page_ref": "ch. 3"}
+    ],
+    "confidence": "HIGH",
+    "extraction_method": "MANUAL"
+  }
+]

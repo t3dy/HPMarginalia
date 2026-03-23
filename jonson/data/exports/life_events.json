@@ -1,0 +1,208 @@
+[
+  {
+    "event_id": "life-1572-birth",
+    "date": "1572",
+    "date_sort": "1572-06-11",
+    "title": "Birth of Ben Jonson",
+    "description": "Benjamin Jonson born in Westminster. His father, a minister who had lost his estate under Queen Mary, died a month before Jonson's birth. His mother later married a bricklayer.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "mardock-london", "page_ref": "introduction"},
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ],
+    "notes": "Gutenberg intro gives birthplace as Westminster and date as early 1573; Drummond records 11 June."
+  },
+  {
+    "event_id": "life-1583-westminster",
+    "date": "c. 1583",
+    "date_sort": "1583-01-01",
+    "title": "Westminster School under William Camden",
+    "description": "As a youth Jonson attracted the attention of the antiquary William Camden, then usher at Westminster School. Camden laid the foundations of Jonson's classical learning. Jonson later acknowledged that to Camden he owed 'All that I am in arts, all that I know.'",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1591-flanders",
+    "date": "c. 1591",
+    "date_sort": "1591-01-01",
+    "title": "Military Service in Flanders",
+    "description": "Jonson enlisted as a soldier, trailing his pike in Flanders in the wars of William the Silent against the Spanish. He later told Drummond he had killed an enemy in single combat between the two camps and taken spoils from him.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1592-marriage",
+    "date": "1592",
+    "date_sort": "1592-01-01",
+    "title": "Return from Abroad and Marriage",
+    "description": "Jonson returned from Flanders penniless and soon married. He told Drummond curtly that 'his wife was a shrew, yet honest.' For some years he lived apart from her in the household of Lord Albany.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1597-henslowe",
+    "date": "1597",
+    "date_sort": "1597-07-28",
+    "title": "Working for Philip Henslowe",
+    "description": "Jonson appears in the employment of Philip Henslowe, manager of the Admiral's Men. Henslowe's Diary records a loan of 4 pounds to Jonson on 28 July 1597, and a later advance of 20 shillings for a play he promised to deliver by Christmas.",
+    "category": "theatrical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1597-isle-of-dogs",
+    "date": "1597",
+    "date_sort": "1597-07-01",
+    "title": "The Isle of Dogs Scandal",
+    "description": "Jonson co-authored The Isle of Dogs with Thomas Nashe for Pembroke's Men. The play was suppressed by the Privy Council as seditious. Jonson was imprisoned in the Marshalsea.",
+    "category": "political",
+    "citations": [
+      {"source_id": "mardock-london", "page_ref": "ch. 1"}
+    ]
+  },
+  {
+    "event_id": "life-1598-spencer-duel",
+    "date": "1598",
+    "date_sort": "1598-09-22",
+    "title": "Killing of Gabriel Spencer",
+    "description": "Jonson killed the actor Gabriel Spencer in a duel in Hoxton fields. Henslowe wrote to Alleyn: 'I have lost one of my company that hurteth me greatly; that is Gabriel, for he is slain in Hogsden fields by the hands of Benjamin Jonson, bricklayer.' Jonson was tried at Old Bailey, convicted, but escaped hanging by pleading benefit of clergy. He was branded with a 'T' (for Tyburn) on his left thumb and his goods were forfeited. While in prison he became a Roman Catholic.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"},
+      {"source_id": "mardock-london", "page_ref": "ch. 1"}
+    ]
+  },
+  {
+    "event_id": "life-1598-every-man",
+    "date": "1598",
+    "date_sort": "1598-09-01",
+    "title": "Every Man in His Humour",
+    "description": "Every Man in His Humour performed by the Lord Chamberlain's Men, with Shakespeare taking a part. Tradition holds that Shakespeare personally championed the play after the company initially rejected it. This was Jonson's first major theatrical success.",
+    "category": "theatrical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"},
+      {"source_id": "mardock-london", "page_ref": "ch. 2"}
+    ]
+  },
+  {
+    "event_id": "life-1605-volpone",
+    "date": "1605",
+    "date_sort": "1605-01-01",
+    "title": "Volpone Performed",
+    "description": "Volpone, or The Fox performed, widely considered Jonson's masterpiece alongside The Alchemist. The play's satire of greed and deception in Venice prefigures the alchemical fraud at the center of The Alchemist five years later.",
+    "category": "theatrical",
+    "citations": [
+      {"source_id": "arden-critical-reader", "page_ref": "ch. 1"}
+    ]
+  },
+  {
+    "event_id": "life-1610-alchemist",
+    "date": "1610",
+    "date_sort": "1610-01-01",
+    "title": "The Alchemist Performed",
+    "description": "The Alchemist first performed by the King's Men. Set in a London house during a plague outbreak, the play satirizes alchemical fraud while demonstrating Jonson's deep knowledge of alchemical language and theory. Published in quarto the same year.",
+    "category": "theatrical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "introduction"},
+      {"source_id": "arden-critical-reader", "page_ref": "ch. 1"}
+    ]
+  },
+  {
+    "event_id": "life-1616-folio",
+    "date": "1616",
+    "date_sort": "1616-01-01",
+    "title": "Publication of the First Folio",
+    "description": "Jonson published The Workes of Benjamin Jonson, the first folio publication to include stage plays. This was a landmark in the elevation of vernacular drama to the status of literature.",
+    "category": "literary",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 3"}
+    ]
+  },
+  {
+    "event_id": "life-1616-pension",
+    "date": "1616",
+    "date_sort": "1616-02-01",
+    "title": "Royal Pension",
+    "description": "Jonson received a royal pension of 100 marks a year from James I, effectively making him the first poet laureate, though the title was not yet formalized.",
+    "category": "literary",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1618-drummond",
+    "date": "1618-1619",
+    "date_sort": "1618-12-01",
+    "title": "Conversations with Drummond of Hawthornden",
+    "description": "Jonson walked to Scotland and stayed with the poet William Drummond of Hawthornden over the winter of 1618-19. Drummond recorded their conversations, preserving Jonson's opinions on contemporaries including Shakespeare, Donne, and others. These Conversations are a primary biographical source.",
+    "category": "literary",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1623-fire",
+    "date": "1623",
+    "date_sort": "1623-11-01",
+    "title": "Library Fire",
+    "description": "A fire destroyed Jonson's library and manuscripts. He lamented the loss in his poem 'An Execration upon Vulcan'. The timing is relevant to the provenance of his HP copy -- the book may have left his collection before or because of this fire.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 42"},
+      {"source_id": "mardock-london", "page_ref": "ch. 5"}
+    ],
+    "notes": "Russell notes the book may have left Jonson's collections before the fire, or at his death."
+  },
+  {
+    "event_id": "life-1628-stroke",
+    "date": "1628",
+    "date_sort": "1628-01-01",
+    "title": "Paralytic Stroke",
+    "description": "Jonson suffered a paralytic stroke that left him bedridden for much of his remaining life. He continued to write but his later plays were less successful. His financial situation deteriorated.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1629-digby",
+    "date": "c. 1629",
+    "date_sort": "1629-01-01",
+    "title": "Acquaintance with Kenelm Digby",
+    "description": "Jonson and Kenelm Digby were acquainted by 1629, when Digby returned from privateering. Digby became one of Jonson's closest associates, attending the 'Sons of Ben' literary coterie. Jonson praised Digby in verse in The Underwood.",
+    "category": "literary",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 27", "note": "Donaldson, p. 411"}
+    ]
+  },
+  {
+    "event_id": "life-1637-death",
+    "date": "1637",
+    "date_sort": "1637-08-06",
+    "title": "Death and Burial",
+    "description": "Jonson died on 6 August 1637 and was buried in Westminster Abbey. His gravestone bears the inscription 'O Rare Ben Jonson'. Digby, as literary executor, received Jonson's unpublished writings.",
+    "category": "biographical",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 27"},
+      {"source_id": "hart-alchemist", "page_ref": "Gutenberg intro"}
+    ]
+  },
+  {
+    "event_id": "life-1640-second-folio",
+    "date": "1640",
+    "date_sort": "1640-01-01",
+    "title": "Second Folio Published Posthumously",
+    "description": "The Second Folio published containing The Underwood and other works from manuscripts Digby held as literary executor. This establishes Digby's direct access to Jonson's papers and personal effects after 1637.",
+    "category": "literary",
+    "citations": [
+      {"source_id": "russell-pptx", "page_ref": "slide 27"}
+    ]
+  }
+]
