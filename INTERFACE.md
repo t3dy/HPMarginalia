@@ -2,7 +2,7 @@
 
 > What the site shows, what it hides, and what needs fixing.
 
-## Navigation (14 tabs)
+## Navigation (15 tabs)
 
 | Tab | Page(s) | Source Table(s) | Status |
 |-----|---------|----------------|--------|
@@ -19,6 +19,7 @@
 | Edition | digital-edition.html | — (static stub) | BUILT (stub) |
 | Alchemical Hands | russell-alchemical-hands.html | annotator_hands, matches, folio_descriptions | BUILT |
 | Concordance | concordance-method.html | matches, signature_map, images | BUILT |
+| Ben Jonson | jonson/index.html + 3 subpages | JSON exports (life_events, annotations, russell_findings) | BUILT (seed) |
 | About | about.html | aggregate stats from all tables | BUILT |
 
 ## UI Surfacing Audit

@@ -53,6 +53,8 @@ def nav_html(active='', prefix=''):
         (f'{prefix}digital-edition.html', 'Editions', 'edition'),
         (f'{prefix}russell-alchemical-hands.html', 'Alchemical Hands', 'russell'),
         (f'{prefix}concordance/index.html', 'Concordance', 'concordance'),
+        (f'{prefix}jonson/index.html', 'Ben Jonson', 'jonson'),
+        (f'{prefix}digby/index.html', 'Digby', 'digby'),
         (f'{prefix}about.html', 'About', 'about'),
     ]
     items = []

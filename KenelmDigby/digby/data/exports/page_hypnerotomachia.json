@@ -1,0 +1,560 @@
+{
+  "hypnerotomachia_findings": [
+    {
+      "id": "hpf_alchemical_hand",
+      "title": "Identification of Digby as the Alchemical Annotator",
+      "claim": "James Russell's research argues that Kenelm Digby is the most likely candidate for the 'alchemical hand' identified among the multiple annotating hands in a copy of the Hypnerotomachia Poliphili.",
+      "description": "The annotated copy of the Hypnerotomachia Poliphili contains marginalia from several distinct hands. One hand is characterized by alchemical symbolic markings, Latin notes interpreting images and text as alchemical allegory, and attention to themes of transformation and transmutation. Russell argues that this hand can be attributed to Digby based on handwriting similarities, conceptual parallels with Digby's known alchemical writings, and historical plausibility given Digby's bibliophilic habits and access to rare books.",
+      "evidence_excerpt": "The alchemical annotations show attention to Jupiter/Tin symbolism, universal spirit concepts, and Mercury — all central to Digby's documented alchemical theories",
+      "related_concepts": "Jupiter/Tin, Mercury, universal spirit, alchemical allegory, transmutation",
+      "significance": "If correct, this attribution expands Digby's known corpus to include his reading practices and alchemical interpretation of Renaissance texts, connecting his natural philosophy to a broader tradition of esoteric reading.",
+      "citation_ids": "cit_hp_russell,cit_hp_alchemy",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "hpf_intellectual_context",
+      "title": "Digby's Alchemical Reading as Intellectual Practice",
+      "claim": "The alchemical marginalia in the Hypnerotomachia, if attributable to Digby, represent a form of active alchemical reading that connects his philosophical theories to his engagement with Renaissance visual and textual culture.",
+      "description": "Digby's known works demonstrate a consistent interest in how material substances interact across distances (the Powder of Sympathy), how spirit animates matter (Two Treatises), and how visible forms encode hidden truths. The alchemical annotations in the Hypnerotomachia show the same interpretive framework applied to Colonna's text and woodcuts — reading images of gardens, architecture, and mythological scenes as encoded alchemical processes.",
+      "evidence_excerpt": "Parallels between marginalia's interpretation of HP imagery and Digby's theories of sympathy and atomic transmission in Two Treatises",
+      "related_concepts": "sympathetic action, atoms, spirit-matter relationship, allegorical reading",
+      "significance": "Situates Digby within early modern alchemical reading practices and demonstrates that his natural philosophy was not separate from his literary and visual culture.",
+      "citation_ids": "cit_hp_russell,cit_two_treatises",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "hpf_jupiter_tin",
+      "title": "Jupiter/Tin Parallels: Marginalia and Chymical Secrets",
+      "claim": "The alchemical annotator pays particular attention to Jupiter's titles in the HP, transcribing them into the flyleaf in a hierarchical scheme. Digby's posthumous Chymical Secrets (1682) contains multiple operations specifically involving Jupiter/Tin, including a cancer cure using an amalgam of Jupiter/Tin and Mercury.",
+      "description": "Early in the HP, Poliphilo invokes Jupiter under multiple titles. The annotator transcribes these into the flyleaf as a hierarchical list with brackets: 'Maximum, optimum, omnipotentem and opitulatorem' and 'sumum patrem, supererum, medioximorum & inferum.' Digby's Chymical Secrets contains 'An Operation upon Jupiter' and a cure for cancer using Jupiter/Tin amalgamated with Mercury, demonstrating the same alchemical interest in Jupiter/Tin that the marginalia display.",
+      "evidence_excerpt": "The annotator transcribes Jupiter's titles into the flyleaf; Chymical Secrets contains 'An Operation upon Jupiter' and a cancer cure using Jupiter/Tin and Mercury amalgam",
+      "related_concepts": "Jupiter/Tin, Mercury, Chymical Secrets, alchemical operations, cancer cure",
+      "significance": "This is one of the strongest content parallels between the marginalia and Digby's known works. The specific interest in Jupiter/Tin is unusual and distinctive.",
+      "citation_ids": "cit_russell_slide32,cit_hp_alchemy",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "hpf_mercury_master",
+      "title": "Mercury as Master Element: Le Fevre's Influence",
+      "claim": "The alchemical annotator writes a Latin inscription declaring the 'true intention' of the HP is a description of 'Master Mercury' — reflecting the influence of Nicholas le Fevre and Jean d'Espagnet on Digby's alchemy after 1651.",
+      "description": "The annotator inscribes: 'verus sensus intentionis huius libri est 3um: Gen: et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla & ingeniossisum' ('The true intention of this book is threefold: and of the energy of all nature and the operation of Master Mercury, a description elegant, full and most ingenious'). This reflects Digby's post-1651 alchemical framework, learned from Le Fevre in Paris, which identified Mercury with the universal spirit and gold with aethereal spirit.",
+      "evidence_excerpt": "Marginalia: 'Magisteri Mercurii Descriptio elegans' — Digby's 1660 Royal Society lecture: 'Gold is of the same Nature as the aethereal Spirit'",
+      "related_concepts": "Mercury, Universal Spirit, Le Fevre, d'Espagnet, gold, aethereal spirit",
+      "significance": "This inscription dates the marginalia to after 1651 (when Digby studied with Le Fevre) and connects them to Digby's mature alchemical philosophy as presented to the Royal Society.",
+      "citation_ids": "cit_russell_slide37,cit_dobbs_1973",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "hpf_three_hands",
+      "title": "Three Annotating Hands in BL C.60.o.12",
+      "claim": "Russell and O'Neill identify three distinct annotating hands in the British Library copy of the 1545 HP: Ben Jonson's hand (in brown ink and pencil), the alchemical hand (attributed to Digby, in black ink and pencil), and Thomas Bourne's hand (dated 1641).",
+      "description": "The copy (BL C.60.o.12) bears Jonson's signature ('sum Ben: Ionsonii') and motto ('tanquam explorator'). Jonson's annotations focus on syntax, sentence structure, and circling specific words. The alchemical hand overwrites both Jonson's and Bourne's annotations, reads the HP as alchemical allegory, uses idiosyncratic alchemical abbreviations not found in standard lists, and annotates both images and margins. Bourne's hand is dated 1641.",
+      "evidence_excerpt": "Three hands: Jonson (signature, syntax focus), Alchemical (overwrites others, allegorical reading), Bourne (1641 date)",
+      "related_concepts": "BL C.60.o.12, 1545 Aldine edition, paleography, marginal annotation",
+      "significance": "Establishing three distinct hands is the foundation of the attribution argument. That the alchemical hand overwrites the others establishes chronological sequence.",
+      "citation_ids": "cit_russell_slide21,cit_hp_russell",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "hpf_attribution_args",
+      "title": "Three Arguments for Attributing the Alchemical Hand to Digby",
+      "claim": "Russell and O'Neill present three main arguments for the Digby attribution: (1) Digby's proximity to Jonson as his friend and literary executor, (2) handwriting comparison with known Digby manuscripts, and (3) parallels between the marginalia's alchemical concepts and Digby's Chymical Secrets (1682).",
+      "description": "First, Digby and Jonson were close from 1629 onward; Digby was Jonson's literary executor and received his unpublished papers. Second, handwriting comparison shows similarities between the alchemical annotations and Digby's known hand (including matching numerals). Third, the alchemical content — particularly Jupiter/Tin operations and Mercury as master element — closely parallels Digby's documented experiments and theories. Additionally, one annotation in English ('Frogg Green') suggests an English annotator, and the purchase price inscription matches Digby's hand rather than Bourne's.",
+      "evidence_excerpt": "Proximity to Jonson; handwriting comparison; Chymical Secrets parallels; English inscription 'Frogg Green'",
+      "related_concepts": "literary executor, paleography, Chymical Secrets, friendship with Jonson",
+      "significance": "The convergence of provenance, paleography, and content analysis provides a cumulative case for the attribution, though each strand individually is suggestive rather than conclusive.",
+      "citation_ids": "cit_russell_slide25,cit_russell_slide28,cit_russell_slide32",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "hpf_book_provenance",
+      "title": "Book Provenance: Jonson to Bourne to Digby",
+      "claim": "The book's provenance chain runs from Jonson through the bookseller Thomas Bourne (a recusant recorded joining the Stationer's Company in 1623) to Digby, likely purchased around 1641. The purchase price inscription matches Digby's hand.",
+      "description": "Thomas Bourne, a recusant bookseller, annotated the book in 1641. Both Digby and Jonson were (sometime) Catholics, and Bourne was a recusant — a shared confessional network. There is no 'ex dono' from Jonson to Digby (unlike other books they exchanged). The purchase price numerals match Digby's handwriting. If Digby bought the book in 1641, he likely had it during his imprisonment at Winchester House in 1642, when he was conducting alchemical experiments. The book later entered Hans Sloane's collections and thence the British Museum/Library.",
+      "evidence_excerpt": "Bourne dated 1641; purchase price matches Digby's hand; recusant book trade network; no ex dono inscription",
+      "related_concepts": "Thomas Bourne, Stationer's Company, recusant networks, Winchester House, Hans Sloane",
+      "significance": "Establishes a plausible transmission path and dates Digby's acquisition to around 1641, with alchemical annotation likely post-1651 based on content.",
+      "citation_ids": "cit_russell_slide42",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "hypnerotomachia_evidence": [
+    {
+      "id": "hpe_jupiter_tin",
+      "finding_id": "hpf_alchemical_hand",
+      "excerpt": "The alchemical annotator consistently marks passages relating to Jupiter/Tin symbolism — a connection central to Digby's alchemical theory as documented by Dobbs.",
+      "source": "Russell PPTX + Dobbs, Ambix 1973",
+      "page_or_location": "Multiple slides; Dobbs passim",
+      "notes": "Conceptual parallel, not direct handwriting proof. Confidence: MEDIUM."
+    },
+    {
+      "id": "hpe_universal_spirit",
+      "finding_id": "hpf_intellectual_context",
+      "excerpt": "Digby's Two Treatises articulates a theory of universal spirit that animates matter — the same framework visible in the marginalia's interpretation of HP imagery as alchemical process.",
+      "source": "Georgescu & Adriaenssen, The Philosophy of Kenelm Digby (2022); Russell PPTX",
+      "page_or_location": "Georgescu passim",
+      "notes": "Parallel between published philosophy and annotation practice."
+    },
+    {
+      "id": "hpe_chymical_jupiter",
+      "finding_id": "hpf_jupiter_tin",
+      "excerpt": "Chymical Secrets: 'An Operation upon Jupiter — Distill a Menstruum out of Vitriol and sal ammoniac, with which make Sulphur naturae Iovis.' The alchemical annotator similarly transcribes Jupiter's titles from the HP into the flyleaf in a hierarchical scheme.",
+      "source": "Russell/O'Neill PPTX, Slides 32-36; Chymical Secrets (1682), p. 106",
+      "page_or_location": "PPTX Slide 35",
+      "notes": "Both the marginalia and Chymical Secrets show specific interest in Jupiter/Tin — an unusual focus that supports the attribution."
+    },
+    {
+      "id": "hpe_mercury_inscription",
+      "finding_id": "hpf_mercury_master",
+      "excerpt": "Marginalia inscription: 'verus sensus intentionis huius libri est...Magisteri Mercurii Descriptio elegans, ampla & ingeniossisum.' Digby's 1660 Royal Society lecture: 'Gold is of the same Nature as the aethereal Spirit; or rather, it is nothing but it, first corporify'd in a pure place.'",
+      "source": "Russell/O'Neill PPTX, Slides 37-40; Dobbs (1973), p. 157",
+      "page_or_location": "PPTX Slide 39",
+      "notes": "The Mercury-as-master-element concept links the marginalia to Digby's post-1651 alchemy via Le Fevre and d'Espagnet."
+    },
+    {
+      "id": "hpe_panton_tokadi",
+      "finding_id": "hpf_mercury_master",
+      "excerpt": "The annotator renders 'Panton Tokadi' as 'rerum omnium vas' ('The vessel of all things') rather than Jonson's 'The mother of all things.' Adjacent notes read 'calor naturae' and 'nam in Humore.' This reflects d'Espagnet's concept of the universal spirit associated with the water cycle.",
+      "source": "Russell/O'Neill PPTX, Slide 41",
+      "page_or_location": "PPTX Slide 41",
+      "notes": "The shift from 'mother' to 'vessel' reflects an alchemical reading focused on containment and transformation."
+    },
+    {
+      "id": "hpe_handwriting_match",
+      "finding_id": "hpf_attribution_args",
+      "excerpt": "Handwriting analysis shows the purchase price inscription numerals (specifically the '5' and '6') match Digby's hand rather than Bourne's. One inscription in English ('Frogg Green') labels a heptagonal fountain, suggesting an English annotator.",
+      "source": "Russell/O'Neill PPTX, Slides 28-31, 43",
+      "page_or_location": "PPTX Slides 28-31",
+      "notes": "Paleographic evidence is suggestive but not conclusive on its own; strongest when combined with content parallels."
+    },
+    {
+      "id": "hpe_significance",
+      "finding_id": "hpf_attribution_args",
+      "excerpt": "Russell/O'Neill identify five areas of significance: (1) adds a major body of text to Digby's corpus, (2) illuminates the Jonson-Digby relationship, (3) informs about post-1651 alchemical work in Paris, (4) validates alchemical readings proposed in the 1600 edition and Carl Jung's Psychology and Alchemy, (5) provides a basis for comparison with other alchemically annotated HP copies.",
+      "source": "Russell/O'Neill PPTX, Slide 44",
+      "page_or_location": "PPTX Slide 44",
+      "notes": "The attribution, if accepted, significantly expands our understanding of Digby's intellectual practices."
+    }
+  ],
+  "citations": [
+    {
+      "id": "cit_birth",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1",
+      "quote_fragment": "born 11 July 1603 at Gayhurst",
+      "context": "Digby's birth date and location",
+      "created_at": null
+    },
+    {
+      "id": "cit_voyage_departure",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": "on 7 January 1628 Kenelm watched from the deck of the Eagle",
+      "context": "Departure of Digby's Mediterranean voyage",
+      "created_at": null
+    },
+    {
+      "id": "cit_scanderoon",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": "fired his cannons at Scanderoon",
+      "context": "Battle of Scanderoon, June 1628",
+      "created_at": null
+    },
+    {
+      "id": "cit_piracy_moshenska",
+      "source_document_id": "sdoc_moshenska_piracy",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Piracy and Lived Romance in the 1620s",
+      "context": "Digby's piracy as self-fashioning",
+      "created_at": null
+    },
+    {
+      "id": "cit_alchemy_dobbs",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Digby and Alchemy",
+      "context": "Digby's alchemical interests and theories",
+      "created_at": null
+    },
+    {
+      "id": "cit_alchemy_principe",
+      "source_document_id": "sdoc_principe",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Alchemical Circle in 1650s Paris",
+      "context": "Digby's Parisian alchemical network",
+      "created_at": null
+    },
+    {
+      "id": "cit_powder_hedrick",
+      "source_document_id": "sdoc_hedrick",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Powder of Sympathy",
+      "context": "Digby's famous sympathetic cure",
+      "created_at": null
+    },
+    {
+      "id": "cit_courtier_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Alchemist, Scholar, Courtier, and Man of Adventure",
+      "context": "Digby's court career and scholarly identity",
+      "created_at": null
+    },
+    {
+      "id": "cit_petition_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": "Petition of Right",
+      "context": "Digby's voyage during the Petition of Right crisis",
+      "created_at": null
+    },
+    {
+      "id": "cit_memoir_source",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-50",
+      "quote_fragment": "Private Memoirs",
+      "context": "Digby's own memoir, published posthumously 1827",
+      "created_at": null
+    },
+    {
+      "id": "cit_hp_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "slides",
+      "quote_fragment": "alchemical annotator",
+      "context": "Russell's research on Digby as HP annotator",
+      "created_at": null
+    },
+    {
+      "id": "cit_hp_alchemy",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "universal spirit, Jupiter, Mercury",
+      "context": "Alchemical concepts in Digby's work paralleling HP marginalia",
+      "created_at": null
+    },
+    {
+      "id": "cit_two_treatises",
+      "source_document_id": "sdoc_georgescu",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Two Treatises",
+      "context": "Digby's major philosophical work",
+      "created_at": null
+    },
+    {
+      "id": "cit_ch1_youth",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Digby's childhood, father's execution, Gayhurst",
+      "created_at": "2026-03-22T21:59:36.454831"
+    },
+    {
+      "id": "cit_ch1_venetia",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Digby meeting Venetia Stanley",
+      "created_at": "2026-03-22T21:59:36.460963"
+    },
+    {
+      "id": "cit_ch1_napier",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Education with Richard Napier",
+      "created_at": "2026-03-22T21:59:36.466123"
+    },
+    {
+      "id": "cit_ch2_europe",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour: Florence, Siena, Madrid",
+      "created_at": "2026-03-22T21:59:36.471237"
+    },
+    {
+      "id": "cit_ch3_london",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "London 1623-1627, marriage, intellectual life",
+      "created_at": "2026-03-22T21:59:36.476147"
+    },
+    {
+      "id": "cit_ch4_voyage_start",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": null,
+      "context": "Start of Mediterranean voyage, plague at sea",
+      "created_at": "2026-03-22T21:59:36.480181"
+    },
+    {
+      "id": "cit_ch5_algiers",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 5",
+      "quote_fragment": null,
+      "context": "Algiers, freeing English slaves",
+      "created_at": "2026-03-22T21:59:36.484253"
+    },
+    {
+      "id": "cit_ch7_scanderoon",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": null,
+      "context": "Battle of Scanderoon, aftermath",
+      "created_at": "2026-03-22T21:59:36.488264"
+    },
+    {
+      "id": "cit_ch8_return",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Delos antiquities, return to England",
+      "created_at": "2026-03-22T21:59:36.492943"
+    },
+    {
+      "id": "cit_ch8_buckingham",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8, Section II",
+      "quote_fragment": null,
+      "context": "Assassination of Buckingham, return home",
+      "created_at": "2026-03-22T21:59:36.496802"
+    },
+    {
+      "id": "cit_miles_overview",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's full career",
+      "created_at": "2026-03-22T21:59:36.500723"
+    },
+    {
+      "id": "cit_mellick_bio",
+      "source_document_id": "sdoc_mellick",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Biographical summary",
+      "created_at": "2026-03-22T21:59:36.504639"
+    },
+    {
+      "id": "cit_closet",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "The Closet cookbook",
+      "created_at": "2026-03-22T21:59:36.508937"
+    },
+    {
+      "id": "cit_observations",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Observations on Spenser and Browne",
+      "created_at": "2026-03-22T21:59:36.513191"
+    },
+    {
+      "id": "cit_russell_slide25",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 25",
+      "quote_fragment": null,
+      "context": "Attribution arguments: proximity to Jonson, handwriting, Chymical Secrets parallels",
+      "created_at": "2026-03-22T22:03:01.501023"
+    },
+    {
+      "id": "cit_russell_slide32",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 32-36",
+      "quote_fragment": null,
+      "context": "Jupiter/Tin parallels between marginalia and Chymical Secrets",
+      "created_at": "2026-03-22T22:03:01.506460"
+    },
+    {
+      "id": "cit_russell_slide37",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 37-41",
+      "quote_fragment": null,
+      "context": "Le Fevre influence, Universal Spirit, Mercury as master element",
+      "created_at": "2026-03-22T22:03:01.512327"
+    },
+    {
+      "id": "cit_russell_slide42",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 42-43",
+      "quote_fragment": null,
+      "context": "Thomas Bourne hand, dating, book provenance",
+      "created_at": "2026-03-22T22:03:01.516545"
+    },
+    {
+      "id": "cit_russell_slide44",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 44",
+      "quote_fragment": null,
+      "context": "Significance of the attribution",
+      "created_at": "2026-03-22T22:03:01.520840"
+    },
+    {
+      "id": "cit_russell_slide21",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 20-24",
+      "quote_fragment": null,
+      "context": "Characteristics of the alchemical hand",
+      "created_at": "2026-03-22T22:03:01.525142"
+    },
+    {
+      "id": "cit_russell_slide28",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 28-31",
+      "quote_fragment": null,
+      "context": "Handwriting analysis",
+      "created_at": "2026-03-22T22:03:01.529310"
+    },
+    {
+      "id": "cit_dobbs_1973",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "p. 156-157",
+      "quote_fragment": null,
+      "context": "Le Fevre's influence on Digby's alchemy, Universal Spirit",
+      "created_at": "2026-03-22T22:03:01.533486"
+    },
+    {
+      "id": "cit_ch1_spain",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section II",
+      "quote_fragment": null,
+      "context": "First journey to Spain with John Digby, 1617",
+      "created_at": "2026-03-22T22:08:19.520832"
+    },
+    {
+      "id": "cit_ch1_oxford",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section II",
+      "quote_fragment": null,
+      "context": "Oxford studies with Thomas Allen",
+      "created_at": "2026-03-22T22:08:19.525344"
+    },
+    {
+      "id": "cit_ch2_france",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2, Section I",
+      "quote_fragment": null,
+      "context": "Grand Tour France, Maria de Medici",
+      "created_at": "2026-03-22T22:08:19.529329"
+    },
+    {
+      "id": "cit_ch2_madrid",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2, Section II",
+      "quote_fragment": null,
+      "context": "Madrid, Spanish Match, knighthood",
+      "created_at": "2026-03-22T22:08:19.533656"
+    },
+    {
+      "id": "cit_ch3_powder",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "Powder of Sympathy demonstration, marriage",
+      "created_at": "2026-03-22T22:08:19.538041"
+    },
+    {
+      "id": "cit_epilogue",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Epilogue",
+      "quote_fragment": null,
+      "context": "Civil War, exile, Cromwell, death",
+      "created_at": "2026-03-22T22:08:19.542143"
+    },
+    {
+      "id": "cit_ch9_venetia_death",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 9",
+      "quote_fragment": null,
+      "context": "Death of Venetia, Gresham College retreat",
+      "created_at": "2026-03-22T22:08:19.546007"
+    },
+    {
+      "id": "cit_memoirs_early",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-100",
+      "quote_fragment": null,
+      "context": "Childhood, Stelliana, Ursatius abduction",
+      "created_at": "2026-03-22T22:09:27.469002"
+    },
+    {
+      "id": "cit_memoirs_mid",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 100-200",
+      "quote_fragment": null,
+      "context": "Grand Tour, Brahmin, Spain",
+      "created_at": "2026-03-22T22:09:27.473891"
+    },
+    {
+      "id": "cit_memoirs_late",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 200-end",
+      "quote_fragment": null,
+      "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
+      "created_at": "2026-03-22T22:09:27.478206"
+    }
+  ]
+}

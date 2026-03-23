@@ -1,0 +1,110 @@
+[
+  {
+    "id": "wrk_two_treatises",
+    "title": "Two Treatises: Of Bodies and Of Man's Soul",
+    "year": 1644,
+    "work_type": "treatise",
+    "subject": "Natural philosophy and metaphysics",
+    "description": "Digby's major philosophical work, published in Paris. The first treatise examines the nature of bodies and physical matter; the second addresses the immortality of the soul. It engages with contemporary debates about atomism, Aristotelianism, and the mechanical philosophy.",
+    "significance": "Digby's most important philosophical contribution, attempting to reconcile Catholic theology with the new natural philosophy.",
+    "citation_ids": "cit_two_treatises",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_powder_sympathy",
+    "title": "A Late Discourse on the Powder of Sympathy",
+    "year": 1658,
+    "work_type": "treatise",
+    "subject": "Sympathetic medicine and natural philosophy",
+    "description": "Digby's famous account of the Powder of Sympathy, a substance claimed to heal wounds at a distance by being applied to the weapon that caused the wound. First delivered as a lecture at Montpellier, it became one of his most widely read works.",
+    "significance": "Made Digby internationally famous and exemplified the intersection of empirical observation and magical thinking in early modern natural philosophy.",
+    "citation_ids": "cit_powder_hedrick",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_closet",
+    "title": "The Closet of Sir Kenelm Digby Knight Opened",
+    "year": 1669,
+    "work_type": "recipe_book",
+    "subject": "Cookery and household receipts",
+    "description": "Published posthumously, this collection of recipes and household receipts reveals Digby's wide-ranging culinary interests, from mead and metheglin to elaborate dishes gathered during his travels across Europe.",
+    "significance": "One of the earliest and most important English cookbooks, reflecting Digby's cosmopolitan tastes and social networks.",
+    "citation_ids": "cit_courtier_miles",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_memoirs",
+    "title": "Private Memoirs of Sir Kenelm Digby",
+    "year": 1827,
+    "work_type": "memoir",
+    "subject": "Autobiography and romance",
+    "description": "Digby's romanticized autobiography, written in the third person under the names Theagenes (himself) and Stelliana (Venetia Stanley). Published posthumously in 1827, it recounts his youth, education, travels, and love for Venetia in a highly literary style modelled on Heliodorus.",
+    "significance": "A unique early modern autobiography blending romance, self-fashioning, and real events, essential for understanding Digby's self-image.",
+    "citation_ids": "cit_memoir_source",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_observations_spenser",
+    "title": "Observations on the 22nd Stanza of the 9th Canto (Spenser)",
+    "year": 1643,
+    "work_type": "treatise",
+    "subject": "Literary criticism and alchemical philosophy",
+    "description": "Digby's alchemical and philosophical interpretation of a stanza from Spenser's Faerie Queene describing the human body as a castle. First drafted aboard ship during his voyage, published in London 1643.",
+    "significance": "Demonstrates Digby's method of reading literary texts through alchemical and astrological frameworks.",
+    "citation_ids": "cit_observations",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_observations_browne",
+    "title": "Observations upon Religio Medici",
+    "year": 1643,
+    "work_type": "treatise",
+    "subject": "Natural philosophy and religion",
+    "description": "Digby's critical commentary on Thomas Browne's Religio Medici, published the same year as the Spenser observations. Engages with questions of faith, reason, and the natural world.",
+    "significance": "Shows Digby's active participation in the intellectual debates of his era.",
+    "citation_ids": "cit_observations",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_loose_fantasies",
+    "title": "Loose Fantasies",
+    "year": 1628,
+    "work_type": "memoir",
+    "subject": "Autobiography and romance",
+    "description": "Written aboard ship at Milos in August 1628, this autobiographical romance recounts Digby's life as 'Theagenes' and Venetia as 'Stelliana.' Modelled on Heliodorus. Published posthumously.",
+    "significance": "Composed at the climax of his voyage, it reveals how Digby shaped his life story through literary models.",
+    "citation_ids": "cit_ch8_return",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_journal",
+    "title": "Journal of a Voyage into the Mediterranean",
+    "year": 1628,
+    "work_type": "memoir",
+    "subject": "Naval journal",
+    "description": "Digby's detailed day-by-day record of his Mediterranean voyage (1628-1629), recording navigation, weather, encounters, battles, and observations. Published by the Camden Society in 1868.",
+    "significance": "Primary source for the voyage, combining naval reportage with philosophical reflection.",
+    "citation_ids": "cit_ch4_voyage_start",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  },
+  {
+    "id": "wrk_bibliotheca",
+    "title": "Bibliotheca Digbeiana",
+    "year": 1680,
+    "work_type": "treatise",
+    "subject": "Library catalogue",
+    "description": "Catalogue of Digby's library, published posthumously in 1680. His collection, one of the finest in England, was bequeathed to the Bodleian Library at Oxford, where it remains.",
+    "significance": "Documents the extraordinary breadth of Digby's reading and intellectual interests.",
+    "citation_ids": "cit_miles_overview",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT"
+  }
+]

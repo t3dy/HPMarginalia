@@ -1,0 +1,93 @@
+[
+  {
+    "id": "hpf_alchemical_hand",
+    "title": "Identification of Digby as the Alchemical Annotator",
+    "claim": "James Russell's research argues that Kenelm Digby is the most likely candidate for the 'alchemical hand' identified among the multiple annotating hands in a copy of the Hypnerotomachia Poliphili.",
+    "description": "The annotated copy of the Hypnerotomachia Poliphili contains marginalia from several distinct hands. One hand is characterized by alchemical symbolic markings, Latin notes interpreting images and text as alchemical allegory, and attention to themes of transformation and transmutation. Russell argues that this hand can be attributed to Digby based on handwriting similarities, conceptual parallels with Digby's known alchemical writings, and historical plausibility given Digby's bibliophilic habits and access to rare books.",
+    "evidence_excerpt": "The alchemical annotations show attention to Jupiter/Tin symbolism, universal spirit concepts, and Mercury — all central to Digby's documented alchemical theories",
+    "related_concepts": "Jupiter/Tin, Mercury, universal spirit, alchemical allegory, transmutation",
+    "significance": "If correct, this attribution expands Digby's known corpus to include his reading practices and alchemical interpretation of Renaissance texts, connecting his natural philosophy to a broader tradition of esoteric reading.",
+    "citation_ids": "cit_hp_russell,cit_hp_alchemy",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "hpf_intellectual_context",
+    "title": "Digby's Alchemical Reading as Intellectual Practice",
+    "claim": "The alchemical marginalia in the Hypnerotomachia, if attributable to Digby, represent a form of active alchemical reading that connects his philosophical theories to his engagement with Renaissance visual and textual culture.",
+    "description": "Digby's known works demonstrate a consistent interest in how material substances interact across distances (the Powder of Sympathy), how spirit animates matter (Two Treatises), and how visible forms encode hidden truths. The alchemical annotations in the Hypnerotomachia show the same interpretive framework applied to Colonna's text and woodcuts — reading images of gardens, architecture, and mythological scenes as encoded alchemical processes.",
+    "evidence_excerpt": "Parallels between marginalia's interpretation of HP imagery and Digby's theories of sympathy and atomic transmission in Two Treatises",
+    "related_concepts": "sympathetic action, atoms, spirit-matter relationship, allegorical reading",
+    "significance": "Situates Digby within early modern alchemical reading practices and demonstrates that his natural philosophy was not separate from his literary and visual culture.",
+    "citation_ids": "cit_hp_russell,cit_two_treatises",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "hpf_jupiter_tin",
+    "title": "Jupiter/Tin Parallels: Marginalia and Chymical Secrets",
+    "claim": "The alchemical annotator pays particular attention to Jupiter's titles in the HP, transcribing them into the flyleaf in a hierarchical scheme. Digby's posthumous Chymical Secrets (1682) contains multiple operations specifically involving Jupiter/Tin, including a cancer cure using an amalgam of Jupiter/Tin and Mercury.",
+    "description": "Early in the HP, Poliphilo invokes Jupiter under multiple titles. The annotator transcribes these into the flyleaf as a hierarchical list with brackets: 'Maximum, optimum, omnipotentem and opitulatorem' and 'sumum patrem, supererum, medioximorum & inferum.' Digby's Chymical Secrets contains 'An Operation upon Jupiter' and a cure for cancer using Jupiter/Tin amalgamated with Mercury, demonstrating the same alchemical interest in Jupiter/Tin that the marginalia display.",
+    "evidence_excerpt": "The annotator transcribes Jupiter's titles into the flyleaf; Chymical Secrets contains 'An Operation upon Jupiter' and a cancer cure using Jupiter/Tin and Mercury amalgam",
+    "related_concepts": "Jupiter/Tin, Mercury, Chymical Secrets, alchemical operations, cancer cure",
+    "significance": "This is one of the strongest content parallels between the marginalia and Digby's known works. The specific interest in Jupiter/Tin is unusual and distinctive.",
+    "citation_ids": "cit_russell_slide32,cit_hp_alchemy",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "hpf_mercury_master",
+    "title": "Mercury as Master Element: Le Fevre's Influence",
+    "claim": "The alchemical annotator writes a Latin inscription declaring the 'true intention' of the HP is a description of 'Master Mercury' — reflecting the influence of Nicholas le Fevre and Jean d'Espagnet on Digby's alchemy after 1651.",
+    "description": "The annotator inscribes: 'verus sensus intentionis huius libri est 3um: Gen: et Totius Naturae energiae & operationum Magisteri Mercurii Descriptio elegans, ampla & ingeniossisum' ('The true intention of this book is threefold: and of the energy of all nature and the operation of Master Mercury, a description elegant, full and most ingenious'). This reflects Digby's post-1651 alchemical framework, learned from Le Fevre in Paris, which identified Mercury with the universal spirit and gold with aethereal spirit.",
+    "evidence_excerpt": "Marginalia: 'Magisteri Mercurii Descriptio elegans' — Digby's 1660 Royal Society lecture: 'Gold is of the same Nature as the aethereal Spirit'",
+    "related_concepts": "Mercury, Universal Spirit, Le Fevre, d'Espagnet, gold, aethereal spirit",
+    "significance": "This inscription dates the marginalia to after 1651 (when Digby studied with Le Fevre) and connects them to Digby's mature alchemical philosophy as presented to the Royal Society.",
+    "citation_ids": "cit_russell_slide37,cit_dobbs_1973",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "hpf_three_hands",
+    "title": "Three Annotating Hands in BL C.60.o.12",
+    "claim": "Russell and O'Neill identify three distinct annotating hands in the British Library copy of the 1545 HP: Ben Jonson's hand (in brown ink and pencil), the alchemical hand (attributed to Digby, in black ink and pencil), and Thomas Bourne's hand (dated 1641).",
+    "description": "The copy (BL C.60.o.12) bears Jonson's signature ('sum Ben: Ionsonii') and motto ('tanquam explorator'). Jonson's annotations focus on syntax, sentence structure, and circling specific words. The alchemical hand overwrites both Jonson's and Bourne's annotations, reads the HP as alchemical allegory, uses idiosyncratic alchemical abbreviations not found in standard lists, and annotates both images and margins. Bourne's hand is dated 1641.",
+    "evidence_excerpt": "Three hands: Jonson (signature, syntax focus), Alchemical (overwrites others, allegorical reading), Bourne (1641 date)",
+    "related_concepts": "BL C.60.o.12, 1545 Aldine edition, paleography, marginal annotation",
+    "significance": "Establishing three distinct hands is the foundation of the attribution argument. That the alchemical hand overwrites the others establishes chronological sequence.",
+    "citation_ids": "cit_russell_slide21,cit_hp_russell",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "hpf_attribution_args",
+    "title": "Three Arguments for Attributing the Alchemical Hand to Digby",
+    "claim": "Russell and O'Neill present three main arguments for the Digby attribution: (1) Digby's proximity to Jonson as his friend and literary executor, (2) handwriting comparison with known Digby manuscripts, and (3) parallels between the marginalia's alchemical concepts and Digby's Chymical Secrets (1682).",
+    "description": "First, Digby and Jonson were close from 1629 onward; Digby was Jonson's literary executor and received his unpublished papers. Second, handwriting comparison shows similarities between the alchemical annotations and Digby's known hand (including matching numerals). Third, the alchemical content — particularly Jupiter/Tin operations and Mercury as master element — closely parallels Digby's documented experiments and theories. Additionally, one annotation in English ('Frogg Green') suggests an English annotator, and the purchase price inscription matches Digby's hand rather than Bourne's.",
+    "evidence_excerpt": "Proximity to Jonson; handwriting comparison; Chymical Secrets parallels; English inscription 'Frogg Green'",
+    "related_concepts": "literary executor, paleography, Chymical Secrets, friendship with Jonson",
+    "significance": "The convergence of provenance, paleography, and content analysis provides a cumulative case for the attribution, though each strand individually is suggestive rather than conclusive.",
+    "citation_ids": "cit_russell_slide25,cit_russell_slide28,cit_russell_slide32",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "hpf_book_provenance",
+    "title": "Book Provenance: Jonson to Bourne to Digby",
+    "claim": "The book's provenance chain runs from Jonson through the bookseller Thomas Bourne (a recusant recorded joining the Stationer's Company in 1623) to Digby, likely purchased around 1641. The purchase price inscription matches Digby's hand.",
+    "description": "Thomas Bourne, a recusant bookseller, annotated the book in 1641. Both Digby and Jonson were (sometime) Catholics, and Bourne was a recusant — a shared confessional network. There is no 'ex dono' from Jonson to Digby (unlike other books they exchanged). The purchase price numerals match Digby's handwriting. If Digby bought the book in 1641, he likely had it during his imprisonment at Winchester House in 1642, when he was conducting alchemical experiments. The book later entered Hans Sloane's collections and thence the British Museum/Library.",
+    "evidence_excerpt": "Bourne dated 1641; purchase price matches Digby's hand; recusant book trade network; no ex dono inscription",
+    "related_concepts": "Thomas Bourne, Stationer's Company, recusant networks, Winchester House, Hans Sloane",
+    "significance": "Establishes a plausible transmission path and dates Digby's acquisition to around 1641, with alchemical annotation likely post-1651 based on content.",
+    "citation_ids": "cit_russell_slide42",
+    "source_method": "CORPUS_EXTRACTION",
+    "review_status": "DRAFT",
+    "confidence": "MEDIUM"
+  }
+]

@@ -1,0 +1,459 @@
+{
+  "digby_theme_records": [
+    {
+      "id": "thm_scanderoon_battle",
+      "theme": "pirate",
+      "title": "The Battle of Scanderoon (Iskenderun), June 1628",
+      "summary": "Digby's most famous naval exploit. On 11 June 1628, his small fleet engaged Venetian galleasses in the Bay of Scanderoon, winning a decisive victory that demonstrated his naval skill and audacity. The Venetians subsequently branded him 'a pirate, who had sold all his property for the sake of robbing.' The battle disrupted English trade in the region and led to diplomatic repercussions.",
+      "key_details": "Two English ships defeated larger Venetian force; English merchants imprisoned in Aleppo as consequence; Digby lingered in the area for weeks afterward",
+      "people": "Kenelm Digby, Antonio Capello, Edward Stradling, Thomas Roe",
+      "places": "Bay of Scanderoon (Iskenderun), Aleppo, Ottoman Empire",
+      "date_display": "June 1628",
+      "year": 1628,
+      "significance": "Established Digby's military reputation but also revealed the tension between privateering glory and diplomatic consequences. The Venetians' labeling of Digby as 'pirate' became part of his public identity.",
+      "citation_ids": "cit_scanderoon,cit_piracy_moshenska",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_venetian_label",
+      "theme": "pirate",
+      "title": "'A Pirate Who Had Sold All His Property for the Sake of Robbing'",
+      "summary": "After the Battle of Scanderoon, the Venetians launched a coordinated campaign to brand Digby as a pirate throughout the Mediterranean. Consul Alvise da Pesaro wrote he was 'nothing but a thief and a pirate.' Letters flew across Venetian outposts calling him 'this audacious pirate,' 'a pirate, who had sold all his property,' and 'the pirate Digby.' Even English diplomats like Thomas Roe complained about the disruption to trade.",
+      "key_details": "Venetian propaganda campaign; English diplomats also critical; Roe called it disruption to trade; Protestant suspicion of Catholic captain",
+      "people": "Kenelm Digby, Alvise da Pesaro, Thomas Roe, Peter Wyche",
+      "places": "Mediterranean, Aleppo, Constantinople, Scanderoon",
+      "date_display": "June-August 1628",
+      "year": 1628,
+      "significance": "Reveals how privateering glory was contested — heroes to one audience were pirates to another. Digby's Catholic identity amplified Protestant suspicion of his motives.",
+      "citation_ids": "cit_ch7_scanderoon,cit_piracy_moshenska",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_delos",
+      "theme": "pirate",
+      "title": "Looting Antiquities at Delos",
+      "summary": "Digby spent three days on the deserted island of Delos collecting ancient marbles from the ruins of Apollo's temple. Unlike other English collectors who disguised themselves and sawed statues into portable fragments, Digby arrived openly as the hero of Scanderoon and devised an ingenious pulley system using ship masts to hoist massive marbles aboard intact.",
+      "key_details": "Three days collecting marbles; pulley system using ship masts; 300 men mobilized; took inscribed monument; contemplated unmovable Apollo colossus",
+      "people": "Kenelm Digby, crew",
+      "places": "Delos, Greece",
+      "date_display": "28-30 August 1628",
+      "year": 1628,
+      "significance": "Demonstrates how privateering shaded into antiquarianism. Digby combined military boldness with scholarly curiosity in his approach to classical ruins.",
+      "citation_ids": "cit_ch8_return",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    }
+  ],
+  "citations": [
+    {
+      "id": "cit_birth",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1",
+      "quote_fragment": "born 11 July 1603 at Gayhurst",
+      "context": "Digby's birth date and location",
+      "created_at": null
+    },
+    {
+      "id": "cit_voyage_departure",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": "on 7 January 1628 Kenelm watched from the deck of the Eagle",
+      "context": "Departure of Digby's Mediterranean voyage",
+      "created_at": null
+    },
+    {
+      "id": "cit_scanderoon",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": "fired his cannons at Scanderoon",
+      "context": "Battle of Scanderoon, June 1628",
+      "created_at": null
+    },
+    {
+      "id": "cit_piracy_moshenska",
+      "source_document_id": "sdoc_moshenska_piracy",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Piracy and Lived Romance in the 1620s",
+      "context": "Digby's piracy as self-fashioning",
+      "created_at": null
+    },
+    {
+      "id": "cit_alchemy_dobbs",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Digby and Alchemy",
+      "context": "Digby's alchemical interests and theories",
+      "created_at": null
+    },
+    {
+      "id": "cit_alchemy_principe",
+      "source_document_id": "sdoc_principe",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Alchemical Circle in 1650s Paris",
+      "context": "Digby's Parisian alchemical network",
+      "created_at": null
+    },
+    {
+      "id": "cit_powder_hedrick",
+      "source_document_id": "sdoc_hedrick",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Powder of Sympathy",
+      "context": "Digby's famous sympathetic cure",
+      "created_at": null
+    },
+    {
+      "id": "cit_courtier_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Alchemist, Scholar, Courtier, and Man of Adventure",
+      "context": "Digby's court career and scholarly identity",
+      "created_at": null
+    },
+    {
+      "id": "cit_petition_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": "Petition of Right",
+      "context": "Digby's voyage during the Petition of Right crisis",
+      "created_at": null
+    },
+    {
+      "id": "cit_memoir_source",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-50",
+      "quote_fragment": "Private Memoirs",
+      "context": "Digby's own memoir, published posthumously 1827",
+      "created_at": null
+    },
+    {
+      "id": "cit_hp_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "slides",
+      "quote_fragment": "alchemical annotator",
+      "context": "Russell's research on Digby as HP annotator",
+      "created_at": null
+    },
+    {
+      "id": "cit_hp_alchemy",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "universal spirit, Jupiter, Mercury",
+      "context": "Alchemical concepts in Digby's work paralleling HP marginalia",
+      "created_at": null
+    },
+    {
+      "id": "cit_two_treatises",
+      "source_document_id": "sdoc_georgescu",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": "Two Treatises",
+      "context": "Digby's major philosophical work",
+      "created_at": null
+    },
+    {
+      "id": "cit_ch1_youth",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Digby's childhood, father's execution, Gayhurst",
+      "created_at": "2026-03-22T21:59:36.454831"
+    },
+    {
+      "id": "cit_ch1_venetia",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Digby meeting Venetia Stanley",
+      "created_at": "2026-03-22T21:59:36.460963"
+    },
+    {
+      "id": "cit_ch1_napier",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section I",
+      "quote_fragment": null,
+      "context": "Education with Richard Napier",
+      "created_at": "2026-03-22T21:59:36.466123"
+    },
+    {
+      "id": "cit_ch2_europe",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour: Florence, Siena, Madrid",
+      "created_at": "2026-03-22T21:59:36.471237"
+    },
+    {
+      "id": "cit_ch3_london",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "London 1623-1627, marriage, intellectual life",
+      "created_at": "2026-03-22T21:59:36.476147"
+    },
+    {
+      "id": "cit_ch4_voyage_start",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": null,
+      "context": "Start of Mediterranean voyage, plague at sea",
+      "created_at": "2026-03-22T21:59:36.480181"
+    },
+    {
+      "id": "cit_ch5_algiers",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 5",
+      "quote_fragment": null,
+      "context": "Algiers, freeing English slaves",
+      "created_at": "2026-03-22T21:59:36.484253"
+    },
+    {
+      "id": "cit_ch7_scanderoon",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": null,
+      "context": "Battle of Scanderoon, aftermath",
+      "created_at": "2026-03-22T21:59:36.488264"
+    },
+    {
+      "id": "cit_ch8_return",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Delos antiquities, return to England",
+      "created_at": "2026-03-22T21:59:36.492943"
+    },
+    {
+      "id": "cit_ch8_buckingham",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8, Section II",
+      "quote_fragment": null,
+      "context": "Assassination of Buckingham, return home",
+      "created_at": "2026-03-22T21:59:36.496802"
+    },
+    {
+      "id": "cit_miles_overview",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's full career",
+      "created_at": "2026-03-22T21:59:36.500723"
+    },
+    {
+      "id": "cit_mellick_bio",
+      "source_document_id": "sdoc_mellick",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Biographical summary",
+      "created_at": "2026-03-22T21:59:36.504639"
+    },
+    {
+      "id": "cit_closet",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "The Closet cookbook",
+      "created_at": "2026-03-22T21:59:36.508937"
+    },
+    {
+      "id": "cit_observations",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Observations on Spenser and Browne",
+      "created_at": "2026-03-22T21:59:36.513191"
+    },
+    {
+      "id": "cit_russell_slide25",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 25",
+      "quote_fragment": null,
+      "context": "Attribution arguments: proximity to Jonson, handwriting, Chymical Secrets parallels",
+      "created_at": "2026-03-22T22:03:01.501023"
+    },
+    {
+      "id": "cit_russell_slide32",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 32-36",
+      "quote_fragment": null,
+      "context": "Jupiter/Tin parallels between marginalia and Chymical Secrets",
+      "created_at": "2026-03-22T22:03:01.506460"
+    },
+    {
+      "id": "cit_russell_slide37",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 37-41",
+      "quote_fragment": null,
+      "context": "Le Fevre influence, Universal Spirit, Mercury as master element",
+      "created_at": "2026-03-22T22:03:01.512327"
+    },
+    {
+      "id": "cit_russell_slide42",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 42-43",
+      "quote_fragment": null,
+      "context": "Thomas Bourne hand, dating, book provenance",
+      "created_at": "2026-03-22T22:03:01.516545"
+    },
+    {
+      "id": "cit_russell_slide44",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 44",
+      "quote_fragment": null,
+      "context": "Significance of the attribution",
+      "created_at": "2026-03-22T22:03:01.520840"
+    },
+    {
+      "id": "cit_russell_slide21",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 20-24",
+      "quote_fragment": null,
+      "context": "Characteristics of the alchemical hand",
+      "created_at": "2026-03-22T22:03:01.525142"
+    },
+    {
+      "id": "cit_russell_slide28",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 28-31",
+      "quote_fragment": null,
+      "context": "Handwriting analysis",
+      "created_at": "2026-03-22T22:03:01.529310"
+    },
+    {
+      "id": "cit_dobbs_1973",
+      "source_document_id": "sdoc_dobbs_ii",
+      "excerpt_id": null,
+      "page_or_location": "p. 156-157",
+      "quote_fragment": null,
+      "context": "Le Fevre's influence on Digby's alchemy, Universal Spirit",
+      "created_at": "2026-03-22T22:03:01.533486"
+    },
+    {
+      "id": "cit_ch1_spain",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section II",
+      "quote_fragment": null,
+      "context": "First journey to Spain with John Digby, 1617",
+      "created_at": "2026-03-22T22:08:19.520832"
+    },
+    {
+      "id": "cit_ch1_oxford",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1, Section II",
+      "quote_fragment": null,
+      "context": "Oxford studies with Thomas Allen",
+      "created_at": "2026-03-22T22:08:19.525344"
+    },
+    {
+      "id": "cit_ch2_france",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2, Section I",
+      "quote_fragment": null,
+      "context": "Grand Tour France, Maria de Medici",
+      "created_at": "2026-03-22T22:08:19.529329"
+    },
+    {
+      "id": "cit_ch2_madrid",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2, Section II",
+      "quote_fragment": null,
+      "context": "Madrid, Spanish Match, knighthood",
+      "created_at": "2026-03-22T22:08:19.533656"
+    },
+    {
+      "id": "cit_ch3_powder",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "Powder of Sympathy demonstration, marriage",
+      "created_at": "2026-03-22T22:08:19.538041"
+    },
+    {
+      "id": "cit_epilogue",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Epilogue",
+      "quote_fragment": null,
+      "context": "Civil War, exile, Cromwell, death",
+      "created_at": "2026-03-22T22:08:19.542143"
+    },
+    {
+      "id": "cit_ch9_venetia_death",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 9",
+      "quote_fragment": null,
+      "context": "Death of Venetia, Gresham College retreat",
+      "created_at": "2026-03-22T22:08:19.546007"
+    },
+    {
+      "id": "cit_memoirs_early",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-100",
+      "quote_fragment": null,
+      "context": "Childhood, Stelliana, Ursatius abduction",
+      "created_at": "2026-03-22T22:09:27.469002"
+    },
+    {
+      "id": "cit_memoirs_mid",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 100-200",
+      "quote_fragment": null,
+      "context": "Grand Tour, Brahmin, Spain",
+      "created_at": "2026-03-22T22:09:27.473891"
+    },
+    {
+      "id": "cit_memoirs_late",
+      "source_document_id": "sdoc_memoirs",
+      "excerpt_id": null,
+      "page_or_location": "pp. 200-end",
+      "quote_fragment": null,
+      "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
+      "created_at": "2026-03-22T22:09:27.478206"
+    }
+  ]
+}

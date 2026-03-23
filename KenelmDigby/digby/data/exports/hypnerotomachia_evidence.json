@@ -1,0 +1,58 @@
+[
+  {
+    "id": "hpe_jupiter_tin",
+    "finding_id": "hpf_alchemical_hand",
+    "excerpt": "The alchemical annotator consistently marks passages relating to Jupiter/Tin symbolism — a connection central to Digby's alchemical theory as documented by Dobbs.",
+    "source": "Russell PPTX + Dobbs, Ambix 1973",
+    "page_or_location": "Multiple slides; Dobbs passim",
+    "notes": "Conceptual parallel, not direct handwriting proof. Confidence: MEDIUM."
+  },
+  {
+    "id": "hpe_universal_spirit",
+    "finding_id": "hpf_intellectual_context",
+    "excerpt": "Digby's Two Treatises articulates a theory of universal spirit that animates matter — the same framework visible in the marginalia's interpretation of HP imagery as alchemical process.",
+    "source": "Georgescu & Adriaenssen, The Philosophy of Kenelm Digby (2022); Russell PPTX",
+    "page_or_location": "Georgescu passim",
+    "notes": "Parallel between published philosophy and annotation practice."
+  },
+  {
+    "id": "hpe_chymical_jupiter",
+    "finding_id": "hpf_jupiter_tin",
+    "excerpt": "Chymical Secrets: 'An Operation upon Jupiter — Distill a Menstruum out of Vitriol and sal ammoniac, with which make Sulphur naturae Iovis.' The alchemical annotator similarly transcribes Jupiter's titles from the HP into the flyleaf in a hierarchical scheme.",
+    "source": "Russell/O'Neill PPTX, Slides 32-36; Chymical Secrets (1682), p. 106",
+    "page_or_location": "PPTX Slide 35",
+    "notes": "Both the marginalia and Chymical Secrets show specific interest in Jupiter/Tin — an unusual focus that supports the attribution."
+  },
+  {
+    "id": "hpe_mercury_inscription",
+    "finding_id": "hpf_mercury_master",
+    "excerpt": "Marginalia inscription: 'verus sensus intentionis huius libri est...Magisteri Mercurii Descriptio elegans, ampla & ingeniossisum.' Digby's 1660 Royal Society lecture: 'Gold is of the same Nature as the aethereal Spirit; or rather, it is nothing but it, first corporify'd in a pure place.'",
+    "source": "Russell/O'Neill PPTX, Slides 37-40; Dobbs (1973), p. 157",
+    "page_or_location": "PPTX Slide 39",
+    "notes": "The Mercury-as-master-element concept links the marginalia to Digby's post-1651 alchemy via Le Fevre and d'Espagnet."
+  },
+  {
+    "id": "hpe_panton_tokadi",
+    "finding_id": "hpf_mercury_master",
+    "excerpt": "The annotator renders 'Panton Tokadi' as 'rerum omnium vas' ('The vessel of all things') rather than Jonson's 'The mother of all things.' Adjacent notes read 'calor naturae' and 'nam in Humore.' This reflects d'Espagnet's concept of the universal spirit associated with the water cycle.",
+    "source": "Russell/O'Neill PPTX, Slide 41",
+    "page_or_location": "PPTX Slide 41",
+    "notes": "The shift from 'mother' to 'vessel' reflects an alchemical reading focused on containment and transformation."
+  },
+  {
+    "id": "hpe_handwriting_match",
+    "finding_id": "hpf_attribution_args",
+    "excerpt": "Handwriting analysis shows the purchase price inscription numerals (specifically the '5' and '6') match Digby's hand rather than Bourne's. One inscription in English ('Frogg Green') labels a heptagonal fountain, suggesting an English annotator.",
+    "source": "Russell/O'Neill PPTX, Slides 28-31, 43",
+    "page_or_location": "PPTX Slides 28-31",
+    "notes": "Paleographic evidence is suggestive but not conclusive on its own; strongest when combined with content parallels."
+  },
+  {
+    "id": "hpe_significance",
+    "finding_id": "hpf_attribution_args",
+    "excerpt": "Russell/O'Neill identify five areas of significance: (1) adds a major body of text to Digby's corpus, (2) illuminates the Jonson-Digby relationship, (3) informs about post-1651 alchemical work in Paris, (4) validates alchemical readings proposed in the 1600 edition and Carl Jung's Psychology and Alchemy, (5) provides a basis for comparison with other alchemically annotated HP copies.",
+    "source": "Russell/O'Neill PPTX, Slide 44",
+    "page_or_location": "PPTX Slide 44",
+    "notes": "The attribution, if accepted, significantly expands our understanding of Digby's intellectual practices."
+  }
+]
