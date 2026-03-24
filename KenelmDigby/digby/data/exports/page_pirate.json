@@ -20,7 +20,7 @@
       "id": "thm_pirate_venetian_label",
       "theme": "pirate",
       "title": "'A Pirate Who Had Sold All His Property for the Sake of Robbing'",
-      "summary": "After the Battle of Scanderoon, the Venetians launched a coordinated campaign to brand Digby as a pirate throughout the Mediterranean. Consul Alvise da Pesaro wrote he was 'nothing but a thief and a pirate.' Letters flew across Venetian outposts calling him 'this audacious pirate,' 'a pirate, who had sold all his property,' and 'the pirate Digby.' Even English diplomats like Thomas Roe complained about the disruption to trade.",
+      "summary": "After the Battle of Scanderoon on 11 June 1628, the Republic of Venice launched a coordinated and systematic campaign to brand Digby as a pirate throughout the Mediterranean and at European courts. Venetian consuls and ambassadors wrote dispatches calling him a thief, a pirate who had sold all his property for the sake of robbing, and an audacious criminal. The consul Alvise da Pesaro declared he was nothing but a thief and a pirate. Letters flew across Venetian outposts calling him this audacious pirate and the pirate Digby. The campaign was deliberate and coordinated, designed to delegitimize Digby's voyage and pressure England into disowning his actions. Even English diplomats felt its effects: Sir Thomas Roe, the ambassador at Constantinople, complained bitterly about the disruption to Levant trade, and English merchants at Aleppo were imprisoned in retaliation. The propaganda was amplified by Protestant suspicion of Digby's Catholic loyalties. Roe and other Protestant officials saw the voyage not as legitimate naval service but as a reckless Catholic adventure that endangered Protestant commercial interests. The pirate label proved remarkably durable, persisting in diplomatic correspondence and historical accounts for years. Digby's response was primarily literary: the Journal, the Loose Fantasies, and the published account of Scanderoon were all efforts to control the narrative. The episode reveals how early modern reputations were contested across diplomatic networks, and how the privateer-pirate distinction was determined by political power rather than legal principle.",
       "key_details": "Venetian propaganda campaign; English diplomats also critical; Roe called it disruption to trade; Protestant suspicion of Catholic captain",
       "people": "Kenelm Digby, Alvise da Pesaro, Thomas Roe, Peter Wyche",
       "places": "Mediterranean, Aleppo, Constantinople, Scanderoon",
@@ -44,6 +44,134 @@
       "year": 1628,
       "significance": "Demonstrates how privateering shaded into antiquarianism. Digby combined military boldness with scholarly curiosity in his approach to classical ruins.",
       "citation_ids": "cit_ch8_return",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_royal_commission",
+      "theme": "pirate",
+      "title": "The Royal Commission and Its Limits",
+      "summary": "Digby's Mediterranean voyage of 1628 operated in the murky space between legitimate privateering and outright piracy, a distinction that depended entirely on the authority under which one sailed. Digby obtained a royal commission from Charles I, but the precise terms of that commission were deliberately vague, reflecting the ambiguity of Caroline naval policy. England was nominally at war with France and Spain, which gave Digby legal cover to seize French and Spanish vessels, but the Mediterranean was controlled by the Ottoman Empire, Venice, and the Barbary regencies, none of whom were at war with England. This meant that any aggressive action against Venetian shipping, or any interference with trade at Ottoman ports like Scanderoon, could be construed as piracy under the law of nations. The commission was further complicated by the hostility of the Duke of Buckingham, who had obstructed Digby's preparations at every turn. Buckingham controlled the Admiralty and could revoke or undermine any commission he chose. Digby circumvented this through direct appeal to Charles I, but the resulting authority was fragile: dependent on royal favor that could evaporate if the voyage caused diplomatic embarrassment. The ambiguity of Digby's commission was not accidental. It gave the Crown plausible deniability if things went wrong while allowing Digby to pursue prizes aggressively if things went right. This was standard practice in the era of Caroline privateering, where the line between royal service and private enrichment was deliberately blurred.",
+      "key_details": "Royal commission from Charles I; vague terms; Buckingham obstruction; no clear authority against Venice; plausible deniability",
+      "people": "Kenelm Digby, Charles I, Duke of Buckingham",
+      "places": "London, Admiralty",
+      "date_display": "Late 1627",
+      "year": 1627,
+      "significance": "The ambiguity of Digby's commission is central to understanding why the pirate label stuck: his authority was real but limited, and he consistently exceeded it.",
+      "citation_ids": "cit_mosh_ch4_commission,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_fleet_assembly",
+      "theme": "pirate",
+      "title": "Fleet Assembly and the Shadow of Cadiz",
+      "summary": "Digby assembled his fleet in the autumn and winter of 1627, a process that revealed both his determination and the parlous state of English naval power. His flagship was the Eagle, a vessel of roughly 300 tons, accompanied by the smaller Elisabeth and George. He recruited sailors from the London waterfront, many of them veterans of the disastrous expeditions to Cadiz in 1625 and the Ile de Re in 1627, campaigns that had killed thousands of English sailors through disease, incompetent leadership, and inadequate supply. These men were scarred, hungry, and skeptical of grand promises. Digby had to pay and provision them from his own resources, supplemented by investments from friends and family. The total cost of outfitting the fleet ran to several thousand pounds, a substantial sum that Digby could only recoup through successful prize-taking. The fleet carried roughly 150 men on the Eagle alone, plus additional crews on the smaller vessels. Digby also needed to stockpile provisions for months at sea: biscuit, salt beef, beer, gunpowder, shot, and medical supplies. The recruitment process was complicated by Buckingham's interference: the Duke controlled naval appointments and could poach sailors and ships from any expedition he chose to obstruct. That Digby managed to assemble a seaworthy fleet and sail on schedule was itself a minor triumph of logistics and political maneuvering.",
+      "key_details": "Eagle ~300 tons; Elisabeth and George; 150+ crew; veterans of Cadiz and Ile de Re; self-funded expedition; Buckingham interference",
+      "people": "Kenelm Digby, Duke of Buckingham, Edward Stradling",
+      "places": "London, Thames",
+      "date_display": "Autumn-Winter 1627",
+      "year": 1627,
+      "significance": "The fleet assembly demonstrates Digby's practical capabilities and the economic realities of Caroline privateering.",
+      "citation_ids": "cit_mosh_ch4_commission,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_plague_detail",
+      "theme": "pirate",
+      "title": "Plague at Sea: Crisis and Command",
+      "summary": "Shortly after entering the Mediterranean in late January 1628, a devastating pestilential disease swept through Digby's crew. On the Eagle alone, sixty of roughly 150 men fell ill within days. The symptoms were severe: high fever, delirium, and rapid debilitation. The sick men hallucinated, believing the sea around them was a spacious and pleasant green meadow through which they tried to walk, falling overboard if not restrained. Officers urged Digby to turn back to England, arguing that the voyage was doomed before it had properly begun. The disease was almost certainly typhus, the scourge of early modern navies, spread by lice in the cramped, unsanitary conditions below decks. Digby faced his first true test of command. Rather than retreat, he pressed forward to Algiers, reasoning that the North African port offered better prospects for treating the sick and resupplying than the long voyage home through hostile waters. This decision was both brave and pragmatic. A return voyage would have taken weeks and killed many of the sick; Algiers was days away and had functioning markets for food and medicine. The crisis also revealed Digby's leadership style: he personally attended the sick, maintained discipline among the healthy crew, and made decisions quickly under pressure. His refusal to turn back set the tone for the rest of the voyage.",
+      "key_details": "60 of 150 sick on Eagle; hallucinations of green meadow; officers urged return; typhus likely; Digby pressed on to Algiers",
+      "people": "Kenelm Digby, crew of the Eagle",
+      "places": "Mediterranean, approaching Algiers",
+      "date_display": "Late January 1628",
+      "year": 1628,
+      "significance": "The plague crisis was the defining early test of Digby's command. His decision to press forward rather than retreat shaped the entire voyage.",
+      "citation_ids": "cit_mosh_ch4_plague,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_algiers_liberation",
+      "theme": "pirate",
+      "title": "Algiers: Slave Liberation and Mediterranean Diplomacy",
+      "summary": "Digby arrived at Algiers in February 1628 and remained for several weeks, a stay that combined medical crisis management with diplomatic initiative. The port city was the capital of one of the most powerful Barbary regencies, a corsair state that lived by raiding Christian shipping and enslaving captives. Thousands of European Christians were held as slaves in Algiers, including a significant number of English men and women captured at sea or in raids on coastal settlements. Digby negotiated with the local authorities for the release of English captives, combining persuasion with the implicit threat of his armed fleet. The exact number of slaves he freed varies between sources, but he secured the release of several dozen English subjects, an achievement that would later enhance his reputation at home. The Algiers stay also allowed Digby to resupply his ships, recruit replacement sailors, and treat the sick. The city was one of the most cosmopolitan in the Mediterranean: a hub where Turkish, Arab, Berber, European renegade, and Jewish communities intersected. Digby encountered a diverse population and a functioning urban economy that offered everything from fresh provisions to intelligence about shipping movements. His successful navigation of Algiers diplomacy demonstrated skills that went far beyond seamanship: he needed to understand Ottoman political structures, corsair customs, and the delicate balance of power in North Africa.",
+      "key_details": "Several dozen English slaves freed; resupply and medical treatment; cosmopolitan city; Ottoman political structures; diplomatic skill demonstrated",
+      "people": "Kenelm Digby",
+      "places": "Algiers",
+      "date_display": "February-March 1628",
+      "year": 1628,
+      "significance": "The Algiers episode shows Digby as diplomat and humanitarian as well as fighter, adding moral legitimacy to a voyage that would later be contested.",
+      "citation_ids": "cit_mosh_ch5_algiers_full,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_prize_economics",
+      "theme": "pirate",
+      "title": "The Economics of Prize-Taking",
+      "summary": "Throughout the voyage Digby captured a series of merchant vessels, the prizes that were the economic engine of any privateering expedition. The economics were straightforward in principle but complex in practice. A captured vessel and its cargo had to be adjudicated by a prize court upon return to England, which would determine whether the seizure was lawful and how the proceeds would be divided. The captain (Digby) typically received the largest share, with portions going to the crew, investors, and the Crown. Digby captured a Flemish vessel in a severe fight in March, took his fleet into the harbor at Cagliari, Sardinia, and drove defenders back from their positions. He seized French merchant ships at Scanderoon, and on his homeward voyage captured additional prizes including a Hamburg merchant ship carrying Granadan wool near Sardinia. The cumulative value of these prizes was substantial, though the exact figures are difficult to determine. Digby also had to manage prize crews to sail captured vessels, distribute food and water across an expanding fleet, and deal with captured sailors who might be hostile, ill, or simply inconvenient. The logistics of prize-taking consumed enormous energy and created ongoing tensions with local authorities at every port. The economic incentive was always in tension with the diplomatic risks: every prize taken was a potential diplomatic incident that could turn profitable privateering into prosecutable piracy.",
+      "key_details": "Flemish vessel March; Cagliari Sardinia; French ships at Scanderoon; Hamburg wool ship; prize court adjudication; crew shares system",
+      "people": "Kenelm Digby, Edward Stradling",
+      "places": "Mediterranean, Cagliari, Scanderoon, Sardinia",
+      "date_display": "January-November 1628",
+      "year": 1628,
+      "significance": "The prize economics reveal that Digby's voyage was fundamentally a commercial enterprise as well as a quest for glory, driven by the need to recoup investment.",
+      "citation_ids": "cit_mosh_ch6_prizes,cit_miles_courtier_career",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_heliodorus",
+      "theme": "pirate",
+      "title": "Reading Heliodorus Becalmed off Egypt",
+      "summary": "In late July 1628, Digby's ships were becalmed off the Egyptian coast for five sweltering days. With nothing to do but wait for wind, Digby retreated to his cabin and read the Aethiopica of Heliodorus, a late antique Greek romance about the star-crossed lovers Theagenes and Chariclea wandering the Mediterranean. The resonance between the fictional narrative and Digby's own experience was profound: like Theagenes, Digby was a young man of noble birth traversing the Mediterranean, facing dangers, and separated from the woman he loved. The reading of Heliodorus was not merely a pastime but a formative intellectual event. It inspired Digby to write his own autobiographical romance, the Loose Fantasies, composed a few weeks later on the island of Milos. In that work Digby adopted the name Theagenes for himself and reimagined his life story through the conventions of the romance genre. As Moshenska has argued, Digby did not simply write a romance based on his life; he strove to live his life as a romance. The decision to structure his experience through a literary model was itself a form of self-fashioning, transforming a privateering voyage into a narrative of heroic adventure and personal redemption. Sweet winds blowing from the Arabian coast perfumed the air as Digby read, a detail he recorded with characteristic sensitivity to the sensory world.",
+      "key_details": "Five days becalmed off Egypt; read Heliodorus Aethiopica; adopted name Theagenes; wrote Loose Fantasies at Milos; sweet Arabian winds",
+      "people": "Kenelm Digby, Venetia Stanley (as Stelliana)",
+      "places": "Egyptian coast, Milos",
+      "date_display": "Late July 1628",
+      "year": 1628,
+      "significance": "The Heliodorus episode reveals Digby's characteristic fusion of literary culture and lived experience, making his voyage unique among Caroline privateering expeditions.",
+      "citation_ids": "cit_mosh_ch7_heliodorus,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_venetian_propaganda",
+      "theme": "pirate",
+      "title": "The Venetian Propaganda Campaign",
+      "summary": "After the Battle of Scanderoon on 11 June 1628, the Republic of Venice launched a systematic diplomatic campaign to brand Digby as a pirate throughout the Mediterranean and across European courts. Venetian ambassadors and consuls wrote coordinated dispatches calling Digby a thief, a pirate who had sold all his property for the sake of robbing, and an audacious criminal. These were not casual insults but deliberate diplomatic communications designed to delegitimize Digby's voyage and pressure England into disowning him. The campaign was effective: English merchants at Aleppo were imprisoned in retaliation for the battle, and English diplomats like Sir Thomas Roe, the ambassador at Constantinople, complained bitterly about the disruption to Levant trade. Roe was particularly hostile because he was Protestant and suspicious of Digby's Catholic loyalties, seeing the voyage as a reckless Catholic adventure that endangered Protestant commercial interests. The Venetian campaign also reached London, where it influenced how the voyage was received at court. Even those who admired Digby's bravery worried about the diplomatic consequences. The pirate label proved remarkably sticky: it appears in Venetian state papers, English diplomatic correspondence, and later historical accounts. Digby spent years after his return trying to rehabilitate his reputation, writing his Journal and the Loose Fantasies in part to counter the narrative that he was nothing more than an unscrupulous pirate.",
+      "key_details": "Coordinated Venetian dispatches; English merchants imprisoned at Aleppo; Thomas Roe hostile; Protestant suspicion of Catholic captain; pirate label persisted",
+      "people": "Kenelm Digby, Thomas Roe, Alvise da Pesaro, Antonio Capello",
+      "places": "Constantinople, Aleppo, Venice, London",
+      "date_display": "June-December 1628",
+      "year": 1628,
+      "significance": "The Venetian propaganda campaign is a case study in how early modern reputations were contested across diplomatic networks, and how the pirate/privateer distinction was fundamentally political.",
+      "citation_ids": "cit_mosh_ch7_scanderoon_full,cit_mosh_ch8_aftermath,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_pirate_aftermath_return",
+      "theme": "pirate",
+      "title": "Return and Aftermath: Hero or Pirate?",
+      "summary": "Digby returned to England in February 1629 after thirteen months at sea, arriving with captured prizes, ancient marbles from Delos, exotic plant specimens, and a greatly enhanced reputation among those who admired martial valor. He was received by King Charles I and presented his trophies at court. The Delos marbles were among the first significant collections of classical antiquities brought to England, predating the Arundel Marbles in scope if not in systematic intent. But the reception was not uniformly positive. The Venetian ambassador in London continued to press complaints, English merchants who had suffered losses demanded compensation, and the diplomatic consequences of Scanderoon lingered for years. Digby's prizes had to pass through prize courts, where their legality was contested. The assassination of Buckingham in August 1628, which Digby learned of while still at sea, removed his most powerful enemy but also eliminated the political dynamic that had partly motivated the voyage. Without Buckingham to oppose, the voyage lost some of its narrative urgency as an act of defiance. Digby was never formally charged with piracy, but the label haunted him. His response was literary as much as legal: the Journal, the Loose Fantasies, and later the published account of the Scanderoon battle were all efforts to control the narrative of his voyage and establish himself as a hero rather than a pirate.",
+      "key_details": "February 1629 return; Delos marbles; Charles I reception; Venetian complaints continued; prize court proceedings; Buckingham dead; literary self-defense",
+      "people": "Kenelm Digby, Charles I, Venetia Stanley",
+      "places": "London, Delos",
+      "date_display": "February 1629 onward",
+      "year": 1629,
+      "significance": "The contested aftermath reveals how Digby's voyage was simultaneously a triumph and a liability, its meaning determined by competing narratives rather than fixed facts.",
+      "citation_ids": "cit_mosh_ch8_aftermath,cit_piracy_article,cit_miles_courtier_career",
       "source_method": "CORPUS_EXTRACTION",
       "review_status": "DRAFT",
       "confidence": "HIGH"
@@ -454,6 +582,321 @@
       "quote_fragment": null,
       "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
       "created_at": "2026-03-22T22:09:27.478206"
+    },
+    {
+      "id": "cit_hp_intro_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 1-10",
+      "quote_fragment": null,
+      "context": "Introduction to the HP, the BL copy, Jonson's ownership, three hands",
+      "created_at": "2026-03-23T19:18:33.680425"
+    },
+    {
+      "id": "cit_hp_methodology_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 11-24",
+      "quote_fragment": null,
+      "context": "Methodology for distinguishing three annotating hands",
+      "created_at": "2026-03-23T19:18:33.685989"
+    },
+    {
+      "id": "cit_hp_implications_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 44",
+      "quote_fragment": null,
+      "context": "Significance of the Digby attribution for scholarship",
+      "created_at": "2026-03-23T19:18:33.691573"
+    },
+    {
+      "id": "cit_life_intro_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Biographical overview framing Digby's life",
+      "created_at": "2026-03-23T19:18:33.697389"
+    },
+    {
+      "id": "cit_life_intro_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's career and accomplishments",
+      "created_at": "2026-03-23T19:18:33.703300"
+    },
+    {
+      "id": "cit_life_phase_youth_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1",
+      "quote_fragment": null,
+      "context": "Youth phase: Gayhurst, father's execution, Venetia, Napier",
+      "created_at": "2026-03-23T19:18:33.709640"
+    },
+    {
+      "id": "cit_life_phase_tour_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour phase: Florence, Siena, Madrid",
+      "created_at": "2026-03-23T19:18:33.716010"
+    },
+    {
+      "id": "cit_life_phase_voyage_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapters 4-8",
+      "quote_fragment": null,
+      "context": "Voyage phase: Mediterranean expedition 1628-1629",
+      "created_at": "2026-03-23T19:18:33.723733"
+    },
+    {
+      "id": "cit_life_phase_exile_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Exile phase: Paris, Civil War, alchemy, Royal Society",
+      "created_at": "2026-03-23T19:18:33.730121"
+    },
+    {
+      "id": "cit_life_works_intro",
+      "source_document_id": "sdoc_georgescu",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's major published works",
+      "created_at": "2026-03-23T19:18:33.735625"
+    },
+    {
+      "id": "cit_mosh_ch4_commission",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": null,
+      "context": "Royal commission, fleet assembly, Buckingham obstruction",
+      "created_at": "2026-03-23T19:19:22.182241"
+    },
+    {
+      "id": "cit_mosh_ch4_plague",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4, late January 1628",
+      "quote_fragment": null,
+      "context": "Plague striking the fleet in the Mediterranean",
+      "created_at": "2026-03-23T19:19:22.186697"
+    },
+    {
+      "id": "cit_mosh_ch5_algiers_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 5",
+      "quote_fragment": null,
+      "context": "Full account of Algiers stay, slave liberation, resupply",
+      "created_at": "2026-03-23T19:19:22.191010"
+    },
+    {
+      "id": "cit_mosh_ch6_prizes",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 6",
+      "quote_fragment": null,
+      "context": "Prize captures, economics of privateering",
+      "created_at": "2026-03-23T19:19:22.195087"
+    },
+    {
+      "id": "cit_mosh_ch7_scanderoon_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": null,
+      "context": "Battle of Scanderoon, Venetian response, diplomatic crisis",
+      "created_at": "2026-03-23T19:19:22.199223"
+    },
+    {
+      "id": "cit_mosh_ch7_heliodorus",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7, late July 1628",
+      "quote_fragment": null,
+      "context": "Becalmed off Egypt, reading Heliodorus",
+      "created_at": "2026-03-23T19:19:22.203352"
+    },
+    {
+      "id": "cit_mosh_ch8_aftermath",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Return, diplomatic fallout, Venetian propaganda",
+      "created_at": "2026-03-23T19:19:22.207862"
+    },
+    {
+      "id": "cit_piracy_article",
+      "source_document_id": "sdoc_32708346",
+      "excerpt_id": null,
+      "page_or_location": "pp. 424-483",
+      "quote_fragment": null,
+      "context": "Moshenska article on piracy and lived romance",
+      "created_at": "2026-03-23T19:19:22.211815"
+    },
+    {
+      "id": "cit_dobbs_1973_gresham",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 143-148",
+      "quote_fragment": null,
+      "context": "Digby at Gresham College after Venetia's death, laboratory inventory",
+      "created_at": "2026-03-23T19:19:22.215749"
+    },
+    {
+      "id": "cit_dobbs_1973_winchester",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Experiments during Winchester imprisonment 1642, glass manufacture",
+      "created_at": "2026-03-23T19:19:22.219410"
+    },
+    {
+      "id": "cit_dobbs_1973_paris",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 150-157",
+      "quote_fragment": null,
+      "context": "Paris exile, Evelyn visit, Le Fevre, Hartlib circle",
+      "created_at": "2026-03-23T19:19:22.223574"
+    },
+    {
+      "id": "cit_dobbs_1973_lefevre",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 155-160",
+      "quote_fragment": null,
+      "context": "Le Fevre's influence on Digby, Universal Spirit, mercury theory",
+      "created_at": "2026-03-23T19:19:22.228437"
+    },
+    {
+      "id": "cit_dobbs_1974_secrets",
+      "source_document_id": "sdoc_c5b22c27",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-28",
+      "quote_fragment": null,
+      "context": "Chymical Secrets analysis, operational alchemy, Hartman publication",
+      "created_at": "2026-03-23T19:19:22.232941"
+    },
+    {
+      "id": "cit_principe_paris_circle",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 3-24",
+      "quote_fragment": null,
+      "context": "Strasbourg manuscripts, Paris alchemical circle, 5000 pages",
+      "created_at": "2026-03-23T19:19:22.237632"
+    },
+    {
+      "id": "cit_principe_manuscripts",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 6-10",
+      "quote_fragment": null,
+      "context": "Digby's textual criticism of alchemical manuscripts",
+      "created_at": "2026-03-23T19:19:22.244410"
+    },
+    {
+      "id": "cit_principe_dubois",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 10-15",
+      "quote_fragment": null,
+      "context": "Noel Picard/Dubois transmutation accounts in Digby manuscripts",
+      "created_at": "2026-03-23T19:19:22.251603"
+    },
+    {
+      "id": "cit_hedrick_powder",
+      "source_document_id": "sdoc_b03434d3",
+      "excerpt_id": null,
+      "page_or_location": "pp. 161-185",
+      "quote_fragment": null,
+      "context": "Powder of Sympathy, Montpellier lecture, priority claims",
+      "created_at": "2026-03-23T19:19:22.257989"
+    },
+    {
+      "id": "cit_lobis_sympathy",
+      "source_document_id": "sdoc_4a8b454c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 243-260",
+      "quote_fragment": null,
+      "context": "Power of Sympathy, moral philosophy, mechanistic explanation",
+      "created_at": "2026-03-23T19:19:22.263679"
+    },
+    {
+      "id": "cit_georgescu_philosophy",
+      "source_document_id": "sdoc_dee89fe4",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Digby's philosophical work, Two Treatises, corpuscular theory",
+      "created_at": "2026-03-23T19:19:22.269390"
+    },
+    {
+      "id": "cit_miles_courtier_career",
+      "source_document_id": "sdoc_4a0dcb55",
+      "excerpt_id": null,
+      "page_or_location": "pp. 119-128",
+      "quote_fragment": null,
+      "context": "Overview of Digby's courtier career, political maneuvering",
+      "created_at": "2026-03-23T19:19:22.275382"
+    },
+    {
+      "id": "cit_mellick_courtier",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "pp. 911-914",
+      "quote_fragment": null,
+      "context": "Digby's versatile career, knighthood, Privy Council, Royal Society",
+      "created_at": "2026-03-23T19:19:22.280672"
+    },
+    {
+      "id": "cit_mosh_ch2_grand_tour_court",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour, Madrid, meeting Prince Charles, court connections",
+      "created_at": "2026-03-23T19:19:22.287063"
+    },
+    {
+      "id": "cit_mosh_ch3_knighthood",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "Knighthood, London political life, Buckingham rivalry",
+      "created_at": "2026-03-23T19:19:22.295610"
+    },
+    {
+      "id": "cit_dobbs_1973_civil_war",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Civil War imprisonment at Winchester House",
+      "created_at": "2026-03-23T19:19:22.302133"
+    },
+    {
+      "id": "cit_mellick_duel",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "p. 913",
+      "quote_fragment": null,
+      "context": "Duel with Mont le Ros in Paris, 1641",
+      "created_at": "2026-03-23T19:19:22.308330"
     }
   ]
 }

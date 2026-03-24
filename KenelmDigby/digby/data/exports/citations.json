@@ -403,5 +403,320 @@
     "quote_fragment": null,
     "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
     "created_at": "2026-03-22T22:09:27.478206"
+  },
+  {
+    "id": "cit_hp_intro_russell",
+    "source_document_id": "sdoc_russell_pptx",
+    "excerpt_id": null,
+    "page_or_location": "Slides 1-10",
+    "quote_fragment": null,
+    "context": "Introduction to the HP, the BL copy, Jonson's ownership, three hands",
+    "created_at": "2026-03-23T19:18:33.680425"
+  },
+  {
+    "id": "cit_hp_methodology_russell",
+    "source_document_id": "sdoc_russell_pptx",
+    "excerpt_id": null,
+    "page_or_location": "Slides 11-24",
+    "quote_fragment": null,
+    "context": "Methodology for distinguishing three annotating hands",
+    "created_at": "2026-03-23T19:18:33.685989"
+  },
+  {
+    "id": "cit_hp_implications_russell",
+    "source_document_id": "sdoc_russell_pptx",
+    "excerpt_id": null,
+    "page_or_location": "Slide 44",
+    "quote_fragment": null,
+    "context": "Significance of the Digby attribution for scholarship",
+    "created_at": "2026-03-23T19:18:33.691573"
+  },
+  {
+    "id": "cit_life_intro_moshenska",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "passim",
+    "quote_fragment": null,
+    "context": "Biographical overview framing Digby's life",
+    "created_at": "2026-03-23T19:18:33.697389"
+  },
+  {
+    "id": "cit_life_intro_miles",
+    "source_document_id": "sdoc_miles",
+    "excerpt_id": null,
+    "page_or_location": "passim",
+    "quote_fragment": null,
+    "context": "Overview of Digby's career and accomplishments",
+    "created_at": "2026-03-23T19:18:33.703300"
+  },
+  {
+    "id": "cit_life_phase_youth_moshenska",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 1",
+    "quote_fragment": null,
+    "context": "Youth phase: Gayhurst, father's execution, Venetia, Napier",
+    "created_at": "2026-03-23T19:18:33.709640"
+  },
+  {
+    "id": "cit_life_phase_tour_moshenska",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 2",
+    "quote_fragment": null,
+    "context": "Grand Tour phase: Florence, Siena, Madrid",
+    "created_at": "2026-03-23T19:18:33.716010"
+  },
+  {
+    "id": "cit_life_phase_voyage_moshenska",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapters 4-8",
+    "quote_fragment": null,
+    "context": "Voyage phase: Mediterranean expedition 1628-1629",
+    "created_at": "2026-03-23T19:18:33.723733"
+  },
+  {
+    "id": "cit_life_phase_exile_miles",
+    "source_document_id": "sdoc_miles",
+    "excerpt_id": null,
+    "page_or_location": "passim",
+    "quote_fragment": null,
+    "context": "Exile phase: Paris, Civil War, alchemy, Royal Society",
+    "created_at": "2026-03-23T19:18:33.730121"
+  },
+  {
+    "id": "cit_life_works_intro",
+    "source_document_id": "sdoc_georgescu",
+    "excerpt_id": null,
+    "page_or_location": "passim",
+    "quote_fragment": null,
+    "context": "Overview of Digby's major published works",
+    "created_at": "2026-03-23T19:18:33.735625"
+  },
+  {
+    "id": "cit_mosh_ch4_commission",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 4",
+    "quote_fragment": null,
+    "context": "Royal commission, fleet assembly, Buckingham obstruction",
+    "created_at": "2026-03-23T19:19:22.182241"
+  },
+  {
+    "id": "cit_mosh_ch4_plague",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 4, late January 1628",
+    "quote_fragment": null,
+    "context": "Plague striking the fleet in the Mediterranean",
+    "created_at": "2026-03-23T19:19:22.186697"
+  },
+  {
+    "id": "cit_mosh_ch5_algiers_full",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 5",
+    "quote_fragment": null,
+    "context": "Full account of Algiers stay, slave liberation, resupply",
+    "created_at": "2026-03-23T19:19:22.191010"
+  },
+  {
+    "id": "cit_mosh_ch6_prizes",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 6",
+    "quote_fragment": null,
+    "context": "Prize captures, economics of privateering",
+    "created_at": "2026-03-23T19:19:22.195087"
+  },
+  {
+    "id": "cit_mosh_ch7_scanderoon_full",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 7",
+    "quote_fragment": null,
+    "context": "Battle of Scanderoon, Venetian response, diplomatic crisis",
+    "created_at": "2026-03-23T19:19:22.199223"
+  },
+  {
+    "id": "cit_mosh_ch7_heliodorus",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 7, late July 1628",
+    "quote_fragment": null,
+    "context": "Becalmed off Egypt, reading Heliodorus",
+    "created_at": "2026-03-23T19:19:22.203352"
+  },
+  {
+    "id": "cit_mosh_ch8_aftermath",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 8",
+    "quote_fragment": null,
+    "context": "Return, diplomatic fallout, Venetian propaganda",
+    "created_at": "2026-03-23T19:19:22.207862"
+  },
+  {
+    "id": "cit_piracy_article",
+    "source_document_id": "sdoc_32708346",
+    "excerpt_id": null,
+    "page_or_location": "pp. 424-483",
+    "quote_fragment": null,
+    "context": "Moshenska article on piracy and lived romance",
+    "created_at": "2026-03-23T19:19:22.211815"
+  },
+  {
+    "id": "cit_dobbs_1973_gresham",
+    "source_document_id": "sdoc_438da82c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 143-148",
+    "quote_fragment": null,
+    "context": "Digby at Gresham College after Venetia's death, laboratory inventory",
+    "created_at": "2026-03-23T19:19:22.215749"
+  },
+  {
+    "id": "cit_dobbs_1973_winchester",
+    "source_document_id": "sdoc_438da82c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 148-150",
+    "quote_fragment": null,
+    "context": "Experiments during Winchester imprisonment 1642, glass manufacture",
+    "created_at": "2026-03-23T19:19:22.219410"
+  },
+  {
+    "id": "cit_dobbs_1973_paris",
+    "source_document_id": "sdoc_438da82c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 150-157",
+    "quote_fragment": null,
+    "context": "Paris exile, Evelyn visit, Le Fevre, Hartlib circle",
+    "created_at": "2026-03-23T19:19:22.223574"
+  },
+  {
+    "id": "cit_dobbs_1973_lefevre",
+    "source_document_id": "sdoc_438da82c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 155-160",
+    "quote_fragment": null,
+    "context": "Le Fevre's influence on Digby, Universal Spirit, mercury theory",
+    "created_at": "2026-03-23T19:19:22.228437"
+  },
+  {
+    "id": "cit_dobbs_1974_secrets",
+    "source_document_id": "sdoc_c5b22c27",
+    "excerpt_id": null,
+    "page_or_location": "pp. 1-28",
+    "quote_fragment": null,
+    "context": "Chymical Secrets analysis, operational alchemy, Hartman publication",
+    "created_at": "2026-03-23T19:19:22.232941"
+  },
+  {
+    "id": "cit_principe_paris_circle",
+    "source_document_id": "sdoc_3ce83ddc",
+    "excerpt_id": null,
+    "page_or_location": "pp. 3-24",
+    "quote_fragment": null,
+    "context": "Strasbourg manuscripts, Paris alchemical circle, 5000 pages",
+    "created_at": "2026-03-23T19:19:22.237632"
+  },
+  {
+    "id": "cit_principe_manuscripts",
+    "source_document_id": "sdoc_3ce83ddc",
+    "excerpt_id": null,
+    "page_or_location": "pp. 6-10",
+    "quote_fragment": null,
+    "context": "Digby's textual criticism of alchemical manuscripts",
+    "created_at": "2026-03-23T19:19:22.244410"
+  },
+  {
+    "id": "cit_principe_dubois",
+    "source_document_id": "sdoc_3ce83ddc",
+    "excerpt_id": null,
+    "page_or_location": "pp. 10-15",
+    "quote_fragment": null,
+    "context": "Noel Picard/Dubois transmutation accounts in Digby manuscripts",
+    "created_at": "2026-03-23T19:19:22.251603"
+  },
+  {
+    "id": "cit_hedrick_powder",
+    "source_document_id": "sdoc_b03434d3",
+    "excerpt_id": null,
+    "page_or_location": "pp. 161-185",
+    "quote_fragment": null,
+    "context": "Powder of Sympathy, Montpellier lecture, priority claims",
+    "created_at": "2026-03-23T19:19:22.257989"
+  },
+  {
+    "id": "cit_lobis_sympathy",
+    "source_document_id": "sdoc_4a8b454c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 243-260",
+    "quote_fragment": null,
+    "context": "Power of Sympathy, moral philosophy, mechanistic explanation",
+    "created_at": "2026-03-23T19:19:22.263679"
+  },
+  {
+    "id": "cit_georgescu_philosophy",
+    "source_document_id": "sdoc_dee89fe4",
+    "excerpt_id": null,
+    "page_or_location": "passim",
+    "quote_fragment": null,
+    "context": "Digby's philosophical work, Two Treatises, corpuscular theory",
+    "created_at": "2026-03-23T19:19:22.269390"
+  },
+  {
+    "id": "cit_miles_courtier_career",
+    "source_document_id": "sdoc_4a0dcb55",
+    "excerpt_id": null,
+    "page_or_location": "pp. 119-128",
+    "quote_fragment": null,
+    "context": "Overview of Digby's courtier career, political maneuvering",
+    "created_at": "2026-03-23T19:19:22.275382"
+  },
+  {
+    "id": "cit_mellick_courtier",
+    "source_document_id": "sdoc_6fc18de0",
+    "excerpt_id": null,
+    "page_or_location": "pp. 911-914",
+    "quote_fragment": null,
+    "context": "Digby's versatile career, knighthood, Privy Council, Royal Society",
+    "created_at": "2026-03-23T19:19:22.280672"
+  },
+  {
+    "id": "cit_mosh_ch2_grand_tour_court",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 2",
+    "quote_fragment": null,
+    "context": "Grand Tour, Madrid, meeting Prince Charles, court connections",
+    "created_at": "2026-03-23T19:19:22.287063"
+  },
+  {
+    "id": "cit_mosh_ch3_knighthood",
+    "source_document_id": "sdoc_moshenska",
+    "excerpt_id": null,
+    "page_or_location": "Chapter 3",
+    "quote_fragment": null,
+    "context": "Knighthood, London political life, Buckingham rivalry",
+    "created_at": "2026-03-23T19:19:22.295610"
+  },
+  {
+    "id": "cit_dobbs_1973_civil_war",
+    "source_document_id": "sdoc_438da82c",
+    "excerpt_id": null,
+    "page_or_location": "pp. 148-150",
+    "quote_fragment": null,
+    "context": "Civil War imprisonment at Winchester House",
+    "created_at": "2026-03-23T19:19:22.302133"
+  },
+  {
+    "id": "cit_mellick_duel",
+    "source_document_id": "sdoc_6fc18de0",
+    "excerpt_id": null,
+    "page_or_location": "p. 913",
+    "quote_fragment": null,
+    "context": "Duel with Mont le Ros in Paris, 1641",
+    "created_at": "2026-03-23T19:19:22.308330"
   }
 ]

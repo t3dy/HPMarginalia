@@ -199,6 +199,24 @@ def html_head(title: str, active_tab: str = "") -> str:
             color: #555;
             margin-top: 0.5rem;
         }}
+        .prose-section {{
+            margin: 1.5rem 0;
+            line-height: 1.8;
+        }}
+        .prose-section p {{
+            margin-bottom: 1rem;
+            text-align: justify;
+        }}
+        .prose-section h2 {{
+            margin-top: 2.5rem;
+        }}
+        .phase-header {{
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #d4c5a9;
+            color: #6b4226;
+            font-size: 1.15rem;
+        }}
     </style>
 </head>
 <body>
@@ -251,6 +269,44 @@ def get_citation_text(cit_ids: str, citations: dict) -> str:
     return ""
 
 
+def get_page_sections(page: str) -> list[dict]:
+    """Query page_sections for a given page, ordered by position."""
+    conn = get_connection()
+    rows = conn.execute(
+        "SELECT * FROM page_sections WHERE page = ? ORDER BY position",
+        (page,)
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def render_section(section: dict, citations_dict: dict) -> str:
+    """Render a page_section as HTML."""
+    title = section.get("title", "")
+    body = section.get("body", "")
+    cit = get_citation_text(section.get("citation_ids"), citations_dict)
+    html = ""
+    if title:
+        html += f'<h2>{escape(title)}</h2>\n'
+    # Body is pre-formatted HTML-safe prose (paragraphs separated by newlines)
+    for para in body.split("\n\n"):
+        para = para.strip()
+        if para:
+            html += f"<p>{para}</p>\n"
+    if cit:
+        html += cit + "\n"
+    return f'<div class="prose-section">\n{html}</div>\n'
+
+
+def render_sections_by_key(sections: list[dict], key: str, citations_dict: dict) -> str:
+    """Render all sections matching a given section_key."""
+    html = ""
+    for s in sections:
+        if s.get("section_key") == key:
+            html += render_section(s, citations_dict)
+    return html
+
+
 def render_card(title, body, meta="", citation_html="", significance="", tags=None):
     tag_html = ""
     if tags:
@@ -270,10 +326,18 @@ def render_card(title, body, meta="", citation_html="", significance="", tags=No
 def build_home(citations_dict):
     events = query_all("life_events")
     works = query_all("work_records")
+    sections = get_page_sections("home")
     html = html_head("Home", "index.html")
     html += """
         <h1>Sir Kenelm Digby (1603-1665)</h1>
-        <p class="subtitle">Pirate, Alchemist, Natural Philosopher, Courtier, Bibliophile</p>
+        <p class="subtitle">Pirate, Alchemist, Natural Philosopher, Courtier, Bibliophile</p>"""
+
+    # Render intro section from DB if available, otherwise use default
+    intro_html = render_sections_by_key(sections, "intro", citations_dict)
+    if intro_html:
+        html += intro_html
+    else:
+        html += """
         <p>Sir Kenelm Digby was one of the most remarkable Englishmen of the seventeenth century:
         a trusted advisor to King Charles I, a pioneering natural philosopher, a daring privateer,
         a committed alchemist, a Catholic in a Protestant nation, and a man whose life spanned
@@ -281,8 +345,12 @@ def build_home(citations_dict):
 
         <p>This section of the HP Marginalia project presents Digby's life, works, and significance,
         with particular attention to his connection to the <em>Hypnerotomachia Poliphili</em> as
-        a possible alchemical annotator of the text.</p>
+        a possible alchemical annotator of the text.</p>"""
 
+    # Render "why digby matters" section if available
+    html += render_sections_by_key(sections, "significance", citations_dict)
+
+    html += """
         <h2>Explore</h2>
         <div class="card">
             <h3><a href="life_works.html">Life & Works</a></h3>
@@ -325,20 +393,55 @@ def build_home(citations_dict):
     return html
 
 
+LIFE_PHASES = [
+    ("youth", "Youth and Education (1603-1620)"),
+    ("education", "Youth and Education (1603-1620)"),
+    ("grand_tour", "Grand Tour (1620-1623)"),
+    ("early_career", "Early Career and Marriage (1623-1627)"),
+    ("marriage", "Early Career and Marriage (1623-1627)"),
+    ("voyage", "The Mediterranean Voyage (1627-1629)"),
+    ("return", "Return and Settled Life (1629-1633)"),
+    ("intellectual_life", "Return and Settled Life (1629-1633)"),
+    ("career", "Return and Settled Life (1629-1633)"),
+    ("grief", "Grief and Alchemy (1633-1640)"),
+    ("mourning", "Grief and Alchemy (1633-1640)"),
+    ("civil_war", "Civil War and Exile (1640-1660)"),
+    ("exile", "Civil War and Exile (1640-1660)"),
+    ("restoration", "The Restoration and Final Years (1660-1665)"),
+    ("death", "The Restoration and Final Years (1660-1665)"),
+]
+PHASE_ORDER = {phase: i for i, (phase, _) in enumerate(LIFE_PHASES)}
+PHASE_LABELS = dict(LIFE_PHASES)
+
+
 def build_life_works(citations_dict):
     events = sorted(query_all("life_events"), key=lambda e: e.get("year") or 0)
     works = sorted(query_all("work_records"), key=lambda w: w.get("year") or 0)
+    sections = get_page_sections("life_works")
     html = html_head("Life & Works", "life_works.html")
     html += "<h1>Life & Works</h1>"
     html += '<p class="subtitle">A chronological overview of Digby\'s life and major writings</p>'
 
+    # Intro section
+    html += render_sections_by_key(sections, "intro", citations_dict)
+
     html += "<h2>Life Events</h2>"
+
+    # Group events by life_phase and render with phase headers
+    current_phase_label = None
     for evt in events:
+        phase = evt.get("life_phase", "")
+        phase_label = PHASE_LABELS.get(phase, "")
+        if phase_label and phase_label != current_phase_label:
+            current_phase_label = phase_label
+            html += f'<h3 class="phase-header">{phase_label}</h3>'
+            # Render phase-specific section if available
+            phase_key = f"phase_{phase}"
+            html += render_sections_by_key(sections, phase_key, citations_dict)
+
         tags = []
         if evt.get("confidence"):
             tags.append(evt["confidence"])
-        if evt.get("review_status"):
-            tags.append(evt["review_status"])
         cit = get_citation_text(evt.get("citation_ids"), citations_dict)
         html += render_card(
             evt["title"],
@@ -349,6 +452,8 @@ def build_life_works(citations_dict):
         )
 
     html += "<h2>Major Works</h2>"
+    html += render_sections_by_key(sections, "works_intro", citations_dict)
+
     for w in works:
         year = f"({w['year']})" if w.get("year") else ""
         wtype = f" [{w['work_type']}]" if w.get("work_type") else ""
@@ -368,10 +473,20 @@ def build_life_works(citations_dict):
 def build_memoir(citations_dict):
     episodes = sorted(query_all("memoir_episodes"),
                       key=lambda e: e.get("episode_number") or 0)
+    sections = get_page_sections("memoir")
     html = html_head("Memoir Summary", "memoir.html")
     html += "<h1>Memoir Summary</h1>"
     html += '<p class="subtitle">Structured summary of Digby\'s <em>Private Memoirs</em></p>'
-    html += "<p>Digby wrote his memoirs in the third person, casting himself as 'Theagenes' and his wife Venetia Stanley as 'Stelliana', in a style modelled on the Greek romance of Heliodorus.</p>"
+
+    # Intro section from DB or default
+    intro_html = render_sections_by_key(sections, "intro", citations_dict)
+    if intro_html:
+        html += intro_html
+    else:
+        html += "<p>Digby wrote his memoirs in the third person, casting himself as 'Theagenes' and his wife Venetia Stanley as 'Stelliana', in a style modelled on the Greek romance of Heliodorus.</p>"
+
+    # Structure essay if available
+    html += render_sections_by_key(sections, "structure", citations_dict)
 
     for ep in episodes:
         details = []
@@ -393,41 +508,33 @@ def build_memoir(citations_dict):
     {cit}
 </div>"""
 
+    # Conclusion section
+    html += render_sections_by_key(sections, "conclusion", citations_dict)
+
     html += html_foot()
     return html
 
 
-def build_theme_page(theme_value, page_title, subtitle, filename, citations_dict):
-    conn = get_connection()
-    records = conn.execute(
-        "SELECT * FROM digby_theme_records WHERE theme = ?", (theme_value,)
-    ).fetchall()
-    conn.close()
-    records = [dict(r) for r in records]
+def render_theme_card(r: dict, citations_dict: dict) -> str:
+    """Render a single digby_theme_record as an HTML card."""
+    details = []
+    if r.get("key_details"):
+        details.append(escape(r["key_details"]))
+    if r.get("people"):
+        details.append(f"<strong>People:</strong> {escape(r['people'])}")
+    if r.get("places"):
+        details.append(f"<strong>Places:</strong> {escape(r['places'])}")
+    detail_html = ""
+    if details:
+        detail_html = '<div class="evidence">' + "<br>".join(details) + "</div>"
 
-    html = html_head(page_title, filename)
-    html += f"<h1>{page_title}</h1>"
-    html += f'<p class="subtitle">{subtitle}</p>'
+    tags = []
+    if r.get("confidence"):
+        tags.append(r["confidence"])
+    cit = get_citation_text(r.get("citation_ids"), citations_dict)
+    sig = r.get("significance", "")
 
-    for r in records:
-        details = []
-        if r.get("key_details"):
-            details.append(escape(r["key_details"]))
-        if r.get("people"):
-            details.append(f"<strong>People:</strong> {escape(r['people'])}")
-        if r.get("places"):
-            details.append(f"<strong>Places:</strong> {escape(r['places'])}")
-        detail_html = ""
-        if details:
-            detail_html = '<div class="evidence">' + "<br>".join(details) + "</div>"
-
-        tags = []
-        if r.get("confidence"):
-            tags.append(r["confidence"])
-        cit = get_citation_text(r.get("citation_ids"), citations_dict)
-        sig = r.get("significance", "")
-
-        html += f"""<div class="card">
+    return f"""<div class="card">
     <h3>{escape(r['title'])}</h3>
     <div class="meta">{escape(r.get('date_display', ''))} {' '.join(f'<span class="tag">{t}</span>' for t in tags)}</div>
     <p>{escape(r.get('summary', ''))}</p>
@@ -436,8 +543,44 @@ def build_theme_page(theme_value, page_title, subtitle, filename, citations_dict
     {cit}
 </div>"""
 
-    if not records:
+
+def build_theme_page(theme_value, page_title, subtitle, filename, citations_dict,
+                     page_key=None):
+    conn = get_connection()
+    records = conn.execute(
+        "SELECT * FROM digby_theme_records WHERE theme = ? ORDER BY year, date_display",
+        (theme_value,)
+    ).fetchall()
+    conn.close()
+    records = [dict(r) for r in records]
+
+    # Determine page key for sections lookup
+    if page_key is None:
+        page_key = filename.replace(".html", "")
+    sections = get_page_sections(page_key)
+
+    html = html_head(page_title, filename)
+    html += f"<h1>{page_title}</h1>"
+    html += f'<p class="subtitle">{subtitle}</p>'
+
+    # Render intro sections
+    html += render_sections_by_key(sections, "intro", citations_dict)
+
+    # Render pre-cards essay sections
+    html += render_sections_by_key(sections, "context", citations_dict)
+
+    # Render records
+    if records:
+        for r in records:
+            html += render_theme_card(r, citations_dict)
+    else:
         html += "<p><em>No records yet. Content will be added as sources are processed.</em></p>"
+
+    # Render post-cards essay sections
+    html += render_sections_by_key(sections, "essay", citations_dict)
+
+    # Render conclusion
+    html += render_sections_by_key(sections, "conclusion", citations_dict)
 
     html += html_foot()
     return html
@@ -446,6 +589,7 @@ def build_theme_page(theme_value, page_title, subtitle, filename, citations_dict
 def build_hypnerotomachia(citations_dict):
     findings = query_all("hypnerotomachia_findings")
     evidence = query_all("hypnerotomachia_evidence")
+    sections = get_page_sections("hypnerotomachia")
     # Index evidence by finding_id
     ev_by_finding = {}
     for e in evidence:
@@ -456,7 +600,12 @@ def build_hypnerotomachia(citations_dict):
     html += "<h1>Digby and the Hypnerotomachia</h1>"
     html += '<p class="subtitle">The case for Kenelm Digby as the alchemical annotator of the <em>Hypnerotomachia Poliphili</em></p>'
 
-    html += """<h2>Overview</h2>
+    # Intro section from DB or default
+    intro_html = render_sections_by_key(sections, "intro", citations_dict)
+    if intro_html:
+        html += intro_html
+    else:
+        html += """<h2>Overview</h2>
     <p>An annotated copy of the 1499 <em>Hypnerotomachia Poliphili</em> contains marginalia from
     several distinct hands. One hand is characterized by alchemical symbolic markings, Latin notes,
     and attention to alchemical allegory in both text and images. James Russell's research argues
@@ -464,6 +613,9 @@ def build_hypnerotomachia(citations_dict):
     parallels with Digby's known writings, historical plausibility, and the alignment of the
     annotations with Digby's alchemical theories.</p>
     """
+
+    # Methodology section if available
+    html += render_sections_by_key(sections, "methodology", citations_dict)
 
     html += "<h2>Findings</h2>"
     for f in findings:
@@ -505,15 +657,24 @@ def build_hypnerotomachia(citations_dict):
     {cit}
 </div>"""
 
+    # Implications section
+    html += render_sections_by_key(sections, "implications", citations_dict)
+    html += render_sections_by_key(sections, "conclusion", citations_dict)
+
     html += html_foot()
     return html
 
 
 def build_sources(citations_dict):
     docs = sorted(query_all("source_documents"), key=lambda d: d.get("year") or 9999)
+    sections = get_page_sections("sources")
     html = html_head("Sources & Bibliography", "sources.html")
     html += "<h1>Sources & Bibliography</h1>"
     html += f'<p class="subtitle">{len(docs)} source documents in the Digby corpus</p>'
+
+    # Intro prose
+    html += render_sections_by_key(sections, "intro", citations_dict)
+    html += render_sections_by_key(sections, "primary", citations_dict)
 
     html += """<table>
     <tr>

@@ -13,14 +13,14 @@ from src.models import (
     ThemeLabel, ReviewStatus, Confidence,
     SourceDocument, SourceExcerpt, LifeEvent, WorkRecord,
     MemoirEpisode, DigbyThemeRecord, Citation,
-    HypnerotomachiaFinding, HypnerotomachiaEvidence,
+    HypnerotomachiaFinding, HypnerotomachiaEvidence, PageSection,
 )
 
 VALID_THEMES = {t.value for t in ThemeLabel}
 VALID_REVIEW_STATUSES = {s.value for s in ReviewStatus}
 VALID_CONFIDENCES = {c.value for c in Confidence}
 VALID_PAGES = {
-    "digby_home", "life_works", "memoir", "pirate",
+    "home", "digby_home", "life_works", "memoir", "pirate",
     "alchemist", "courtier", "sources", "hypnerotomachia"
 }
 VALID_FILE_TYPES = {"pdf", "txt", "md", "epub", "xlsx", "pptx"}
@@ -112,6 +112,13 @@ def validate_hp_evidence(e: HypnerotomachiaEvidence):
     validate_required(e, ["finding_id", "excerpt", "source"], "HypnerotomachiaEvidence")
 
 
+def validate_page_section(ps: PageSection):
+    validate_id(ps, "PageSection")
+    validate_required(ps, ["page", "section_key", "body"], "PageSection")
+    if ps.page not in VALID_PAGES:
+        raise ValidationError(f"[PageSection] Invalid page: {ps.page}")
+
+
 def validate_record(record):
     """Dispatch validation by type."""
     dispatch = {
@@ -124,6 +131,7 @@ def validate_record(record):
         Citation: validate_citation,
         HypnerotomachiaFinding: validate_hp_finding,
         HypnerotomachiaEvidence: validate_hp_evidence,
+        PageSection: validate_page_section,
     }
     validator = dispatch.get(type(record))
     if validator is None:

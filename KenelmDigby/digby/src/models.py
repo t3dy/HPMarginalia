@@ -220,3 +220,20 @@ class HypnerotomachiaEvidence:
 
     def to_dict(self):
         return asdict(self)
+
+
+@dataclass
+class PageSection:
+    """Narrative prose section for a site page (intro essays, transitions, conclusions)."""
+    id: str
+    page: str  # "pirate", "alchemist", "memoir", etc.
+    section_key: str  # "intro", "essay_1", "conclusion"
+    body: str
+    title: Optional[str] = None
+    position: int = 0
+    citation_ids: Optional[str] = None
+    source_method: str = SourceMethod.LLM_ASSISTED.value
+    review_status: str = ReviewStatus.DRAFT.value
+
+    def to_dict(self):
+        return asdict(self)

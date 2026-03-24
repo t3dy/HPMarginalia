@@ -20,7 +20,7 @@
       "id": "thm_courtier_buckingham",
       "theme": "courtier_legal_thinker",
       "title": "Conflict with the Duke of Buckingham",
-      "summary": "The Duke of Buckingham, the most powerful man in England and King Charles's closest friend, actively tried to prevent Digby's Mediterranean voyage. Despite Buckingham's obstruction, Digby assembled his fleet through determination and royal support. Buckingham's assassination on 23 August 1628 — while Digby was at sea — removed his greatest political obstacle.",
+      "summary": "The Duke of Buckingham, George Villiers, was the most powerful man in England after the King and Charles I's closest personal friend. His relationship with Digby was one of mutual antagonism that shaped the entire trajectory of the Mediterranean voyage. Buckingham controlled the Admiralty and wielded enormous influence over naval appointments, ship allocations, and maritime commissions. He actively tried to prevent Digby's expedition, obstructing his access to ships, sailors, and supplies at every turn. The reasons for Buckingham's hostility are not entirely clear but likely combined personal rivalry with political calculation: Digby was gaining favor with Charles I, and any independent success by Digby would diminish Buckingham's monopoly on royal attention. Despite this obstruction, Digby assembled his fleet through a combination of personal determination, private investment, and direct appeal to the King's authority over Buckingham's head. This circumvention of the most powerful man in England demonstrated both Digby's political skill and the depth of Charles's personal regard for him. The drama took an extraordinary turn on 23 August 1628, when Buckingham was assassinated by John Felton at Portsmouth. Digby learned the news while near the Currant Islands in Greece, from a captured French captain. The assassination removed his greatest political obstacle and transformed the context of his return: without Buckingham to oppose him, Digby could hope for a more favorable reception at court. The Buckingham conflict illustrates the intensely personal nature of Caroline politics, where access to the King was the ultimate currency and personal rivalry could determine matters of war and peace.",
       "key_details": "Buckingham obstructed voyage preparations; Digby circumvented through royal favor; assassination by John Felton removed obstacle; Digby heard news near Currant Islands",
       "people": "Duke of Buckingham, King Charles I, John Felton",
       "places": "London, Portsmouth, Currant Islands",
@@ -44,6 +44,134 @@
       "year": null,
       "significance": "Digby's life exemplifies the precarious position of Catholic intellectuals in early modern England — simultaneously insider and outsider, trusted and suspected.",
       "citation_ids": "cit_ch1_youth,cit_courtier_miles",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_james_knighthood",
+      "theme": "courtier_legal_thinker",
+      "title": "Service to King James and the Knighthood of 1623",
+      "summary": "Digby's entry into court life was remarkably swift for a young man whose father had been executed as a traitor just seventeen years earlier. After returning from his Grand Tour in September 1623, during which he had accompanied Prince Charles and Buckingham in Madrid during the failed Spanish Match, Digby was knighted by King James I on 21 October 1623, at the age of just twenty. The knighthood was a dramatic gesture of royal rehabilitation: it signaled that the Crown no longer held the sins of the father against the son. Digby had earned this favor through personal charm, intellectual brilliance, and the connections he had made in Madrid, where he impressed the Prince with his courage, learning, and courtly manner. He was tall, handsome, and extraordinarily well-read, qualities that made him a natural ornament of any court. The knighthood also reflected the Stuart monarchy's willingness to reconcile with the Catholic gentry, a policy that would cause increasing political friction as anti-Catholic sentiment grew. For Digby personally, the knighthood was redemption: the stain in his blood from the Gunpowder Plot was officially, if not entirely, expunged. He was now Sir Kenelm, a gentleman of the bedchamber to the King, with all the access and influence that position implied.",
+      "key_details": "Knighted 21 October 1623 by James I; age 20; Spanish Match connection; rehabilitation of Gunpowder Plot family; gentleman of bedchamber",
+      "people": "Kenelm Digby, James I, Prince Charles, Duke of Buckingham",
+      "places": "London, Madrid",
+      "date_display": "21 October 1623",
+      "year": 1623,
+      "significance": "The knighthood represents the pivotal moment when Digby transformed from the son of a traitor into a courtier, the beginning of his political career.",
+      "citation_ids": "cit_mosh_ch2_grand_tour_court,cit_mellick_courtier",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_charles_relationship",
+      "theme": "courtier_legal_thinker",
+      "title": "Relationship with Charles I",
+      "summary": "Digby's relationship with Charles I was one of the most consequential of his life, providing the political foundation for his Mediterranean voyage, his courtly career, and his survival through decades of political upheaval. The friendship dated from Madrid in 1623, when the young Digby and the young Prince Charles were both guests at the Spanish court during the failed negotiations for the Spanish Match. Charles appreciated Digby's combination of physical courage, intellectual range, and courtly grace. After Charles became king in 1625, Digby became part of his inner circle, with access that aroused jealousy from rivals, particularly the Duke of Buckingham. Charles granted Digby the royal commission for his Mediterranean voyage despite Buckingham's opposition, a significant demonstration of personal favor. After Digby's return, Charles received him at court and admired the Delos marbles. Digby also demonstrated his alchemical powder for fixing mercury before the King, suggesting a degree of personal intimacy unusual for a Catholic subject. The relationship survived the tensions of the late 1620s and 1630s, though Digby's Catholicism made him increasingly vulnerable as anti-Catholic sentiment intensified. When Civil War came, Digby was a committed Royalist, but his Catholicism meant he could not serve openly in the way Protestant Royalists could.",
+      "key_details": "Friendship from Madrid 1623; inner circle access; commission despite Buckingham; mercury demonstration; Royalist commitment; Catholic vulnerability",
+      "people": "Kenelm Digby, Charles I, Duke of Buckingham",
+      "places": "Madrid, London, Whitehall",
+      "date_display": "1623-1649",
+      "year": 1623,
+      "significance": "The Charles I relationship was Digby's political lifeline, providing the royal favor that protected him from his enemies and enabled his most ambitious ventures.",
+      "citation_ids": "cit_mosh_ch3_knighthood,cit_miles_courtier_career",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_protestant_conversion",
+      "theme": "courtier_legal_thinker",
+      "title": "The Protestant Conversion and Naval Appointment",
+      "summary": "In the mid-1620s, Digby made the remarkable decision to convert to Protestantism, or at least to present himself as having done so. The conversion was almost certainly strategic: it removed the most significant obstacle to his holding official positions in a Protestant state. As a Catholic, Digby was barred from public office by the recusancy laws; as a nominal Protestant, he could receive commissions, hold monopolies, and participate fully in court life. The conversion enabled his appointment as a naval commander with official authority rather than the ambiguous status of a Catholic adventurer. It also demonstrated the pragmatic flexibility that characterized Digby's approach to confessional politics throughout his life. He was born Catholic, educated by Jesuits, and would return to Catholicism openly by the 1630s, eventually serving as chancellor to the Catholic Queen Henrietta Maria. The Protestant interlude of the late 1620s was a tactical accommodation to political reality, not a genuine change of conviction. This confessional flexibility made Digby simultaneously useful and suspect: useful because he could operate across the Catholic-Protestant divide, suspect because neither side fully trusted a man who changed his religion for advantage.",
+      "key_details": "Mid-1620s conversion; strategic motivation; enabled naval commission; recusancy laws obstacle; returned to Catholicism by 1630s; confessional flexibility",
+      "people": "Kenelm Digby, Charles I",
+      "places": "London",
+      "date_display": "c. 1626-1627",
+      "year": 1626,
+      "significance": "The Protestant conversion episode reveals the pragmatic dimension of Digby's courtier identity: willing to bend confessional allegiance to political necessity.",
+      "citation_ids": "cit_mosh_ch3_knighthood,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "thm_courtier_henrietta_chancellor",
+      "theme": "courtier_legal_thinker",
+      "title": "Chancellor to Queen Henrietta Maria in Exile",
+      "summary": "During the Civil War exile in Paris, Digby served as chancellor to Queen Henrietta Maria, the French-born Catholic wife of Charles I. The chancellorship was one of the most senior positions in the exiled court, giving Digby responsibility for managing the Queen's affairs, correspondence, and diplomacy. It was a role that suited his talents perfectly: he was multilingual, cosmopolitan, Catholic, and intimately familiar with French court culture from his years of travel and residence. The position also gave him access to the wider network of Catholic exile politics, including negotiations with the papacy, the French crown, and sympathetic European powers. Digby used his position to pursue his own diplomatic initiatives, including a mission to Rome in 1645 to seek papal support for the Royalist cause. The chancellorship was not merely ceremonial: Henrietta Maria was an active political figure who wielded significant influence over the Royalist faction, and her chancellor was involved in substantive decisions about policy, finance, and military support. For Digby, the position represented the culmination of his courtly career: the son of a Gunpowder Plotter had become the chief officer of the Queen of England, a triumph of personal rehabilitation that would have been unimaginable at the time of his father's execution.",
+      "key_details": "Chancellor to Henrietta Maria; Paris exile; managed Queen's affairs; Rome mission 1645; Catholic exile politics; personal rehabilitation",
+      "people": "Kenelm Digby, Henrietta Maria, Charles I",
+      "places": "Paris, Rome",
+      "date_display": "1640s-1650s",
+      "year": 1643,
+      "significance": "The chancellorship was the apex of Digby's political career, demonstrating that a Catholic intellectual could reach the highest levels of service even in exile.",
+      "citation_ids": "cit_miles_courtier_career,cit_mellick_courtier,cit_dobbs_1973_paris",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_cromwell",
+      "theme": "courtier_legal_thinker",
+      "title": "The Cromwell Relationship: Catholic Royalist Meets Lord Protector",
+      "summary": "One of the most remarkable aspects of Digby's political career was his relationship with Oliver Cromwell, the man who had overthrown and executed his king. After returning briefly to England in 1654, Digby met with Cromwell and established a working relationship that puzzled contemporaries and has puzzled historians since. Cromwell was interested in Digby's international connections, his knowledge of European courts, and possibly his alchemical expertise. Digby, for his part, needed to protect his remaining property and secure safe passage between England and the Continent. The relationship was transactional rather than ideological: neither man shared the other's political or religious convictions, but both saw advantages in cooperation. Digby reportedly discussed religious toleration with Cromwell, arguing for greater freedom for Catholics, a cause that Cromwell was more sympathetic to than many assumed. The relationship also reflected Digby's extraordinary capacity for personal connection across political divides. Marjorie Nicolson was exaggerating only slightly when she wrote that Digby knew everybody: his list of correspondents and personal contacts included Ben Jonson, Thomas Hobbes, Descartes, Mersenne, Fermat, Hartlib, John Winthrop Jr., Robert Boyle, Henrietta Maria, and now Oliver Cromwell.",
+      "key_details": "1654 meeting with Cromwell; transactional relationship; discussed religious toleration; international connections valued; property protection; political flexibility",
+      "people": "Kenelm Digby, Oliver Cromwell",
+      "places": "London",
+      "date_display": "1654-1658",
+      "year": 1654,
+      "significance": "The Cromwell relationship demonstrates Digby's extraordinary political adaptability, maintaining connections across the most fundamental divide in English politics.",
+      "citation_ids": "cit_miles_courtier_career,cit_piracy_article",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "thm_courtier_bibliophile",
+      "theme": "courtier_legal_thinker",
+      "title": "The Bibliophile Identity: Books as Cultural Capital",
+      "summary": "Digby was one of the great bibliophiles of seventeenth-century England, and his library functioned as a form of cultural capital that enhanced his standing at court and in intellectual circles. His collection began with the manuscripts inherited from his Oxford tutor Thomas Allen, who bequeathed him his burning glass and a quantity of extremely valuable manuscripts that later formed the core of Digby's donation to the Bodleian Library. Throughout his life, Digby systematically acquired books, manuscripts, and curiosities from across Europe, taking advantage of his travels and diplomatic connections to build one of the finest private collections in England. The 1680 Bibliotheca Digbeiana, the posthumous catalogue of his library, documents an extraordinary breadth of reading across theology, philosophy, natural science, alchemy, literature, and history in multiple languages. Digby's bibliophilia was not merely acquisitive but scholarly: as Principe's Strasbourg manuscripts show, he approached texts with the methods of a trained humanist, comparing variant readings, correcting scribal errors, and tracking textual transmission. His donation to the Bodleian, one of the most significant private gifts the library received in the seventeenth century, secured his posthumous reputation as a patron of learning and ensured that his collections would survive for future scholars.",
+      "key_details": "Allen manuscripts inheritance; Bodleian donation; 1680 Bibliotheca Digbeiana; humanist textual methods; multilingual collection; cultural capital",
+      "people": "Kenelm Digby, Thomas Allen",
+      "places": "Oxford, Bodleian Library, London, Paris",
+      "date_display": "1618-1665",
+      "year": 1618,
+      "significance": "Digby's library was both an intellectual resource and a political tool, demonstrating that books could be a form of power in early modern England.",
+      "citation_ids": "cit_miles_courtier_career,cit_mellick_courtier,cit_principe_manuscripts",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_civil_war_prison",
+      "theme": "courtier_legal_thinker",
+      "title": "Civil War Imprisonment at Winchester House",
+      "summary": "When the English Civil War broke out in 1642, Digby was arrested by Parliament and imprisoned at Winchester House in Southwark. His offenses were twofold: he was Catholic, and he was Royalist. The combination made him doubly suspect in the eyes of a Parliament increasingly hostile to both categories. However, his social standing and powerful friends ensured that his imprisonment was relatively comfortable by the standards of the time. He was allowed to establish a laboratory, receive visitors, and maintain correspondence. The imprisonment lasted until influential friends petitioned for his release, and Parliament allowed him to go into exile rather than face further confinement. Digby chose Paris, where the exiled Royalist court was gathering around Queen Henrietta Maria. The Winchester episode reveals the precarious position of Catholic intellectuals during the Civil War: too prominent to ignore, too well-connected to execute, but too Catholic and too Royalist to trust. Digby's ability to transform his prison into a functioning laboratory was characteristic of his refusal to let circumstances dictate his activities. Even in captivity, he pursued the experimental investigations that defined his intellectual life.",
+      "key_details": "1642 arrest; Winchester House Southwark; Catholic and Royalist; privileged conditions; laboratory in prison; petitioned release; exile to Paris",
+      "people": "Kenelm Digby",
+      "places": "Winchester House, Southwark, London",
+      "date_display": "1642-1643",
+      "year": 1642,
+      "significance": "The imprisonment crystallizes Digby's dual identity as political actor and natural philosopher, showing how he maintained intellectual productivity under political constraint.",
+      "citation_ids": "cit_dobbs_1973_civil_war,cit_miles_courtier_career",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_courtier_restoration_rs",
+      "theme": "courtier_legal_thinker",
+      "title": "Restoration Return and the Royal Society",
+      "summary": "The Restoration of Charles II in 1660 allowed Digby to return to England after years of exile, and he quickly established himself as a prominent figure in Restoration intellectual life. He became a founding member of the Royal Society, the institution that would define English science for centuries. His election was natural: he was one of the most experienced experimental philosophers in England, with decades of laboratory work and a vast international network of scientific contacts. He delivered his lecture on the Vegetation of Plants at Gresham College in January 1661, one of the earliest formal presentations to the Society. He also engaged with the younger generation of natural philosophers, particularly Robert Boyle, to whom he gave numerous alchemical manuscripts. Digby's Restoration return was not merely a political homecoming but an intellectual one: he was reunited with the institutional framework that his earlier work at Gresham College had anticipated. He also received Privy Council appointment, confirming his rehabilitation as a trusted figure in public life. The Royal Society appointment was the final chapter of a career that had traversed piracy, alchemy, imprisonment, exile, and every major political upheaval of the seventeenth century. Digby died on his birthday, 11 June 1665, and bequeathed his library to the Bodleian.",
+      "key_details": "1660 return; founding Royal Society member; Vegetation of Plants lecture; Boyle manuscripts; Privy Council; died 11 June 1665; Bodleian bequest",
+      "people": "Kenelm Digby, Charles II, Robert Boyle",
+      "places": "London, Gresham College, Oxford",
+      "date_display": "1660-1665",
+      "year": 1660,
+      "significance": "The Restoration return brought Digby's career full circle, from the son of a traitor to a founding member of England's most prestigious scientific institution.",
+      "citation_ids": "cit_miles_courtier_career,cit_mellick_courtier,cit_dobbs_1973_lefevre",
       "source_method": "CORPUS_EXTRACTION",
       "review_status": "DRAFT",
       "confidence": "HIGH"
@@ -454,6 +582,321 @@
       "quote_fragment": null,
       "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
       "created_at": "2026-03-22T22:09:27.478206"
+    },
+    {
+      "id": "cit_hp_intro_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 1-10",
+      "quote_fragment": null,
+      "context": "Introduction to the HP, the BL copy, Jonson's ownership, three hands",
+      "created_at": "2026-03-23T19:18:33.680425"
+    },
+    {
+      "id": "cit_hp_methodology_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 11-24",
+      "quote_fragment": null,
+      "context": "Methodology for distinguishing three annotating hands",
+      "created_at": "2026-03-23T19:18:33.685989"
+    },
+    {
+      "id": "cit_hp_implications_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 44",
+      "quote_fragment": null,
+      "context": "Significance of the Digby attribution for scholarship",
+      "created_at": "2026-03-23T19:18:33.691573"
+    },
+    {
+      "id": "cit_life_intro_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Biographical overview framing Digby's life",
+      "created_at": "2026-03-23T19:18:33.697389"
+    },
+    {
+      "id": "cit_life_intro_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's career and accomplishments",
+      "created_at": "2026-03-23T19:18:33.703300"
+    },
+    {
+      "id": "cit_life_phase_youth_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1",
+      "quote_fragment": null,
+      "context": "Youth phase: Gayhurst, father's execution, Venetia, Napier",
+      "created_at": "2026-03-23T19:18:33.709640"
+    },
+    {
+      "id": "cit_life_phase_tour_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour phase: Florence, Siena, Madrid",
+      "created_at": "2026-03-23T19:18:33.716010"
+    },
+    {
+      "id": "cit_life_phase_voyage_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapters 4-8",
+      "quote_fragment": null,
+      "context": "Voyage phase: Mediterranean expedition 1628-1629",
+      "created_at": "2026-03-23T19:18:33.723733"
+    },
+    {
+      "id": "cit_life_phase_exile_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Exile phase: Paris, Civil War, alchemy, Royal Society",
+      "created_at": "2026-03-23T19:18:33.730121"
+    },
+    {
+      "id": "cit_life_works_intro",
+      "source_document_id": "sdoc_georgescu",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's major published works",
+      "created_at": "2026-03-23T19:18:33.735625"
+    },
+    {
+      "id": "cit_mosh_ch4_commission",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": null,
+      "context": "Royal commission, fleet assembly, Buckingham obstruction",
+      "created_at": "2026-03-23T19:19:22.182241"
+    },
+    {
+      "id": "cit_mosh_ch4_plague",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4, late January 1628",
+      "quote_fragment": null,
+      "context": "Plague striking the fleet in the Mediterranean",
+      "created_at": "2026-03-23T19:19:22.186697"
+    },
+    {
+      "id": "cit_mosh_ch5_algiers_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 5",
+      "quote_fragment": null,
+      "context": "Full account of Algiers stay, slave liberation, resupply",
+      "created_at": "2026-03-23T19:19:22.191010"
+    },
+    {
+      "id": "cit_mosh_ch6_prizes",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 6",
+      "quote_fragment": null,
+      "context": "Prize captures, economics of privateering",
+      "created_at": "2026-03-23T19:19:22.195087"
+    },
+    {
+      "id": "cit_mosh_ch7_scanderoon_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": null,
+      "context": "Battle of Scanderoon, Venetian response, diplomatic crisis",
+      "created_at": "2026-03-23T19:19:22.199223"
+    },
+    {
+      "id": "cit_mosh_ch7_heliodorus",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7, late July 1628",
+      "quote_fragment": null,
+      "context": "Becalmed off Egypt, reading Heliodorus",
+      "created_at": "2026-03-23T19:19:22.203352"
+    },
+    {
+      "id": "cit_mosh_ch8_aftermath",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Return, diplomatic fallout, Venetian propaganda",
+      "created_at": "2026-03-23T19:19:22.207862"
+    },
+    {
+      "id": "cit_piracy_article",
+      "source_document_id": "sdoc_32708346",
+      "excerpt_id": null,
+      "page_or_location": "pp. 424-483",
+      "quote_fragment": null,
+      "context": "Moshenska article on piracy and lived romance",
+      "created_at": "2026-03-23T19:19:22.211815"
+    },
+    {
+      "id": "cit_dobbs_1973_gresham",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 143-148",
+      "quote_fragment": null,
+      "context": "Digby at Gresham College after Venetia's death, laboratory inventory",
+      "created_at": "2026-03-23T19:19:22.215749"
+    },
+    {
+      "id": "cit_dobbs_1973_winchester",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Experiments during Winchester imprisonment 1642, glass manufacture",
+      "created_at": "2026-03-23T19:19:22.219410"
+    },
+    {
+      "id": "cit_dobbs_1973_paris",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 150-157",
+      "quote_fragment": null,
+      "context": "Paris exile, Evelyn visit, Le Fevre, Hartlib circle",
+      "created_at": "2026-03-23T19:19:22.223574"
+    },
+    {
+      "id": "cit_dobbs_1973_lefevre",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 155-160",
+      "quote_fragment": null,
+      "context": "Le Fevre's influence on Digby, Universal Spirit, mercury theory",
+      "created_at": "2026-03-23T19:19:22.228437"
+    },
+    {
+      "id": "cit_dobbs_1974_secrets",
+      "source_document_id": "sdoc_c5b22c27",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-28",
+      "quote_fragment": null,
+      "context": "Chymical Secrets analysis, operational alchemy, Hartman publication",
+      "created_at": "2026-03-23T19:19:22.232941"
+    },
+    {
+      "id": "cit_principe_paris_circle",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 3-24",
+      "quote_fragment": null,
+      "context": "Strasbourg manuscripts, Paris alchemical circle, 5000 pages",
+      "created_at": "2026-03-23T19:19:22.237632"
+    },
+    {
+      "id": "cit_principe_manuscripts",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 6-10",
+      "quote_fragment": null,
+      "context": "Digby's textual criticism of alchemical manuscripts",
+      "created_at": "2026-03-23T19:19:22.244410"
+    },
+    {
+      "id": "cit_principe_dubois",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 10-15",
+      "quote_fragment": null,
+      "context": "Noel Picard/Dubois transmutation accounts in Digby manuscripts",
+      "created_at": "2026-03-23T19:19:22.251603"
+    },
+    {
+      "id": "cit_hedrick_powder",
+      "source_document_id": "sdoc_b03434d3",
+      "excerpt_id": null,
+      "page_or_location": "pp. 161-185",
+      "quote_fragment": null,
+      "context": "Powder of Sympathy, Montpellier lecture, priority claims",
+      "created_at": "2026-03-23T19:19:22.257989"
+    },
+    {
+      "id": "cit_lobis_sympathy",
+      "source_document_id": "sdoc_4a8b454c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 243-260",
+      "quote_fragment": null,
+      "context": "Power of Sympathy, moral philosophy, mechanistic explanation",
+      "created_at": "2026-03-23T19:19:22.263679"
+    },
+    {
+      "id": "cit_georgescu_philosophy",
+      "source_document_id": "sdoc_dee89fe4",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Digby's philosophical work, Two Treatises, corpuscular theory",
+      "created_at": "2026-03-23T19:19:22.269390"
+    },
+    {
+      "id": "cit_miles_courtier_career",
+      "source_document_id": "sdoc_4a0dcb55",
+      "excerpt_id": null,
+      "page_or_location": "pp. 119-128",
+      "quote_fragment": null,
+      "context": "Overview of Digby's courtier career, political maneuvering",
+      "created_at": "2026-03-23T19:19:22.275382"
+    },
+    {
+      "id": "cit_mellick_courtier",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "pp. 911-914",
+      "quote_fragment": null,
+      "context": "Digby's versatile career, knighthood, Privy Council, Royal Society",
+      "created_at": "2026-03-23T19:19:22.280672"
+    },
+    {
+      "id": "cit_mosh_ch2_grand_tour_court",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour, Madrid, meeting Prince Charles, court connections",
+      "created_at": "2026-03-23T19:19:22.287063"
+    },
+    {
+      "id": "cit_mosh_ch3_knighthood",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "Knighthood, London political life, Buckingham rivalry",
+      "created_at": "2026-03-23T19:19:22.295610"
+    },
+    {
+      "id": "cit_dobbs_1973_civil_war",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Civil War imprisonment at Winchester House",
+      "created_at": "2026-03-23T19:19:22.302133"
+    },
+    {
+      "id": "cit_mellick_duel",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "p. 913",
+      "quote_fragment": null,
+      "context": "Duel with Mont le Ros in Paris, 1641",
+      "created_at": "2026-03-23T19:19:22.308330"
     }
   ]
 }

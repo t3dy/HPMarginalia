@@ -151,6 +151,18 @@ def init_db(db_path: str = None):
         page_or_location TEXT,
         notes TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS page_sections (
+        id TEXT PRIMARY KEY,
+        page TEXT NOT NULL,
+        section_key TEXT NOT NULL,
+        title TEXT,
+        body TEXT NOT NULL,
+        position INTEGER DEFAULT 0,
+        citation_ids TEXT,
+        source_method TEXT DEFAULT 'LLM_ASSISTED',
+        review_status TEXT DEFAULT 'DRAFT'
+    );
     """)
 
     conn.commit()

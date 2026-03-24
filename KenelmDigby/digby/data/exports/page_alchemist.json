@@ -36,7 +36,7 @@
       "id": "thm_alch_napier",
       "theme": "alchemist_natural_philosopher",
       "title": "Early Alchemical Education with Richard Napier",
-      "summary": "Digby's first introduction to alchemy and natural philosophy came through his tutor Richard Napier, a physician-priest at Great Linford. Napier practiced astrology, alchemy, and spirit-conjuring alongside conventional medicine. He cast Digby's horoscope, taught him herbal lore, and demonstrated that empirical observation and occult philosophy could work hand in hand.",
+      "summary": "Digby's first introduction to alchemy and natural philosophy came through his tutor Richard Napier, a physician-priest at Great Linford in Buckinghamshire. Napier, known locally as Parson Sandie, was a remarkable figure who combined conventional medical practice with astrology, alchemy, and spirit-conjuring. He maintained an extensive library and a network of astrological clients that included some of the most prominent families in Buckinghamshire. Napier cast Digby's horoscope, taught him herbal lore and botanical medicine, and demonstrated that empirical observation and occult philosophy could work hand in hand. The young Kenelm borrowed whole cloak-bags of books from Napier's library, developing the voracious reading habits that would define his intellectual life. Napier's influence on Digby was profound and lasting. The integration of empirical and occult approaches to nature that characterized Digby's mature philosophy can be traced directly to Napier's example. Where later natural philosophers would draw sharp lines between legitimate science and illegitimate magic, Napier modeled a practice in which astrology, medicine, alchemy, and natural philosophy formed a coherent whole. Digby absorbed this integrative approach and never fully abandoned it, even as he engaged with the mechanical philosophies of Descartes and Gassendi in the 1640s and 1650s. Napier also introduced Digby to the concept of sympathetic forces connecting distant objects, an idea that would later find expression in the Powder of Sympathy and in the alchemical marginalia attributed to Digby in the Hypnerotomachia.",
       "key_details": "Napier practiced astrology and alchemy; cast Digby's horoscope; taught botanical and chemical medicine; demonstrated integration of empirical and occult methods",
       "people": "Kenelm Digby, Richard Napier",
       "places": "Great Linford, Buckinghamshire",
@@ -63,6 +63,150 @@
       "source_method": "CORPUS_EXTRACTION",
       "review_status": "DRAFT",
       "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_two_treatises",
+      "theme": "alchemist_natural_philosopher",
+      "title": "Two Treatises: Of Bodies and Of Man's Soul (1644)",
+      "summary": "Digby published his major philosophical work in Paris in 1644, during the Civil War exile that had driven him from England. The Two Treatises attempted nothing less than a comprehensive account of the natural world and the human soul, reconciling Catholic theology with contemporary natural philosophy. The first treatise, Of Bodies, developed a corpuscular theory of matter that drew on both Aristotelian and atomistic traditions. Digby argued that all physical phenomena could be explained by the motions and interactions of minute particles, a position that aligned him with the emerging mechanical philosophy while retaining elements of older Aristotelian thought. The second treatise, Of Man's Soul, argued for the immortality of the rational soul on philosophical grounds, seeking to demonstrate that the soul's capacity for abstract thought proved it could not be merely material. This was a deeply Catholic argument, designed to show that natural philosophy supported rather than undermined orthodox theology. The Two Treatises were widely read and debated. Alexander Ross published a critical response, and Thomas Hobbes, who had known Digby in Paris, engaged with his arguments. The work established Digby as a serious philosophical thinker, not merely an adventurer or courtier, and it remains his most sustained intellectual achievement.",
+      "key_details": "Published Paris 1644; corpuscular theory; Aristotelian and atomistic synthesis; immortality of soul argument; Ross critique; Hobbes engagement",
+      "people": "Kenelm Digby, Alexander Ross, Thomas Hobbes",
+      "places": "Paris",
+      "date_display": "1644",
+      "year": 1644,
+      "significance": "The Two Treatises positioned Digby at the intersection of Catholic theology and mechanical philosophy, a combination unique in seventeenth-century England.",
+      "citation_ids": "cit_georgescu_philosophy,cit_dobbs_1973_paris",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_powder_sympathy",
+      "theme": "alchemist_natural_philosopher",
+      "title": "The Powder of Sympathy Lectures at Montpellier",
+      "summary": "In 1657, while travelling in southern France for treatment of his bladder stone, Digby delivered a celebrated lecture at the Academy of Sciences at Montpellier on the Powder of Sympathy, a simple compound of vitriol (iron sulphate) that purportedly healed wounds at a distance when applied to a bloodied cloth rather than the wound itself. The lecture, published in Paris and London in 1658 as A Late Discourse, went through over forty editions in French, English, Latin, Dutch, and German. Digby's account was distinctive because he offered a mechanistic explanation for the cure's operation: he argued that atoms of blood carried to the powder were combined with curative atoms of vitriol and then attracted back to the wound by sympathy, eliminating the need for astral or spiritual agencies invoked by earlier defenders of the weapon-salve like Robert Fludd. As Hedrick has shown, Digby also claimed priority for introducing the powdered form of the cure to Europe, telling the story of his cure of James Howell's wounded hand as foundational evidence. This priority claim was almost certainly false, as contemporaries recognized, but the rhetorical skill with which Digby presented it made the Late Discourse enormously influential. The practical effect of the powder was probably beneficial: by keeping the actual wound clean and free of the caustic ointments that conventional medicine applied, it allowed natural healing to proceed.",
+      "key_details": "1657 Montpellier lecture; vitriol powder; 40+ editions; mechanistic atomistic explanation; James Howell cure story; priority claim contested by Hedrick",
+      "people": "Kenelm Digby, James Howell, Robert Fludd",
+      "places": "Montpellier, Paris, London",
+      "date_display": "1657-1658",
+      "year": 1657,
+      "significance": "The Powder of Sympathy was Digby's most famous single contribution to natural philosophy, demonstrating his ability to present occult phenomena in mechanistic terms.",
+      "citation_ids": "cit_hedrick_powder,cit_lobis_sympathy,cit_mellick_courtier",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_lefevre_paris",
+      "theme": "alchemist_natural_philosopher",
+      "title": "Le Fevre's Influence and the Paris Alchemical Circle",
+      "summary": "During his extended residences in Paris in the 1650s, Digby came under the influence of Nicolas Le Fevre (Nicasius le Febvre), a distinguished chemist who served as demonstrator at the Jardin du Roi. Le Fevre's teaching systematized alchemical practice and connected it to the emerging discipline of rational chemistry. Through Le Fevre, Digby absorbed the concept of the Universal Spirit, a subtle fluid that permeated all matter and could be manipulated through chemical operations. This concept became central to Digby's mature alchemy, as expressed in his 1660 lecture on the Vegetation of Plants and in the marginalia attributed to him in the British Library Hypnerotomachia Poliphili. Le Fevre also introduced Digby to the work of Jean d'Espagnet, whose writings on the Philosophers' Stone and the universal spirit informed Digby's identification of Mercury as the master element. As Principe's discovery of the Strasbourg manuscripts has shown, Digby was part of a substantial alchemical circle in Paris during this period, trading manuscripts and information with collaborators including Samuel Cottereau Duclos and others connected to the French scientific community. This circle was not a marginal occult gathering but overlapped with the learned societies that would later become the Academie des Sciences.",
+      "key_details": "Le Fevre demonstrator Jardin du Roi; Universal Spirit concept; d'Espagnet influence; Mercury as master element; Principe Strasbourg discovery; Duclos collaboration",
+      "people": "Kenelm Digby, Nicolas Le Fevre, Jean d'Espagnet, Samuel Cottereau Duclos",
+      "places": "Paris, Jardin du Roi",
+      "date_display": "1650s",
+      "year": 1651,
+      "significance": "Le Fevre's influence represents the crucial transition in Digby's alchemy from inherited Hermetic tradition to systematic experimental philosophy.",
+      "citation_ids": "cit_dobbs_1973_lefevre,cit_principe_paris_circle",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_chymical_secrets",
+      "theme": "alchemist_natural_philosopher",
+      "title": "Chymical Secrets: The Posthumous Book of Recipes",
+      "summary": "In 1682, seventeen years after Digby's death, his servant and laboratory assistant George Hartman published A Choice Collection of Rare Chymical Secrets, compiled from Digby's manuscripts. The book provides a rich sample of mid-seventeenth-century alchemy and chemical pharmacy. Hartman, who had served Digby for several years in both France and England, translated most of the secrets from Latin, French, German, and Italian, testifying to the international scope of Digby's alchemical network. The book is divided into two sections: the first largely devoted to alchemical recipes and processes for metallic transmutation, the second to medicines and cosmetics. As Dobbs has demonstrated, the collection is remarkable for its operational clarity. Starting materials are described precisely, quantities are specified for each step, and the necessary degrees of fire are delineated. Many processes can be translated into modern chemical terminology. Digby's own favorite recipe involved the fixation of mercury using a powder that he had demonstrated before Charles I. The book also contains the recipe for engendering crayfishes through palingenesis, dating from the Gresham College period of the 1630s, and various pharmaceutical preparations collected during the Paris years. The experimental nature of the collection cannot be emphasized too strongly: these are operational instructions, not mystical allegory.",
+      "key_details": "Published 1682 by Hartman; translated from four languages; operational clarity; mercury fixation; palingenesis; medicines and cosmetics",
+      "people": "Kenelm Digby, George Hartman, Charles I",
+      "places": "London, Paris",
+      "date_display": "1682 (recipes from 1630s-1660s)",
+      "year": 1682,
+      "significance": "The Chymical Secrets demonstrates that Digby's alchemy was empirical and operational, not merely theoretical, making it a key document in the history of experimental chemistry.",
+      "citation_ids": "cit_dobbs_1974_secrets,cit_miles_courtier_career",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_gresham_experiments",
+      "theme": "alchemist_natural_philosopher",
+      "title": "Experiments at Gresham College After Venetia's Death",
+      "summary": "After the sudden death of his wife Venetia on 1 May 1633, Digby withdrew from public life and retreated to Gresham College in London, where he spent roughly two years in intense grief and scholarly seclusion. As Aubrey recorded, he wore a long mourning cloak, a high-crowned hat, and left his beard unshorn, looking like a hermit in signs of sorrow. But this period of mourning was also intensely productive. Digby established a large laboratory at Gresham under the lodgings of the Divinity Reader, with his own quarters at the end of the great gallery. A 1648 inventory of the laboratory, discovered by Wilkinson among the Hartlib Papers, reveals an impressive array of equipment: reverberating and calcining ovens, a balneum Mariae (water bath), sand and retort furnaces, an athanor (digestion furnace), twenty alembic bodies of several sizes, grinding stones, glass funnels, a screw press, and copper stills with refrigerators. Digby devoted much of his time to experiments on palingenesis, the attempt to revive or resurrect plants and animals from their calcined ashes. He successfully produced the form of calcined crayfishes and claimed to regenerate living animals from their ashes by feeding them ox-blood. The concept of palingenesis was intimately connected in Digby's mind to the Christian doctrine of the Resurrection of the Body, given particular emotional force by Venetia's death.",
+      "key_details": "1633-1635 at Gresham; elaborate laboratory inventory; palingenesis experiments; crayfish resurrection; mourning period; Hermetic and Christian synthesis",
+      "people": "Kenelm Digby, Venetia Stanley, Hans Hunneades",
+      "places": "Gresham College, London",
+      "date_display": "1633-1635",
+      "year": 1633,
+      "significance": "The Gresham period shows how personal grief catalyzed Digby's most intense experimental work, connecting alchemy to his deepest emotional and theological concerns.",
+      "citation_ids": "cit_dobbs_1973_gresham,cit_miles_courtier_career",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_winchester_prison",
+      "theme": "alchemist_natural_philosopher",
+      "title": "Alchemy During Winchester Imprisonment",
+      "summary": "In 1642, as Civil War broke out, Parliament imprisoned Digby at Winchester House, the former episcopal palace of Lancelot Andrewes in Southwark. As a Catholic Royalist, Digby was doubly suspect, but his social standing earned him privileged conditions of confinement. He established a laboratory within Winchester House and hired John Colnett, a worker from a nearby glass factory, as his operator. Together they developed an improved method for manufacturing glass bottles, a contribution to practical chemistry that only came to light in 1662 when Colnett applied for a patent and was opposed by other glass workers who knew the process to have been Digby's invention. The Attorney-General was convinced that Digby had first invented glass bottles nearly thirty years earlier and had employed Colnett to make them. Digby's work on glassware addressed a serious practical problem: available glass was of very poor quality, and defective vessels negated many experimental results or broke at crucial points. His improvements represented a very practical effort to raise the operational standards of chemical experimentation. The Winchester period also saw Digby continue his alchemical studies, likely working on processes later recorded in the Chymical Secrets.",
+      "key_details": "Winchester House 1642; privileged imprisonment; John Colnett glass operator; glass bottle improvements; 1662 patent dispute; practical chemistry",
+      "people": "Kenelm Digby, John Colnett",
+      "places": "Winchester House, Southwark",
+      "date_display": "1642-1643",
+      "year": 1642,
+      "significance": "The Winchester imprisonment shows Digby pursuing practical chemistry even in captivity, and his glass innovations had lasting industrial significance.",
+      "citation_ids": "cit_dobbs_1973_winchester,cit_dobbs_1973_civil_war",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_vegetation_plants",
+      "theme": "alchemist_natural_philosopher",
+      "title": "The Vegetation of Plants: Royal Society Lecture (1661)",
+      "summary": "On 23 January 1661, Digby delivered a notable lecture to the newly formed Royal Society at Gresham College on the vegetation of plants, published that same year as A Discourse Concerning the Vegetation of Plants. The lecture synthesized his decades of alchemical thinking into a systematic account of plant growth. Digby argued that plants drew their nourishment from a universal spirit or saltpetre distributed through the air and soil, a concept he had absorbed from Le Fevre and d'Espagnet during his Paris years. He claimed that gold was of the same nature as the aethereal spirit, or rather was nothing but that spirit first corporified in a pure place, an assertion that connected plant biology to alchemical transmutation through the concept of a universal matter. The lecture drew on his personal experience: he described his earlier laboratory at Gresham College and experiments he had conducted on plant nutrition using controlled soil conditions. The discourse was well received by the Society, whose members were eager for systematic accounts of natural processes. It represented Digby's mature natural philosophy: empirical in method, alchemical in theory, and confident that observable phenomena could be explained by the motions and transformations of a universal material spirit.",
+      "key_details": "23 January 1661; Royal Society at Gresham; universal spirit/saltpetre; gold = aethereal spirit corporified; plant nutrition experiments; Le Fevre influence",
+      "people": "Kenelm Digby, Nicolas Le Fevre",
+      "places": "Gresham College, London",
+      "date_display": "23 January 1661",
+      "year": 1661,
+      "significance": "The Vegetation lecture was Digby's last major scientific contribution, representing the synthesis of his alchemical and philosophical thinking before the Royal Society.",
+      "citation_ids": "cit_dobbs_1973_lefevre,cit_miles_courtier_career,cit_mellick_courtier",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_strasbourg_manuscripts",
+      "theme": "alchemist_natural_philosopher",
+      "title": "The Strasbourg Manuscripts: 5,000 Pages of Alchemical Practice",
+      "summary": "In 2010, Lawrence Principe discovered eleven manuscripts in the Bibliotheque Nationale et Universitaire de Strasbourg that are unambiguously identifiable as Digby's by his characteristic handwriting. These manuscripts comprise over five thousand pages of material, almost entirely relating to metallic transmutation. One volume was magnificently bound in fine leather bearing a gilt fleur-de-lis and Digby's monogram KD in gold on the spine. The manuscripts reveal Digby's method of collecting and reading alchemical texts: he strove to achieve the most accurate and complete text of materials within the manuscript tradition, employing scribes to copy works and then meticulously comparing copies against originals and other manuscripts, noting variant readings in extensive autograph marginalia. This was the method of a trained humanist applied to alchemical literature. The manuscripts also contain transcripts from the otherwise lost notebooks of Joseph Du Chesne and Samuel Cottereau Duclos, including letters from Johann Rudolf Glauber datable to late 1651. They document a circle of alchemical collaborators active in Paris during the 1650s and 1660s, trading manuscripts and information and collaborating on projects ranging from the Philosophers' Stone to chemical medicines. The discovery transformed understanding of Digby's alchemy from a minor eccentricity to a major commitment.",
+      "key_details": "Principe 2010 discovery; 11 manuscripts; 5000+ pages; transmutation focus; humanist textual criticism; Glauber letters 1651; Paris circle documented",
+      "people": "Kenelm Digby, Lawrence Principe, Samuel Cottereau Duclos, Johann Rudolf Glauber",
+      "places": "Strasbourg, Paris",
+      "date_display": "1650s-1660s (discovered 2010)",
+      "year": 1652,
+      "significance": "The Strasbourg discovery is the most important single advance in Digby studies in decades, revealing the scale and seriousness of his alchemical commitment.",
+      "citation_ids": "cit_principe_paris_circle,cit_principe_manuscripts",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "thm_alch_closet_recipes",
+      "theme": "alchemist_natural_philosopher",
+      "title": "The Closet of Sir Kenelm Digby Opened: Recipes and Domestic Chemistry",
+      "summary": "Published posthumously in 1669, The Closet of Sir Kenelm Digby Opened is a recipe collection that sits at the intersection of alchemy, medicine, and domestic economy. The book contains recipes for meads, metheglin (spiced mead), ales, wines, cordials, conserves, and medicinal preparations, many of them collected during Digby's travels across Europe. Unlike the Chymical Secrets, which aimed at metallic transmutation, the Closet focuses on the transformation of organic materials through fermentation, distillation, and infusion. Yet the underlying principles are the same: careful observation of processes, precise specification of quantities and conditions, and confidence that natural transformations can be controlled and directed through human skill. Several recipes involve sophisticated chemical processes, including the preparation of cordials that required distillation and rectification. The Closet has been reprinted numerous times and has attracted attention from food historians as one of the earliest English cookbooks by a named male author. But it should also be understood as an extension of Digby's alchemical practice into the domestic sphere, applying the same experimental sensibility to food and drink that he brought to the laboratory.",
+      "key_details": "Published 1669 posthumously; meads, metheglin, ales, cordials; collected across Europe; fermentation and distillation; food history significance",
+      "people": "Kenelm Digby",
+      "places": "London, Paris, various European courts",
+      "date_display": "1669 (recipes collected 1620s-1660s)",
+      "year": 1669,
+      "significance": "The Closet reveals that Digby's experimental sensibility extended beyond the laboratory into everyday life, making him a pioneer of systematic recipe literature.",
+      "citation_ids": "cit_miles_courtier_career,cit_mellick_courtier",
+      "source_method": "CORPUS_EXTRACTION",
+      "review_status": "DRAFT",
+      "confidence": "MEDIUM"
     }
   ],
   "citations": [
@@ -470,6 +614,321 @@
       "quote_fragment": null,
       "context": "Return, marriage, voyage, Scanderoon, Milo postscript",
       "created_at": "2026-03-22T22:09:27.478206"
+    },
+    {
+      "id": "cit_hp_intro_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 1-10",
+      "quote_fragment": null,
+      "context": "Introduction to the HP, the BL copy, Jonson's ownership, three hands",
+      "created_at": "2026-03-23T19:18:33.680425"
+    },
+    {
+      "id": "cit_hp_methodology_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slides 11-24",
+      "quote_fragment": null,
+      "context": "Methodology for distinguishing three annotating hands",
+      "created_at": "2026-03-23T19:18:33.685989"
+    },
+    {
+      "id": "cit_hp_implications_russell",
+      "source_document_id": "sdoc_russell_pptx",
+      "excerpt_id": null,
+      "page_or_location": "Slide 44",
+      "quote_fragment": null,
+      "context": "Significance of the Digby attribution for scholarship",
+      "created_at": "2026-03-23T19:18:33.691573"
+    },
+    {
+      "id": "cit_life_intro_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Biographical overview framing Digby's life",
+      "created_at": "2026-03-23T19:18:33.697389"
+    },
+    {
+      "id": "cit_life_intro_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's career and accomplishments",
+      "created_at": "2026-03-23T19:18:33.703300"
+    },
+    {
+      "id": "cit_life_phase_youth_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 1",
+      "quote_fragment": null,
+      "context": "Youth phase: Gayhurst, father's execution, Venetia, Napier",
+      "created_at": "2026-03-23T19:18:33.709640"
+    },
+    {
+      "id": "cit_life_phase_tour_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour phase: Florence, Siena, Madrid",
+      "created_at": "2026-03-23T19:18:33.716010"
+    },
+    {
+      "id": "cit_life_phase_voyage_moshenska",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapters 4-8",
+      "quote_fragment": null,
+      "context": "Voyage phase: Mediterranean expedition 1628-1629",
+      "created_at": "2026-03-23T19:18:33.723733"
+    },
+    {
+      "id": "cit_life_phase_exile_miles",
+      "source_document_id": "sdoc_miles",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Exile phase: Paris, Civil War, alchemy, Royal Society",
+      "created_at": "2026-03-23T19:18:33.730121"
+    },
+    {
+      "id": "cit_life_works_intro",
+      "source_document_id": "sdoc_georgescu",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Overview of Digby's major published works",
+      "created_at": "2026-03-23T19:18:33.735625"
+    },
+    {
+      "id": "cit_mosh_ch4_commission",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4",
+      "quote_fragment": null,
+      "context": "Royal commission, fleet assembly, Buckingham obstruction",
+      "created_at": "2026-03-23T19:19:22.182241"
+    },
+    {
+      "id": "cit_mosh_ch4_plague",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 4, late January 1628",
+      "quote_fragment": null,
+      "context": "Plague striking the fleet in the Mediterranean",
+      "created_at": "2026-03-23T19:19:22.186697"
+    },
+    {
+      "id": "cit_mosh_ch5_algiers_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 5",
+      "quote_fragment": null,
+      "context": "Full account of Algiers stay, slave liberation, resupply",
+      "created_at": "2026-03-23T19:19:22.191010"
+    },
+    {
+      "id": "cit_mosh_ch6_prizes",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 6",
+      "quote_fragment": null,
+      "context": "Prize captures, economics of privateering",
+      "created_at": "2026-03-23T19:19:22.195087"
+    },
+    {
+      "id": "cit_mosh_ch7_scanderoon_full",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7",
+      "quote_fragment": null,
+      "context": "Battle of Scanderoon, Venetian response, diplomatic crisis",
+      "created_at": "2026-03-23T19:19:22.199223"
+    },
+    {
+      "id": "cit_mosh_ch7_heliodorus",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 7, late July 1628",
+      "quote_fragment": null,
+      "context": "Becalmed off Egypt, reading Heliodorus",
+      "created_at": "2026-03-23T19:19:22.203352"
+    },
+    {
+      "id": "cit_mosh_ch8_aftermath",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 8",
+      "quote_fragment": null,
+      "context": "Return, diplomatic fallout, Venetian propaganda",
+      "created_at": "2026-03-23T19:19:22.207862"
+    },
+    {
+      "id": "cit_piracy_article",
+      "source_document_id": "sdoc_32708346",
+      "excerpt_id": null,
+      "page_or_location": "pp. 424-483",
+      "quote_fragment": null,
+      "context": "Moshenska article on piracy and lived romance",
+      "created_at": "2026-03-23T19:19:22.211815"
+    },
+    {
+      "id": "cit_dobbs_1973_gresham",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 143-148",
+      "quote_fragment": null,
+      "context": "Digby at Gresham College after Venetia's death, laboratory inventory",
+      "created_at": "2026-03-23T19:19:22.215749"
+    },
+    {
+      "id": "cit_dobbs_1973_winchester",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Experiments during Winchester imprisonment 1642, glass manufacture",
+      "created_at": "2026-03-23T19:19:22.219410"
+    },
+    {
+      "id": "cit_dobbs_1973_paris",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 150-157",
+      "quote_fragment": null,
+      "context": "Paris exile, Evelyn visit, Le Fevre, Hartlib circle",
+      "created_at": "2026-03-23T19:19:22.223574"
+    },
+    {
+      "id": "cit_dobbs_1973_lefevre",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 155-160",
+      "quote_fragment": null,
+      "context": "Le Fevre's influence on Digby, Universal Spirit, mercury theory",
+      "created_at": "2026-03-23T19:19:22.228437"
+    },
+    {
+      "id": "cit_dobbs_1974_secrets",
+      "source_document_id": "sdoc_c5b22c27",
+      "excerpt_id": null,
+      "page_or_location": "pp. 1-28",
+      "quote_fragment": null,
+      "context": "Chymical Secrets analysis, operational alchemy, Hartman publication",
+      "created_at": "2026-03-23T19:19:22.232941"
+    },
+    {
+      "id": "cit_principe_paris_circle",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 3-24",
+      "quote_fragment": null,
+      "context": "Strasbourg manuscripts, Paris alchemical circle, 5000 pages",
+      "created_at": "2026-03-23T19:19:22.237632"
+    },
+    {
+      "id": "cit_principe_manuscripts",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 6-10",
+      "quote_fragment": null,
+      "context": "Digby's textual criticism of alchemical manuscripts",
+      "created_at": "2026-03-23T19:19:22.244410"
+    },
+    {
+      "id": "cit_principe_dubois",
+      "source_document_id": "sdoc_3ce83ddc",
+      "excerpt_id": null,
+      "page_or_location": "pp. 10-15",
+      "quote_fragment": null,
+      "context": "Noel Picard/Dubois transmutation accounts in Digby manuscripts",
+      "created_at": "2026-03-23T19:19:22.251603"
+    },
+    {
+      "id": "cit_hedrick_powder",
+      "source_document_id": "sdoc_b03434d3",
+      "excerpt_id": null,
+      "page_or_location": "pp. 161-185",
+      "quote_fragment": null,
+      "context": "Powder of Sympathy, Montpellier lecture, priority claims",
+      "created_at": "2026-03-23T19:19:22.257989"
+    },
+    {
+      "id": "cit_lobis_sympathy",
+      "source_document_id": "sdoc_4a8b454c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 243-260",
+      "quote_fragment": null,
+      "context": "Power of Sympathy, moral philosophy, mechanistic explanation",
+      "created_at": "2026-03-23T19:19:22.263679"
+    },
+    {
+      "id": "cit_georgescu_philosophy",
+      "source_document_id": "sdoc_dee89fe4",
+      "excerpt_id": null,
+      "page_or_location": "passim",
+      "quote_fragment": null,
+      "context": "Digby's philosophical work, Two Treatises, corpuscular theory",
+      "created_at": "2026-03-23T19:19:22.269390"
+    },
+    {
+      "id": "cit_miles_courtier_career",
+      "source_document_id": "sdoc_4a0dcb55",
+      "excerpt_id": null,
+      "page_or_location": "pp. 119-128",
+      "quote_fragment": null,
+      "context": "Overview of Digby's courtier career, political maneuvering",
+      "created_at": "2026-03-23T19:19:22.275382"
+    },
+    {
+      "id": "cit_mellick_courtier",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "pp. 911-914",
+      "quote_fragment": null,
+      "context": "Digby's versatile career, knighthood, Privy Council, Royal Society",
+      "created_at": "2026-03-23T19:19:22.280672"
+    },
+    {
+      "id": "cit_mosh_ch2_grand_tour_court",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 2",
+      "quote_fragment": null,
+      "context": "Grand Tour, Madrid, meeting Prince Charles, court connections",
+      "created_at": "2026-03-23T19:19:22.287063"
+    },
+    {
+      "id": "cit_mosh_ch3_knighthood",
+      "source_document_id": "sdoc_moshenska",
+      "excerpt_id": null,
+      "page_or_location": "Chapter 3",
+      "quote_fragment": null,
+      "context": "Knighthood, London political life, Buckingham rivalry",
+      "created_at": "2026-03-23T19:19:22.295610"
+    },
+    {
+      "id": "cit_dobbs_1973_civil_war",
+      "source_document_id": "sdoc_438da82c",
+      "excerpt_id": null,
+      "page_or_location": "pp. 148-150",
+      "quote_fragment": null,
+      "context": "Civil War imprisonment at Winchester House",
+      "created_at": "2026-03-23T19:19:22.302133"
+    },
+    {
+      "id": "cit_mellick_duel",
+      "source_document_id": "sdoc_6fc18de0",
+      "excerpt_id": null,
+      "page_or_location": "p. 913",
+      "quote_fragment": null,
+      "context": "Duel with Mont le Ros in Paris, 1641",
+      "created_at": "2026-03-23T19:19:22.308330"
     }
   ]
 }
